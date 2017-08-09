@@ -47,26 +47,24 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 
-    id <NNNode> stack = [[NNStackNode alloc] initWithStack:@[
-            [[NNTabNode alloc] initWithTabs:@[
+    id <NNNode> node = [[NNTabNode alloc] initWithTabs:@[
+            [[NNSingleNode alloc] init],
+            [[NNSingleNode alloc] init],
+            [[NNSingleNode alloc] init],
+            [[NNStackNode alloc] initWithStack:@[
+                    [[NNTabNode alloc] initWithTabs:@[
+                            [[NNSingleNode alloc] init],
+                            [[NNSingleNode alloc] init],
+                            [[NNSingleNode alloc] init],
+                    ] selectedTab:1],
                     [[NNSingleNode alloc] init],
                     [[NNSingleNode alloc] init],
                     [[NNSingleNode alloc] init],
-            ] selectedTab:1],
-            [[NNSingleNode alloc] init],
-            [[NNSingleNode alloc] init],
-            [[NNSingleNode alloc] init],
-    ]];
-
-    id <NNNode> tabs = [[NNTabNode alloc] initWithTabs:@[
-            [[NNSingleNode alloc] init],
-            [[NNSingleNode alloc] init],
-            [[NNSingleNode alloc] init],
-            stack,
+            ]],
     ] selectedTab:3];
 
     self.window = [[UIWindow alloc] init];
-    self.window.rootViewController = [tabs generate];
+    self.window.rootViewController = [node generate];
     [self.window makeKeyAndVisible];
 
     return YES;

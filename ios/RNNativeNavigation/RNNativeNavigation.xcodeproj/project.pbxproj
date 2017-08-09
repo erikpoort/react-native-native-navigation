@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2FA2804C6D4A1E63FC24FE98 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2FA28DD3B4313F4E5647BBD2 /* Main.storyboard */; };
 		2FA28172B63DE800EED829ED /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FA28EE378106B619E61DC54 /* main.m */; };
 		2FA282F25B4995EDC7E56F38 /* NNTabNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FA28B46C72F1C1F81FDC75F /* NNTabNode.m */; };
 		2FA283D136A1F150B2E0ABDC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2FA28BBA536BA604E37AC3CE /* Assets.xcassets */; };
@@ -175,7 +174,6 @@
 			files = (
 				2FA283D136A1F150B2E0ABDC /* Assets.xcassets in Resources */,
 				2FA28581767FB51DA4D69C55 /* LaunchScreen.storyboard in Resources */,
-				2FA2804C6D4A1E63FC24FE98 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -341,6 +339,7 @@
 				2FA28C241B414C9BCEF4D223 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		2FA28ED0489CCC319D3A0D7B /* Build configuration list for PBXProject "RNNativeNavigation" */ = {
 			isa = XCConfigurationList;

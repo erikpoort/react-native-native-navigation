@@ -34,7 +34,6 @@
 		2FA2898CB4CC112EE37B35A5 /* NNTabNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NNTabNode.h; sourceTree = "<group>"; };
 		2FA28B31BB76176E0377BA21 /* NNSingleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NNSingleView.h; sourceTree = "<group>"; };
 		2FA28B46C72F1C1F81FDC75F /* NNTabNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NNTabNode.m; sourceTree = "<group>"; };
-		2FA28B56CFB961940EA06C18 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		2FA28BBA536BA604E37AC3CE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2FA28C066320E52AB1ADFFB7 /* NNNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NNNode.h; sourceTree = "<group>"; };
 		2FA28E714A786D3398F6E468 /* NNTabView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NNTabView.h; sourceTree = "<group>"; };
@@ -84,7 +83,6 @@
 				2FA288D82BE71526FA410DF3 /* Supporting Files */,
 				2FA2896CBA22374DF39988E1 /* AppDelegate.h */,
 				2FA289766D17F1A15424DCDB /* AppDelegate.m */,
-				2FA28DD3B4313F4E5647BBD2 /* Main.storyboard */,
 				2FA28A89019DF206877342A7 /* Data */,
 				2FA28227B3456E4996DA9EB5 /* Factory */,
 			);
@@ -204,14 +202,6 @@
 				2FA2821C32FD29078295CDC0 /* Base */,
 			);
 			name = LaunchScreen.storyboard;
-			sourceTree = "<group>";
-		};
-		2FA28DD3B4313F4E5647BBD2 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				2FA28B56CFB961940EA06C18 /* Base */,
-			);
-			name = Main.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

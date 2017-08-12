@@ -16,7 +16,5 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".factory.SingleView"/>
-        <activity android:name=".factory.TabView"/>
     </application>
 </manifest>

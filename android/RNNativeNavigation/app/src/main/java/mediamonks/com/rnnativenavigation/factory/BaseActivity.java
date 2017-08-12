@@ -8,10 +8,8 @@ import android.view.MenuItem;
  * RNNativeNavigation 2017
  */
 
-abstract class BaseActivity extends AppCompatActivity
+public abstract class BaseActivity extends AppCompatActivity
 {
-	public abstract BaseFragment getFragment();
-
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item)
 	{

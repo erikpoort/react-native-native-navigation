@@ -1,27 +1,32 @@
 package mediamonks.com.rnnativenavigation.data;
 
-import android.content.Context;
-import android.content.Intent;
-
 import mediamonks.com.rnnativenavigation.factory.BaseFragment;
-import mediamonks.com.rnnativenavigation.factory.SingleView;
+import mediamonks.com.rnnativenavigation.factory.SingleFragment;
 
 /**
  * Created by erik on 09/08/2017.
  * RNNativeNavigation 2017
  */
 
-public class SingleNode implements Node
+public class SingleNode implements TitleNode
 {
-	@Override
-	public Intent getIntent(Context context)
+	private final String _title;
+
+	public SingleNode(String title)
 	{
-		return new Intent(context, SingleView.class);
+		_title = title;
 	}
 
 	@Override
-	public Class<? extends BaseFragment> getFragmentClass()
+	public BaseFragment<SingleNode> getFragment()
 	{
-		return SingleView.SingleFragment.class;
+		SingleFragment fragment = new SingleFragment();
+		fragment.setNode(this);
+		return fragment;
+	}
+
+	public String getTitle()
+	{
+		return _title;
 	}
 }

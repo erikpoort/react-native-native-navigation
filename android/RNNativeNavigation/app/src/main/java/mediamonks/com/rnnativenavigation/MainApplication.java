@@ -1,9 +1,6 @@
 package mediamonks.com.rnnativenavigation;
 
 import android.app.Application;
-import android.content.Intent;
-
-import mediamonks.com.rnnativenavigation.factory.SingleView;
 
 /**
  * Created by erik on 10/08/2017.

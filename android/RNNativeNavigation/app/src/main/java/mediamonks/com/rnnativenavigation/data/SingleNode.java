@@ -2,8 +2,8 @@ package mediamonks.com.rnnativenavigation.data;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v4.app.TaskStackBuilder;
 
+import mediamonks.com.rnnativenavigation.factory.BaseFragment;
 import mediamonks.com.rnnativenavigation.factory.SingleView;
 
 /**
@@ -14,8 +14,14 @@ import mediamonks.com.rnnativenavigation.factory.SingleView;
 public class SingleNode implements Node
 {
 	@Override
-	public TaskStackBuilder generate(Context context, TaskStackBuilder stackBuilder)
+	public Intent getIntent(Context context)
 	{
-		return stackBuilder.addNextIntent(new Intent(context, SingleView.class));
+		return new Intent(context, SingleView.class);
+	}
+
+	@Override
+	public Class<? extends BaseFragment> getFragmentClass()
+	{
+		return SingleView.SingleFragment.class;
 	}
 }

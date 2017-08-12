@@ -1,9 +1,9 @@
 package mediamonks.com.rnnativenavigation;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.TaskStackBuilder;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -28,10 +28,11 @@ public class MainActivity extends Activity
 				new SingleNode(),
 				new SingleNode(),
 				new SingleNode()
-		)), 1);
+		)), 0);
+//		Node node = new SingleNode();
 
-		TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
-		stackBuilder = node.generate(this, stackBuilder);
-		stackBuilder.startActivities();
+		Intent intent = node.getIntent(this);
+		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+		this.startActivity(intent);
 	}
 }

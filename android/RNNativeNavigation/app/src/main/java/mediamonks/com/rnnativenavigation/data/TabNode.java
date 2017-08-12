@@ -2,10 +2,10 @@ package mediamonks.com.rnnativenavigation.data;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v4.app.TaskStackBuilder;
 
 import java.util.ArrayList;
 
+import mediamonks.com.rnnativenavigation.factory.BaseFragment;
 import mediamonks.com.rnnativenavigation.factory.TabView;
 
 /**
@@ -16,7 +16,7 @@ import mediamonks.com.rnnativenavigation.factory.TabView;
 public class TabNode implements Node
 {
 	public static final String TABS_KEY = "TABS_KEY";
-	private static final String SELECTED_TAB_KEY = "SELECTED_TAB_KEY";
+	public static final String SELECTED_TAB_KEY = "SELECTED_TAB_KEY";
 
 	private final ArrayList<Node> _tabs;
 	private final int _selectedTab;
@@ -31,11 +31,17 @@ public class TabNode implements Node
 
 
 	@Override
-	public TaskStackBuilder generate(Context context, TaskStackBuilder stackBuilder)
+	public Intent getIntent(Context context)
 	{
 		Intent intent = new Intent(context, TabView.class);
 		intent.putExtra(TABS_KEY, _tabs);
 		intent.putExtra(SELECTED_TAB_KEY, _selectedTab);
-		return stackBuilder.addNextIntent(intent);
+		return intent;
+	}
+
+	@Override
+	public Class <? extends BaseFragment> getFragmentClass()
+	{
+		return TabView.TabFragment.class;
 	}
 }

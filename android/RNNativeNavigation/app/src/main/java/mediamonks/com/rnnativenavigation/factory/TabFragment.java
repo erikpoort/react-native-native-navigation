@@ -6,10 +6,14 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
+import android.support.transition.Transition;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
+import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,15 +31,17 @@ public class TabFragment extends BaseFragment<TabNode> implements BottomNavigati
 	 * Created by erik on 10/08/2017.
 	 * RNNativeNavigation 2017
 	 */
-	private static class TabPagerAdapter extends FragmentStatePagerAdapter
+	private static class TabPagerAdapter extends FragmentPagerAdapter
 	{
 		private ArrayList<TitleNode> _items;
+		private SparseArray<BaseFragment> _fragments;
 
 		TabPagerAdapter(FragmentManager fm, ArrayList<TitleNode> items)
 		{
 			super(fm);
 
 			this._items = items;
+			this._fragments = new SparseArray<>(this._items.size());
 		}
 
 		@Override
@@ -43,7 +49,11 @@ public class TabFragment extends BaseFragment<TabNode> implements BottomNavigati
 		{
 			try
 			{
-				return _items.get(position).getFragment();
+				if (_fragments.get(position) == null)
+				{
+					_fragments.put(position, _items.get(position).getFragment());
+				}
+				return _fragments.get(position);
 			}
 			catch (Exception e)
 			{
@@ -57,6 +67,11 @@ public class TabFragment extends BaseFragment<TabNode> implements BottomNavigati
 		public int getCount()
 		{
 			return _items.size();
+		}
+
+		SparseArray<BaseFragment> getFragments()
+		{
+			return _fragments;
 		}
 	}
 
@@ -76,6 +91,24 @@ public class TabFragment extends BaseFragment<TabNode> implements BottomNavigati
 		_viewPager.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 1));
 		_viewPager.setId(View.generateViewId());
 		_viewPager.setAdapter(adapter);
+		_viewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener()
+		{
+			int page;
+
+			@Override
+			public void onPageSelected(int position)
+			{
+				super.onPageSelected(position);
+
+//				TabPagerAdapter adapter = (TabPagerAdapter) _viewPager.getAdapter();
+//				BaseFragment fragment = adapter.getFragments().get(_viewPager.getCurrentItem());
+//				FragmentTransaction transition = getActivity().getSupportFragmentManager().beginTransaction();
+//				transition.detach(fragment);
+//				transition.commit();
+
+				page = position;
+			}
+		});
 		linearLayout.addView(_viewPager);
 
 		BottomNavigationView bottomNavigationView = new BottomNavigationView(getContext());
@@ -108,5 +141,13 @@ public class TabFragment extends BaseFragment<TabNode> implements BottomNavigati
 	{
 		_viewPager.setCurrentItem(item.getItemId(), true);
 		return true;
+	}
+
+	@Override
+	public boolean onBackPressed()
+	{
+		TabPagerAdapter adapter = (TabPagerAdapter) _viewPager.getAdapter();
+		BaseFragment fragment = adapter.getFragments().get(_viewPager.getCurrentItem());
+		return fragment.onBackPressed();
 	}
 }

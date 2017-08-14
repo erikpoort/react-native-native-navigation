@@ -1,11 +1,8 @@
 package mediamonks.com.rnnativenavigation.factory;
 
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.Toolbar;
-import android.util.TypedValue;
-import android.view.View;
-import android.view.ViewGroup;
 
+import mediamonks.com.rnnativenavigation.MainActivity;
 import mediamonks.com.rnnativenavigation.data.Node;
 
 /**
@@ -17,9 +14,9 @@ public abstract class BaseFragment<T extends Node> extends Fragment
 {
 	private T _node;
 
-	protected BaseActivity getBaseActivity()
+	protected MainActivity getBaseActivity()
 	{
-		return (BaseActivity) getActivity();
+		return (MainActivity) getActivity();
 	}
 
 	public void setNode(T node)
@@ -30,5 +27,10 @@ public abstract class BaseFragment<T extends Node> extends Fragment
 	public T getNode()
 	{
 		return _node;
+	}
+
+	public boolean onBackPressed()
+	{
+		return false;
 	}
 }

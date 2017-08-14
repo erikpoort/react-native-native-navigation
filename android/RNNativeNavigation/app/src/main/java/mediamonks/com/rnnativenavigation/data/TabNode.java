@@ -12,10 +12,10 @@ import mediamonks.com.rnnativenavigation.factory.TabFragment;
 
 public class TabNode implements Node
 {
-	private final ArrayList<TitleNode> _tabs;
+	private final ArrayList<Node> _tabs;
 	private final int _selectedTab;
 
-	public TabNode(ArrayList<TitleNode> tabs, int selectedTab)
+	public TabNode(ArrayList<Node> tabs, int selectedTab)
 	{
 		super();
 
@@ -31,7 +31,13 @@ public class TabNode implements Node
 		return fragment;
 	}
 
-	public ArrayList<TitleNode> getTabs()
+	@Override
+	public String getTitle()
+	{
+		return "";
+	}
+
+	public ArrayList<Node> getTabs()
 	{
 		return _tabs;
 	}

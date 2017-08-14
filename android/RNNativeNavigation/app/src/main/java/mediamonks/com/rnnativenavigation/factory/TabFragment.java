@@ -6,13 +6,10 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
-import android.support.transition.Transition;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -22,8 +19,8 @@ import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 
+import mediamonks.com.rnnativenavigation.data.Node;
 import mediamonks.com.rnnativenavigation.data.TabNode;
-import mediamonks.com.rnnativenavigation.data.TitleNode;
 
 public class TabFragment extends BaseFragment<TabNode> implements BottomNavigationView.OnNavigationItemSelectedListener
 {
@@ -33,10 +30,10 @@ public class TabFragment extends BaseFragment<TabNode> implements BottomNavigati
 	 */
 	private static class TabPagerAdapter extends FragmentPagerAdapter
 	{
-		private ArrayList<TitleNode> _items;
+		private ArrayList<Node> _items;
 		private SparseArray<BaseFragment> _fragments;
 
-		TabPagerAdapter(FragmentManager fm, ArrayList<TitleNode> items)
+		TabPagerAdapter(FragmentManager fm, ArrayList<Node> items)
 		{
 			super(fm);
 
@@ -99,13 +96,6 @@ public class TabFragment extends BaseFragment<TabNode> implements BottomNavigati
 			public void onPageSelected(int position)
 			{
 				super.onPageSelected(position);
-
-//				TabPagerAdapter adapter = (TabPagerAdapter) _viewPager.getAdapter();
-//				BaseFragment fragment = adapter.getFragments().get(_viewPager.getCurrentItem());
-//				FragmentTransaction transition = getActivity().getSupportFragmentManager().beginTransaction();
-//				transition.detach(fragment);
-//				transition.commit();
-
 				page = position;
 			}
 		});
@@ -121,7 +111,7 @@ public class TabFragment extends BaseFragment<TabNode> implements BottomNavigati
 				Color.WHITE,
 				Color.GRAY,
 		};
-		for (TitleNode node : getNode().getTabs())
+		for (Node node : getNode().getTabs())
 		{
 			String title = node.getTitle();
 			int i = getNode().getTabs().indexOf(node);

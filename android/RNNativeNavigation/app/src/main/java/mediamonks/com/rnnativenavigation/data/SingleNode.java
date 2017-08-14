@@ -8,7 +8,7 @@ import mediamonks.com.rnnativenavigation.factory.SingleFragment;
  * RNNativeNavigation 2017
  */
 
-public class SingleNode implements TitleNode
+public class SingleNode implements Node
 {
 	private final String _title;
 

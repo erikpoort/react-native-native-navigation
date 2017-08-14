@@ -12,4 +12,5 @@ import mediamonks.com.rnnativenavigation.factory.BaseFragment;
 public interface Node extends Serializable
 {
 	BaseFragment getFragment();
+	String getTitle();
 }

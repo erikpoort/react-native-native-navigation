@@ -10,12 +10,12 @@ import mediamonks.com.rnnativenavigation.factory.StackFragment;
  * RNNativeNavigation 2017
  */
 
-public class StackNode implements TitleNode
+public class StackNode implements Node
 {
 	private final String _title;
-	private final ArrayList<TitleNode> _stack;
+	private final ArrayList<Node> _stack;
 
-	public StackNode(String title, ArrayList<TitleNode> stack)
+	public StackNode(String title, ArrayList<Node> stack)
 	{
 		super();
 
@@ -36,7 +36,7 @@ public class StackNode implements TitleNode
 		return _title;
 	}
 
-	public ArrayList<TitleNode> getStack()
+	public ArrayList<Node> getStack()
 	{
 		return _stack;
 	}

@@ -9,10 +9,10 @@ import android.view.MenuItem;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import mediamonks.com.rnnativenavigation.data.Node;
 import mediamonks.com.rnnativenavigation.data.SingleNode;
 import mediamonks.com.rnnativenavigation.data.StackNode;
 import mediamonks.com.rnnativenavigation.data.TabNode;
-import mediamonks.com.rnnativenavigation.data.TitleNode;
 import mediamonks.com.rnnativenavigation.factory.BaseFragment;
 
 /**
@@ -29,27 +29,24 @@ public class MainActivity extends AppCompatActivity
 	{
 		super.onCreate(savedInstanceState);
 
-		StackNode stackNode = new StackNode("c", new ArrayList<TitleNode>(Arrays.asList(
-				new SingleNode("3"),
-				new SingleNode("2"),
-				new SingleNode("1")
-		)));
-		TabNode tabNode = new TabNode(new ArrayList<TitleNode>(Arrays.asList(
-				new StackNode("c", new ArrayList<TitleNode>(Arrays.asList(
+		TabNode node = new TabNode(new ArrayList<>(Arrays.asList(
+				new SingleNode("A"),
+				new SingleNode("B"),
+				new SingleNode("C"),
+				new StackNode("D", new ArrayList<>(Arrays.asList(
+						new TabNode(new ArrayList<Node>(Arrays.asList(
+								new SingleNode("A"),
+								new SingleNode("B"),
+								new SingleNode("C")
+						)), 1),
 						new SingleNode("3"),
 						new SingleNode("2"),
 						new SingleNode("1")
-				))),
-				new StackNode("b", new ArrayList<TitleNode>(Arrays.asList(
-						new SingleNode("3"),
-						new SingleNode("2"),
-						new SingleNode("1")
-				))),
-				stackNode
+				)))
 		)), 1);
 
 		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-		_fragment = tabNode.getFragment();
+		_fragment = node.getFragment();
 		transaction.add(android.R.id.content, _fragment);
 		transaction.commit();
 	}
@@ -69,7 +66,8 @@ public class MainActivity extends AppCompatActivity
 	@Override
 	public void onBackPressed()
 	{
-		if (this._fragment.onBackPressed()) {
+		if (this._fragment.onBackPressed())
+		{
 			return;
 		}
 		finish();

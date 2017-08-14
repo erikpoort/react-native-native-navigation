@@ -2,7 +2,11 @@
   "name": "react-native-native-navigation",
   "version": "0.1.0",
   "description": "ReactNative Native Navigation",
-  "files": ["src", "ios", "android"],
+  "files": [
+    "src",
+    "ios",
+    "android"
+  ],
   "main": "src/index.js",
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
@@ -25,8 +29,7 @@
     "url": "https://github.com/ErikMediaMonks/react-native-native-navigation/issues"
   },
   "homepage": "https://github.com/ErikMediaMonks/react-native-native-navigation#readme",
-  "dependencies": {
-  },
+  "dependencies": {},
   "peerDependencies": {
     "react": ">=16.0.0-alpha.6",
     "react-native": ">=0.46.0"

@@ -4,11 +4,14 @@
 	"private": true,
 	"scripts": {
 		"start": "node node_modules/react-native/local-cli/cli.js start",
+		"ios": "react-native run-ios",
+		"android": "react-native run-android",
 		"test": "jest"
 	},
 	"dependencies": {
 		"react": "16.0.0-alpha.12",
-		"react-native": "0.47.1"
+		"react-native": "0.47.1",
+		"react-native-native-navigation": "file:../../react-native-native-navigation"
 	},
 	"devDependencies": {
 		"babel-jest": "20.0.3",

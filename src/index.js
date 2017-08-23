@@ -1,12 +1,19 @@
 import React, { Component } from 'react';
-import { Text } from 'react-native';
+
+class Navigation extends Component {
+	render() {
+		return (this.props.children)
+	}
+}
 
 class SingleView extends Component {
 	render() {
-		return (
-			<Text>Hoi</Text>
-		)
+		const Screen = this.props.screen;
+		return (<Screen />)
 	}
 };
 
-export { SingleView }
+export {
+	Navigation,
+	SingleView
+}

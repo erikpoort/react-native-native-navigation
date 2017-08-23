@@ -11,7 +11,7 @@
 	"dependencies": {
 		"react": "^16.0.0-alpha.12",
 		"react-native": "0.47.1",
-		"react-native-native-navigation": "file:../../react-native-native-navigation"
+		"react-native-native-navigation": "file:../"
 	},
 	"devDependencies": {
 		"babel-jest": "20.0.3",

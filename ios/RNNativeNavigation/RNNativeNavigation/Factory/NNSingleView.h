@@ -6,4 +6,6 @@
 
 @interface NNSingleView : UIViewController
 
+- (instancetype)initWithBridge:(RCTBridge *)bridge screenID:(NSString *)screenID;
+
 @end

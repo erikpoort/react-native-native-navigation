@@ -8,7 +8,7 @@
 #import "NNSingleNode.h"
 #import "NNNodeHelper.h"
 
-static NSString *const kRNNN = @"RNNNN";
+static NSString *const kRNNN = @"RNNN";
 
 @implementation ReactNativeNativeNavigation
 RCT_EXPORT_MODULE();

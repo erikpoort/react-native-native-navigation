@@ -8,10 +8,10 @@ export default class example extends Component {
     return (
         <Navigation>
           <Loading />
-            <StackView>
-              <SingleView screen={Home} />
-              <SingleView screen={Home} />
-            </StackView>
+          <StackView>
+            <SingleView screen={Home} />
+            <SingleView screen={Home} />
+          </StackView>
         </Navigation>
     );
   }

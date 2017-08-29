@@ -2,27 +2,22 @@ import React, { Component } from 'react';
 import { NativeModules, AppRegistry, Text } from 'react-native';
 const { ReactNativeNativeNavigation } = NativeModules;
 
-class Navigation extends Component {
-	registerScreen = dom => {
-		const name = dom.type.name;
-		const NavigationComponent = dom.props.screen;
-		AppRegistry.registerComponent(name, () => {
-			return class extends Component {
-				render() {
-					return (<NavigationComponent/>)
-				}
+registerScreen = dom => {
+	const name = dom.type.name;
+	const NavigationComponent = dom.props.screen;
+	AppRegistry.registerComponent(name, () => {
+		return class extends Component {
+			render() {
+				return (<NavigationComponent/>)
 			}
-		});
-	}
-	mapToDictionary = dom => {
-		const name = dom.type.name;
-		return {[name]: {}};
-	}
+		}
+	});
+}
+
+class Navigation extends Component {
 	setSiteMap = () => {
 		let dom = this.props.children[1];
-		let map = this.mapToDictionary(dom);
-		this.registerScreen(dom);
-		return map;
+		return dom.type.mapToDictionary(dom);
 	}
 	componentDidMount() {
 		map = this.setSiteMap();
@@ -35,9 +30,35 @@ class Navigation extends Component {
 }
 
 class SingleView extends Component {
+	static mapToDictionary = dom => {
+		const name = dom.type.name;
+		const screenID = name;
+
+		this.registerScreen(dom);
+
+		return {
+			name,
+			screenID,
+		};
+	}
+};
+class StackView extends Component {
+	static mapChildren = children => {
+		if (!Array.isArray(children)) children = [children];
+		return children.map(dom => dom.type.mapToDictionary(dom));
+	}
+	static mapToDictionary = dom => {
+		const name = dom.type.name;
+		const stack = dom.type.mapChildren(dom.props.children);
+		return {
+			name,
+			stack,
+		};
+	}
 };
 
 export {
 	Navigation,
-	SingleView
+	SingleView,
+	StackView
 }

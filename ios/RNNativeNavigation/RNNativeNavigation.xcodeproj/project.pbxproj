@@ -11,6 +11,9 @@
 		03A657C61F54B851001ADC60 /* NNSingleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FA28FF223B6C82EA9933D1B /* NNSingleView.m */; };
 		2FA2820A9C105EF3D69ADBFA /* RNNNState.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FA28E92F602A8F16F963A8F /* RNNNState.m */; };
 		2FA282BFB501C319E027EDD8 /* ReactNativeNativeNavigation.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FA28419A84F8C37AA1ED511 /* ReactNativeNativeNavigation.m */; };
+		2FA287D23CAFCC8964DA5006 /* NNStackNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FA28F42F051F292F34F279F /* NNStackNode.m */; };
+		2FA289340946E4086CA86B7E /* NNNodeHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FA284AFD1B39CCF8F232487 /* NNNodeHelper.m */; };
+		2FA28DD39C0B9E9FFEF6CB5A /* NNStackView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FA2864CBFE55A1F7ACDD12D /* NNStackView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -31,11 +34,13 @@
 		2FA2821C32FD29078295CDC0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		2FA28311DE8B09052F7B768F /* NNSingleNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NNSingleNode.h; sourceTree = "<group>"; };
 		2FA28419A84F8C37AA1ED511 /* ReactNativeNativeNavigation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReactNativeNativeNavigation.m; sourceTree = "<group>"; };
+		2FA284AFD1B39CCF8F232487 /* NNNodeHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NNNodeHelper.m; sourceTree = "<group>"; };
 		2FA285498B52918E4FA3BE86 /* NNSingleNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NNSingleNode.m; sourceTree = "<group>"; };
 		2FA285A272A95F1C341B195C /* NNTabView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NNTabView.m; sourceTree = "<group>"; };
 		2FA2864CBFE55A1F7ACDD12D /* NNStackView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NNStackView.m; sourceTree = "<group>"; };
 		2FA286C7D2CC918712B80842 /* NNStackNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NNStackNode.h; sourceTree = "<group>"; };
 		2FA289192030B7F243F52D1A /* NNStackView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NNStackView.h; sourceTree = "<group>"; };
+		2FA2894B72697E630EEEE4E8 /* NNNodeHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NNNodeHelper.h; sourceTree = "<group>"; };
 		2FA2896CBA22374DF39988E1 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		2FA289766D17F1A15424DCDB /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		2FA2898CB4CC112EE37B35A5 /* NNTabNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NNTabNode.h; sourceTree = "<group>"; };
@@ -126,6 +131,8 @@
 				2FA286C7D2CC918712B80842 /* NNStackNode.h */,
 				2FA28B46C72F1C1F81FDC75F /* NNTabNode.m */,
 				2FA2898CB4CC112EE37B35A5 /* NNTabNode.h */,
+				2FA284AFD1B39CCF8F232487 /* NNNodeHelper.m */,
+				2FA2894B72697E630EEEE4E8 /* NNNodeHelper.h */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -202,6 +209,9 @@
 				03A657C51F54B84C001ADC60 /* NNSingleNode.m in Sources */,
 				03A657C61F54B851001ADC60 /* NNSingleView.m in Sources */,
 				2FA2820A9C105EF3D69ADBFA /* RNNNState.m in Sources */,
+				2FA287D23CAFCC8964DA5006 /* NNStackNode.m in Sources */,
+				2FA28DD39C0B9E9FFEF6CB5A /* NNStackView.m in Sources */,
+				2FA289340946E4086CA86B7E /* NNNodeHelper.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

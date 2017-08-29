@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { SingleView, Navigation } from 'react-native-native-navigation';
+import { StackView, SingleView, Navigation } from 'react-native-native-navigation';
 import Home from './Home';
 import Loading from './Loading';
 
@@ -8,7 +8,10 @@ export default class example extends Component {
     return (
         <Navigation>
           <Loading />
-          <SingleView screen={Home} />
+            <StackView>
+              <SingleView screen={Home} />
+              <SingleView screen={Home} />
+            </StackView>
         </Navigation>
     );
   }

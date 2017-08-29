@@ -6,6 +6,8 @@
 #import "NNSingleNode.h"
 #import "NNSingleView.h"
 
+static NSString *const kScreenId = @"screenID";
+
 @interface NNSingleNode ()
 
 @property (nonatomic, strong) RCTBridge *bridge;
@@ -13,17 +15,16 @@
 
 @end
 
-@implementation NNSingleNode {
+@implementation NNSingleNode
 
++ (NSString *)jsName
+{
+	return @"SingleView";
 }
 
-- (instancetype)initWithBridge:(RCTBridge *)bridge screenID:(NSString *)screenID
+- (void)setData:(NSDictionary *)data
 {
-    if (self = [super init]) {
-        self.bridge = bridge;
-        self.screenID = screenID;
-    }
-    return self;
+	self.screenID = data[kScreenId];
 }
 
 - (UIViewController *)generate {

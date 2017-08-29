@@ -7,4 +7,6 @@
 
 @interface NNSingleNode : NSObject <NNNode>
 
+@property (nonatomic, copy, readonly) NSString *screenID;
+
 @end

@@ -7,6 +7,6 @@
 
 @interface NNStackNode : NSObject <NNNode>
 
-- (instancetype)initWithStack:(NSArray <id <NNNode>> *)stack;
+@property (nonatomic, copy, readonly) NSArray <id <NNNode>> *stack;
 
 @end

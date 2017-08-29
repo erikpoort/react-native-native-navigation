@@ -3,10 +3,13 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <React/RCTBridge.h>
 
 @protocol NNNode <NSObject>
 
-- (instancetype)initWithBridge:(RCTBridge *)bridge screenID:(NSString *)screenID;
++ (NSString *)jsName;
+- (void)setBridge:(RCTBridge *)bridge;
+- (void)setData:(NSDictionary *)data;
 - (UIViewController *)generate;
 
 @end

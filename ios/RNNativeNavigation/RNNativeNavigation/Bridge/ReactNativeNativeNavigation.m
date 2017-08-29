@@ -8,7 +8,7 @@
 #import "NNSingleNode.h"
 #import "NNNodeHelper.h"
 
-static NSString *const kRNNNN = @"RNNNN";
+static NSString *const kRNNN = @"RNNNN";
 
 @implementation ReactNativeNativeNavigation
 RCT_EXPORT_MODULE();
@@ -31,7 +31,7 @@ RCT_EXPORT_METHOD(onStart:(RCTPromiseResolveBlock)resolve
 	} else {
 		NSLog(@"First load");
 		NSString *message = @"A site map is needed to build the views, call setSiteMap";
-		reject(kRNNNN, message, RCTErrorWithMessage(message));
+		reject(kRNNN, message, RCTErrorWithMessage(message));
 	}
 }
 

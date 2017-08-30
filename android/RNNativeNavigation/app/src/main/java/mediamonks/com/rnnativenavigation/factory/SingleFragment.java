@@ -23,8 +23,6 @@ public class SingleFragment extends BaseFragment<SingleNode>
 	@Override
 	public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
 	{
-		super.onCreateView(inflater, container, savedInstanceState);
-
 		Random rand = new Random();
 		int r = rand.nextInt(255);
 		int g = rand.nextInt(255);

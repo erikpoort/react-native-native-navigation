@@ -1,12 +1,13 @@
 package com.mediamonks.rnnativenavigation.bridge;
 
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 
-import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactApplication;
+import com.facebook.react.ReactFragmentActivity;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.bridge.Promise;
@@ -57,16 +58,17 @@ class RNNativeNavigationModule extends ReactContextBaseJavaModule
 
 		try {
 			assert getCurrentActivity() != null;
-			ReactActivity mainActivity = (ReactActivity) getCurrentActivity();
+			ReactFragmentActivity mainActivity = (ReactFragmentActivity) getCurrentActivity();
 			ReactApplication mainApplication = (ReactApplication) mainActivity.getApplication();
 			ReactNativeHost reactNativeHost = mainApplication.getReactNativeHost();
 			ReactInstanceManager reactInstanceManager = reactNativeHost.getReactInstanceManager();
 			Node node = NodeHelper.nodeFromMap(map, reactInstanceManager);
-			FragmentManager fragmentManager = mainActivity.getFragmentManager();
+			FragmentManager fragmentManager = mainActivity.getSupportFragmentManager();
 			FragmentTransaction transaction = fragmentManager.beginTransaction();
 			Fragment fragment = node.getFragment();
 			transaction.replace(android.R.id.content, fragment);
 			transaction.commit();
+			promise.resolve(true);
 		} catch (Exception e) {
 			promise.reject(kRNNN, "Could not start app", e);
 		}

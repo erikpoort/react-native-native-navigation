@@ -55,6 +55,14 @@ public class StackFragment extends BaseFragment<StackNode>
 		_holder.setId(View.generateViewId());
 		linearLayout.addView(_holder, new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, 1));
 
+		return linearLayout;
+	}
+
+	@Override
+	public void onViewCreated(View view, @Nullable Bundle savedInstanceState)
+	{
+		super.onViewCreated(view, savedInstanceState);
+
 		for (Node node : getNode().getStack())
 		{
 			Fragment fragment = node.getFragment();
@@ -66,8 +74,6 @@ public class StackFragment extends BaseFragment<StackNode>
 		}
 
 		this.handleCurrentStack();
-
-		return linearLayout;
 	}
 
 	private void handleCurrentStack()

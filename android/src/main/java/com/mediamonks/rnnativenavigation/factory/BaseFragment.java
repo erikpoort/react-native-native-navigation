@@ -1,6 +1,6 @@
 package com.mediamonks.rnnativenavigation.factory;
 
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 
 import com.mediamonks.rnnativenavigation.data.Node;
 

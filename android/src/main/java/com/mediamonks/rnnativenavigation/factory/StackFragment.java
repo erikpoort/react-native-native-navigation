@@ -3,12 +3,9 @@ package com.mediamonks.rnnativenavigation.factory;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
-import android.app.ActionBar;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -54,21 +51,30 @@ public class StackFragment extends BaseFragment<StackNode>
 		linearLayout.addView(_toolbar);
 
 		_holder = new FrameLayout(getActivity());
-		_holder.setId(View.generateViewId());
+		// I'm calling generateViewId() twice, calling it once doesn't work on first load. My assumption is the initial id is later hijacked by ReactNative, making it impossible to add fragments
+		View.generateViewId();
+		int id = View.generateViewId();
+		_holder.setId(id);
 		linearLayout.addView(_holder, new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, 1));
+
+		return linearLayout;
+	}
+
+	@Override
+	public void onViewCreated(View view, @Nullable Bundle savedInstanceState)
+	{
+		super.onViewCreated(view, savedInstanceState);
 
 		for (Node node : getNode().getStack())
 		{
 			Fragment fragment = node.getFragment();
-			FragmentTransaction transaction = getActivity().getFragmentManager().beginTransaction();
+			FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
 			transaction.add(_holder.getId(), fragment);
 			transaction.commit();
 			_stack.add(fragment);
 		}
 
 		this.handleCurrentStack();
-
-		return linearLayout;
 	}
 
 	private void handleCurrentStack()
@@ -83,7 +89,7 @@ public class StackFragment extends BaseFragment<StackNode>
 	{
 		if (_holder.getChildCount() > 1)
 		{
-			FragmentTransaction transaction = getActivity().getFragmentManager().beginTransaction();
+			FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
 			transaction.remove(_stack.pop());
 			transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
 			transaction.commit();

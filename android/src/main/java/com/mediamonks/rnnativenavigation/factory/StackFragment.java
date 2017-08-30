@@ -1,10 +1,12 @@
 package com.mediamonks.rnnativenavigation.factory;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.internal.app.ToolbarActionBar;
 import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -28,27 +30,35 @@ public class StackFragment extends BaseFragment<StackNode>
 {
 	private FrameLayout _holder;
 	private Stack<Fragment> _stack;
-	private Toolbar _toolbar;
+	private ToolbarActionBar _actionBar;
+
+	@Override
+	public void onAttach(Context context)
+	{
+		super.onAttach(context);
+
+		_stack = new Stack<>();
+
+	}
 
 	@Nullable
 	@Override
 	public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
 	{
-		_stack = new Stack<>();
-
 		LinearLayout linearLayout = new LinearLayout(getActivity());
 		linearLayout.setBackgroundColor(Color.WHITE);
 		linearLayout.setOrientation(LinearLayout.VERTICAL);
 		linearLayout.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 
-		_toolbar = new Toolbar(getActivity());
+		String title = getNode().getData().getString("name");
+		Toolbar toolbar = new Toolbar(getActivity());
+		_actionBar = new ToolbarActionBar(toolbar, title, getActivity());
 		TypedValue typedValue = new TypedValue();
 		if (getActivity().getTheme().resolveAttribute(android.R.attr.actionBarSize, typedValue, true))
 		{
-			_toolbar.setLayoutParams(new Toolbar.LayoutParams(LayoutParams.MATCH_PARENT, TypedValue.complexToDimensionPixelSize(typedValue.data, getResources().getDisplayMetrics())));
+			toolbar.setLayoutParams(new Toolbar.LayoutParams(LayoutParams.MATCH_PARENT, TypedValue.complexToDimensionPixelSize(typedValue.data, getResources().getDisplayMetrics())));
 		}
-		_toolbar.setTitle(getNode().getData().getString("name"));
-		linearLayout.addView(_toolbar);
+		linearLayout.addView(toolbar);
 
 		_holder = new FrameLayout(getActivity());
 		// I'm calling generateViewId() twice, calling it once doesn't work on first load. My assumption is the initial id is later hijacked by ReactNative, making it impossible to add fragments
@@ -81,7 +91,8 @@ public class StackFragment extends BaseFragment<StackNode>
 	{
 		int size = _stack.size();
 		String title = getNode().getStack().get(size - 1).getData().getString("screenID");
-		_toolbar.setTitle(title);
+		_actionBar.setDisplayHomeAsUpEnabled(size > 1);
+		_actionBar.setTitle(title);
 	}
 
 	@Override
@@ -102,9 +113,11 @@ public class StackFragment extends BaseFragment<StackNode>
 	@Override
 	public void onDestroy()
 	{
-		if (_stack != null) {
-			for (Fragment fragment : _stack) {
-				onBackPressed();
+		if (_stack != null)
+		{
+			while (_stack.size() > 0)
+			{
+				_stack.pop();
 			}
 		}
 

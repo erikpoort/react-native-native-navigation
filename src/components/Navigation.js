@@ -22,7 +22,6 @@ const registerScreen = (navigator, screenID, screen) => {
 class Navigation extends Component {
 	setSiteMap = () => {
 		let dom = this.props.children[1];
-		console.log(dom);
 		return dom.type.mapToDictionary(dom.type, '', dom);
 	}
 	componentDidMount() {

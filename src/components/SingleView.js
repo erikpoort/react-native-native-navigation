@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { registerScreen } from './Navigation';
 
 export default class SingleView extends Component {
-
 	static mapToDictionary = (navigator, path, dom) => {
 		const { screen } = dom.props;
 		const name = screen.name;
@@ -14,5 +13,9 @@ export default class SingleView extends Component {
 			type,
 			screenID,
 		};
+	}
+
+	render() {
+		return this.props.children;
 	}
 }

@@ -13,9 +13,10 @@ export default class SingleView extends Component {
 			type,
 			screenID,
 		};
-	}
+	};
 
 	render() {
-		return this.props.children;
+		const Screen = this.props.screen;
+		return <Screen />;
 	}
 }

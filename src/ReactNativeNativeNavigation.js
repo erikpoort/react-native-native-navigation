@@ -9,12 +9,7 @@ setSiteMap = (map) => {
 	return ReactNativeNativeNavigation.setSiteMap(map);
 }
 
-handleBackButton = (callback) => {
-	return ReactNativeNativeNavigation.handleBackButton(callback);
-}
-
 module.exports = {
 	onStart,
 	setSiteMap,
-	handleBackButton,
 }

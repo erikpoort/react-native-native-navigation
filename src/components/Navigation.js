@@ -10,9 +10,7 @@ const registerScreen = (navigator, screenID, screen) => {
 			render() {
 				const props = this.props;
 				return (
-					<Navigator>
-						<Screen />
-					</Navigator>
+					<Navigator screen={Screen} />
 				)
 			}
 		}

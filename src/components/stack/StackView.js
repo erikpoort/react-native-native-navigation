@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { BackHandler } from 'react-native';
-import ReactNativeNativeNavigation from './../ReactNativeNativeNavigation';
+import StackNavigation from './StackNavigation';
 
 export default class StackView extends Component {
 	static mapChildren = (navigator, path, children) => {
@@ -19,7 +19,7 @@ export default class StackView extends Component {
 	removeBackButtonListener;
 	componentWillMount() {
 		const { remove } = BackHandler.addEventListener('hardwareBackPress', function() {
-			ReactNativeNativeNavigation.handleBackButton(handled => {
+			StackNavigation.handleBackButton(handled => {
 				if (!handled) {
 					BackHandler.exitApp();
 				}
@@ -35,6 +35,7 @@ export default class StackView extends Component {
 	}
 
 	render() {
-		return this.props.children;
+		const Screen = this.props.screen;
+		return <Screen stack={StackNavigation} />;
 	}
 }

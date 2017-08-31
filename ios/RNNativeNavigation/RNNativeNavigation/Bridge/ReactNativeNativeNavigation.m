@@ -53,4 +53,20 @@ RCT_EXPORT_METHOD(setSiteMap:(NSDictionary *)map
 	resolve(@[]);
 }
 
+RCT_EXPORT_METHOD(push:(NSDictionary *)screen) {
+	id <NNNode> nodeObject = [NNNodeHelper nodeFromMap:screen bridge:self.bridge];
+	UIViewController *viewController = [nodeObject generate];
+
+	dispatch_async(dispatch_get_main_queue(), ^{
+		UIViewController *findController = [UIApplication sharedApplication].keyWindow.rootViewController;
+		while (![findController isKindOfClass:[UINavigationController class]] && findController.presentedViewController) {
+			findController = findController.presentedViewController;
+		}
+		if ([findController isKindOfClass:[UINavigationController class]]) {
+			UINavigationController *navigationController = (UINavigationController *)findController;
+			[navigationController pushViewController:viewController animated:YES];
+		}
+	});
+}
+
 @end

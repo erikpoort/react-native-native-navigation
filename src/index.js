@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { NativeModules, AppRegistry, Text } from 'react-native';
+import { NativeModules, AppRegistry, BackHandler } from 'react-native';
 const { ReactNativeNativeNavigation } = NativeModules;
 
 registerScreen = dom => {
@@ -7,6 +7,23 @@ registerScreen = dom => {
 	const NavigationComponent = dom.props.screen;
 	AppRegistry.registerComponent(name, () => {
 		return class extends Component {
+			removeBackButtonListener;
+			componentWillMount() {
+				const { remove } = BackHandler.addEventListener('hardwareBackPress', function() {
+					ReactNativeNativeNavigation.handleBackButton(handled => {
+						if (!handled) {
+							BackHandler.exitApp();
+						}
+					})
+					return true;
+				});
+				this.removeBackButtonListener = remove;
+			}
+			componentWillUnmount() {
+				if (this.removeBackButtonListener != null) {
+					this.removeBackButtonListener();
+				}
+			}
 			render() {
 				return (<NavigationComponent/>)
 			}

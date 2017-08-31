@@ -4,12 +4,15 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.annotation.UiThread;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.internal.app.ToolbarActionBar;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
@@ -30,6 +33,7 @@ public class StackFragment extends BaseFragment<StackNode>
 {
 	private FrameLayout _holder;
 	private Stack<Fragment> _stack;
+	private Toolbar _toolbar;
 	private ToolbarActionBar _actionBar;
 
 	@Override
@@ -51,14 +55,14 @@ public class StackFragment extends BaseFragment<StackNode>
 		linearLayout.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 
 		String title = getNode().getData().getString("name");
-		Toolbar toolbar = new Toolbar(getActivity());
-		_actionBar = new ToolbarActionBar(toolbar, title, getActivity());
+		_toolbar = new Toolbar(getActivity());
+		_actionBar = new ToolbarActionBar(_toolbar, title, getActivity());
 		TypedValue typedValue = new TypedValue();
 		if (getActivity().getTheme().resolveAttribute(android.R.attr.actionBarSize, typedValue, true))
 		{
-			toolbar.setLayoutParams(new Toolbar.LayoutParams(LayoutParams.MATCH_PARENT, TypedValue.complexToDimensionPixelSize(typedValue.data, getResources().getDisplayMetrics())));
+			_toolbar.setLayoutParams(new Toolbar.LayoutParams(LayoutParams.MATCH_PARENT, TypedValue.complexToDimensionPixelSize(typedValue.data, getResources().getDisplayMetrics())));
 		}
-		linearLayout.addView(toolbar);
+		linearLayout.addView(_toolbar);
 
 		_holder = new FrameLayout(getActivity());
 		// I'm calling generateViewId() twice, calling it once doesn't work on first load. My assumption is the initial id is later hijacked by ReactNative, making it impossible to add fragments
@@ -85,14 +89,21 @@ public class StackFragment extends BaseFragment<StackNode>
 		}
 
 		this.handleCurrentStack();
+
+		_toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				onBackPressed();
+			}
+		});
 	}
 
 	private void handleCurrentStack()
 	{
 		int size = _stack.size();
 		String title = getNode().getStack().get(size - 1).getData().getString("screenID");
-		_actionBar.setDisplayHomeAsUpEnabled(size > 1);
 		_actionBar.setTitle(title);
+		_actionBar.setDisplayHomeAsUpEnabled(size > 1);
 	}
 
 	@Override

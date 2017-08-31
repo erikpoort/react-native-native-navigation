@@ -1,6 +1,5 @@
 package com.mediamonks.rnnativenavigation.factory;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -23,7 +22,25 @@ public class SingleFragment extends BaseFragment<SingleNode>
 	{
 		ReactRootView rootView = new ReactRootView(getActivity());
 		rootView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
-		rootView.startReactApplication(this.getNode().getInstanceManager(), this.getNode().getData().getString("screenID"));
 		return rootView;
+	}
+
+	@Override
+	public void onViewCreated(View view, @Nullable Bundle savedInstanceState)
+	{
+		super.onViewCreated(view, savedInstanceState);
+		ReactRootView rootView = (ReactRootView) view;
+		rootView.startReactApplication(this.getNode().getInstanceManager(), this.getNode().getData().getString("screenID"));
+	}
+
+	@Override
+	public void onDestroyView()
+	{
+		ReactRootView rootView = (ReactRootView) getView();
+		if (rootView != null)
+		{
+			rootView.unmountReactApplication();
+		}
+		super.onDestroyView();
 	}
 }

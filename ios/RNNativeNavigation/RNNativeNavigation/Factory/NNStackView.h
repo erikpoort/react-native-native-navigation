@@ -4,10 +4,10 @@
 
 #import <UIKit/UIKit.h>
 
-@protocol NNNode;
+@class NNStackNode;
 
 @interface NNStackView : UINavigationController
 
-- (instancetype)initWithStack:(NSArray <id <NNNode>> *)stack;
+- (instancetype)initWithNode:(NNStackNode *)node;
 
 @end

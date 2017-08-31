@@ -16,11 +16,13 @@ import java.util.List;
 
 public class NodeHelper
 {
+	private static final String TYPE = "type";
+
 	public static Node nodeFromMap(ReadableMap map, ReactInstanceManager instanceManager) throws Exception
 	{
-		List<String> names = Arrays.asList(SingleNode.jsName, StackNode.jsName);
+		List<String> names = Arrays.asList(SingleNode.JS_NAME, StackNode.JS_NAME);
 		List<Class<? extends Node>> classes = Arrays.asList(SingleNode.class, StackNode.class);
-		int index = names.indexOf(map.getString("name"));
+		int index = names.indexOf(map.getString(TYPE));
 		if (index >= 0)
 		{
 			Class<? extends Node> nodeClass = classes.get(index);

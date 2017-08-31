@@ -4,8 +4,10 @@
 
 #import <UIKit/UIKit.h>
 
+@class NNSingleNode;
+
 @interface NNSingleView : UIViewController
 
-- (instancetype)initWithBridge:(RCTBridge *)bridge screenID:(NSString *)screenID;
+- (instancetype)initWithBridge:(RCTBridge *)bridge node:(NNSingleNode *)node;
 
 @end

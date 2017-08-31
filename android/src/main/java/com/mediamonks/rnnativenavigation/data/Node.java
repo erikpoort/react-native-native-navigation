@@ -17,5 +17,6 @@ public interface Node extends Serializable
 
 	void setInstanceManager(ReactInstanceManager instanceManager);
 	void setData(ReadableMap map);
-	ReadableMap getData();
+
+	String getTitle();
 }

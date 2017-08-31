@@ -22,6 +22,10 @@ static NSString *const kStackKey = @"stack";
     return @"StackView";
 }
 
+- (UIViewController *)generate {
+	return [[NNStackView alloc] initWithNode:self];
+}
+
 - (void)setData:(NSDictionary *)data
 {
     NSArray <NSDictionary *> *objects = data[kStackKey];
@@ -33,8 +37,9 @@ static NSString *const kStackKey = @"stack";
 	self.stack = tempStack;
 }
 
-- (UIViewController *)generate {
-    return [[NNStackView alloc] initWithStack:self.stack];
+- (NSString *)title
+{
+	return self.stack.lastObject.title;
 }
 
 @end

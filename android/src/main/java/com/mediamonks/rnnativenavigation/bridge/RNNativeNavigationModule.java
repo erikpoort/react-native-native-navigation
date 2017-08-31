@@ -16,7 +16,6 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableMap;
 import com.mediamonks.rnnativenavigation.data.Node;
-import com.mediamonks.rnnativenavigation.factory.BaseFragment;
 import com.mediamonks.rnnativenavigation.factory.NodeHelper;
 import com.mediamonks.rnnativenavigation.factory.StackFragment;
 

@@ -1,16 +1,13 @@
 package com.mediamonks.rnnativenavigation.data;
 
-import android.util.Log;
-
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
-import com.facebook.react.bridge.ReadableNativeMap;
 import com.mediamonks.rnnativenavigation.factory.BaseFragment;
 import com.mediamonks.rnnativenavigation.factory.NodeHelper;
 import com.mediamonks.rnnativenavigation.factory.StackFragment;
 
-import java.util.ArrayList;
+import java.util.Stack;
 
 /**
  * Created by erik on 12/08/2017.
@@ -19,11 +16,12 @@ import java.util.ArrayList;
 
 public class StackNode implements Node
 {
-	public static String jsName = "StackView";
+	public static String JS_NAME = "StackView";
 
-	private ArrayList<Node> _stack;
+	private static final String STACK = "stack";
+
 	private ReactInstanceManager _instanceManager;
-	private ReadableMap _data;
+	private Stack<Node> _stack;
 
 	@Override
 	public BaseFragment<StackNode> getFragment()
@@ -33,18 +31,13 @@ public class StackNode implements Node
 		return fragment;
 	}
 
-	public ArrayList<Node> getStack()
-	{
-		return _stack;
-	}
-
 	@Override
 	public void setInstanceManager(ReactInstanceManager instanceManager)
 	{
 		_instanceManager = instanceManager;
 	}
 
-	public ReactInstanceManager getInstanceManager()
+	private ReactInstanceManager getInstanceManager()
 	{
 		return _instanceManager;
 	}
@@ -52,10 +45,8 @@ public class StackNode implements Node
 	@Override
 	public void setData(ReadableMap map)
 	{
-		_data = map;
-
-		ArrayList<Node> stack = new ArrayList<>();
-		ReadableArray stackArray = map.getArray("stack");
+		Stack<Node> stack = new Stack<>();
+		ReadableArray stackArray = map.getArray(STACK);
 
 		int leni = stackArray.size();
 		for (int i = 0; i < leni; ++i) {
@@ -73,8 +64,14 @@ public class StackNode implements Node
 		_stack = stack;
 	}
 
-	public ReadableMap getData()
+	@Override
+	public String getTitle()
 	{
-		return _data;
+		return _stack.peek().getTitle();
+	}
+
+	public Stack<Node> getStack()
+	{
+		return _stack;
 	}
 }

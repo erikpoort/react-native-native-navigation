@@ -4,6 +4,7 @@
 
 #import <React/RCTRootView.h>
 #import "NNSingleView.h"
+#import "NNSingleNode.h"
 
 @interface NNSingleView ()
 
@@ -14,10 +15,11 @@
 
 @implementation NNSingleView
 
-- (instancetype)initWithBridge:(RCTBridge *)bridge screenID:(NSString *)screenID {
+- (instancetype)initWithBridge:(RCTBridge *)bridge node:(NNSingleNode *)node {
     if (self = [super init]) {
         self.bridge = bridge;
-        self.screenID = screenID;
+        self.screenID = node.screenID;
+        self.title = node.title;
     }
     return self;
 }

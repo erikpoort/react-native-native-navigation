@@ -4,14 +4,15 @@
 
 #import "NNStackView.h"
 #import "NNNode.h"
+#import "NNStackNode.h"
 
 @implementation NNStackView
 
-- (instancetype)initWithStack:(NSArray <id <NNNode>> *)stack {
+- (instancetype)initWithNode:(NNStackNode *)node {
     if (self = [super init]) {
         self.navigationBar.translucent = NO;
         NSMutableArray *viewControllers = [@[] mutableCopy];
-        [stack enumerateObjectsUsingBlock:^(id <NNNode> view, NSUInteger idx, BOOL *stop) {
+        [node.stack enumerateObjectsUsingBlock:^(id <NNNode> view, NSUInteger idx, BOOL *stop) {
             [viewControllers addObject:[view generate]];
         }];
         self.viewControllers = [viewControllers copy];

@@ -12,10 +12,14 @@ import com.mediamonks.rnnativenavigation.factory.SingleFragment;
 
 public class SingleNode implements Node
 {
-	public static String jsName = "SingleView";
+	public static String JS_NAME = "SingleView";
+
+	private static final String NAME = "name";
+	private static final String SCREEN_ID = "screenID";
 
 	private ReactInstanceManager _instanceManager;
-	private ReadableMap _data;
+	private String _title;
+	private String _screenID;
 
 	@Override
 	public BaseFragment<SingleNode> getFragment()
@@ -39,11 +43,18 @@ public class SingleNode implements Node
 	@Override
 	public void setData(ReadableMap map)
 	{
-		_data = map;
+		_title = map.getString(NAME);
+		_screenID = map.getString(SCREEN_ID);
 	}
 
-	public ReadableMap getData()
+	@Override
+	public String getTitle()
 	{
-		return _data;
+		return _title;
+	}
+
+	public String getScreenID()
+	{
+		return _screenID;
 	}
 }

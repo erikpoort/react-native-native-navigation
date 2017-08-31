@@ -4,15 +4,11 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.annotation.UiThread;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.internal.app.ToolbarActionBar;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
@@ -32,7 +28,7 @@ import java.util.Stack;
 public class StackFragment extends BaseFragment<StackNode>
 {
 	private FrameLayout _holder;
-	private Stack<Fragment> _stack;
+	private Stack<BaseFragment> _stack;
 	private Toolbar _toolbar;
 	private ToolbarActionBar _actionBar;
 
@@ -42,7 +38,6 @@ public class StackFragment extends BaseFragment<StackNode>
 		super.onAttach(context);
 
 		_stack = new Stack<>();
-
 	}
 
 	@Nullable
@@ -54,9 +49,8 @@ public class StackFragment extends BaseFragment<StackNode>
 		linearLayout.setOrientation(LinearLayout.VERTICAL);
 		linearLayout.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 
-		String title = getNode().getData().getString("name");
 		_toolbar = new Toolbar(getActivity());
-		_actionBar = new ToolbarActionBar(_toolbar, title, getActivity());
+		_actionBar = new ToolbarActionBar(_toolbar, "", getActivity());
 		TypedValue typedValue = new TypedValue();
 		if (getActivity().getTheme().resolveAttribute(android.R.attr.actionBarSize, typedValue, true))
 		{
@@ -81,7 +75,7 @@ public class StackFragment extends BaseFragment<StackNode>
 
 		for (Node node : getNode().getStack())
 		{
-			Fragment fragment = node.getFragment();
+			BaseFragment fragment = node.getFragment();
 			FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
 			transaction.add(_holder.getId(), fragment);
 			transaction.commit();
@@ -101,9 +95,8 @@ public class StackFragment extends BaseFragment<StackNode>
 	private void handleCurrentStack()
 	{
 		int size = _stack.size();
-		String title = getNode().getStack().get(size - 1).getData().getString("screenID");
-		_actionBar.setTitle(title);
 		_actionBar.setDisplayHomeAsUpEnabled(size > 1);
+		_actionBar.setTitle(_stack.peek().getNode().getTitle());
 	}
 
 	@Override

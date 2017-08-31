@@ -2,10 +2,9 @@ import React, { Component } from 'react';
 import { NativeModules, AppRegistry, BackHandler } from 'react-native';
 const { ReactNativeNativeNavigation } = NativeModules;
 
-registerScreen = dom => {
-	const name = dom.type.name;
-	const NavigationComponent = dom.props.screen;
-	AppRegistry.registerComponent(name, () => {
+registerScreen = (screenID, screen) => {
+	AppRegistry.registerComponent(screenID, () => {
+		const Screen = screen;
 		return class extends Component {
 			removeBackButtonListener;
 			componentWillMount() {
@@ -25,7 +24,7 @@ registerScreen = dom => {
 				}
 			}
 			render() {
-				return (<NavigationComponent/>)
+				return (<Screen/>)
 			}
 		}
 	});
@@ -34,7 +33,7 @@ registerScreen = dom => {
 class Navigation extends Component {
 	setSiteMap = () => {
 		let dom = this.props.children[1];
-		return dom.type.mapToDictionary(dom);
+		return dom.type.mapToDictionary('', dom);
 	}
 	componentDidMount() {
 		map = this.setSiteMap();
@@ -47,28 +46,29 @@ class Navigation extends Component {
 }
 
 class SingleView extends Component {
-	static mapToDictionary = dom => {
-		const name = dom.type.name;
-		const screenID = name;
-
-		this.registerScreen(dom);
-
+	static mapToDictionary = (path, dom) => {
+		const { screen } = dom.props;
+		const name = screen.name;
+		const type = dom.type.name;
+		const screenID = `${path}/${name}`;
+		this.registerScreen(screenID, screen);
 		return {
 			name,
+			type,
 			screenID,
 		};
 	}
 };
 class StackView extends Component {
-	static mapChildren = children => {
+	static mapChildren = (path, children) => {
 		if (!Array.isArray(children)) children = [children];
-		return children.map(dom => dom.type.mapToDictionary(dom));
+		return children.map(dom => dom.type.mapToDictionary(path, dom));
 	}
-	static mapToDictionary = dom => {
-		const name = dom.type.name;
-		const stack = dom.type.mapChildren(dom.props.children);
+	static mapToDictionary = (path, dom) => {
+		const type = dom.type.name;
+		const stack = dom.type.mapChildren(path, dom.props.children);
 		return {
-			name,
+			type,
 			stack,
 		};
 	}

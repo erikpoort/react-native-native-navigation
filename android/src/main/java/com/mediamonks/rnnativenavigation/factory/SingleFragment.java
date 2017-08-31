@@ -30,7 +30,7 @@ public class SingleFragment extends BaseFragment<SingleNode>
 	{
 		super.onViewCreated(view, savedInstanceState);
 		ReactRootView rootView = (ReactRootView) view;
-		rootView.startReactApplication(this.getNode().getInstanceManager(), this.getNode().getData().getString("screenID"));
+		rootView.startReactApplication(this.getNode().getInstanceManager(), this.getNode().getScreenID());
 	}
 
 	@Override

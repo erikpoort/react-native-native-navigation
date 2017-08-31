@@ -6,11 +6,13 @@
 #import "NNSingleNode.h"
 #import "NNSingleView.h"
 
+static NSString *const kName = @"name";
 static NSString *const kScreenId = @"screenID";
 
 @interface NNSingleNode ()
 
 @property (nonatomic, strong) RCTBridge *bridge;
+@property (nonatomic, copy) NSString *title;
 @property (nonatomic, copy) NSString *screenID;
 
 @end
@@ -22,13 +24,14 @@ static NSString *const kScreenId = @"screenID";
 	return @"SingleView";
 }
 
-- (void)setData:(NSDictionary *)data
-{
-	self.screenID = data[kScreenId];
+- (UIViewController *)generate {
+	return [[NNSingleView alloc] initWithBridge:self.bridge node:self];
 }
 
-- (UIViewController *)generate {
-    return [[NNSingleView alloc] initWithBridge:self.bridge screenID:self.screenID];
+- (void)setData:(NSDictionary *)data
+{
+	self.title = data[kName];
+	self.screenID = data[kScreenId];
 }
 
 @end

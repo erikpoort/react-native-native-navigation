@@ -1,30 +1,19 @@
 import React, { Component } from 'react';
-import { AppRegistry, BackHandler } from 'react-native';
+import { AppRegistry } from 'react-native';
 import ReactNativeNativeNavigation from './../ReactNativeNativeNavigation';
 
-const registerScreen = (screenID, screen) => {
+const registerScreen = (navigator, screenID, screen) => {
 	AppRegistry.registerComponent(screenID, () => {
 		const Screen = screen;
+		const Navigator = navigator;
 		return class extends Component {
-			removeBackButtonListener;
-			componentWillMount() {
-				const { remove } = BackHandler.addEventListener('hardwareBackPress', function() {
-					ReactNativeNativeNavigation.handleBackButton(handled => {
-						if (!handled) {
-							BackHandler.exitApp();
-						}
-					})
-					return true;
-				});
-				this.removeBackButtonListener = remove;
-			}
-			componentWillUnmount() {
-				if (this.removeBackButtonListener != null) {
-					this.removeBackButtonListener();
-				}
-			}
 			render() {
-				return (<Screen/>)
+				const props = this.props;
+				return (
+					<Navigator>
+						<Screen />
+					</Navigator>
+				)
 			}
 		}
 	});
@@ -33,7 +22,8 @@ const registerScreen = (screenID, screen) => {
 class Navigation extends Component {
 	setSiteMap = () => {
 		let dom = this.props.children[1];
-		return dom.type.mapToDictionary('', dom);
+		console.log(dom);
+		return dom.type.mapToDictionary(dom.type, '', dom);
 	}
 	componentDidMount() {
 		map = this.setSiteMap();

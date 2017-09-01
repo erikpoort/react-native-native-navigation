@@ -2,17 +2,22 @@ import React from 'react';
 import { NativeModules } from 'react-native';
 const { ReactNativeNativeNavigation } = NativeModules;
 import SingleView from './../SingleView';
+import StackView from './../stack/StackView';
 
-handleBackButton = (callback) => {
-	return ReactNativeNativeNavigation.handleBackButton(callback);
-}
+export default class StackNavigation {
+	screenID;
 
-push = (screen) => {
-	const Wrapper = <SingleView screen={screen.type} />
-	return ReactNativeNativeNavigation.push(SingleView.mapToDictionary(SingleView, '', Wrapper));
-}
+	constructor(screenID = '') {
+		this.screenID = screenID;
+	}
 
-module.exports = {
-	handleBackButton,
-	push,
+	handleBackButton = (callback) => {
+		return ReactNativeNativeNavigation.handleBackButton(callback);
+	}
+
+	push = (screen) => {
+		// const Navigator = todo SingleView is assumed
+		const Screen = <SingleView screen={screen.type} />;
+		return ReactNativeNativeNavigation.push(Screen.type.mapToDictionary(StackView, this.screenID, Screen));
+	}
 }

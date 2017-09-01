@@ -1,8 +1,8 @@
 import { NativeModules } from 'react-native';
 const { ReactNativeNativeNavigation } = NativeModules;
 
-onStart = () => {
-	return ReactNativeNativeNavigation.onStart();
+onStart = (callback) => {
+	ReactNativeNativeNavigation.onStart(callback);
 }
 
 setSiteMap = (map) => {

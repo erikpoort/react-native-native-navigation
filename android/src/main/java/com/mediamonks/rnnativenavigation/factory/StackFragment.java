@@ -75,11 +75,7 @@ public class StackFragment extends BaseFragment<StackNode>
 
 		for (Node node : getNode().getStack())
 		{
-			BaseFragment fragment = node.getFragment();
-			FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-			transaction.add(_holder.getId(), fragment);
-			transaction.commit();
-			_stack.add(fragment);
+			push(node, false);
 		}
 
 		this.handleCurrentStack();
@@ -90,6 +86,21 @@ public class StackFragment extends BaseFragment<StackNode>
 				onBackPressed();
 			}
 		});
+	}
+
+	public void push(Node node)
+	{
+		push(node, true);
+	}
+
+	public void push(Node node, boolean animated)
+	{
+		BaseFragment fragment = node.getFragment();
+		FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+		transaction.add(_holder.getId(), fragment);
+		transaction.setTransition(animated ? FragmentTransaction.TRANSIT_FRAGMENT_OPEN : FragmentTransaction.TRANSIT_NONE);
+		transaction.commit();
+		_stack.add(fragment);
 	}
 
 	private void handleCurrentStack()

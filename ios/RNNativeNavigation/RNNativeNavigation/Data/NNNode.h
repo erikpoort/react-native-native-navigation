@@ -10,6 +10,7 @@
 + (NSString *)jsName;
 - (void)setBridge:(RCTBridge *)bridge;
 - (void)setData:(NSDictionary *)data;
+- (NSDictionary *)data;
 - (NSString *)title;
 - (UIViewController *)generate;
 

@@ -37,6 +37,18 @@ static NSString *const kStackKey = @"stack";
 	self.stack = tempStack;
 }
 
+- (NSDictionary *)data
+{
+	NSMutableArray *stack = @[].mutableCopy;
+	[self.stack enumerateObjectsUsingBlock:^(id <NNNode> obj, NSUInteger idx, BOOL *stop)
+	{
+		[stack addObject:obj.data];
+	}];
+	return @{
+			kStackKey: stack.copy,
+	};
+}
+
 - (NSString *)title
 {
 	return self.stack.lastObject.title;

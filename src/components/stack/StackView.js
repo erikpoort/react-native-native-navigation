@@ -1,11 +1,17 @@
 import React, { Component } from 'react';
 import { BackHandler } from 'react-native';
 import StackNavigation from './StackNavigation';
+import SingleView from './../SingleView';
 
 export default class StackView extends Component {
 	static mapChildren = (navigator, path, children) => {
 		if (!Array.isArray(children)) children = [children];
-		return children.map(dom => dom.type.mapToDictionary(navigator, path, dom));
+		let buildPath = path;
+		return children.map(dom => {
+			let child = dom.type.mapToDictionary(navigator, buildPath, dom);
+			buildPath = child.screenID;
+			return child;
+		});
 	}
 	static mapToDictionary = (navigator, path, dom) => {
 		const type = dom.type.name;
@@ -14,6 +20,15 @@ export default class StackView extends Component {
 			type,
 			stack,
 		};
+	}
+
+	static handleMap = (data, viewMap, pageMap) => {
+		data.stack.forEach(node => {
+			const view = viewMap[node.type];
+			if (view) {
+				view.handleMap(node, viewMap, pageMap);
+			}
+		});
 	}
 
 	removeBackButtonListener;
@@ -36,6 +51,7 @@ export default class StackView extends Component {
 
 	render() {
 		const Screen = this.props.screen;
-		return <Screen stack={StackNavigation} />;
+		const stackNavigation = new StackNavigation(Screen.screenID);
+		return <Screen stack={stackNavigation} />;
 	}
 }

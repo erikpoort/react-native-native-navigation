@@ -1,31 +1,34 @@
 import React, { Component } from 'react';
-import { AppRegistry } from 'react-native';
 import ReactNativeNativeNavigation from './../ReactNativeNativeNavigation';
-
-const registerScreen = (navigator, screenID, screen) => {
-	AppRegistry.registerComponent(screenID, () => {
-		const Screen = screen;
-		const Navigator = navigator;
-		return class extends Component {
-			render() {
-				const props = this.props;
-				return (
-					<Navigator screen={Screen} />
-				)
-			}
-		}
-	});
-}
+import SingleView from './SingleView';
+import StackView from './stack/StackView';
 
 class Navigation extends Component {
 	setSiteMap = () => {
-		let dom = this.props.children[1];
+		const dom = this.props.children[1];
 		return dom.type.mapToDictionary(dom.type, '', dom);
 	}
 	componentDidMount() {
 		map = this.setSiteMap();
-		ReactNativeNativeNavigation.onStart()
-			.catch(() => ReactNativeNativeNavigation.setSiteMap(map));
+		const pageMap = this.props.pages.reduce((map, page) => {
+			return {
+				...map,
+				[page.name]: page
+			}
+		}, {});
+		ReactNativeNativeNavigation.onStart((request) => {
+			if (request) {
+				const dom = this.props.children[1];
+				const viewMap = {
+					[SingleView.name] : SingleView,
+					[StackView.name] : StackView,
+				}
+				dom.type.handleMap(request, viewMap, pageMap);
+				ReactNativeNativeNavigation.setSiteMap(request);
+			} else {
+				ReactNativeNativeNavigation.setSiteMap(map);
+			}
+		});
 	}
 	render() {
 		return this.props.children[0]
@@ -33,6 +36,5 @@ class Navigation extends Component {
 }
 
 module.exports = {
-	registerScreen,
 	Navigation,
 }

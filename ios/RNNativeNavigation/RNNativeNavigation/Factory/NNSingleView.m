@@ -5,11 +5,12 @@
 #import <React/RCTRootView.h>
 #import "NNSingleView.h"
 #import "NNSingleNode.h"
+#import "RNNNState.h"
 
 @interface NNSingleView ()
 
+@property (nonatomic, strong) NNSingleNode *node;
 @property (nonatomic, strong) RCTBridge *bridge;
-@property (nonatomic, copy) NSString *screenID;
 
 @end
 
@@ -17,15 +18,23 @@
 
 - (instancetype)initWithBridge:(RCTBridge *)bridge node:(NNSingleNode *)node {
     if (self = [super init]) {
+        self.node = node;
         self.bridge = bridge;
-        self.screenID = node.screenID;
         self.title = node.title;
     }
     return self;
 }
 
 - (void)loadView {
-    self.view = [[RCTRootView alloc] initWithBridge:self.bridge moduleName:self.screenID initialProperties:nil];
+    self.view = [[RCTRootView alloc] initWithBridge:self.bridge moduleName:self.node.screenID initialProperties:nil];
+}
+
+- (void)dealloc {
+    if (self.node.parentType == NNParentTypeStack && self.bridge.isValid) {
+        NSMutableDictionary *newState = (NSMutableDictionary *)[RNNNState sharedInstance].state;
+        [newState[@"stack"] removeLastObject];
+        [RNNNState sharedInstance].state = newState;
+    }
 }
 
 @end

@@ -1,5 +1,6 @@
 package com.mediamonks.rnnativenavigation.factory;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -21,6 +22,7 @@ public class SingleFragment extends BaseFragment<SingleNode>
 	public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
 	{
 		ReactRootView rootView = new ReactRootView(getActivity());
+		rootView.setBackgroundColor(Color.WHITE);
 		rootView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 		return rootView;
 	}

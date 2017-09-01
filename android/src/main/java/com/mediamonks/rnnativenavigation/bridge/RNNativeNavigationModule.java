@@ -66,10 +66,7 @@ class RNNativeNavigationModule extends ReactContextBaseJavaModule
 		{
 			assert getCurrentActivity() != null;
 			ReactFragmentActivity mainActivity = (ReactFragmentActivity) getCurrentActivity();
-			ReactApplication mainApplication = (ReactApplication) mainActivity.getApplication();
-			ReactNativeHost reactNativeHost = mainApplication.getReactNativeHost();
-			ReactInstanceManager reactInstanceManager = reactNativeHost.getReactInstanceManager();
-			Node node = NodeHelper.nodeFromMap(map, reactInstanceManager);
+			Node node = NodeHelper.nodeFromMap(map, getReactInstanceManager());
 			FragmentManager fragmentManager = mainActivity.getSupportFragmentManager();
 			FragmentTransaction transaction = fragmentManager.beginTransaction();
 			Fragment fragment = node.getFragment();
@@ -108,5 +105,47 @@ class RNNativeNavigationModule extends ReactContextBaseJavaModule
 			}
 		}
 		callback.invoke(false);
+	}
+
+	@ReactMethod
+	public void push(final ReadableMap screen)
+	{
+		assert getCurrentActivity() != null;
+		ReactFragmentActivity mainActivity = (ReactFragmentActivity) getCurrentActivity();
+		List<Fragment> fragments = mainActivity.getSupportFragmentManager().getFragments();
+		int leni = fragments.size();
+
+		for (int i = leni - 1; i >= 0; --i)
+		{
+			final Fragment fragment = fragments.get(i);
+			if (fragment instanceof StackFragment)
+			{
+				mainActivity.runOnUiThread(new Runnable()
+				{
+					@Override
+					public void run()
+					{
+						try
+						{
+							StackFragment stackFragment = (StackFragment) fragment;
+							stackFragment.push(NodeHelper.nodeFromMap(screen, getReactInstanceManager()));
+						}
+						catch (Exception ignored)
+						{
+						}
+					}
+				});
+				return;
+			}
+		}
+	}
+
+	private ReactInstanceManager getReactInstanceManager()
+	{
+		assert getCurrentActivity() != null;
+		ReactFragmentActivity mainActivity = (ReactFragmentActivity) getCurrentActivity();
+		ReactApplication mainApplication = (ReactApplication) mainActivity.getApplication();
+		ReactNativeHost reactNativeHost = mainApplication.getReactNativeHost();
+		return reactNativeHost.getReactInstanceManager();
 	}
 }

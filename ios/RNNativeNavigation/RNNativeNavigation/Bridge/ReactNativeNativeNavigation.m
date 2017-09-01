@@ -7,6 +7,7 @@
 #import "RNNNState.h"
 #import "NNSingleNode.h"
 #import "NNNodeHelper.h"
+#import "NNStackNode.h"
 
 static NSString *const kRNNN = @"RNNN";
 
@@ -22,16 +23,15 @@ RCT_EXPORT_MODULE();
 	return self;
 }
 
-RCT_EXPORT_METHOD(onStart:(RCTPromiseResolveBlock)resolve
-			rejecter:(RCTPromiseRejectBlock)reject) {
+RCT_EXPORT_METHOD(onStart:(RCTResponseSenderBlock)callback) {
 
 	NSDictionary *state = [RNNNState sharedInstance].state;
 	if (state) {
-		[self setSiteMap:state resolver:resolve rejecter:reject];
+		NSLog(@"Reload");
+		callback(@[state]);
 	} else {
 		NSLog(@"First load");
-		NSString *message = @"A site map is needed to build the views, call setSiteMap";
-		reject(kRNNN, message, RCTErrorWithMessage(message));
+		callback(@[]);
 	}
 }
 
@@ -41,7 +41,7 @@ RCT_EXPORT_METHOD(setSiteMap:(NSDictionary *)map
 
 	[RNNNState sharedInstance].state = map;
 
-	id <NNNode> nodeObject = [NNNodeHelper nodeFromMap:map bridge:self.bridge];
+	NNStackNode *nodeObject = [NNNodeHelper nodeFromMap:map bridge:self.bridge];
 	UIViewController *viewController = [nodeObject generate];
 
 	dispatch_async(dispatch_get_main_queue(), ^{
@@ -54,7 +54,7 @@ RCT_EXPORT_METHOD(setSiteMap:(NSDictionary *)map
 }
 
 RCT_EXPORT_METHOD(push:(NSDictionary *)screen) {
-	id <NNNode> nodeObject = [NNNodeHelper nodeFromMap:screen bridge:self.bridge];
+	NNSingleNode *nodeObject = [NNNodeHelper nodeFromMap:screen bridge:self.bridge];
 	UIViewController *viewController = [nodeObject generate];
 
 	dispatch_async(dispatch_get_main_queue(), ^{
@@ -67,6 +67,10 @@ RCT_EXPORT_METHOD(push:(NSDictionary *)screen) {
 			[navigationController pushViewController:viewController animated:YES];
 		}
 	});
+
+	NSMutableDictionary *newState = [RNNNState sharedInstance].state.mutableCopy;
+	[newState[@"stack"] addObject:screen];
+	[RNNNState sharedInstance].state = newState;
 }
 
 @end

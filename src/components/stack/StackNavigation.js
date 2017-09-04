@@ -12,7 +12,7 @@ export default class StackNavigation {
 	}
 
 	handleBackButton = (callback) => {
-		return ReactNativeNativeNavigation.handleBackButton(callback);
+		ReactNativeNativeNavigation.handleBackButton(callback);
 	}
 
 	push = (screen) => {

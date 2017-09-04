@@ -15,9 +15,13 @@ import android.view.ViewGroup.LayoutParams;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
+import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.WritableMap;
+import com.mediamonks.rnnativenavigation.bridge.RNNNState;
 import com.mediamonks.rnnativenavigation.data.Node;
 import com.mediamonks.rnnativenavigation.data.StackNode;
 
+import java.util.ArrayList;
 import java.util.Stack;
 
 /**
@@ -101,6 +105,8 @@ public class StackFragment extends BaseFragment<StackNode>
 		transaction.setTransition(animated ? FragmentTransaction.TRANSIT_FRAGMENT_OPEN : FragmentTransaction.TRANSIT_NONE);
 		transaction.commit();
 		_stack.add(fragment);
+
+		this.handleCurrentStack();
 	}
 
 	private void handleCurrentStack()
@@ -120,6 +126,13 @@ public class StackFragment extends BaseFragment<StackNode>
 			transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
 			transaction.commit();
 			this.handleCurrentStack();
+
+			WritableMap newState = RNNNState.INSTANCE.state;
+			ArrayList stack = newState.getArray("stack").toArrayList();
+			stack.remove(stack.size() - 1);
+			newState.putArray("stack", Arguments.makeNativeArray(stack));
+			RNNNState.INSTANCE.state = newState;
+
 			return true;
 		}
 		return false;
@@ -132,7 +145,8 @@ public class StackFragment extends BaseFragment<StackNode>
 		{
 			while (_stack.size() > 0)
 			{
-				_stack.pop();
+				BaseFragment fragment = _stack.pop();
+				fragment.onDestroyView();
 			}
 		}
 

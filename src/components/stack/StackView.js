@@ -31,10 +31,15 @@ export default class StackView extends Component {
 		});
 	}
 
+	stackNavigation;
 	removeBackButtonListener;
+
 	componentWillMount() {
-		const { remove } = BackHandler.addEventListener('hardwareBackPress', function() {
-			StackNavigation.handleBackButton(handled => {
+		const Screen = this.props.screen;
+		this.stackNavigation = new StackNavigation(Screen.screenID);
+
+		const { remove } = BackHandler.addEventListener('hardwareBackPress', () => {
+			this.stackNavigation.handleBackButton((handled) => {
 				if (!handled) {
 					BackHandler.exitApp();
 				}
@@ -43,6 +48,7 @@ export default class StackView extends Component {
 		});
 		this.removeBackButtonListener = remove;
 	}
+
 	componentWillUnmount() {
 		if (this.removeBackButtonListener != null) {
 			this.removeBackButtonListener();
@@ -51,7 +57,6 @@ export default class StackView extends Component {
 
 	render() {
 		const Screen = this.props.screen;
-		const stackNavigation = new StackNavigation(Screen.screenID);
-		return <Screen stack={stackNavigation} />;
+		return <Screen stack={this.stackNavigation} />;
 	}
 }

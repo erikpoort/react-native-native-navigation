@@ -9,12 +9,15 @@ import com.facebook.react.ReactApplication;
 import com.facebook.react.ReactFragmentActivity;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactNativeHost;
+import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.WritableArray;
+import com.facebook.react.bridge.WritableMap;
 import com.mediamonks.rnnativenavigation.data.Node;
 import com.mediamonks.rnnativenavigation.factory.NodeHelper;
 import com.mediamonks.rnnativenavigation.factory.StackFragment;
@@ -36,31 +39,54 @@ class RNNativeNavigationModule extends ReactContextBaseJavaModule
 	}
 
 	@Override
+	public void onCatalystInstanceDestroy()
+	{
+		/*
+		 * Clear all existing fragments before Facebook reloads them. The onStart method will
+		 * rebuild the fragments.
+		 */
+		assert getCurrentActivity() != null;
+		ReactFragmentActivity mainActivity = (ReactFragmentActivity) getCurrentActivity();
+		List<Fragment> fragments = mainActivity.getSupportFragmentManager().getFragments();
+		for (Fragment fragment : fragments)
+		{
+			if (fragment != null)
+			{
+				FragmentTransaction transaction = mainActivity.getSupportFragmentManager().beginTransaction();
+				transaction.remove(fragment);
+				transaction.commit();
+			}
+		}
+
+		super.onCatalystInstanceDestroy();
+	}
+
+	@Override
 	public String getName()
 	{
 		return "ReactNativeNativeNavigation";
 	}
 
 	@ReactMethod
-	public void onStart(Promise promise)
+	public void onStart(Callback callback)
 	{
 		ReadableMap state = RNNNState.INSTANCE.state;
-		if (state != null)
+		if (state == null)
 		{
-			this.setSiteMap(state, promise);
+			Log.i(kRNNN, "First load");
+			callback.invoke();
 		}
 		else
 		{
-			Log.i(kRNNN, "First load");
-			String message = "A site map is needed to build the views, call setSiteMap";
-			promise.reject(kRNNN, message, new Throwable(message));
+			Log.i(kRNNN, "Reload");
+			callback.invoke(state);
 		}
 	}
 
 	@ReactMethod
 	public void setSiteMap(ReadableMap map, Promise promise)
 	{
-		RNNNState.INSTANCE.state = map;
+		RNNNState.INSTANCE.state = Arguments.makeNativeMap(map.toHashMap());
 
 		try
 		{
@@ -135,9 +161,15 @@ class RNNativeNavigationModule extends ReactContextBaseJavaModule
 						}
 					}
 				});
-				return;
+				break;
 			}
 		}
+
+		WritableMap newState = RNNNState.INSTANCE.state;
+		WritableArray stack = Arguments.makeNativeArray(newState.getArray("stack").toArrayList());
+		stack.pushMap(Arguments.makeNativeMap(screen.toHashMap()));
+		newState.putArray("stack", stack);
+		RNNNState.INSTANCE.state = newState;
 	}
 
 	private ReactInstanceManager getReactInstanceManager()

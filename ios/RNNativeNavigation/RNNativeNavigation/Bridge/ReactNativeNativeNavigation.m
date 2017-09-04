@@ -26,12 +26,12 @@ RCT_EXPORT_MODULE();
 RCT_EXPORT_METHOD(onStart:(RCTResponseSenderBlock)callback) {
 
 	NSDictionary *state = [RNNNState sharedInstance].state;
-	if (state) {
-		NSLog(@"Reload");
-		callback(@[state]);
-	} else {
-		NSLog(@"First load");
+	if (state == nil) {
+		NSLog(@"%@ %@", kRNNN, @"First load");
 		callback(@[]);
+	} else {
+		NSLog(@"%@ %@", kRNNN, @"Reload");
+		callback(@[state]);
 	}
 }
 

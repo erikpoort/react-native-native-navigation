@@ -55,7 +55,7 @@
 			} else {
 				checkController = nil;
 			}
-		} while([checkController isEqual:foundController]);
+		} while(checkController != nil);
 
 		if (![foundController.node.screenID isEqualToString:path]) {
 			foundController = [foundController viewForPath:path];

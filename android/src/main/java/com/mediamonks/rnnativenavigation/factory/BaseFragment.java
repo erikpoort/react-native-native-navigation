@@ -11,6 +11,8 @@ import com.mediamonks.rnnativenavigation.data.Node;
 
 public abstract class BaseFragment<T extends Node> extends Fragment
 {
+	private StackFragment _stackFragment;
+
 	private T _node;
 
 	public void setNode(T node)
@@ -26,5 +28,17 @@ public abstract class BaseFragment<T extends Node> extends Fragment
 	public boolean onBackPressed()
 	{
 		return false;
+	}
+
+	public abstract BaseFragment fragmentForPath(String path);
+
+	public void setStackFragment(StackFragment stackFragment)
+	{
+		_stackFragment = stackFragment;
+	}
+
+	public StackFragment getStackFragment()
+	{
+		return _stackFragment;
 	}
 }

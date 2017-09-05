@@ -16,12 +16,14 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableMap;
-import com.facebook.react.bridge.WritableArray;
-import com.facebook.react.bridge.WritableMap;
 import com.mediamonks.rnnativenavigation.data.Node;
+import com.mediamonks.rnnativenavigation.factory.BaseFragment;
 import com.mediamonks.rnnativenavigation.factory.NodeHelper;
+import com.mediamonks.rnnativenavigation.factory.SingleFragment;
 import com.mediamonks.rnnativenavigation.factory.StackFragment;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -70,7 +72,7 @@ class RNNativeNavigationModule extends ReactContextBaseJavaModule
 	@ReactMethod
 	public void onStart(Callback callback)
 	{
-		ReadableMap state = RNNNState.INSTANCE.state;
+		HashMap state = RNNNState.INSTANCE.state;
 		if (state == null)
 		{
 			Log.i(kRNNN, "First load");
@@ -79,14 +81,14 @@ class RNNativeNavigationModule extends ReactContextBaseJavaModule
 		else
 		{
 			Log.i(kRNNN, "Reload");
-			callback.invoke(state);
+			callback.invoke(Arguments.makeNativeMap(state));
 		}
 	}
 
 	@ReactMethod
 	public void setSiteMap(ReadableMap map, Promise promise)
 	{
-		RNNNState.INSTANCE.state = Arguments.makeNativeMap(map.toHashMap());
+		RNNNState.INSTANCE.state = map.toHashMap();
 
 		try
 		{
@@ -134,42 +136,43 @@ class RNNativeNavigationModule extends ReactContextBaseJavaModule
 	}
 
 	@ReactMethod
-	public void push(final ReadableMap screen)
+	public void push(final ReadableMap screen, Callback callback)
 	{
-		assert getCurrentActivity() != null;
-		ReactFragmentActivity mainActivity = (ReactFragmentActivity) getCurrentActivity();
-		List<Fragment> fragments = mainActivity.getSupportFragmentManager().getFragments();
-		int leni = fragments.size();
-
-		for (int i = leni - 1; i >= 0; --i)
+		try
 		{
-			final Fragment fragment = fragments.get(i);
-			if (fragment instanceof StackFragment)
-			{
-				mainActivity.runOnUiThread(new Runnable()
-				{
-					@Override
-					public void run()
-					{
-						try
-						{
-							StackFragment stackFragment = (StackFragment) fragment;
-							stackFragment.push(NodeHelper.nodeFromMap(screen, getReactInstanceManager()));
-						}
-						catch (Exception ignored)
-						{
-						}
-					}
-				});
-				break;
-			}
-		}
+			final Node node = NodeHelper.nodeFromMap(screen, getReactInstanceManager());
 
-		WritableMap newState = RNNNState.INSTANCE.state;
-		WritableArray stack = Arguments.makeNativeArray(newState.getArray("stack").toArrayList());
-		stack.pushMap(Arguments.makeNativeMap(screen.toHashMap()));
-		newState.putArray("stack", stack);
-		RNNNState.INSTANCE.state = newState;
+			assert getCurrentActivity() != null;
+			ReactFragmentActivity mainActivity = (ReactFragmentActivity) getCurrentActivity();
+			List<Fragment> fragments = mainActivity.getSupportFragmentManager().getFragments();
+			BaseFragment rootFragment = (BaseFragment) fragments.get(0);
+			int lastSlash = node.getScreenID().lastIndexOf("/");
+			final BaseFragment findFragment = rootFragment.fragmentForPath(node.getScreenID().substring(0, lastSlash));
+
+			HashMap newState = RNNNState.INSTANCE.state;
+			ArrayList stack = (ArrayList) newState.get("stack");
+			stack.add(screen.toHashMap());
+			newState.put("stack", stack);
+			RNNNState.INSTANCE.state = newState;
+
+			callback.invoke(Arguments.makeNativeMap(newState));
+
+			mainActivity.runOnUiThread(new Runnable()
+			{
+				@Override
+				public void run()
+				{
+					if (findFragment != null)
+					{
+						SingleFragment singleFragment = (SingleFragment) findFragment;
+						singleFragment.getStackFragment().push(node);
+					}
+				}
+			});
+		}
+		catch (Exception ignored)
+		{
+		}
 	}
 
 	private ReactInstanceManager getReactInstanceManager()

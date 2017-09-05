@@ -2,6 +2,7 @@ package com.mediamonks.rnnativenavigation.data;
 
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.WritableMap;
 import com.mediamonks.rnnativenavigation.factory.BaseFragment;
 
 import java.io.Serializable;
@@ -13,10 +14,10 @@ import java.io.Serializable;
 
 public interface Node extends Serializable
 {
-	BaseFragment getFragment();
-
 	void setInstanceManager(ReactInstanceManager instanceManager);
 	void setData(ReadableMap map);
-
+	WritableMap data();
 	String getTitle();
+	String getScreenID();
+	BaseFragment getFragment();
 }

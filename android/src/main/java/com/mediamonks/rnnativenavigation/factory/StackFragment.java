@@ -22,6 +22,7 @@ import com.mediamonks.rnnativenavigation.data.Node;
 import com.mediamonks.rnnativenavigation.data.StackNode;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Stack;
 
 /**
@@ -84,9 +85,11 @@ public class StackFragment extends BaseFragment<StackNode>
 
 		this.handleCurrentStack();
 
-		_toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+		_toolbar.setNavigationOnClickListener(new View.OnClickListener()
+		{
 			@Override
-			public void onClick(View v) {
+			public void onClick(View v)
+			{
 				onBackPressed();
 			}
 		});
@@ -100,6 +103,7 @@ public class StackFragment extends BaseFragment<StackNode>
 	public void push(Node node, boolean animated)
 	{
 		BaseFragment fragment = node.getFragment();
+		fragment.setStackFragment(this);
 		FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
 		transaction.add(_holder.getId(), fragment);
 		transaction.setTransition(animated ? FragmentTransaction.TRANSIT_FRAGMENT_OPEN : FragmentTransaction.TRANSIT_NONE);
@@ -127,15 +131,51 @@ public class StackFragment extends BaseFragment<StackNode>
 			transaction.commit();
 			this.handleCurrentStack();
 
-			WritableMap newState = RNNNState.INSTANCE.state;
-			ArrayList stack = newState.getArray("stack").toArrayList();
+			HashMap newState = RNNNState.INSTANCE.state;
+			ArrayList stack = (ArrayList) newState.get("stack");
 			stack.remove(stack.size() - 1);
-			newState.putArray("stack", Arguments.makeNativeArray(stack));
+			newState.put("stack", stack);
 			RNNNState.INSTANCE.state = newState;
 
 			return true;
 		}
 		return false;
+	}
+
+	@Override
+	public BaseFragment fragmentForPath(String path)
+	{
+		if (path.indexOf(getNode().getScreenID()) == 0)
+		{
+			BaseFragment checkFragment;
+			BaseFragment foundFragment = null;
+
+			int i = 0;
+			do
+			{
+				if (i < this._stack.size())
+				{
+					checkFragment = _stack.get(i++);
+
+					if (path.indexOf(checkFragment.getNode().getScreenID()) == 0) {
+						foundFragment = checkFragment;
+					}
+				}
+				else
+				{
+					checkFragment = null;
+				}
+			} while (checkFragment != null);
+
+			if (foundFragment != null) {
+				if (!foundFragment.getNode().getScreenID().equals(path)) {
+					foundFragment = foundFragment.fragmentForPath(path);
+				}
+
+				return foundFragment;
+			}
+		}
+		return null;
 	}
 
 	@Override

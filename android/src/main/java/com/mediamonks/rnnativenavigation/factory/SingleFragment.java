@@ -45,4 +45,10 @@ public class SingleFragment extends BaseFragment<SingleNode>
 		}
 		super.onDestroyView();
 	}
+
+	@Override
+	public BaseFragment fragmentForPath(String path)
+	{
+		return null;
+	}
 }

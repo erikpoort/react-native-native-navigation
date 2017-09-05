@@ -2,6 +2,8 @@ package com.mediamonks.rnnativenavigation.data;
 
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.bridge.WritableNativeMap;
 import com.mediamonks.rnnativenavigation.factory.BaseFragment;
 import com.mediamonks.rnnativenavigation.factory.SingleFragment;
 
@@ -10,16 +12,14 @@ import com.mediamonks.rnnativenavigation.factory.SingleFragment;
  * RNNativeNavigation 2017
  */
 
-public class SingleNode implements Node
+public class SingleNode extends BaseNode implements Node
 {
 	public static String JS_NAME = "SingleView";
 
 	private static final String NAME = "name";
-	private static final String SCREEN_ID = "screenID";
 
 	private ReactInstanceManager _instanceManager;
 	private String _title;
-	private String _screenID;
 
 	@Override
 	public BaseFragment<SingleNode> getFragment()
@@ -43,8 +43,16 @@ public class SingleNode implements Node
 	@Override
 	public void setData(ReadableMap map)
 	{
+		super.setData(map);
 		_title = map.getString(NAME);
-		_screenID = map.getString(SCREEN_ID);
+	}
+
+	@Override
+	public WritableMap data()
+	{
+		WritableMap data = super.data();
+		data.putString(NAME, _title);
+		return data;
 	}
 
 	@Override
@@ -53,8 +61,4 @@ public class SingleNode implements Node
 		return _title;
 	}
 
-	public String getScreenID()
-	{
-		return _screenID;
-	}
 }

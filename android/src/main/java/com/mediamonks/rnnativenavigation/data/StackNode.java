@@ -3,6 +3,10 @@ package com.mediamonks.rnnativenavigation.data;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.WritableArray;
+import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.bridge.WritableNativeArray;
+import com.facebook.react.bridge.WritableNativeMap;
 import com.mediamonks.rnnativenavigation.factory.BaseFragment;
 import com.mediamonks.rnnativenavigation.factory.NodeHelper;
 import com.mediamonks.rnnativenavigation.factory.StackFragment;
@@ -14,7 +18,7 @@ import java.util.Stack;
  * RNNativeNavigation 2017
  */
 
-public class StackNode implements Node
+public class StackNode extends BaseNode implements Node
 {
 	public static String JS_NAME = "StackView";
 
@@ -45,6 +49,8 @@ public class StackNode implements Node
 	@Override
 	public void setData(ReadableMap map)
 	{
+		super.setData(map);
+
 		Stack<Node> stack = new Stack<>();
 		ReadableArray stackArray = map.getArray(STACK);
 
@@ -62,6 +68,18 @@ public class StackNode implements Node
 		}
 
 		_stack = stack;
+	}
+
+	@Override
+	public WritableMap data()
+	{
+		WritableMap map = super.data();
+		WritableArray stack = new WritableNativeArray();
+		for (Node node : _stack) {
+			stack.pushMap(node.data());
+		}
+		map.putArray(STACK, stack);
+		return map;
 	}
 
 	@Override

@@ -1,6 +1,6 @@
 package com.mediamonks.rnnativenavigation.bridge;
 
-import com.facebook.react.bridge.WritableMap;
+import java.util.HashMap;
 
 /**
  * Created by erik on 29/08/2017.
@@ -10,5 +10,5 @@ import com.facebook.react.bridge.WritableMap;
 public enum RNNNState
 {
 	INSTANCE;
-	public WritableMap state;
+	public HashMap state;
 }

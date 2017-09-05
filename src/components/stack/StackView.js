@@ -39,7 +39,7 @@ export default class StackView extends Component {
 							}
 							componentWillMount() {
 								const { remove } = BackHandler.addEventListener('hardwareBackPress', () => {
-									this.props.stack.handleBackButton((handled) => {
+									this.stack.handleBackButton((handled) => {
 										if (!handled) {
 											BackHandler.exitApp();
 										}

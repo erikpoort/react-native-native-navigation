@@ -86,7 +86,7 @@ class RNNativeNavigationModule extends ReactContextBaseJavaModule
 	}
 
 	@ReactMethod
-	public void setSiteMap(ReadableMap map, Promise promise)
+	public void setSiteMap(ReadableMap map, final Promise promise)
 	{
 		RNNNState.INSTANCE.state = map.toHashMap();
 
@@ -94,13 +94,21 @@ class RNNativeNavigationModule extends ReactContextBaseJavaModule
 		{
 			assert getCurrentActivity() != null;
 			ReactFragmentActivity mainActivity = (ReactFragmentActivity) getCurrentActivity();
-			Node node = NodeHelper.nodeFromMap(map, getReactInstanceManager());
-			FragmentManager fragmentManager = mainActivity.getSupportFragmentManager();
-			FragmentTransaction transaction = fragmentManager.beginTransaction();
-			Fragment fragment = node.getFragment();
-			transaction.replace(android.R.id.content, fragment);
-			transaction.commit();
-			promise.resolve(true);
+			final Node node = NodeHelper.nodeFromMap(map, getReactInstanceManager());
+			final FragmentManager fragmentManager = mainActivity.getSupportFragmentManager();
+
+			mainActivity.runOnUiThread(new Runnable()
+			{
+				@Override
+				public void run()
+				{
+					FragmentTransaction transaction = fragmentManager.beginTransaction();
+					Fragment fragment = node.getFragment();
+					transaction.replace(android.R.id.content, fragment);
+					transaction.commit();
+					promise.resolve(true);
+				}
+			});
 		}
 		catch (Exception e)
 		{
@@ -145,7 +153,21 @@ class RNNativeNavigationModule extends ReactContextBaseJavaModule
 			assert getCurrentActivity() != null;
 			ReactFragmentActivity mainActivity = (ReactFragmentActivity) getCurrentActivity();
 			List<Fragment> fragments = mainActivity.getSupportFragmentManager().getFragments();
-			BaseFragment rootFragment = (BaseFragment) fragments.get(0);
+			BaseFragment rootFragment = null;
+			String rootPath = node.getScreenID().substring(0, node.getScreenID().indexOf("/", 1));
+			for (Fragment findFragment : fragments)
+			{
+				if (findFragment != null)
+				{
+					BaseFragment findBaseFragment = (BaseFragment) findFragment;
+					if (findBaseFragment.getNode().getScreenID().equals(rootPath))
+					{
+						rootFragment = findBaseFragment;
+						break;
+					}
+				}
+			}
+			assert rootFragment != null;
 			int lastSlash = node.getScreenID().lastIndexOf("/");
 			final BaseFragment findFragment = rootFragment.fragmentForPath(node.getScreenID().substring(0, lastSlash));
 

@@ -7,6 +7,7 @@
 
 @interface NNTabNode : NSObject <NNNode>
 
-- (instancetype)initWithTabs:(NSArray <id <NNNode>> *)tabs selectedTab:(NSUInteger)selectedTab;
+@property (nonatomic, copy, readonly) NSArray <id <NNNode>> *tabs;
+@property (nonatomic, readonly) NSUInteger selectedTab;
 
 @end

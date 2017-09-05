@@ -1,62 +1,78 @@
 import React, { Component } from 'react';
 import { BackHandler } from 'react-native';
 import StackNavigation from './StackNavigation';
-import SingleView from './../SingleView';
 
 export default class StackView extends Component {
-	static mapChildren = (navigator, path, children) => {
+	static mapChildren = (children, path) => {
 		if (!Array.isArray(children)) children = [children];
 		let buildPath = path;
 		return children.map(dom => {
-			let child = dom.type.mapToDictionary(navigator, buildPath, dom);
+			let child = dom.type.mapToDictionary(dom, buildPath);
 			buildPath = child.screenID;
 			return child;
 		});
 	}
-	static mapToDictionary = (navigator, path, dom) => {
+	static mapToDictionary = (dom, path) => {
 		const type = dom.type.name;
-		const stack = dom.type.mapChildren(navigator, path, dom.props.children);
+		const screenID = `${path}/${dom.props.name}`
+		const stack = dom.type.mapChildren(dom.props.children, screenID);
 		return {
 			type,
+			screenID,
 			stack,
 		};
 	}
 
-	static handleMap = (data, viewMap, pageMap) => {
-		data.stack.forEach(node => {
-			const view = viewMap[node.type];
-			if (view) {
-				view.handleMap(node, viewMap, pageMap);
+	static reduceScreens = (data, viewMap, pageMap) => {
+		return data.stack.reduce((map, node) => {
+			const viewData = viewMap[node.type];
+			if (viewData) {
+				const result = viewData.reduceScreens(node, viewMap, pageMap).map((view) => {
+					const { screenID, screen } = view;
+					const StackScreen = () => {
+						return class extends Component {
+							removeBackButtonListener;
+							stack;
+							constructor() {
+								super();
+								this.stack = new StackNavigation(screenID);
+							}
+							componentWillMount() {
+								const { remove } = BackHandler.addEventListener('hardwareBackPress', () => {
+									this.props.stack.handleBackButton((handled) => {
+										if (!handled) {
+											BackHandler.exitApp();
+										}
+									})
+									return true;
+								});
+								this.removeBackButtonListener = remove;
+							}
+							componentWillUnmount() {
+								if (this.removeBackButtonListener != null) {
+									this.removeBackButtonListener();
+								}
+							}
+							componentWillReceiveProps(newProps) {
+							}
+							render() {
+								const Screen = screen;
+								return <Screen stack={this.stack} {...this.props} />
+							}
+						}
+					}
+					const stack = StackScreen();
+					return ({
+						screenID,
+						screen: stack,
+					});
+				});
+				return [
+					...map,
+					...result,
+				];
 			}
-		});
-	}
-
-	stackNavigation;
-	removeBackButtonListener;
-
-	componentWillMount() {
-		const Screen = this.props.screen;
-		this.stackNavigation = new StackNavigation(Screen.screenID);
-
-		const { remove } = BackHandler.addEventListener('hardwareBackPress', () => {
-			this.stackNavigation.handleBackButton((handled) => {
-				if (!handled) {
-					BackHandler.exitApp();
-				}
-			})
-			return true;
-		});
-		this.removeBackButtonListener = remove;
-	}
-
-	componentWillUnmount() {
-		if (this.removeBackButtonListener != null) {
-			this.removeBackButtonListener();
-		}
-	}
-
-	render() {
-		const Screen = this.props.screen;
-		return <Screen stack={this.stackNavigation} />;
+			return map;
+		}, []);
 	}
 }

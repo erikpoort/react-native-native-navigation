@@ -3,10 +3,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "NNView.h"
 
 @class NNStackNode;
 
-@interface NNStackView : UINavigationController
+@interface NNStackView : UINavigationController <NNView>
 
 - (instancetype)initWithNode:(NNStackNode *)node;
 

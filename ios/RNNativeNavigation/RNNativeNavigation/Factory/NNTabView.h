@@ -3,11 +3,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "NNView.h"
 
-@protocol NNNode;
+@class NNTabNode;
 
-@interface NNTabView : UIViewController
+@interface NNTabView : UIViewController <NNView>
 
-- (instancetype)initWithTabs:(NSArray <id <NNNode>> *)tabs selectedTab:(NSUInteger)tab;
+- (instancetype)initWithNode:(NNTabNode *)node;
 
 @end

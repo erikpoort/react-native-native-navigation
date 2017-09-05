@@ -6,14 +6,15 @@
 #import "NNNodeHelper.h"
 #import "NNStackNode.h"
 #import "NNSingleNode.h"
+#import "NNTabNode.h"
 
 static NSString *const kJSViewName = @"type";
 
 @implementation NNNodeHelper
 
 + (id <NNNode>)nodeFromMap:(NSDictionary *)map bridge:(RCTBridge *)bridge {
-	NSArray <NSString *> *names = @[[NNSingleNode jsName], [NNStackNode jsName]];
-	NSArray <Class <NNNode>> *classes = @[[NNSingleNode class], [NNStackNode class]];
+	NSArray <NSString *> *names = @[[NNSingleNode jsName], [NNStackNode jsName], [NNTabNode jsName]];
+	NSArray <Class <NNNode>> *classes = @[[NNSingleNode class], [NNStackNode class], [NNTabNode class]];
 	NSString *name = map[kJSViewName];
 	NSUInteger index = [names indexOfObject:name];
 	if (index != NSNotFound) {

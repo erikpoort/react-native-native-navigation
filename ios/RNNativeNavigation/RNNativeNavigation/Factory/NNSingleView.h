@@ -3,10 +3,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "NNView.h"
 
 @class NNSingleNode;
 
-@interface NNSingleView : UIViewController
+@interface NNSingleView : UIViewController <NNView>
 
 - (instancetype)initWithBridge:(RCTBridge *)bridge node:(NNSingleNode *)node;
 

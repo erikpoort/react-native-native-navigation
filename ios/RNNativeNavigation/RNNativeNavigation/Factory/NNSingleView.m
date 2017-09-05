@@ -29,6 +29,11 @@
     self.view = [[RCTRootView alloc] initWithBridge:self.bridge moduleName:self.node.screenID initialProperties:nil];
 }
 
+- (UIViewController <NNView> *)viewForPath:(NSString *)path
+{
+	return nil;
+}
+
 - (void)dealloc {
     if (self.node.parentType == NNParentTypeStack && self.bridge.isValid) {
         NSMutableDictionary *newState = (NSMutableDictionary *)[RNNNState sharedInstance].state;

@@ -215,3 +215,4 @@ android/keystores/debug.keystore
 jsconfig.json
 .vscode/launchReactNative.js
 example/yarn.lock
+.tmp

@@ -4,25 +4,58 @@
 
 #import "NNTabNode.h"
 #import "NNTabView.h"
+#import "NNNodeHelper.h"
 
-@implementation NNTabNode {
-    NSArray <id <NNNode>> *_tabs;
-    NSUInteger _selectedTab;
-}
+static NSString *const kTabsKey = @"tabs";
+static NSString *const kSelectedTabKey = @"selectedTab";
 
-- (instancetype)initWithTabs:(NSArray <id <NNNode>> *)tabs selectedTab:(NSUInteger)selectedTab {
-    self = [super init];
+@interface NNTabNode ()
 
-    if (self) {
-        _tabs = tabs;
-        _selectedTab = selectedTab;
-    }
+@property (nonatomic, strong) RCTBridge *bridge;
+@property (nonatomic, copy) NSArray <id <NNNode>> *tabs;
+@property (nonatomic, assign) NSUInteger selectedTab;
 
-    return self;
+@end
+
+@implementation NNTabNode
+
++ (NSString *)jsName
+{
+    return @"TabView";
 }
 
 - (UIViewController *)generate {
-    return [[NNTabView alloc] initWithTabs:_tabs selectedTab:_selectedTab];
+    return [[NNTabView alloc] initWithNode:self];
+}
+
+- (void)setData:(NSDictionary *)data
+{
+    NSArray <NSDictionary *> *objects = data[kTabsKey];
+    NSMutableArray <NNNode> *tempTabs = (NSMutableArray <NNNode> *)@[].mutableCopy;
+    [objects enumerateObjectsUsingBlock:^(NSDictionary *obj, NSUInteger idx, BOOL *stop)
+    {
+        [tempTabs addObject:[NNNodeHelper nodeFromMap:obj bridge:self.bridge]];
+    }];
+    self.tabs = tempTabs.copy;
+    self.selectedTab = [data[kSelectedTabKey] unsignedIntegerValue];
+}
+
+- (NSDictionary *)data
+{
+    NSMutableArray *tabs = @[].mutableCopy;
+    [self.tabs enumerateObjectsUsingBlock:^(id <NNNode> obj, NSUInteger idx, BOOL *stop)
+    {
+        [tabs addObject:obj.data];
+    }];
+    return @{
+            kTabsKey: tabs.copy,
+            kSelectedTabKey: @(self.selectedTab),
+    };
+}
+
+- (NSString *)title
+{
+    return self.tabs[self.selectedTab].title;
 }
 
 @end

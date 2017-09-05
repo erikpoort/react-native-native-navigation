@@ -12,6 +12,7 @@
 - (void)setData:(NSDictionary *)data;
 - (NSDictionary *)data;
 - (NSString *)title;
+- (NSString *)screenID;
 - (UIViewController *)generate;
 
 @end

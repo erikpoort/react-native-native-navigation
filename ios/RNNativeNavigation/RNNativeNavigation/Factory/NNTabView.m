@@ -4,6 +4,7 @@
 
 #import "NNTabView.h"
 #import "NNNode.h"
+#import "NNTabNode.h"
 
 @interface NNTabView () <UITabBarDelegate>
 @end
@@ -15,20 +16,18 @@
     NSArray <UIViewController *> *_viewControllers;
 }
 
-- (instancetype)initWithTabs:(NSArray <id <NNNode>> *)tabs selectedTab:(NSUInteger)tab {
-    self = [super init];
-
-    if (self) {
+- (instancetype)initWithNode:(NNTabNode *)node {
+    if (self = [super init]) {
         NSMutableArray *viewControllers = [@[] mutableCopy];
         NSMutableArray *items = [@[] mutableCopy];
-        [tabs enumerateObjectsUsingBlock:^(id <NNNode> view, NSUInteger idx, BOOL *stop) {
+        [node.tabs enumerateObjectsUsingBlock:^(id <NNNode> view, NSUInteger idx, BOOL *stop) {
             UIViewController *viewController = [view generate];
             [viewControllers addObject:viewController];
             UITabBarItem *tabBarItem = [[UITabBarItem alloc] initWithTitle:viewController.title image:nil tag:idx];
             [items addObject:tabBarItem];
         }];
         _viewControllers = [viewControllers copy];
-        _selectedTab = tab;
+        _selectedTab = node.selectedTab;
 
         _holder = [[UIView alloc] init];
         _holder.translatesAutoresizingMaskIntoConstraints = NO;

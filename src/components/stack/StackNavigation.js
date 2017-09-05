@@ -1,13 +1,15 @@
 import React from 'react';
 import { NativeModules } from 'react-native';
 const { ReactNativeNativeNavigation } = NativeModules;
+import { Navigation } from './../Navigation';
 import SingleView from './../SingleView';
 import StackView from './../stack/StackView';
+import { Text } from 'react-native';
 
 export default class StackNavigation {
 	screenID;
 
-	constructor(screenID = '') {
+	constructor(screenID) {
 		this.screenID = screenID;
 	}
 
@@ -16,8 +18,16 @@ export default class StackNavigation {
 	}
 
 	push = (screen) => {
-		// const Navigator = todo SingleView is assumed
 		const Screen = <SingleView screen={screen.type} />;
-		return ReactNativeNativeNavigation.push(Screen.type.mapToDictionary(StackView, this.screenID, Screen));
+		const screenData = Screen.type.mapToDictionary(Screen, this.screenID);
+
+		return ReactNativeNativeNavigation.push(screenData, (register) => {
+			const view = Navigation.viewMap[register.type];
+			const registerScreens = view.reduceScreens(register, Navigation.viewMap, Navigation.pageMap).filter((screen) => {
+				return screen.screenID === screenData.screenID;
+			});
+			const registerScreenData = registerScreens[0];
+			Navigation.registerScreen(registerScreenData.screenID, registerScreenData.screen);
+		});
 	}
 }

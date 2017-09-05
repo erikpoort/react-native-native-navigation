@@ -28,6 +28,8 @@ static NSString *const kStackKey = @"stack";
 
 - (void)setData:(NSDictionary *)data
 {
+	[super setData:data];
+
     NSArray <NSDictionary *> *objects = data[kStackKey];
 	NSMutableArray <NNNode> *tempStack = (NSMutableArray <NNNode> *)@[].mutableCopy;
 	[objects enumerateObjectsUsingBlock:^(NSDictionary *obj, NSUInteger idx, BOOL *stop)

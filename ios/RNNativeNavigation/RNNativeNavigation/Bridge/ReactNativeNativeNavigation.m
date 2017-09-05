@@ -8,6 +8,7 @@
 #import "NNSingleNode.h"
 #import "NNNodeHelper.h"
 #import "NNStackNode.h"
+#import "NNView.h"
 
 static NSString *const kRNNN = @"RNNN";
 
@@ -38,13 +39,12 @@ RCT_EXPORT_METHOD(onStart:(RCTResponseSenderBlock)callback) {
 RCT_EXPORT_METHOD(setSiteMap:(NSDictionary *)map
 			resolver:(RCTPromiseResolveBlock)resolve
 			rejecter:(RCTPromiseRejectBlock)reject) {
-
-	[RNNNState sharedInstance].state = map;
-
-	NNStackNode *nodeObject = [NNNodeHelper nodeFromMap:map bridge:self.bridge];
-	UIViewController *viewController = [nodeObject generate];
-
 	dispatch_async(dispatch_get_main_queue(), ^{
+		[RNNNState sharedInstance].state = map;
+
+		NNStackNode *nodeObject = [NNNodeHelper nodeFromMap:map bridge:self.bridge];
+		UIViewController *viewController = [nodeObject generate];
+
 		UIWindow *window = [RNNNState sharedInstance].window;
 		window.rootViewController = viewController;
 		[window makeKeyAndVisible];
@@ -53,24 +53,24 @@ RCT_EXPORT_METHOD(setSiteMap:(NSDictionary *)map
 	resolve(@[]);
 }
 
-RCT_EXPORT_METHOD(push:(NSDictionary *)screen) {
+RCT_EXPORT_METHOD(push:(NSDictionary *)screen registerCallback:(RCTResponseSenderBlock)callback) {
 	NNSingleNode *nodeObject = [NNNodeHelper nodeFromMap:screen bridge:self.bridge];
 	UIViewController *viewController = [nodeObject generate];
 
-	dispatch_async(dispatch_get_main_queue(), ^{
-		UIViewController *findController = [UIApplication sharedApplication].keyWindow.rootViewController;
-		while (![findController isKindOfClass:[UINavigationController class]] && findController.presentedViewController) {
-			findController = findController.presentedViewController;
-		}
-		if ([findController isKindOfClass:[UINavigationController class]]) {
-			UINavigationController *navigationController = (UINavigationController *)findController;
-			[navigationController pushViewController:viewController animated:YES];
-		}
-	});
+	UIViewController <NNView> *rootController = (UIViewController <NNView> *)[UIApplication sharedApplication].keyWindow.rootViewController;
+	UIViewController <NNView> *findController = [rootController viewForPath:nodeObject.screenID.stringByDeletingLastPathComponent];
 
 	NSMutableDictionary *newState = [RNNNState sharedInstance].state.mutableCopy;
 	[newState[@"stack"] addObject:screen];
 	[RNNNState sharedInstance].state = newState;
+
+	callback(@[newState]);
+
+	dispatch_async(dispatch_get_main_queue(), ^{
+		if (findController) {
+			[findController.navigationController pushViewController:viewController animated:YES];
+		}
+	});
 }
 
 @end

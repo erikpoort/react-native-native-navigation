@@ -30,6 +30,8 @@ static NSString *const kSelectedTabKey = @"selectedTab";
 
 - (void)setData:(NSDictionary *)data
 {
+    [super setData:data];
+
     NSArray <NSDictionary *> *objects = data[kTabsKey];
     NSMutableArray <NNNode> *tempTabs = (NSMutableArray <NNNode> *)@[].mutableCopy;
     [objects enumerateObjectsUsingBlock:^(NSDictionary *obj, NSUInteger idx, BOOL *stop)
@@ -42,15 +44,16 @@ static NSString *const kSelectedTabKey = @"selectedTab";
 
 - (NSDictionary *)data
 {
+    NSMutableDictionary *data = [super data].mutableCopy;
     NSMutableArray *tabs = @[].mutableCopy;
     [self.tabs enumerateObjectsUsingBlock:^(id <NNNode> obj, NSUInteger idx, BOOL *stop)
     {
         [tabs addObject:obj.data];
     }];
-    return @{
-            kTabsKey: tabs.copy,
-            kSelectedTabKey: @(self.selectedTab),
-    };
+    data[kTabsKey] = tabs;
+    data[kSelectedTabKey] = @(self.selectedTab);
+	data[kType] = self.class.jsName;
+	return data.copy;
 }
 
 - (NSString *)title

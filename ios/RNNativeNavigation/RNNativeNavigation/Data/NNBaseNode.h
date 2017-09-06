@@ -8,6 +8,7 @@
 
 FOUNDATION_EXPORT NSString *const kScreenId;
 FOUNDATION_EXPORT NSString *const kParentType;
+FOUNDATION_EXPORT NSString *const kType;
 
 typedef NS_ENUM(NSUInteger, NNParentType) {
 	NNParentTypeUnknown,
@@ -21,5 +22,6 @@ typedef NS_ENUM(NSUInteger, NNParentType) {
 @property (nonatomic, readonly) NNParentType parentType;
 
 - (void)setData:(NSDictionary *)data;
+- (NSDictionary *)data;
 
 @end

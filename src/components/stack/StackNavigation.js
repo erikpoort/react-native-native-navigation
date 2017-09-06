@@ -2,7 +2,7 @@ import React from 'react';
 import { NativeModules } from 'react-native';
 const { ReactNativeNativeNavigation } = NativeModules;
 import { Navigation } from './../Navigation';
-import SingleView from './../SingleView';
+import SingleView from './../single/SingleView';
 import StackView from './../stack/StackView';
 import { Text } from 'react-native';
 

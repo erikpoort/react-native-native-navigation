@@ -59,11 +59,16 @@ RCT_EXPORT_METHOD(push:(NSDictionary *)screen registerCallback:(RCTResponseSende
 
 	UIViewController <NNView> *rootController = (UIViewController <NNView> *)[UIApplication sharedApplication].keyWindow.rootViewController;
 	UIViewController <NNView> *findController = [rootController viewForPath:nodeObject.screenID.stringByDeletingLastPathComponent];
+	if (!findController) return;
 
-	NSMutableDictionary *newState = [RNNNState sharedInstance].state.mutableCopy;
-	[newState[@"stack"] addObject:screen];
+	UINavigationController <NNView> *navigationController = (UINavigationController <NNView> *)findController.navigationController;
+	NNStackNode *stackNode = navigationController.node;
+	NSMutableArray *stack = stackNode.stack.mutableCopy;
+	[stack addObject:nodeObject];
+	stackNode.stack = stack;
+
+	NSDictionary *newState = rootController.node.data;
 	[RNNNState sharedInstance].state = newState;
-
 	callback(@[newState]);
 
 	dispatch_async(dispatch_get_main_queue(), ^{

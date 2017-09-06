@@ -7,17 +7,21 @@
 #import "NNTabNode.h"
 
 @interface NNTabView () <UITabBarDelegate>
+
+@property (nonatomic, strong) NNTabNode *tabNode;
+@property (nonatomic, strong) UIView *holder;
+@property (nonatomic, strong) UITabBar *tabBar;
+@property (nonatomic, assign) NSUInteger selectedTab;
+@property (nonatomic, strong) NSArray <UIViewController <NNView> *> *viewControllers;
+
 @end
 
-@implementation NNTabView {
-    UIView *_holder;
-    UITabBar *_tabBar;
-    NSUInteger _selectedTab;
-    NSArray <UIViewController *> *_viewControllers;
-}
+@implementation NNTabView
 
 - (instancetype)initWithNode:(NNTabNode *)node {
     if (self = [super init]) {
+        self.tabNode = node;
+
         NSMutableArray *viewControllers = [@[] mutableCopy];
         NSMutableArray *items = [@[] mutableCopy];
         [node.tabs enumerateObjectsUsingBlock:^(id <NNNode> view, NSUInteger idx, BOOL *stop) {
@@ -26,18 +30,18 @@
             UITabBarItem *tabBarItem = [[UITabBarItem alloc] initWithTitle:viewController.title image:nil tag:idx];
             [items addObject:tabBarItem];
         }];
-        _viewControllers = [viewControllers copy];
-        _selectedTab = node.selectedTab;
+        self.viewControllers = [viewControllers copy];
+        self.selectedTab = node.selectedTab;
 
-        _holder = [[UIView alloc] init];
-        _holder.translatesAutoresizingMaskIntoConstraints = NO;
-        [self.view addSubview:_holder];
+        self.holder = [[UIView alloc] init];
+        self.holder.translatesAutoresizingMaskIntoConstraints = NO;
+        [self.view addSubview:self.holder];
 
-        _tabBar = [[UITabBar alloc] init];
-        _tabBar.translatesAutoresizingMaskIntoConstraints = NO;
-        _tabBar.items = [items copy];
-        _tabBar.delegate = self;
-        [self.view addSubview:_tabBar];
+        self.tabBar = [[UITabBar alloc] init];
+        self.tabBar.translatesAutoresizingMaskIntoConstraints = NO;
+        self.tabBar.items = [items copy];
+        self.tabBar.delegate = self;
+        [self.view addSubview:self.tabBar];
 
         NSDictionary *views = NSDictionaryOfVariableBindings(_holder, _tabBar);
         [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[_holder]-0-|" options:0 metrics:nil views:views]];
@@ -50,23 +54,23 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    [self showTabBarViewControllerForItem:_tabBar.items[_selectedTab]];
+    [self showTabBarViewControllerForItem:self.tabBar.items[self.selectedTab]];
 }
 
 - (void)showTabBarViewControllerForItem:(UITabBarItem *)item {
-    [_tabBar setSelectedItem:item];
+    [self.tabBar setSelectedItem:item];
 
-    _selectedTab = [_tabBar.items indexOfObject:item];
+    self.selectedTab = [self.tabBar.items indexOfObject:item];
 
-    while (_holder.subviews.count) {
-        [_holder.subviews.firstObject removeFromSuperview];
+    while (self.holder.subviews.count) {
+        [self.holder.subviews.firstObject removeFromSuperview];
     }
 
-    UIViewController *viewController = _viewControllers[_selectedTab];
+    UIViewController *viewController = self.viewControllers[self.selectedTab];
     UIView *view = viewController.view;
     view.translatesAutoresizingMaskIntoConstraints = NO;
     [self addChildViewController:viewController];
-    [_holder addSubview:viewController.view];
+    [self.holder addSubview:viewController.view];
     [viewController didMoveToParentViewController:self];
 
     NSDictionary *views = NSDictionaryOfVariableBindings(view);
@@ -74,12 +78,45 @@
     [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[view]-0-|" options:0 metrics:nil views:views]];
 }
 
+- (__kindof id <NNNode>)node {
+    return self.tabNode;
+}
+
+- (UIViewController <NNView> *)viewForPath:(NSString *)path {
+    if ([path rangeOfString:self.node.screenID].location == 0) {
+		UIViewController <NNView> *checkController;
+		UIViewController <NNView> *foundController;
+
+		NSUInteger i = 0;
+		do {
+			if (i < self.viewControllers.count) {
+				checkController = self.viewControllers[i++];
+
+				if ([path rangeOfString:checkController.node.screenID].location == 0)
+				{
+					foundController = checkController;
+				}
+			} else {
+				checkController = nil;
+			}
+		} while(checkController != nil);
+
+		if (![foundController.node.screenID isEqualToString:path]) {
+			foundController = [foundController viewForPath:path];
+		}
+
+		return foundController;
+	}
+
+    return nil;
+}
+
 #pragma mark - UITabBarDelegate
 
 - (void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item {
-    if ([_tabBar.items indexOfObject:item] == _selectedTab) {
-        if ([_viewControllers[_selectedTab] isKindOfClass:[UINavigationController class]]) {
-            UINavigationController *navigationController = (UINavigationController *) _viewControllers[_selectedTab];
+    if ([self.tabBar.items indexOfObject:item] == self.selectedTab) {
+        if ([self.viewControllers[self.selectedTab] isKindOfClass:[UINavigationController class]]) {
+            UINavigationController *navigationController = (UINavigationController *) self.viewControllers[self.selectedTab];
             [navigationController popToRootViewControllerAnimated:YES];
         }
     } else {

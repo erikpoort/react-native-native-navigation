@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { AppRegistry } from 'react-native';
 import ReactNativeNativeNavigation from './../ReactNativeNativeNavigation';
-import SingleView from './SingleView';
+import SingleView from './single/SingleView';
 import StackView from './stack/StackView';
 import TabView from './tab/TabView';
 
@@ -65,9 +65,6 @@ class Navigation extends Component {
 
 module.exports = {
 	Navigation,
-	SingleView,
-	StackView,
-	TabView,
 }
 
 export {

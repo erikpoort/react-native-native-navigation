@@ -8,10 +8,12 @@ export default class TabView extends Component {
 	}
 	static mapToDictionary = (dom, path) => {
 		const type = dom.type.name;
-		const tabs = dom.type.mapChildren(dom.props.children, path);
+		const screenID = `${path}/${dom.props.name}`;
+		const tabs = dom.type.mapChildren(dom.props.children, screenID);
 		const selectedTab = dom.props.selectedTab;
 		return {
 			type,
+			screenID,
 			tabs,
 			selectedTab
 		};

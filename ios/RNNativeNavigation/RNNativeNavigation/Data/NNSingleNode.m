@@ -32,10 +32,10 @@ static NSString *const kName = @"name";
 }
 
 - (NSDictionary *)data {
-	return @{
-			kName: self.title,
-			kScreenId:  self.screenID,
-	};
+	NSMutableDictionary *data = [super data].mutableCopy;
+	data[kName] = self.title;
+	data[kType] = self.class.jsName;
+	return data.copy;
 }
 
 @end

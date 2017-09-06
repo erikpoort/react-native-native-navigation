@@ -8,6 +8,7 @@
 
 NSString *const kScreenId = @"screenID";
 NSString *const kParentType = @"parentType";
+NSString *const kType = @"type";
 
 @interface NNBaseNode ()
 
@@ -27,6 +28,14 @@ NSString *const kParentType = @"parentType";
 	if (index != NSNotFound) {
 		self.parentType = index + 1;
 	}
+}
+
+- (NSDictionary *)data
+{
+	return @{
+			kScreenId: self.screenID,
+			kParentType: @(self.parentType),
+	};
 }
 
 @end

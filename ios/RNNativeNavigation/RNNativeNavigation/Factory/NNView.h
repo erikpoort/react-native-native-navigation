@@ -9,7 +9,7 @@
 
 @protocol NNView <NSObject>
 
-- (id <NNNode>)node;
+- (__kindof id <NNNode>)node;
 - (UIViewController <NNView> *)viewForPath:(NSString *)path;
 
 @end

@@ -3,12 +3,11 @@
 //
 
 #import "NNStackView.h"
-#import "NNNode.h"
 #import "NNStackNode.h"
 
 @interface NNStackView ()
 
-@property (nonatomic, strong) NNStackNode *node;
+@property (nonatomic, strong) NNStackNode *stackNode;
 
 @end
 
@@ -16,7 +15,7 @@
 
 - (instancetype)initWithNode:(NNStackNode *)node {
     if (self = [super init]) {
-		self.node = node;
+		self.stackNode = node;
         self.navigationBar.translucent = NO;
         NSMutableArray *viewControllers = [@[] mutableCopy];
         [node.stack enumerateObjectsUsingBlock:^(id <NNNode> view, NSUInteger idx, BOOL *stop) {
@@ -32,14 +31,14 @@
     return self.viewControllers.lastObject.title;
 }
 
-- (NSString *)screenID
+- (__kindof id <NNNode>)node
 {
-	return self.node.screenID;
+	return self.stackNode;
 }
 
 - (UIViewController <NNView> *)viewForPath:(NSString *)path
 {
-	if ([path rangeOfString:self.screenID].location == 0) {
+	if ([path rangeOfString:self.node.screenID].location == 0) {
 		UIViewController <NNView> *checkController;
 		UIViewController <NNView> *foundController;
 

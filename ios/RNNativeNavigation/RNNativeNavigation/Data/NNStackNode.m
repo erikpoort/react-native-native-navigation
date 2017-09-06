@@ -11,7 +11,6 @@ static NSString *const kStackKey = @"stack";
 @interface NNStackNode ()
 
 @property (nonatomic, strong) RCTBridge *bridge;
-@property (nonatomic, copy) NSArray <id <NNNode>> *stack;
 
 @end
 
@@ -41,14 +40,15 @@ static NSString *const kStackKey = @"stack";
 
 - (NSDictionary *)data
 {
+	NSMutableDictionary *data = [super data].mutableCopy;
 	NSMutableArray *stack = @[].mutableCopy;
 	[self.stack enumerateObjectsUsingBlock:^(id <NNNode> obj, NSUInteger idx, BOOL *stop)
 	{
 		[stack addObject:obj.data];
 	}];
-	return @{
-			kStackKey: stack.copy,
-	};
+	data[kStackKey] = stack.copy;
+	data[kType] = self.class.jsName;
+	return data.copy;
 }
 
 - (NSString *)title

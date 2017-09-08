@@ -10,9 +10,12 @@ export default class example extends Component {
     return (
         <Navigation pages={[Loading, Home, Detail, Detail2]}>
           <Loading />
+            <TabView name="tabs" selectedTab={2}>
               <StackView name="stack">
                 <SingleView screen={Home} />
               </StackView>
+              <SingleView screen={Detail2} />
+            </TabView>
         </Navigation>
     );
   }

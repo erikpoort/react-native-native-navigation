@@ -6,6 +6,7 @@ import com.mediamonks.rnnativenavigation.data.BaseNode;
 import com.mediamonks.rnnativenavigation.data.Node;
 import com.mediamonks.rnnativenavigation.data.SingleNode;
 import com.mediamonks.rnnativenavigation.data.StackNode;
+import com.mediamonks.rnnativenavigation.data.TabNode;
 
 import java.util.Arrays;
 import java.util.List;
@@ -21,8 +22,8 @@ public class NodeHelper
 
 	public static Node nodeFromMap(ReadableMap map, ReactInstanceManager instanceManager) throws Exception
 	{
-		List<String> names = Arrays.asList(SingleNode.JS_NAME, StackNode.JS_NAME);
-		List<? extends Class<? extends BaseNode>> classes = Arrays.asList(SingleNode.class, StackNode.class);
+		List<String> names = Arrays.asList(SingleNode.JS_NAME, StackNode.JS_NAME, TabNode.JS_NAME);
+		List<? extends Class<? extends BaseNode>> classes = Arrays.asList(SingleNode.class, StackNode.class, TabNode.class);
 		int index = names.indexOf(map.getString(TYPE));
 		if (index >= 0)
 		{

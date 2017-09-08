@@ -128,8 +128,6 @@ public class StackFragment extends BaseFragment<StackNode>
 			transaction.commit();
 			this.handleCurrentStack();
 
-			RNNNState.INSTANCE.state = getCurrentFragment().getRootFragment().getNode().data().toHashMap();
-
 			return true;
 		}
 		return false;

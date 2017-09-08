@@ -10,5 +10,5 @@ import java.util.HashMap;
 public enum RNNNState
 {
 	INSTANCE;
-	public HashMap state;
+	public HashMap <String, Object> state;
 }

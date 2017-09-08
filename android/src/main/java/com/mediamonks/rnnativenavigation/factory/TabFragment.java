@@ -1,6 +1,5 @@
 package com.mediamonks.rnnativenavigation.factory;
 
-import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -129,7 +128,7 @@ public class TabFragment extends BaseFragment<TabNode> implements BottomNavigati
 
 		_adapter = new TabPagerAdapter(getActivity().getSupportFragmentManager(), getNode().getTabs());
 		_viewPager.setAdapter(_adapter);
-		_viewPager.setCurrentItem(0);
+		_viewPager.setCurrentItem(getNode().getSelectedTab());
 	}
 
 	@Override

@@ -77,14 +77,6 @@ public class TabFragment extends BaseFragment<TabNode> implements BottomNavigati
 
 	}
 
-	@Override
-	public void onAttach(Context context)
-	{
-		super.onAttach(context);
-
-		_adapter = new TabPagerAdapter(getActivity().getSupportFragmentManager(), getNode().getTabs());
-	}
-
 	@Nullable
 	@Override
 	public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
@@ -96,16 +88,13 @@ public class TabFragment extends BaseFragment<TabNode> implements BottomNavigati
 		_viewPager = new ViewPager(getContext());
 		_viewPager.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 1));
 		_viewPager.setId(View.generateViewId());
-		_viewPager.setAdapter(_adapter);
 		_viewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener()
 		{
-			int page;
-
 			@Override
 			public void onPageSelected(int position)
 			{
 				super.onPageSelected(position);
-				page = position;
+				getNode().setSelectedTab(position);
 			}
 		});
 		linearLayout.addView(_viewPager);
@@ -130,9 +119,17 @@ public class TabFragment extends BaseFragment<TabNode> implements BottomNavigati
 		bottomNavigationView.setOnNavigationItemSelectedListener(this);
 		linearLayout.addView(bottomNavigationView);
 
-		bottomNavigationView.setSelectedItemId(getNode().getSelectedTab());
-
 		return linearLayout;
+	}
+
+	@Override
+	public void onViewCreated(View view, @Nullable Bundle savedInstanceState)
+	{
+		super.onViewCreated(view, savedInstanceState);
+
+		_adapter = new TabPagerAdapter(getActivity().getSupportFragmentManager(), getNode().getTabs());
+		_viewPager.setAdapter(_adapter);
+		_viewPager.setCurrentItem(0);
 	}
 
 	@Override
@@ -184,5 +181,15 @@ public class TabFragment extends BaseFragment<TabNode> implements BottomNavigati
 			}
 		}
 		return null;
+	}
+
+	@Override
+	public SingleFragment getCurrentFragment()
+	{
+		BaseFragment currentFragment = _adapter.getItem(_viewPager.getCurrentItem());
+		if (currentFragment instanceof SingleFragment) {
+			return (SingleFragment) currentFragment;
+		}
+		return currentFragment.getCurrentFragment();
 	}
 }

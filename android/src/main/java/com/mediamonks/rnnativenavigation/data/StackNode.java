@@ -6,7 +6,6 @@ import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.WritableNativeArray;
-import com.facebook.react.bridge.WritableNativeMap;
 import com.mediamonks.rnnativenavigation.factory.BaseFragment;
 import com.mediamonks.rnnativenavigation.factory.NodeHelper;
 import com.mediamonks.rnnativenavigation.factory.StackFragment;
@@ -55,7 +54,8 @@ public class StackNode extends BaseNode implements Node
 		ReadableArray stackArray = map.getArray(STACK);
 
 		int leni = stackArray.size();
-		for (int i = 0; i < leni; ++i) {
+		for (int i = 0; i < leni; ++i)
+		{
 			ReadableMap obj = stackArray.getMap(i);
 			try
 			{
@@ -75,7 +75,8 @@ public class StackNode extends BaseNode implements Node
 	{
 		WritableMap map = super.data();
 		WritableArray stack = new WritableNativeArray();
-		for (Node node : _stack) {
+		for (Node node : _stack)
+		{
 			stack.pushMap(node.data());
 		}
 		map.putArray(STACK, stack);

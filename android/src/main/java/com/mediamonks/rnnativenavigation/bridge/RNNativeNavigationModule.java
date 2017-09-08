@@ -17,14 +17,15 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableMap;
 import com.mediamonks.rnnativenavigation.data.Node;
+import com.mediamonks.rnnativenavigation.data.StackNode;
 import com.mediamonks.rnnativenavigation.factory.BaseFragment;
 import com.mediamonks.rnnativenavigation.factory.NodeHelper;
 import com.mediamonks.rnnativenavigation.factory.SingleFragment;
 import com.mediamonks.rnnativenavigation.factory.StackFragment;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Stack;
 
 /**
  * Created by erik on 29/08/2017.
@@ -121,25 +122,23 @@ class RNNativeNavigationModule extends ReactContextBaseJavaModule
 	{
 		assert getCurrentActivity() != null;
 		ReactFragmentActivity mainActivity = (ReactFragmentActivity) getCurrentActivity();
-		List<Fragment> fragments = mainActivity.getSupportFragmentManager().getFragments();
-		int leni = fragments.size();
-		for (int i = leni - 1; i >= 0; --i)
-		{
-			final Fragment fragment = fragments.get(i);
-			if (fragment instanceof StackFragment)
+		BaseFragment anyFragment = (BaseFragment) mainActivity.getSupportFragmentManager().getFragments().get(0);
+		final BaseFragment rootFragment = getRootFragment(anyFragment.getNode());
+		BaseFragment currentFragment = rootFragment.getCurrentFragment();
+		final StackFragment stackFragment = currentFragment.getStackFragment();
+
+		if (stackFragment != null) {
+			mainActivity.runOnUiThread(new Runnable()
 			{
-				mainActivity.runOnUiThread(new Runnable()
+				@Override
+				public void run()
 				{
-					@Override
-					public void run()
-					{
-						StackFragment baseFragment = (StackFragment) fragment;
-						callback.invoke(baseFragment.onBackPressed());
-					}
-				});
-				return;
-			}
+					callback.invoke(stackFragment.onBackPressed());
+				}
+			});
+			return;
 		}
+
 		callback.invoke(false);
 	}
 
@@ -152,29 +151,22 @@ class RNNativeNavigationModule extends ReactContextBaseJavaModule
 
 			assert getCurrentActivity() != null;
 			ReactFragmentActivity mainActivity = (ReactFragmentActivity) getCurrentActivity();
-			List<Fragment> fragments = mainActivity.getSupportFragmentManager().getFragments();
-			BaseFragment rootFragment = null;
-			String rootPath = node.getScreenID().substring(0, node.getScreenID().indexOf("/", 1));
-			for (Fragment findFragment : fragments)
-			{
-				if (findFragment != null)
-				{
-					BaseFragment findBaseFragment = (BaseFragment) findFragment;
-					if (findBaseFragment.getNode().getScreenID().equals(rootPath))
-					{
-						rootFragment = findBaseFragment;
-						break;
-					}
-				}
-			}
+			BaseFragment rootFragment = getRootFragment(node);
 			assert rootFragment != null;
+
 			int lastSlash = node.getScreenID().lastIndexOf("/");
 			final BaseFragment findFragment = rootFragment.fragmentForPath(node.getScreenID().substring(0, lastSlash));
+			if (findFragment == null)
+			{
+				return;
+			}
 
-			HashMap newState = RNNNState.INSTANCE.state;
-			ArrayList stack = (ArrayList) newState.get("stack");
-			stack.add(screen.toHashMap());
-			newState.put("stack", stack);
+			StackFragment stackFragment = findFragment.getStackFragment();
+			StackNode stackNode = stackFragment.getNode();
+			Stack<Node> stack = stackNode.getStack();
+			stack.add(node);
+
+			HashMap<String, Object> newState = rootFragment.getNode().data().toHashMap();
 			RNNNState.INSTANCE.state = newState;
 
 			callback.invoke(Arguments.makeNativeMap(newState));
@@ -184,11 +176,8 @@ class RNNativeNavigationModule extends ReactContextBaseJavaModule
 				@Override
 				public void run()
 				{
-					if (findFragment != null)
-					{
-						SingleFragment singleFragment = (SingleFragment) findFragment;
-						singleFragment.getStackFragment().push(node);
-					}
+					SingleFragment singleFragment = (SingleFragment) findFragment;
+					singleFragment.getStackFragment().push(node);
 				}
 			});
 		}
@@ -204,5 +193,26 @@ class RNNativeNavigationModule extends ReactContextBaseJavaModule
 		ReactApplication mainApplication = (ReactApplication) mainActivity.getApplication();
 		ReactNativeHost reactNativeHost = mainApplication.getReactNativeHost();
 		return reactNativeHost.getReactInstanceManager();
+	}
+
+	private BaseFragment getRootFragment(Node node)
+	{
+		BaseFragment rootFragment = null;
+		ReactFragmentActivity mainActivity = (ReactFragmentActivity) getCurrentActivity();
+		List<Fragment> fragments = mainActivity.getSupportFragmentManager().getFragments();
+		String rootPath = node.getScreenID().substring(0, node.getScreenID().indexOf("/", 1));
+		for (Fragment findFragment : fragments)
+		{
+			if (findFragment != null)
+			{
+				BaseFragment findBaseFragment = (BaseFragment) findFragment;
+				if (findBaseFragment.getNode().getScreenID().equals(rootPath))
+				{
+					rootFragment = findBaseFragment;
+					break;
+				}
+			}
+		}
+		return rootFragment;
 	}
 }

@@ -3,6 +3,7 @@ package com.mediamonks.rnnativenavigation.factory;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,8 @@ import android.view.ViewGroup.LayoutParams;
 
 import com.facebook.react.ReactRootView;
 import com.mediamonks.rnnativenavigation.data.SingleNode;
+
+import java.util.List;
 
 /**
  * Created by erik on 09/08/2017.
@@ -49,6 +52,29 @@ public class SingleFragment extends BaseFragment<SingleNode>
 	@Override
 	public BaseFragment fragmentForPath(String path)
 	{
+		return null;
+	}
+
+	@Override
+	public SingleFragment getCurrentFragment()
+	{
+		return this;
+	}
+
+	public BaseFragment getRootFragment()
+	{
+		List<Fragment> fragments = getActivity().getSupportFragmentManager().getFragments();
+		for (Fragment fragment : fragments)
+		{
+			BaseFragment baseFragment;
+			if (fragment instanceof BaseFragment)
+			{
+				baseFragment = (BaseFragment) fragment;
+				if (baseFragment.isRootFragment()) {
+					return baseFragment;
+				}
+			}
+		}
 		return null;
 	}
 }

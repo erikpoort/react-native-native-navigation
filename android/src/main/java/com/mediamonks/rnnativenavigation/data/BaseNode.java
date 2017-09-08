@@ -12,17 +12,22 @@ import com.facebook.react.bridge.WritableNativeMap;
 public class BaseNode
 {
 	private static final String SCREEN_ID = "screenID";
+	private static final String TYPE = "type";
+
 	private String _screenID;
+	private String _type;
 
 	public void setData(ReadableMap map)
 	{
 		_screenID = map.getString(SCREEN_ID);
+		_type = map.getString(TYPE);
 	}
 
 	public WritableMap data()
 	{
 		WritableNativeMap data = new WritableNativeMap();
 		data.putString(SCREEN_ID, _screenID);
+		data.putString(TYPE, _type);
 		return data;
 	}
 

@@ -3,7 +3,9 @@ package com.mediamonks.rnnativenavigation.data;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.bridge.WritableNativeArray;
 import com.mediamonks.rnnativenavigation.factory.BaseFragment;
 import com.mediamonks.rnnativenavigation.factory.NodeHelper;
 import com.mediamonks.rnnativenavigation.factory.TabFragment;
@@ -55,7 +57,8 @@ public class TabNode extends BaseNode implements Node
 		ReadableArray stackArray = map.getArray(TABS);
 
 		int leni = stackArray.size();
-		for (int i = 0; i < leni; ++i) {
+		for (int i = 0; i < leni; ++i)
+		{
 			ReadableMap obj = stackArray.getMap(i);
 			try
 			{
@@ -74,7 +77,15 @@ public class TabNode extends BaseNode implements Node
 	@Override
 	public WritableMap data()
 	{
-		return super.data();
+		WritableMap map = super.data();
+		WritableArray tabs = new WritableNativeArray();
+		for (Node node : _tabs)
+		{
+			tabs.pushMap(node.data());
+		}
+		map.putArray(TABS, tabs);
+		map.putInt(SELECTED_TAB, _selectedTab);
+		return map;
 	}
 
 	@Override
@@ -91,5 +102,10 @@ public class TabNode extends BaseNode implements Node
 	public int getSelectedTab()
 	{
 		return _selectedTab;
+	}
+
+	public void setSelectedTab(int selectedTab)
+	{
+		_selectedTab = selectedTab;
 	}
 }

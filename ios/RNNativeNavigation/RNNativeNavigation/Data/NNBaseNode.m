@@ -26,7 +26,7 @@ NSString *const kType = @"type";
 	NSArray *parentTypes = @[NNStackNode.jsName, NNTabNode.jsName];
 	NSUInteger index = [parentTypes indexOfObject:data[kParentType]];
 	if (index != NSNotFound) {
-		self.parentType = index + 1;
+		self.parentType = (NNParentType)(index + 1);
 	}
 }
 

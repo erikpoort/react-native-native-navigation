@@ -2,10 +2,10 @@ package com.mediamonks.rnnativenavigation.factory;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.internal.app.ToolbarActionBar;
 import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -15,14 +15,11 @@ import android.view.ViewGroup.LayoutParams;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
-import com.facebook.react.bridge.Arguments;
-import com.facebook.react.bridge.WritableMap;
+import com.mediamonks.rnnativenavigation.R;
 import com.mediamonks.rnnativenavigation.bridge.RNNNState;
 import com.mediamonks.rnnativenavigation.data.Node;
 import com.mediamonks.rnnativenavigation.data.StackNode;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Stack;
 
 /**
@@ -35,7 +32,7 @@ public class StackFragment extends BaseFragment<StackNode>
 	private FrameLayout _holder;
 	private Stack<BaseFragment> _stack;
 	private Toolbar _toolbar;
-	private ToolbarActionBar _actionBar;
+	private Drawable _upIcon;
 
 	@Override
 	public void onAttach(Context context)
@@ -54,8 +51,8 @@ public class StackFragment extends BaseFragment<StackNode>
 		linearLayout.setOrientation(LinearLayout.VERTICAL);
 		linearLayout.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 
-		_toolbar = new Toolbar(getActivity());
-		_actionBar = new ToolbarActionBar(_toolbar, "", getActivity());
+		_toolbar = (Toolbar) inflater.inflate(R.layout.toolbar, null, false);
+		_upIcon = _toolbar.getNavigationIcon();
 		TypedValue typedValue = new TypedValue();
 		if (getActivity().getTheme().resolveAttribute(android.R.attr.actionBarSize, typedValue, true))
 		{
@@ -116,8 +113,8 @@ public class StackFragment extends BaseFragment<StackNode>
 	private void handleCurrentStack()
 	{
 		int size = _stack.size();
-		_actionBar.setDisplayHomeAsUpEnabled(size > 1);
-		_actionBar.setTitle(_stack.peek().getNode().getTitle());
+		_toolbar.setNavigationIcon(size > 1 ? _upIcon : null);
+		_toolbar.setTitle(_stack.peek().getNode().getTitle());
 	}
 
 	@Override
@@ -131,11 +128,7 @@ public class StackFragment extends BaseFragment<StackNode>
 			transaction.commit();
 			this.handleCurrentStack();
 
-			HashMap newState = RNNNState.INSTANCE.state;
-			ArrayList stack = (ArrayList) newState.get("stack");
-			stack.remove(stack.size() - 1);
-			newState.put("stack", stack);
-			RNNNState.INSTANCE.state = newState;
+			RNNNState.INSTANCE.state = getCurrentFragment().getRootFragment().getNode().data().toHashMap();
 
 			return true;
 		}
@@ -176,6 +169,16 @@ public class StackFragment extends BaseFragment<StackNode>
 			}
 		}
 		return null;
+	}
+
+	@Override
+	public SingleFragment getCurrentFragment()
+	{
+		BaseFragment topFragment = _stack.peek();
+		if (topFragment instanceof SingleFragment) {
+			return (SingleFragment) topFragment;
+		}
+		return topFragment.getCurrentFragment();
 	}
 
 	@Override

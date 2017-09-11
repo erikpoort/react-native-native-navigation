@@ -36,4 +36,20 @@ public class BaseNode
 		return _screenID;
 	}
 
+	public String getRootPath()
+	{
+		int index = getScreenID().indexOf("/", 1);
+		if (index > -1 && index < getScreenID().length())
+		{
+			return getScreenID().substring(0, index);
+		}
+		else if (index < 0)
+		{
+			return getScreenID();
+		}
+		else
+		{
+			return "";
+		}
+	}
 }

@@ -20,4 +20,5 @@ public interface Node extends Serializable
 	String getTitle();
 	String getScreenID();
 	BaseFragment getFragment();
+	String getRootPath();
 }

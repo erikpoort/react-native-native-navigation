@@ -45,19 +45,7 @@ public abstract class BaseFragment<T extends Node> extends Fragment
 
 	protected String getRootPath()
 	{
-		int index = getNode().getScreenID().indexOf("/", 1);
-		if (index > -1 && index < getNode().getScreenID().length())
-		{
-			return getNode().getScreenID().substring(0, index);
-		}
-		else if (index < 0)
-		{
-			return getNode().getScreenID();
-		}
-		else
-		{
-			return "";
-		}
+		return getNode().getRootPath();
 	}
 
 	protected boolean isRootFragment()

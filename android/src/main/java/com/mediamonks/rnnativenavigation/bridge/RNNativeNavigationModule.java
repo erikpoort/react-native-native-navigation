@@ -233,7 +233,7 @@ class RNNativeNavigationModule extends ReactContextBaseJavaModule implements Lif
 	private BaseFragment getRootFragment(Node node)
 	{
 		BaseFragment rootFragment = null;
-		String rootPath = node.getScreenID().substring(0, node.getScreenID().indexOf("/", 1));
+		String rootPath = node.getRootPath();
 		for (Fragment findFragment : _fragments)
 		{
 			if (findFragment != null)

@@ -16,7 +16,6 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
 import com.mediamonks.rnnativenavigation.R;
-import com.mediamonks.rnnativenavigation.bridge.RNNNState;
 import com.mediamonks.rnnativenavigation.data.Node;
 import com.mediamonks.rnnativenavigation.data.StackNode;
 
@@ -29,8 +28,50 @@ import java.util.Stack;
 
 public class StackFragment extends BaseFragment<StackNode>
 {
+	class StackStub
+	{
+		private Node _node;
+		private BaseFragment _fragment;
+		private boolean _shown;
+
+		StackStub(Node node)
+		{
+			_node = node;
+		}
+
+		public Node getNode()
+		{
+			return _node;
+		}
+
+		public BaseFragment getFragment()
+		{
+			if (_fragment == null)
+			{
+				_fragment = getNode().getFragment();
+			}
+			return _fragment;
+		}
+
+		void show(int transition)
+		{
+			_shown = true;
+			_fragment = getFragment();
+			_fragment.setStackFragment(StackFragment.this);
+			FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+			transaction.add(_holder.getId(), _fragment);
+			transaction.setTransition(transition);
+			transaction.commit();
+		}
+
+		boolean isShown()
+		{
+			return _shown;
+		}
+	}
+
 	private FrameLayout _holder;
-	private Stack<BaseFragment> _stack;
+	private Stack<StackStub> _stack;
 	private Toolbar _toolbar;
 	private Drawable _upIcon;
 
@@ -79,8 +120,7 @@ public class StackFragment extends BaseFragment<StackNode>
 		{
 			push(node, false);
 		}
-
-		this.handleCurrentStack();
+		_stack.peek().show(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
 
 		_toolbar.setNavigationOnClickListener(new View.OnClickListener()
 		{
@@ -97,17 +137,15 @@ public class StackFragment extends BaseFragment<StackNode>
 		push(node, true);
 	}
 
-	public void push(Node node, boolean animated)
+	public void push(Node node, boolean show)
 	{
-		BaseFragment fragment = node.getFragment();
-		fragment.setStackFragment(this);
-		FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-		transaction.add(_holder.getId(), fragment);
-		transaction.setTransition(animated ? FragmentTransaction.TRANSIT_FRAGMENT_OPEN : FragmentTransaction.TRANSIT_NONE);
-		transaction.commit();
-		_stack.add(fragment);
+		_stack.add(new StackStub(node));
 
-		this.handleCurrentStack();
+		if (show)
+		{
+			_stack.peek().show(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+			this.handleCurrentStack();
+		}
 	}
 
 	private void handleCurrentStack()
@@ -120,12 +158,18 @@ public class StackFragment extends BaseFragment<StackNode>
 	@Override
 	public boolean onBackPressed()
 	{
-		if (_holder.getChildCount() > 1)
+		if (_stack.size() > 1)
 		{
 			FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-			transaction.remove(_stack.pop());
+			transaction.remove(_stack.pop().getFragment());
 			transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
 			transaction.commit();
+
+			if (!_stack.peek().isShown())
+			{
+				_stack.peek().show(FragmentTransaction.TRANSIT_NONE);
+			}
+
 			this.handleCurrentStack();
 
 			return true;
@@ -138,7 +182,7 @@ public class StackFragment extends BaseFragment<StackNode>
 	{
 		if (path.indexOf(getNode().getScreenID()) == 0)
 		{
-			BaseFragment checkFragment;
+			StackStub checkStub;
 			BaseFragment foundFragment = null;
 
 			int i = 0;
@@ -146,20 +190,24 @@ public class StackFragment extends BaseFragment<StackNode>
 			{
 				if (i < this._stack.size())
 				{
-					checkFragment = _stack.get(i++);
+					checkStub = _stack.get(i++);
 
-					if (path.indexOf(checkFragment.getNode().getScreenID()) == 0) {
-						foundFragment = checkFragment;
+					if (path.indexOf(checkStub.getNode().getScreenID()) == 0)
+					{
+						foundFragment = checkStub.getFragment();
 					}
 				}
 				else
 				{
-					checkFragment = null;
+					checkStub = null;
 				}
-			} while (checkFragment != null);
+			}
+			while (checkStub != null);
 
-			if (foundFragment != null) {
-				if (!foundFragment.getNode().getScreenID().equals(path)) {
+			if (foundFragment != null)
+			{
+				if (!foundFragment.getNode().getScreenID().equals(path))
+				{
 					foundFragment = foundFragment.fragmentForPath(path);
 				}
 
@@ -172,8 +220,9 @@ public class StackFragment extends BaseFragment<StackNode>
 	@Override
 	public SingleFragment getCurrentFragment()
 	{
-		BaseFragment topFragment = _stack.peek();
-		if (topFragment instanceof SingleFragment) {
+		BaseFragment topFragment = _stack.peek().getFragment();
+		if (topFragment instanceof SingleFragment)
+		{
 			return (SingleFragment) topFragment;
 		}
 		return topFragment.getCurrentFragment();
@@ -186,7 +235,7 @@ public class StackFragment extends BaseFragment<StackNode>
 		{
 			while (_stack.size() > 0)
 			{
-				BaseFragment fragment = _stack.pop();
+				BaseFragment fragment = _stack.pop().getFragment();
 				fragment.onDestroyView();
 			}
 		}

@@ -13,6 +13,8 @@ export default class example extends Component {
             <TabView name="tabs" selectedTab={0}>
               <StackView name="stack">
                 <SingleView screen={Home} />
+                <SingleView screen={Detail} />
+                <SingleView screen={Detail2} />
               </StackView>
               <SingleView screen={Detail2} />
             </TabView>

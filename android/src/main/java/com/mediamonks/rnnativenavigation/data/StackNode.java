@@ -17,7 +17,7 @@ import java.util.Stack;
  * RNNativeNavigation 2017
  */
 
-public class StackNode extends BaseNode implements Node
+public class StackNode extends BaseNode<StackFragment> implements Node
 {
 	public static String JS_NAME = "StackView";
 
@@ -29,9 +29,12 @@ public class StackNode extends BaseNode implements Node
 	@Override
 	public BaseFragment<StackNode> getFragment()
 	{
-		StackFragment fragment = new StackFragment();
-		fragment.setNode(this);
-		return fragment;
+		if (_fragment == null)
+		{
+			_fragment = new StackFragment();
+			_fragment.setNode(this);
+		}
+		return _fragment;
 	}
 
 	@Override

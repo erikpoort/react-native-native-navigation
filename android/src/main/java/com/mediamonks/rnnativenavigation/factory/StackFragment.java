@@ -1,6 +1,5 @@
 package com.mediamonks.rnnativenavigation.factory;
 
-import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -19,8 +18,6 @@ import com.mediamonks.rnnativenavigation.R;
 import com.mediamonks.rnnativenavigation.data.Node;
 import com.mediamonks.rnnativenavigation.data.StackNode;
 
-import java.util.Stack;
-
 /**
  * Created by erik on 12/08/2017.
  * RNNativeNavigation 2017
@@ -28,60 +25,9 @@ import java.util.Stack;
 
 public class StackFragment extends BaseFragment<StackNode>
 {
-	class StackStub
-	{
-		private Node _node;
-		private BaseFragment _fragment;
-		private boolean _shown;
-
-		StackStub(Node node)
-		{
-			_node = node;
-		}
-
-		public Node getNode()
-		{
-			return _node;
-		}
-
-		public BaseFragment getFragment()
-		{
-			if (_fragment == null)
-			{
-				_fragment = getNode().getFragment();
-			}
-			return _fragment;
-		}
-
-		void show(int transition)
-		{
-			_shown = true;
-			_fragment = getFragment();
-			_fragment.setStackFragment(StackFragment.this);
-			FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-			transaction.add(_holder.getId(), _fragment);
-			transaction.setTransition(transition);
-			transaction.commit();
-		}
-
-		boolean isShown()
-		{
-			return _shown;
-		}
-	}
-
 	private FrameLayout _holder;
-	private Stack<StackStub> _stack;
 	private Toolbar _toolbar;
 	private Drawable _upIcon;
-
-	@Override
-	public void onAttach(Context context)
-	{
-		super.onAttach(context);
-
-		_stack = new Stack<>();
-	}
 
 	@Nullable
 	@Override
@@ -116,11 +62,7 @@ public class StackFragment extends BaseFragment<StackNode>
 	{
 		super.onViewCreated(view, savedInstanceState);
 
-		for (Node node : getNode().getStack())
-		{
-			push(node, false);
-		}
-		_stack.peek().show(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+		showPeek(FragmentTransaction.TRANSIT_NONE);
 
 		_toolbar.setNavigationOnClickListener(new View.OnClickListener()
 		{
@@ -132,42 +74,44 @@ public class StackFragment extends BaseFragment<StackNode>
 		});
 	}
 
-	public void push(Node node)
+	private void showPeek(int transition)
 	{
-		push(node, true);
+		Node node = getNode().getStack().peek();
+		BaseFragment fragment = node.getFragment();
+		fragment.setStackFragment(this);
+		FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+		transaction.add(_holder.getId(), fragment);
+		transaction.setTransition(transition);
+		transaction.commit();
+		node.setShown(true);
 	}
 
-	public void push(Node node, boolean show)
+	public void push()
 	{
-		_stack.add(new StackStub(node));
-
-		if (show)
-		{
-			_stack.peek().show(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-			this.handleCurrentStack();
-		}
+		showPeek(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+		handleCurrentStack();
 	}
 
 	private void handleCurrentStack()
 	{
-		int size = _stack.size();
+		int size = getNode().getStack().size();
 		_toolbar.setNavigationIcon(size > 1 ? _upIcon : null);
-		_toolbar.setTitle(_stack.peek().getNode().getTitle());
+		_toolbar.setTitle(getNode().getStack().peek().getTitle());
 	}
 
 	@Override
 	public boolean onBackPressed()
 	{
-		if (_stack.size() > 1)
+		if (getNode().getStack().size() > 1)
 		{
 			FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-			transaction.remove(_stack.pop().getFragment());
+			transaction.remove(getNode().getStack().pop().getFragment());
 			transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
 			transaction.commit();
 
-			if (!_stack.peek().isShown())
+			if (!getNode().getStack().peek().isShown())
 			{
-				_stack.peek().show(FragmentTransaction.TRANSIT_NONE);
+				showPeek(FragmentTransaction.TRANSIT_NONE);
 			}
 
 			this.handleCurrentStack();
@@ -182,27 +126,23 @@ public class StackFragment extends BaseFragment<StackNode>
 	{
 		if (path.indexOf(getNode().getScreenID()) == 0)
 		{
-			StackStub checkStub;
 			BaseFragment foundFragment = null;
+			Node checkNode = null;
 
 			int i = 0;
 			do
 			{
-				if (i < this._stack.size())
+				if (i < getNode().getStack().size())
 				{
-					checkStub = _stack.get(i++);
+					checkNode = getNode().getStack().get(i++);
 
-					if (path.indexOf(checkStub.getNode().getScreenID()) == 0)
+					if (path.indexOf(checkNode.getScreenID()) == 0)
 					{
-						foundFragment = checkStub.getFragment();
+						foundFragment = checkNode.getFragment();
 					}
 				}
-				else
-				{
-					checkStub = null;
-				}
 			}
-			while (checkStub != null);
+			while (checkNode != null);
 
 			if (foundFragment != null)
 			{
@@ -220,7 +160,7 @@ public class StackFragment extends BaseFragment<StackNode>
 	@Override
 	public SingleFragment getCurrentFragment()
 	{
-		BaseFragment topFragment = _stack.peek().getFragment();
+		BaseFragment topFragment = getNode().getStack().peek().getFragment();
 		if (topFragment instanceof SingleFragment)
 		{
 			return (SingleFragment) topFragment;
@@ -231,12 +171,15 @@ public class StackFragment extends BaseFragment<StackNode>
 	@Override
 	public void onDestroy()
 	{
-		if (_stack != null)
+		if (getNode().getStack() != null)
 		{
-			while (_stack.size() > 0)
+			while (getNode().getStack().size() > 0)
 			{
-				BaseFragment fragment = _stack.pop().getFragment();
-				fragment.onDestroyView();
+				Node node = getNode().getStack().pop();
+				if (node.isShown())
+				{
+					node.getFragment().onDestroyView();
+				}
 			}
 		}
 

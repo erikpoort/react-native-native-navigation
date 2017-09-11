@@ -17,6 +17,8 @@ public interface Node extends Serializable
 	void setInstanceManager(ReactInstanceManager instanceManager);
 	void setData(ReadableMap map);
 	WritableMap data();
+	void setShown(boolean shown);
+	boolean isShown();
 	String getTitle();
 	String getScreenID();
 	BaseFragment getFragment();

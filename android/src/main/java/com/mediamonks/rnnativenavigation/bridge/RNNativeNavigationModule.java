@@ -212,7 +212,7 @@ class RNNativeNavigationModule extends ReactContextBaseJavaModule implements Lif
 				public void run()
 				{
 					SingleFragment singleFragment = (SingleFragment) findFragment;
-					singleFragment.getStackFragment().push(node);
+					singleFragment.getStackFragment().push();
 				}
 			});
 		}

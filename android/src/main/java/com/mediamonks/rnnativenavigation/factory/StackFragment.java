@@ -51,7 +51,7 @@ public class StackFragment extends BaseFragment<StackNode>
 		linearLayout.setOrientation(LinearLayout.VERTICAL);
 		linearLayout.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 
-		_toolbar = (Toolbar) inflater.inflate(R.layout.toolbar, null, false);
+		_toolbar = (Toolbar) inflater.inflate(R.layout.toolbar, linearLayout, false);
 		_upIcon = _toolbar.getNavigationIcon();
 		TypedValue typedValue = new TypedValue();
 		if (getActivity().getTheme().resolveAttribute(android.R.attr.actionBarSize, typedValue, true))

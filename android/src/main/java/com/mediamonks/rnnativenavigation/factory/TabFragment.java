@@ -69,6 +69,7 @@ public class TabFragment extends BaseFragment<TabNode> implements BottomNavigati
 		{
 			return _items.size();
 		}
+
 		SparseArray<BaseFragment> getFragments()
 		{
 			return _fragments;
@@ -107,7 +108,7 @@ public class TabFragment extends BaseFragment<TabNode> implements BottomNavigati
 				new int[]{android.R.attr.state_checkable}, // disabled
 		};
 		int[] colors = new int[]{
-				Color.WHITE,
+				Color.DKGRAY,
 				Color.GRAY,
 		};
 		for (Node node : getNode().getTabs())
@@ -163,7 +164,8 @@ public class TabFragment extends BaseFragment<TabNode> implements BottomNavigati
 				{
 					checkFragment = _adapter.getItem(i++);
 
-					if (path.indexOf(checkFragment.getNode().getScreenID()) == 0) {
+					if (path.indexOf(checkFragment.getNode().getScreenID()) == 0)
+					{
 						foundFragment = checkFragment;
 					}
 				}
@@ -171,10 +173,13 @@ public class TabFragment extends BaseFragment<TabNode> implements BottomNavigati
 				{
 					checkFragment = null;
 				}
-			} while (checkFragment != null);
+			}
+			while (checkFragment != null);
 
-			if (foundFragment != null) {
-				if (!foundFragment.getNode().getScreenID().equals(path)) {
+			if (foundFragment != null)
+			{
+				if (!foundFragment.getNode().getScreenID().equals(path))
+				{
 					foundFragment = foundFragment.fragmentForPath(path);
 				}
 

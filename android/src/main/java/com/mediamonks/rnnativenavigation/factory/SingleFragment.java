@@ -70,7 +70,8 @@ public class SingleFragment extends BaseFragment<SingleNode>
 			if (fragment instanceof BaseFragment)
 			{
 				baseFragment = (BaseFragment) fragment;
-				if (baseFragment.isRootFragment()) {
+				if (baseFragment.isRootFragment())
+				{
 					return baseFragment;
 				}
 			}

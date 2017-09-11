@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { AppRegistry } from 'react-native';
+import { AppRegistry, View } from 'react-native';
 import ReactNativeNativeNavigation from './../ReactNativeNativeNavigation';
 import SingleView from './single/SingleView';
 import StackView from './stack/StackView';
@@ -8,6 +8,11 @@ import TabView from './tab/TabView';
 class Navigation extends Component {
 	static pageMap;
 	static viewMap;
+
+	state = {
+		loading: true,
+	};
+
 	static registerScreen = (screenID, screen) => {
 		const Screen = screen;
 		AppRegistry.registerComponent(screenID, () => {
@@ -31,6 +36,7 @@ class Navigation extends Component {
 		const dom = this.props.children[1];
 		return dom.type.mapToDictionary(dom, '');
 	}
+
 	componentDidMount() {
 		const pageMap = this.props.pages.reduce((map, page) => {
 			return {
@@ -55,11 +61,16 @@ class Navigation extends Component {
 			const screens = dom.reduceScreens(request, Navigation.viewMap, Navigation.pageMap);
 			this.registerScreens(screens);
 
-			ReactNativeNativeNavigation.setSiteMap(request);
+			ReactNativeNativeNavigation.setSiteMap(request).then((loaded) => {
+				this.setState({loading: !loaded});
+			});
 		});
 	}
 	render() {
-		return this.props.children[0]
+		if (this.state.loading) {
+			return this.props.children[0]
+		}
+		return <View/>
 	}
 }
 

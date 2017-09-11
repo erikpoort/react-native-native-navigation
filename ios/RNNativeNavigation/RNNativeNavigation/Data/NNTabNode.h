@@ -9,6 +9,6 @@
 @interface NNTabNode : NNBaseNode <NNNode>
 
 @property (nonatomic, copy, readonly) NSArray <id <NNNode>> *tabs;
-@property (nonatomic, readonly) NSUInteger selectedTab;
+@property (nonatomic, assign) NSUInteger selectedTab;
 
 @end

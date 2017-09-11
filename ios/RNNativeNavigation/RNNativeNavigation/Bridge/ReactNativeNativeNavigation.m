@@ -78,4 +78,10 @@ RCT_EXPORT_METHOD(push:(NSDictionary *)screen registerCallback:(RCTResponseSende
 	});
 }
 
+- (void)dealloc
+{
+	UIViewController <NNView> *viewController = (UIViewController <NNView> *)[UIApplication sharedApplication].keyWindow.rootViewController;
+	[RNNNState sharedInstance].state = [viewController node].data;
+}
+
 @end

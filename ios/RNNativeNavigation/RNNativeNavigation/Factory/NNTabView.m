@@ -11,7 +11,6 @@
 @property (nonatomic, strong) NNTabNode *tabNode;
 @property (nonatomic, strong) UIView *holder;
 @property (nonatomic, strong) UITabBar *tabBar;
-@property (nonatomic, assign) NSUInteger selectedTab;
 @property (nonatomic, strong) NSArray <UIViewController <NNView> *> *viewControllers;
 
 @end
@@ -31,7 +30,6 @@
             [items addObject:tabBarItem];
         }];
         self.viewControllers = [viewControllers copy];
-        self.selectedTab = node.selectedTab;
 
         self.holder = [[UIView alloc] init];
         self.holder.translatesAutoresizingMaskIntoConstraints = NO;
@@ -54,19 +52,19 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    [self showTabBarViewControllerForItem:self.tabBar.items[self.selectedTab]];
+    [self showTabBarViewControllerForItem:self.tabBar.items[self.tabNode.selectedTab]];
 }
 
 - (void)showTabBarViewControllerForItem:(UITabBarItem *)item {
     [self.tabBar setSelectedItem:item];
 
-    self.selectedTab = [self.tabBar.items indexOfObject:item];
+    self.tabNode.selectedTab = [self.tabBar.items indexOfObject:item];
 
     while (self.holder.subviews.count) {
         [self.holder.subviews.firstObject removeFromSuperview];
     }
 
-    UIViewController *viewController = self.viewControllers[self.selectedTab];
+    UIViewController *viewController = self.viewControllers[self.tabNode.selectedTab];
     UIView *view = viewController.view;
     view.translatesAutoresizingMaskIntoConstraints = NO;
     [self addChildViewController:viewController];
@@ -114,9 +112,9 @@
 #pragma mark - UITabBarDelegate
 
 - (void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item {
-    if ([self.tabBar.items indexOfObject:item] == self.selectedTab) {
-        if ([self.viewControllers[self.selectedTab] isKindOfClass:[UINavigationController class]]) {
-            UINavigationController *navigationController = (UINavigationController *) self.viewControllers[self.selectedTab];
+    if ([self.tabBar.items indexOfObject:item] == self.tabNode.selectedTab) {
+        if ([self.viewControllers[self.tabNode.selectedTab] isKindOfClass:[UINavigationController class]]) {
+            UINavigationController *navigationController = (UINavigationController *) self.viewControllers[self.tabNode.selectedTab];
             [navigationController popToRootViewControllerAnimated:YES];
         }
     } else {

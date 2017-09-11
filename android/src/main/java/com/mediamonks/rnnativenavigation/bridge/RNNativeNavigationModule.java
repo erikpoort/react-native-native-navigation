@@ -47,7 +47,6 @@ class RNNativeNavigationModule extends ReactContextBaseJavaModule implements Lif
 	{
 		super(reactContext);
 
-		Log.i("MMM i", this.toString());
 		_fragments = new HashSet<>();
 		_lifecycleCallbacks = new FragmentManager.FragmentLifecycleCallbacks() {
 			@Override
@@ -99,7 +98,6 @@ class RNNativeNavigationModule extends ReactContextBaseJavaModule implements Lif
 				transaction.commit();
 			}
 		}
-		Log.i("MMM d", this.toString());
 
 		super.onCatalystInstanceDestroy();
 	}

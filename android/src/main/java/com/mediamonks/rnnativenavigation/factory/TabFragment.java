@@ -86,6 +86,8 @@ public class TabFragment extends BaseFragment<TabNode> implements BottomNavigati
 
 		_viewPager = new ViewPager(getContext());
 		_viewPager.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 1));
+		// I'm calling generateViewId() twice, calling it once doesn't work on first load. My assumption is the initial id is later hijacked by ReactNative, making it impossible to add fragments
+		View.generateViewId();
 		_viewPager.setId(View.generateViewId());
 		_viewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener()
 		{

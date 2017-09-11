@@ -13,7 +13,6 @@ static NSString *const kSelectedTabKey = @"selectedTab";
 
 @property (nonatomic, strong) RCTBridge *bridge;
 @property (nonatomic, copy) NSArray <id <NNNode>> *tabs;
-@property (nonatomic, assign) NSUInteger selectedTab;
 
 @end
 

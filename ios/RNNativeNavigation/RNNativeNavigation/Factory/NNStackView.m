@@ -5,7 +5,7 @@
 #import "NNStackView.h"
 #import "NNStackNode.h"
 
-@interface NNStackView ()
+@interface NNStackView () <UINavigationControllerDelegate>
 
 @property (nonatomic, strong) NNStackNode *stackNode;
 
@@ -19,9 +19,12 @@
         self.navigationBar.translucent = NO;
         NSMutableArray *viewControllers = [@[] mutableCopy];
         [node.stack enumerateObjectsUsingBlock:^(id <NNNode> view, NSUInteger idx, BOOL *stop) {
-            [viewControllers addObject:[view generate]];
+			UIViewController <NNView> *viewController = [view generate];
+            [viewControllers addObject:viewController];
         }];
         self.viewControllers = [viewControllers copy];
+
+		self.delegate = self;
     }
 
     return self;
@@ -64,6 +67,13 @@
 	}
 
 	return nil;
+}
+
+#pragma mark - UINavigationControllerDelegate
+
+- (void)navigationController:(UINavigationController *)navigationController didShowViewController:(UIViewController *)viewController animated:(BOOL)animated
+{
+	self.stackNode.stack = [self.stackNode.stack subarrayWithRange:NSMakeRange(0, self.viewControllers.count)];
 }
 
 @end

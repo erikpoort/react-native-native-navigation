@@ -34,12 +34,4 @@
 	return nil;
 }
 
-- (void)dealloc {
-    if (self.node.parentType == NNParentTypeStack && self.bridge.isValid) {
-        NSMutableDictionary *newState = (NSMutableDictionary *)[RNNNState sharedInstance].state;
-        [newState[@"stack"] removeLastObject];
-        [RNNNState sharedInstance].state = newState;
-    }
-}
-
 @end

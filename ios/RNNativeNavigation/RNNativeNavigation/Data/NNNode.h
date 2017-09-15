@@ -5,6 +5,8 @@
 #import <Foundation/Foundation.h>
 #import <React/RCTBridge.h>
 
+@protocol NNView;
+
 @protocol NNNode <NSObject>
 
 + (NSString *)jsName;
@@ -13,6 +15,6 @@
 - (NSDictionary *)data;
 - (NSString *)title;
 - (NSString *)screenID;
-- (UIViewController *)generate;
+- (UIViewController <NNView> *)generate;
 
 @end

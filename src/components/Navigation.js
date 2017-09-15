@@ -4,6 +4,7 @@ import ReactNativeNativeNavigation from './../ReactNativeNativeNavigation';
 import SingleView from './single/SingleView';
 import StackView from './stack/StackView';
 import TabView from './tab/TabView';
+import SplitView from './split/SplitView';
 
 class Navigation extends Component {
 	static pageMap;
@@ -49,6 +50,7 @@ class Navigation extends Component {
 			[SingleView.name] : SingleView,
 			[StackView.name] : StackView,
 			[TabView.name] : TabView,
+			[SplitView.name] : SplitView,
 		};
 		Navigation.viewMap = viewMap;
 

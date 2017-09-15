@@ -15,7 +15,9 @@
 		2FA282BFB501C319E027EDD8 /* ReactNativeNativeNavigation.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FA28419A84F8C37AA1ED511 /* ReactNativeNativeNavigation.m */; };
 		2FA2874E97D0A87F08F2A9B0 /* NNBaseNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FA286EEF0468E8670DE5D40 /* NNBaseNode.m */; };
 		2FA287D23CAFCC8964DA5006 /* NNStackNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FA28F42F051F292F34F279F /* NNStackNode.m */; };
+		2FA288E3EABAEC036C507B80 /* NNSplitView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FA281F3D454B7FBDAE6F83D /* NNSplitView.m */; };
 		2FA289340946E4086CA86B7E /* NNNodeHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FA284AFD1B39CCF8F232487 /* NNNodeHelper.m */; };
+		2FA28AE1E70B3E82B676C34D /* NNSplitNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FA287E5874275BF09B32640 /* NNSplitNode.m */; };
 		2FA28DD39C0B9E9FFEF6CB5A /* NNStackView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FA2864CBFE55A1F7ACDD12D /* NNStackView.m */; };
 /* End PBXBuildFile section */
 
@@ -34,6 +36,8 @@
 /* Begin PBXFileReference section */
 		03A6578D1F54995E001ADC60 /* libRNNativeNavigation.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libRNNativeNavigation.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		2FA280ACAB5827E04AEE6186 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.info; path = Info.plist; sourceTree = "<group>"; };
+		2FA280C6572003D8C46619FD /* NNSplitView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NNSplitView.h; sourceTree = "<group>"; };
+		2FA281F3D454B7FBDAE6F83D /* NNSplitView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NNSplitView.m; sourceTree = "<group>"; };
 		2FA2821C32FD29078295CDC0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		2FA28311DE8B09052F7B768F /* NNSingleNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NNSingleNode.h; sourceTree = "<group>"; };
 		2FA28419A84F8C37AA1ED511 /* ReactNativeNativeNavigation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReactNativeNativeNavigation.m; sourceTree = "<group>"; };
@@ -45,6 +49,7 @@
 		2FA286ADEB2044666BD1BB52 /* NNView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NNView.h; sourceTree = "<group>"; };
 		2FA286C7D2CC918712B80842 /* NNStackNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NNStackNode.h; sourceTree = "<group>"; };
 		2FA286EEF0468E8670DE5D40 /* NNBaseNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NNBaseNode.m; sourceTree = "<group>"; };
+		2FA287E5874275BF09B32640 /* NNSplitNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NNSplitNode.m; sourceTree = "<group>"; };
 		2FA289192030B7F243F52D1A /* NNStackView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NNStackView.h; sourceTree = "<group>"; };
 		2FA2894B72697E630EEEE4E8 /* NNNodeHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NNNodeHelper.h; sourceTree = "<group>"; };
 		2FA2896CBA22374DF39988E1 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -52,6 +57,7 @@
 		2FA2898CB4CC112EE37B35A5 /* NNTabNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NNTabNode.h; sourceTree = "<group>"; };
 		2FA28B31BB76176E0377BA21 /* NNSingleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NNSingleView.h; sourceTree = "<group>"; };
 		2FA28B46C72F1C1F81FDC75F /* NNTabNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NNTabNode.m; sourceTree = "<group>"; };
+		2FA28BB6A3FA8E7354559302 /* NNSplitNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NNSplitNode.h; sourceTree = "<group>"; };
 		2FA28BBA536BA604E37AC3CE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2FA28BF5021EAC6FEB5D196E /* RNNNState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNNNState.h; sourceTree = "<group>"; };
 		2FA28C066320E52AB1ADFFB7 /* NNNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NNNode.h; sourceTree = "<group>"; };
@@ -92,6 +98,8 @@
 				2FA285A272A95F1C341B195C /* NNTabView.m */,
 				2FA28E714A786D3398F6E468 /* NNTabView.h */,
 				2FA286ADEB2044666BD1BB52 /* NNView.h */,
+				2FA281F3D454B7FBDAE6F83D /* NNSplitView.m */,
+				2FA280C6572003D8C46619FD /* NNSplitView.h */,
 			);
 			path = Factory;
 			sourceTree = "<group>";
@@ -142,6 +150,8 @@
 				2FA2894B72697E630EEEE4E8 /* NNNodeHelper.h */,
 				2FA286EEF0468E8670DE5D40 /* NNBaseNode.m */,
 				2FA284A6029F2935BC5B96A9 /* NNBaseNode.h */,
+				2FA287E5874275BF09B32640 /* NNSplitNode.m */,
+				2FA28BB6A3FA8E7354559302 /* NNSplitNode.h */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -224,6 +234,8 @@
 				2FA281EF0600EE60C1C93ABD /* NNTabNode.m in Sources */,
 				2FA2804367762217C88B4BB6 /* NNTabView.m in Sources */,
 				2FA2874E97D0A87F08F2A9B0 /* NNBaseNode.m in Sources */,
+				2FA28AE1E70B3E82B676C34D /* NNSplitNode.m in Sources */,
+				2FA288E3EABAEC036C507B80 /* NNSplitView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

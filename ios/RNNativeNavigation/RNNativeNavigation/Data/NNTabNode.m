@@ -57,7 +57,7 @@ static NSString *const kSelectedTabKey = @"selectedTab";
 
 - (NSString *)title
 {
-    return self.tabs[self.selectedTab].title;
+    return self.tabs.firstObject.title;
 }
 
 @end

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { TabView, StackView, SingleView, Navigation } from 'react-native-native-navigation';
+import { TabView, StackView, SingleView, SplitView, Navigation } from 'react-native-native-navigation';
 import Home from './Home';
 import Loading from './Loading';
 import Detail from './Detail';
@@ -17,6 +17,16 @@ export default class example extends Component {
                 <SingleView screen={Detail2} />
               </StackView>
               <SingleView screen={Detail2} />
+              <SplitView name="horizontal" axis={SplitView.AXIS.HORIZONTAL}>
+                <SingleView screen={Detail} />
+                <SingleView screen={Detail2} />
+              </SplitView>
+              <SplitView name="vertical" axis={SplitView.AXIS.VERTICAL}>
+                <SingleView screen={Detail} />
+                <StackView name="stack">
+                  <SingleView screen={Home} />
+                </StackView>
+              </SplitView>
             </TabView>
         </Navigation>
     );

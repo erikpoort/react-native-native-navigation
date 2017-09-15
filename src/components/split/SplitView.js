@@ -1,30 +1,35 @@
 import React, { Component } from 'react';
 
-export default class TabView extends Component {
-	static mapChildren = (children, path) => {
-		if (!Array.isArray(children)) children = [children];
-		return children.map(dom => dom.type.mapToDictionary(dom, path));
+export default class SplitView extends Component {
+	static AXIS = {
+		HORIZONTAL: "horizontal",
+		VERTICAL: "vertical",
 	}
+
 	static mapToDictionary = (dom, path) => {
 		const type = dom.type.name;
 		const screenID = `${path}/${dom.props.name}`;
-		const tabs = dom.type.mapChildren(dom.props.children, screenID);
-		const selectedTab = dom.props.selectedTab;
+		const dom1 = dom.props.children[0];
+		const node1 = dom1.type.mapToDictionary(dom1, screenID);
+		const dom2 = dom.props.children[1];
+		const node2 = dom2.type.mapToDictionary(dom2, screenID);
+		const axis = dom.props.axis;
 		return {
 			type,
 			screenID,
-			tabs,
-			selectedTab,
-		};
+			node1,
+			node2,
+			axis,
+		}
 	}
 
 	static reduceScreens = (data, viewMap, pageMap) => {
-		return data.tabs.reduce((map, node) => {
+		return [data.node1, data.node2].reduce((map, node) => {
 			const viewData = viewMap[node.type];
 			if (viewData) {
 				const result = viewData.reduceScreens(node, viewMap, pageMap).map((view) => {
 					const { screenID, screen } = view;
-					const TabScreen = () => {
+					const SplitScreen = () => {
 						return class extends Component {
 							render() {
 								const Screen = screen;
@@ -32,18 +37,19 @@ export default class TabView extends Component {
 							}
 						}
 					}
-					const Tab = TabScreen();
+					const Split = SplitScreen();
 					return ({
 						screenID,
-						screen: Tab,
+						screen: Split,
 					})
 				});
 				return [
 					...map,
 					...result,
-				];
+				]
+			} else {
+				return null;
 			}
-			return map;
-		}, []);
+		}, []).filter((screen) => screen != null);
 	}
 }

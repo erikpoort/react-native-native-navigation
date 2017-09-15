@@ -21,7 +21,9 @@
     if (self = [super init]) {
         self.tabNode = node;
 
-        NSMutableArray *viewControllers = [@[] mutableCopy];
+		self.title = node.title;
+
+		NSMutableArray *viewControllers = [@[] mutableCopy];
         NSMutableArray *items = [@[] mutableCopy];
         [node.tabs enumerateObjectsUsingBlock:^(id <NNNode> view, NSUInteger idx, BOOL *stop) {
             UIViewController *viewController = [view generate];
@@ -90,9 +92,9 @@
 			if (i < self.viewControllers.count) {
 				checkController = self.viewControllers[i++];
 
-				if ([path rangeOfString:checkController.node.screenID].location == 0)
-				{
+				if ([path rangeOfString:checkController.node.screenID].location == 0) {
 					foundController = checkController;
+					checkController = nil;
 				}
 			} else {
 				checkController = nil;

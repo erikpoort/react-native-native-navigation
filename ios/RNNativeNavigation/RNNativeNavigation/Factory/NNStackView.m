@@ -31,7 +31,7 @@
 }
 
 - (NSString *)title {
-    return self.viewControllers.lastObject.title;
+    return self.viewControllers.firstObject.title;
 }
 
 - (__kindof id <NNNode>)node

@@ -5,7 +5,6 @@
 #import <React/RCTRootView.h>
 #import "NNSingleView.h"
 #import "NNSingleNode.h"
-#import "RNNNState.h"
 
 @interface NNSingleView ()
 

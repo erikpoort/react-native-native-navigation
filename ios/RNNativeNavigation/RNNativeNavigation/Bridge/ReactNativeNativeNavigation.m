@@ -72,8 +72,8 @@ RCT_EXPORT_METHOD(push:(NSDictionary *)screen registerCallback:(RCTResponseSende
 	callback(@[newState]);
 
 	dispatch_async(dispatch_get_main_queue(), ^{
-		if (findController) {
-			[findController.navigationController pushViewController:viewController animated:YES];
+		if (navigationController && viewController) {
+			[navigationController pushViewController:viewController animated:YES];
 		}
 	});
 }

@@ -127,7 +127,7 @@ public class StackFragment extends BaseFragment<StackNode>
 		if (path.indexOf(getNode().getScreenID()) == 0)
 		{
 			BaseFragment foundFragment = null;
-			Node checkNode = null;
+			Node checkNode;
 
 			int i = 0;
 			do
@@ -140,6 +140,10 @@ public class StackFragment extends BaseFragment<StackNode>
 					{
 						foundFragment = checkNode.getFragment();
 					}
+				}
+				else
+				{
+					checkNode = null;
 				}
 			}
 			while (checkNode != null);

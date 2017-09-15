@@ -5,6 +5,7 @@ import com.facebook.react.bridge.ReadableMap;
 import com.mediamonks.rnnativenavigation.data.BaseNode;
 import com.mediamonks.rnnativenavigation.data.Node;
 import com.mediamonks.rnnativenavigation.data.SingleNode;
+import com.mediamonks.rnnativenavigation.data.SplitNode;
 import com.mediamonks.rnnativenavigation.data.StackNode;
 import com.mediamonks.rnnativenavigation.data.TabNode;
 
@@ -22,8 +23,16 @@ public class NodeHelper
 
 	public static Node nodeFromMap(ReadableMap map, ReactInstanceManager instanceManager) throws Exception
 	{
-		List<String> names = Arrays.asList(SingleNode.JS_NAME, StackNode.JS_NAME, TabNode.JS_NAME);
-		List<? extends Class<? extends BaseNode>> classes = Arrays.asList(SingleNode.class, StackNode.class, TabNode.class);
+		List<String> names = Arrays.asList(
+				SingleNode.JS_NAME,
+				StackNode.JS_NAME,
+				TabNode.JS_NAME,
+				SplitNode.JS_NAME);
+		List<? extends Class<? extends BaseNode>> classes = Arrays.asList(
+				SingleNode.class,
+				StackNode.class,
+				TabNode.class,
+				SplitNode.class);
 		int index = names.indexOf(map.getString(TYPE));
 		if (index >= 0)
 		{

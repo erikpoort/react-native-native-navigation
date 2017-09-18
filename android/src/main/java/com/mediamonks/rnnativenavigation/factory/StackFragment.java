@@ -91,6 +91,8 @@ public class StackFragment extends BaseFragment<StackNode>
 		transaction.setTransition(transition);
 		transaction.commit();
 		node.setShown(true);
+
+		handleCurrentStack();
 	}
 
 	public void push()

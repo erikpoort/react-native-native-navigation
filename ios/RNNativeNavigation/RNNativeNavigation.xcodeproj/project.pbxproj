@@ -10,14 +10,20 @@
 		03A657C51F54B84C001ADC60 /* NNSingleNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FA285498B52918E4FA3BE86 /* NNSingleNode.m */; };
 		03A657C61F54B851001ADC60 /* NNSingleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FA28FF223B6C82EA9933D1B /* NNSingleView.m */; };
 		2FA2804367762217C88B4BB6 /* NNTabView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FA285A272A95F1C341B195C /* NNTabView.m */; };
+		2FA2812F3BBDB00B60AF1DC9 /* NNDrawerNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FA28FB1AE9A3EAFE4354075 /* NNDrawerNode.m */; };
 		2FA281EF0600EE60C1C93ABD /* NNTabNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FA28B46C72F1C1F81FDC75F /* NNTabNode.m */; };
 		2FA2820A9C105EF3D69ADBFA /* RNNNState.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FA28E92F602A8F16F963A8F /* RNNNState.m */; };
 		2FA282BFB501C319E027EDD8 /* ReactNativeNativeNavigation.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FA28419A84F8C37AA1ED511 /* ReactNativeNativeNavigation.m */; };
+		2FA285AADCCE0A4FA1B5D6F4 /* MMDrawerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FA28A03844645A4E1F9A096 /* MMDrawerController.m */; };
 		2FA2874E97D0A87F08F2A9B0 /* NNBaseNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FA286EEF0468E8670DE5D40 /* NNBaseNode.m */; };
 		2FA287D23CAFCC8964DA5006 /* NNStackNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FA28F42F051F292F34F279F /* NNStackNode.m */; };
+		2FA2888AAB0C0A45F421C19C /* MMDrawerVisualState.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FA2852B773A1CA3D3EA8ADF /* MMDrawerVisualState.m */; };
 		2FA288E3EABAEC036C507B80 /* NNSplitView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FA281F3D454B7FBDAE6F83D /* NNSplitView.m */; };
 		2FA289340946E4086CA86B7E /* NNNodeHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FA284AFD1B39CCF8F232487 /* NNNodeHelper.m */; };
+		2FA28A3560791E4206F356C1 /* UIViewController+MMDrawerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FA28AD048DAB1E614641810 /* UIViewController+MMDrawerController.m */; };
 		2FA28AE1E70B3E82B676C34D /* NNSplitNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FA287E5874275BF09B32640 /* NNSplitNode.m */; };
+		2FA28B1F404E077DC4924283 /* MMDrawerBarButtonItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FA28C0EFE4C2D1ECB0AB85F /* MMDrawerBarButtonItem.m */; };
+		2FA28DA2F0680FAE2C4C7E5F /* NNDrawerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FA281B88FDF714E9F743D97 /* NNDrawerView.m */; };
 		2FA28DD39C0B9E9FFEF6CB5A /* NNStackView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FA2864CBFE55A1F7ACDD12D /* NNStackView.m */; };
 /* End PBXBuildFile section */
 
@@ -37,34 +43,47 @@
 		03A6578D1F54995E001ADC60 /* libRNNativeNavigation.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libRNNativeNavigation.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		2FA280ACAB5827E04AEE6186 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.info; path = Info.plist; sourceTree = "<group>"; };
 		2FA280C6572003D8C46619FD /* NNSplitView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NNSplitView.h; sourceTree = "<group>"; };
+		2FA280C7491E9D87EA9BF7CB /* MMDrawerBarButtonItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMDrawerBarButtonItem.h; sourceTree = "<group>"; };
+		2FA28196CE76ABB75F2A6FAF /* NNDrawerNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NNDrawerNode.h; sourceTree = "<group>"; };
+		2FA281B88FDF714E9F743D97 /* NNDrawerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NNDrawerView.m; sourceTree = "<group>"; };
 		2FA281F3D454B7FBDAE6F83D /* NNSplitView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NNSplitView.m; sourceTree = "<group>"; };
 		2FA2821C32FD29078295CDC0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		2FA282884B09821E79A0780F /* MMDrawerController+Subclass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MMDrawerController+Subclass.h"; sourceTree = "<group>"; };
 		2FA28311DE8B09052F7B768F /* NNSingleNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NNSingleNode.h; sourceTree = "<group>"; };
 		2FA28419A84F8C37AA1ED511 /* ReactNativeNativeNavigation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReactNativeNativeNavigation.m; sourceTree = "<group>"; };
 		2FA284A6029F2935BC5B96A9 /* NNBaseNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NNBaseNode.h; sourceTree = "<group>"; };
 		2FA284AFD1B39CCF8F232487 /* NNNodeHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NNNodeHelper.m; sourceTree = "<group>"; };
+		2FA2852B773A1CA3D3EA8ADF /* MMDrawerVisualState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMDrawerVisualState.m; sourceTree = "<group>"; };
 		2FA285498B52918E4FA3BE86 /* NNSingleNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NNSingleNode.m; sourceTree = "<group>"; };
 		2FA285A272A95F1C341B195C /* NNTabView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NNTabView.m; sourceTree = "<group>"; };
 		2FA2864CBFE55A1F7ACDD12D /* NNStackView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NNStackView.m; sourceTree = "<group>"; };
 		2FA286ADEB2044666BD1BB52 /* NNView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NNView.h; sourceTree = "<group>"; };
 		2FA286C7D2CC918712B80842 /* NNStackNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NNStackNode.h; sourceTree = "<group>"; };
+		2FA286E6D19C2D9E07A4EB42 /* NNDrawerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NNDrawerView.h; sourceTree = "<group>"; };
 		2FA286EEF0468E8670DE5D40 /* NNBaseNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NNBaseNode.m; sourceTree = "<group>"; };
 		2FA287E5874275BF09B32640 /* NNSplitNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NNSplitNode.m; sourceTree = "<group>"; };
+		2FA2883BF0614197AB410739 /* MMDrawerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMDrawerController.h; sourceTree = "<group>"; };
 		2FA289192030B7F243F52D1A /* NNStackView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NNStackView.h; sourceTree = "<group>"; };
 		2FA2894B72697E630EEEE4E8 /* NNNodeHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NNNodeHelper.h; sourceTree = "<group>"; };
 		2FA2896CBA22374DF39988E1 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		2FA289766D17F1A15424DCDB /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		2FA2898CB4CC112EE37B35A5 /* NNTabNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NNTabNode.h; sourceTree = "<group>"; };
+		2FA28A03844645A4E1F9A096 /* MMDrawerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMDrawerController.m; sourceTree = "<group>"; };
+		2FA28AD048DAB1E614641810 /* UIViewController+MMDrawerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+MMDrawerController.m"; sourceTree = "<group>"; };
 		2FA28B31BB76176E0377BA21 /* NNSingleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NNSingleView.h; sourceTree = "<group>"; };
 		2FA28B46C72F1C1F81FDC75F /* NNTabNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NNTabNode.m; sourceTree = "<group>"; };
 		2FA28BB6A3FA8E7354559302 /* NNSplitNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NNSplitNode.h; sourceTree = "<group>"; };
 		2FA28BBA536BA604E37AC3CE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2FA28BF5021EAC6FEB5D196E /* RNNNState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNNNState.h; sourceTree = "<group>"; };
 		2FA28C066320E52AB1ADFFB7 /* NNNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NNNode.h; sourceTree = "<group>"; };
+		2FA28C0EFE4C2D1ECB0AB85F /* MMDrawerBarButtonItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMDrawerBarButtonItem.m; sourceTree = "<group>"; };
+		2FA28CC71DD4C737BA873D40 /* UIViewController+MMDrawerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+MMDrawerController.h"; sourceTree = "<group>"; };
+		2FA28D0EBF4A82BED682D6BF /* MMDrawerVisualState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMDrawerVisualState.h; sourceTree = "<group>"; };
 		2FA28E714A786D3398F6E468 /* NNTabView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NNTabView.h; sourceTree = "<group>"; };
 		2FA28E92F602A8F16F963A8F /* RNNNState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNNNState.m; sourceTree = "<group>"; };
 		2FA28EE378106B619E61DC54 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		2FA28F42F051F292F34F279F /* NNStackNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NNStackNode.m; sourceTree = "<group>"; };
+		2FA28FB1AE9A3EAFE4354075 /* NNDrawerNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NNDrawerNode.m; sourceTree = "<group>"; };
 		2FA28FEF8C629EA3319E2979 /* ReactNativeNativeNavigation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReactNativeNativeNavigation.h; sourceTree = "<group>"; };
 		2FA28FF223B6C82EA9933D1B /* NNSingleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NNSingleView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -80,6 +99,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2FA28090956966883CD1EFB3 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				2FA28815AF1C3C73429170EE /* MMDrawerController */,
+			);
+			path = Frameworks;
+			sourceTree = "<group>";
+		};
 		2FA2816D7E5ED0BC7FD4A191 = {
 			isa = PBXGroup;
 			children = (
@@ -100,6 +127,8 @@
 				2FA286ADEB2044666BD1BB52 /* NNView.h */,
 				2FA281F3D454B7FBDAE6F83D /* NNSplitView.m */,
 				2FA280C6572003D8C46619FD /* NNSplitView.h */,
+				2FA281B88FDF714E9F743D97 /* NNDrawerView.m */,
+				2FA286E6D19C2D9E07A4EB42 /* NNDrawerView.h */,
 			);
 			path = Factory;
 			sourceTree = "<group>";
@@ -116,6 +145,7 @@
 				2FA28A89019DF206877342A7 /* Data */,
 				2FA28227B3456E4996DA9EB5 /* Factory */,
 				2FA28DB3076CA0E9073D6A97 /* Bridge */,
+				2FA28090956966883CD1EFB3 /* Frameworks */,
 			);
 			path = RNNativeNavigation;
 			sourceTree = "<group>";
@@ -126,6 +156,22 @@
 				03A6578D1F54995E001ADC60 /* libRNNativeNavigation.a */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		2FA28815AF1C3C73429170EE /* MMDrawerController */ = {
+			isa = PBXGroup;
+			children = (
+				2FA2883BF0614197AB410739 /* MMDrawerController.h */,
+				2FA28A03844645A4E1F9A096 /* MMDrawerController.m */,
+				2FA28D0EBF4A82BED682D6BF /* MMDrawerVisualState.h */,
+				2FA2852B773A1CA3D3EA8ADF /* MMDrawerVisualState.m */,
+				2FA280C7491E9D87EA9BF7CB /* MMDrawerBarButtonItem.h */,
+				2FA28C0EFE4C2D1ECB0AB85F /* MMDrawerBarButtonItem.m */,
+				2FA282884B09821E79A0780F /* MMDrawerController+Subclass.h */,
+				2FA28CC71DD4C737BA873D40 /* UIViewController+MMDrawerController.h */,
+				2FA28AD048DAB1E614641810 /* UIViewController+MMDrawerController.m */,
+			);
+			path = MMDrawerController;
 			sourceTree = "<group>";
 		};
 		2FA288D82BE71526FA410DF3 /* Supporting Files */ = {
@@ -152,6 +198,8 @@
 				2FA284A6029F2935BC5B96A9 /* NNBaseNode.h */,
 				2FA287E5874275BF09B32640 /* NNSplitNode.m */,
 				2FA28BB6A3FA8E7354559302 /* NNSplitNode.h */,
+				2FA28FB1AE9A3EAFE4354075 /* NNDrawerNode.m */,
+				2FA28196CE76ABB75F2A6FAF /* NNDrawerNode.h */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -236,6 +284,12 @@
 				2FA2874E97D0A87F08F2A9B0 /* NNBaseNode.m in Sources */,
 				2FA28AE1E70B3E82B676C34D /* NNSplitNode.m in Sources */,
 				2FA288E3EABAEC036C507B80 /* NNSplitView.m in Sources */,
+				2FA285AADCCE0A4FA1B5D6F4 /* MMDrawerController.m in Sources */,
+				2FA2888AAB0C0A45F421C19C /* MMDrawerVisualState.m in Sources */,
+				2FA28B1F404E077DC4924283 /* MMDrawerBarButtonItem.m in Sources */,
+				2FA28A3560791E4206F356C1 /* UIViewController+MMDrawerController.m in Sources */,
+				2FA2812F3BBDB00B60AF1DC9 /* NNDrawerNode.m in Sources */,
+				2FA28DA2F0680FAE2C4C7E5F /* NNDrawerView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -8,6 +8,7 @@
 #import "NNSingleNode.h"
 #import "NNTabNode.h"
 #import "NNSplitNode.h"
+#import "NNDrawerNode.h"
 
 static NSString *const kJSViewName = @"type";
 
@@ -19,12 +20,14 @@ static NSString *const kJSViewName = @"type";
 			[NNStackNode jsName],
 			[NNTabNode jsName],
 			[NNSplitNode jsName],
+			[NNDrawerNode jsName],
 	];
 	NSArray <Class <NNNode>> *classes = @[
 			[NNSingleNode class],
 			[NNStackNode class],
 			[NNTabNode class],
 			[NNSplitNode class],
+			[NNDrawerNode class],
 	];
 	NSString *name = map[kJSViewName];
 	NSUInteger index = [names indexOfObject:name];

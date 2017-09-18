@@ -22,7 +22,7 @@ static NSString *const kName = @"name";
 	return @"SingleView";
 }
 
-- (UIViewController *)generate {
+- (UIViewController <NNView> *)generate {
 	return [[NNSingleView alloc] initWithBridge:self.bridge node:self];
 }
 
@@ -34,7 +34,6 @@ static NSString *const kName = @"name";
 - (NSDictionary *)data {
 	NSMutableDictionary *data = [super data].mutableCopy;
 	data[kName] = self.title;
-	data[kType] = self.class.jsName;
 	return data.copy;
 }
 

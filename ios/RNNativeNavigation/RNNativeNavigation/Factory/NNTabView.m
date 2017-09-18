@@ -22,6 +22,7 @@
         self.tabNode = node;
 
 		self.title = node.title;
+		self.view.backgroundColor = [UIColor whiteColor];
 
 		NSMutableArray *viewControllers = [@[] mutableCopy];
         NSMutableArray *items = [@[] mutableCopy];

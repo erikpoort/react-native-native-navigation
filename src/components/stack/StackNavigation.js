@@ -1,5 +1,6 @@
 import React from 'react';
 import { NativeModules } from 'react-native';
+
 const { ReactNativeNativeNavigation } = NativeModules;
 import { Navigation } from './../Navigation';
 import SingleView from './../single/SingleView';
@@ -18,7 +19,7 @@ export default class StackNavigation {
 	}
 
 	push = (screen) => {
-		const Screen = <SingleView screen={screen.type} />;
+		const Screen = <SingleView screen={screen.type}/>;
 		const screenData = Screen.type.mapToDictionary(Screen, this.screenID);
 
 		return ReactNativeNativeNavigation.push(screenData, (register) => {

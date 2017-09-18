@@ -10,6 +10,7 @@ NSString *const kType = @"type";
 @interface NNBaseNode ()
 
 @property (nonatomic, copy) NSString *screenID;
+@property (nonatomic, copy) NSString *type;
 
 @end
 
@@ -18,12 +19,14 @@ NSString *const kType = @"type";
 - (void)setData:(NSDictionary *)data
 {
 	self.screenID = data[kScreenId];
+	self.type = data[kType];
 }
 
 - (NSDictionary *)data
 {
 	return @{
-			kScreenId: self.screenID,
+			kScreenId : self.screenID,
+			kType : self.type,
 	};
 }
 

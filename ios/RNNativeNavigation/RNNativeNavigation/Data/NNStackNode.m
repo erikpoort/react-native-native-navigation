@@ -21,7 +21,7 @@ static NSString *const kStackKey = @"stack";
     return @"StackView";
 }
 
-- (UIViewController *)generate {
+- (UIViewController <NNView> *)generate {
 	return [[NNStackView alloc] initWithNode:self];
 }
 
@@ -47,7 +47,6 @@ static NSString *const kStackKey = @"stack";
 		[stack addObject:obj.data];
 	}];
 	data[kStackKey] = stack.copy;
-	data[kType] = self.class.jsName;
 	return data.copy;
 }
 

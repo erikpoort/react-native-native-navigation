@@ -89,7 +89,7 @@ public class StackNode extends BaseNode<StackFragment> implements Node
 	@Override
 	public String getTitle()
 	{
-		return _stack.peek().getTitle();
+		return _stack.firstElement().getTitle();
 	}
 
 	public Stack<Node> getStack()

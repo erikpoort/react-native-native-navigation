@@ -5,6 +5,7 @@ import SingleView from './components/single/SingleView';
 import StackView from './components/stack/StackView';
 import TabView from './components/tab/TabView';
 import SplitView from './components/split/SplitView';
+import DrawerView from './components/drawer/DrawerView';
 
 module.exports = {
 	Navigation,
@@ -12,4 +13,5 @@ module.exports = {
 	StackView,
 	TabView,
 	SplitView,
+	DrawerView,
 }

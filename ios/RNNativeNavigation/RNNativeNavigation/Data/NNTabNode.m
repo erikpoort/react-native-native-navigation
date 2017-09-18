@@ -51,7 +51,6 @@ static NSString *const kSelectedTabKey = @"selectedTab";
     }];
     data[kTabsKey] = tabs;
     data[kSelectedTabKey] = @(self.selectedTab);
-	data[kType] = self.class.jsName;
 	return data.copy;
 }
 

@@ -5,6 +5,7 @@ import SingleView from './single/SingleView';
 import StackView from './stack/StackView';
 import TabView from './tab/TabView';
 import SplitView from './split/SplitView';
+import DrawerView from './drawer/DrawerView';
 
 class Navigation extends Component {
 	static pageMap;
@@ -20,7 +21,7 @@ class Navigation extends Component {
 			return class extends Component {
 				render() {
 					return (
-						<Screen />
+						<Screen/>
 					)
 				}
 			}
@@ -47,10 +48,11 @@ class Navigation extends Component {
 		}, {});
 		Navigation.pageMap = pageMap;
 		const viewMap = {
-			[SingleView.name] : SingleView,
-			[StackView.name] : StackView,
-			[TabView.name] : TabView,
-			[SplitView.name] : SplitView,
+			[SingleView.name]: SingleView,
+			[StackView.name]: StackView,
+			[TabView.name]: TabView,
+			[SplitView.name]: SplitView,
+			[DrawerView.name]: DrawerView,
 		};
 		Navigation.viewMap = viewMap;
 
@@ -64,10 +66,11 @@ class Navigation extends Component {
 			this.registerScreens(screens);
 
 			ReactNativeNativeNavigation.setSiteMap(request).then((loaded) => {
-				this.setState({loading: !loaded});
+				this.setState({ loading: !loaded });
 			});
 		});
 	}
+
 	render() {
 		if (this.state.loading) {
 			return this.props.children[0]

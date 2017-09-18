@@ -4,7 +4,9 @@ import StackNavigation from './StackNavigation';
 
 export default class StackView extends Component {
 	static mapChildren = (children, path) => {
-		if (!Array.isArray(children)) children = [children];
+		if (!Array.isArray(children)) {
+			children = [children];
+		}
 		let buildPath = path;
 		return children.map(dom => {
 			let child = dom.type.mapToDictionary(dom, buildPath);
@@ -33,10 +35,12 @@ export default class StackView extends Component {
 						return class extends Component {
 							removeBackButtonListener;
 							stack;
+
 							constructor() {
 								super();
 								this.stack = new StackNavigation(screenID);
 							}
+
 							componentWillMount() {
 								const { remove } = BackHandler.addEventListener('hardwareBackPress', () => {
 									this.stack.handleBackButton((handled) => {
@@ -48,13 +52,16 @@ export default class StackView extends Component {
 								});
 								this.removeBackButtonListener = remove;
 							}
+
 							componentWillUnmount() {
 								if (this.removeBackButtonListener != null) {
 									this.removeBackButtonListener();
 								}
 							}
+
 							componentWillReceiveProps(newProps) {
 							}
+
 							render() {
 								const Screen = screen;
 								return <Screen stack={this.stack} {...this.props} />

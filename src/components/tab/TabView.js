@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 
 export default class TabView extends Component {
 	static mapChildren = (children, path) => {
-		if (!Array.isArray(children)) children = [children];
+		if (!Array.isArray(children)) {
+			children = [children];
+		}
 		return children.map(dom => dom.type.mapToDictionary(dom, path));
 	}
 	static mapToDictionary = (dom, path) => {

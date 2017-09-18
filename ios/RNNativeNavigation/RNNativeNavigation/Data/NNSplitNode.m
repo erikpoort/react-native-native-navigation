@@ -47,7 +47,6 @@ static NSString *const kAxisKey = @"axis";
 	data[kNode1Key] = self.node1.data;
 	data[kNode2Key] = self.node2.data;
 	data[kAxisKey] = self.axis == UILayoutConstraintAxisHorizontal ? @"horizontal" : @"vertical";
-	data[kType] = self.class.jsName;
 	return data.copy;
 }
 

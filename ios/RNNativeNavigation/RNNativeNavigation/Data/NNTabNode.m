@@ -23,7 +23,7 @@ static NSString *const kSelectedTabKey = @"selectedTab";
     return @"TabView";
 }
 
-- (UIViewController *)generate {
+- (UIViewController <NNView> *)generate {
     return [[NNTabView alloc] initWithNode:self];
 }
 

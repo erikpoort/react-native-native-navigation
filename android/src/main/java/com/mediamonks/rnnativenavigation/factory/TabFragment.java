@@ -90,22 +90,13 @@ public class TabFragment extends BaseFragment<TabNode> implements BottomNavigati
 		// I'm calling generateViewId() twice, calling it once doesn't work on first load. My assumption is the initial id is later hijacked by ReactNative, making it impossible to add fragments
 		View.generateViewId();
 		_viewPager.setId(View.generateViewId());
-		_viewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener()
-		{
-			@Override
-			public void onPageSelected(int position)
-			{
-				super.onPageSelected(position);
-				getNode().setSelectedTab(position);
-			}
-		});
 		linearLayout.addView(_viewPager);
 
-		BottomNavigationView bottomNavigationView = new BottomNavigationView(getContext());
+		final BottomNavigationView bottomNavigationView = new BottomNavigationView(getContext());
 		bottomNavigationView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 		int[][] states = new int[][]{
 				new int[]{android.R.attr.state_enabled}, // enabled
-				new int[]{android.R.attr.state_checkable}, // disabled
+				new int[]{android.R.attr.state_selected}, // disabled
 		};
 		int[] colors = new int[]{
 				Color.DKGRAY,
@@ -120,6 +111,17 @@ public class TabFragment extends BaseFragment<TabNode> implements BottomNavigati
 		bottomNavigationView.setItemTextColor(new ColorStateList(states, colors));
 		bottomNavigationView.setOnNavigationItemSelectedListener(this);
 		linearLayout.addView(bottomNavigationView);
+
+		_viewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener()
+		{
+			@Override
+			public void onPageSelected(int position)
+			{
+				super.onPageSelected(position);
+				getNode().setSelectedTab(position);
+				bottomNavigationView.setSelectedItemId(position);
+			}
+		});
 
 		return linearLayout;
 	}

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -54,16 +55,7 @@ public class StackFragment extends BaseFragment<StackNode>
 		_holder.setId(id);
 		linearLayout.addView(_holder, new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, 1));
 
-		return linearLayout;
-	}
-
-	@Override
-	public void onViewCreated(View view, @Nullable Bundle savedInstanceState)
-	{
-		super.onViewCreated(view, savedInstanceState);
-
 		showPeek(FragmentTransaction.TRANSIT_NONE);
-
 		_toolbar.setNavigationOnClickListener(new View.OnClickListener()
 		{
 			@Override
@@ -72,6 +64,21 @@ public class StackFragment extends BaseFragment<StackNode>
 				onBackPressed();
 			}
 		});
+
+		return linearLayout;
+	}
+
+	@Override
+	public void onDestroyView()
+	{
+		super.onDestroyView();
+
+		for (Node node : getNode().getStack())
+		{
+			FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+			transaction.remove(node.getFragment());
+			transaction.commit();
+		}
 	}
 
 	private void showPeek(int transition)
@@ -170,23 +177,5 @@ public class StackFragment extends BaseFragment<StackNode>
 			return (SingleFragment) topFragment;
 		}
 		return topFragment.getCurrentFragment();
-	}
-
-	@Override
-	public void onDestroy()
-	{
-		if (getNode().getStack() != null)
-		{
-			while (getNode().getStack().size() > 0)
-			{
-				Node node = getNode().getStack().pop();
-				if (node.isShown())
-				{
-					node.getFragment().onDestroyView();
-				}
-			}
-		}
-
-		super.onDestroy();
 	}
 }

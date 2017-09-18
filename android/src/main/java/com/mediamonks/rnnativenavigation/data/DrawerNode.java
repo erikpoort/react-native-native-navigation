@@ -1,0 +1,137 @@
+package com.mediamonks.rnnativenavigation.data;
+
+import android.view.Gravity;
+
+import com.facebook.react.ReactInstanceManager;
+import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.WritableMap;
+import com.mediamonks.rnnativenavigation.factory.BaseFragment;
+import com.mediamonks.rnnativenavigation.factory.DrawerFragment;
+import com.mediamonks.rnnativenavigation.factory.NodeHelper;
+
+import java.util.Arrays;
+
+/**
+ * Created by erik on 18/09/2017.
+ * example 2017
+ */
+
+public class DrawerNode extends BaseNode<DrawerFragment> implements Node
+{
+	public static String JS_NAME = "DrawerView";
+
+	private static final String LEFT = "left";
+	private static final String CENTER = "center";
+	private static final String RIGHT = "right";
+	private static final String SIDE = "side";
+
+	private ReactInstanceManager _instanceManager;
+	private Node _leftNode;
+	private Node _centerNode;
+	private Node _rightNode;
+	private int _side;
+
+	@Override
+	public BaseFragment getFragment()
+	{
+		if (_fragment == null)
+		{
+			_fragment = new DrawerFragment();
+			_fragment.setNode(this);
+		}
+		return _fragment;
+	}
+
+	@Override
+	public void setInstanceManager(ReactInstanceManager instanceManager)
+	{
+		_instanceManager = instanceManager;
+	}
+
+	private ReactInstanceManager getInstanceManager()
+	{
+		return _instanceManager;
+	}
+
+	@Override
+	public void setData(ReadableMap map)
+	{
+		super.setData(map);
+
+		try
+		{
+			_leftNode = NodeHelper.nodeFromMap(map.getMap(LEFT), getInstanceManager());
+			_centerNode = NodeHelper.nodeFromMap(map.getMap(CENTER), getInstanceManager());
+			_rightNode = NodeHelper.nodeFromMap(map.getMap(RIGHT), getInstanceManager());
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+
+		String side = map.getString(SIDE);
+		String[] sides = new String[]{LEFT, CENTER, RIGHT};
+		Integer[] gravities = new Integer[]{Gravity.START, Gravity.NO_GRAVITY, Gravity.END};
+		int index = Arrays.asList(sides).indexOf(side);
+		if (index >= 0)
+		{
+			_side = gravities[index];
+		}
+		else
+		{
+			_side = Gravity.NO_GRAVITY;
+		}
+	}
+
+	@Override
+	public WritableMap data()
+	{
+		WritableMap map = super.data();
+		map.putMap(LEFT, _leftNode.data());
+		map.putMap(CENTER, _centerNode.data());
+		map.putMap(RIGHT, _rightNode.data());
+		String[] sides = new String[]{LEFT, CENTER, RIGHT};
+		Integer[] gravities = new Integer[]{Gravity.START, Gravity.NO_GRAVITY, Gravity.END};
+		int index = Arrays.asList(gravities).indexOf(_side);
+		if (index >= 0)
+		{
+			map.putString(SIDE, sides[index]);
+		}
+		else
+		{
+			map.putString(SIDE, CENTER);
+		}
+		return map;
+	}
+
+	@Override
+	public String getTitle()
+	{
+		return _centerNode.getTitle();
+	}
+
+	public Node getLeftNode()
+	{
+		return _leftNode;
+	}
+
+	public Node getCenterNode()
+	{
+		return _centerNode;
+	}
+
+	public Node getRightNode()
+	{
+		return _rightNode;
+	}
+
+	public int getSide()
+	{
+		return _side;
+	}
+
+	public void setSide(int side)
+	{
+		_side = side;
+	}
+}

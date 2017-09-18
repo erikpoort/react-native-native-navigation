@@ -13,17 +13,17 @@ export default class DrawerView extends Component {
 		const leftData = dom.props.left;
 		let left;
 		if (leftData) {
-			left = leftData.type.mapToDictionary(leftData, screenID);
+			left = leftData.type.mapToDictionary(leftData, `${screenID}/left`);
 		}
 		const centerData = dom.props.center;
 		let center;
 		if (centerData) {
-			center = centerData.type.mapToDictionary(centerData, screenID);
+			center = centerData.type.mapToDictionary(centerData, `${screenID}/center`);
 		}
 		const rightData = dom.props.right;
 		let right;
 		if (rightData) {
-			right = rightData.type.mapToDictionary(rightData, screenID);
+			right = rightData.type.mapToDictionary(rightData, `${screenID}/right`);
 		}
 		const side = dom.props.side;
 		return {

@@ -58,6 +58,7 @@ public class SplitFragment extends BaseFragment<SplitNode>
 		super.onDestroyView();
 
 		FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+
 		FragmentTransaction transaction1 = fragmentManager.beginTransaction();
 		transaction1.remove(getNode().getNode1().getFragment());
 		transaction1.commit();

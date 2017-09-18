@@ -3,6 +3,7 @@ package com.mediamonks.rnnativenavigation.factory;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.bridge.ReadableMap;
 import com.mediamonks.rnnativenavigation.data.BaseNode;
+import com.mediamonks.rnnativenavigation.data.DrawerNode;
 import com.mediamonks.rnnativenavigation.data.Node;
 import com.mediamonks.rnnativenavigation.data.SingleNode;
 import com.mediamonks.rnnativenavigation.data.SplitNode;
@@ -27,12 +28,14 @@ public class NodeHelper
 				SingleNode.JS_NAME,
 				StackNode.JS_NAME,
 				TabNode.JS_NAME,
-				SplitNode.JS_NAME);
+				SplitNode.JS_NAME,
+				DrawerNode.JS_NAME);
 		List<? extends Class<? extends BaseNode>> classes = Arrays.asList(
 				SingleNode.class,
 				StackNode.class,
 				TabNode.class,
-				SplitNode.class);
+				SplitNode.class,
+				DrawerNode.class);
 		int index = names.indexOf(map.getString(TYPE));
 		if (index >= 0)
 		{

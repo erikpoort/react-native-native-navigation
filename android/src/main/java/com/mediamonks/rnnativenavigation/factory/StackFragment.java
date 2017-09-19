@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -84,6 +83,11 @@ public class StackFragment extends BaseFragment<StackNode>
 	private void showPeek(int transition)
 	{
 		Node node = getNode().getStack().peek();
+		pushNode(node, transition);
+	}
+
+	public void pushNode(Node node, int transition)
+	{
 		BaseFragment fragment = node.getFragment();
 		fragment.setStackFragment(this);
 		FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
@@ -92,12 +96,6 @@ public class StackFragment extends BaseFragment<StackNode>
 		transaction.commit();
 		node.setShown(true);
 
-		handleCurrentStack();
-	}
-
-	public void push()
-	{
-		showPeek(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
 		handleCurrentStack();
 	}
 

@@ -2,6 +2,7 @@ package com.mediamonks.rnnativenavigation.bridge;
 
 import android.content.Context;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
@@ -23,6 +24,7 @@ import com.mediamonks.rnnativenavigation.data.Node;
 import com.mediamonks.rnnativenavigation.data.StackNode;
 import com.mediamonks.rnnativenavigation.factory.BaseFragment;
 import com.mediamonks.rnnativenavigation.factory.NodeHelper;
+import com.mediamonks.rnnativenavigation.factory.RNNNFragment;
 import com.mediamonks.rnnativenavigation.factory.SingleFragment;
 import com.mediamonks.rnnativenavigation.factory.StackFragment;
 
@@ -40,7 +42,7 @@ class RNNativeNavigationModule extends ReactContextBaseJavaModule implements Lif
 {
 	private static final String kRNNN = "RNNN";
 
-	private Set<BaseFragment> _fragments;
+	private Set<RNNNFragment> _fragments;
 	private final FragmentManager.FragmentLifecycleCallbacks _lifecycleCallbacks;
 
 	RNNativeNavigationModule(ReactApplicationContext reactContext)
@@ -48,15 +50,16 @@ class RNNativeNavigationModule extends ReactContextBaseJavaModule implements Lif
 		super(reactContext);
 
 		_fragments = new HashSet<>();
-		_lifecycleCallbacks = new FragmentManager.FragmentLifecycleCallbacks() {
+		_lifecycleCallbacks = new FragmentManager.FragmentLifecycleCallbacks()
+		{
 			@Override
 			public void onFragmentAttached(FragmentManager fm, Fragment f, Context context)
 			{
 				super.onFragmentAttached(fm, f, context);
 
-				if (f instanceof BaseFragment)
+				if (f instanceof RNNNFragment)
 				{
-					BaseFragment baseFragment = (BaseFragment) f;
+					RNNNFragment baseFragment = (RNNNFragment) f;
 					_fragments.add(baseFragment);
 				}
 			}
@@ -65,7 +68,7 @@ class RNNativeNavigationModule extends ReactContextBaseJavaModule implements Lif
 			public void onFragmentDetached(FragmentManager fm, Fragment f)
 			{
 				super.onFragmentDetached(fm, f);
-				BaseFragment baseFragment = (BaseFragment) f;
+				RNNNFragment baseFragment = (RNNNFragment) f;
 				_fragments.remove(baseFragment);
 			}
 		};
@@ -79,9 +82,8 @@ class RNNativeNavigationModule extends ReactContextBaseJavaModule implements Lif
 		/*
 		 * Save the state of the application before reload
 		 */
-		BaseFragment anyFragment = (BaseFragment) _fragments.toArray()[0];
-		SingleFragment currentFragment = anyFragment.getCurrentFragment();
-		BaseFragment rootFragment = currentFragment.getRootFragment();
+		RNNNFragment anyFragment = (RNNNFragment) _fragments.toArray()[0];
+		RNNNFragment rootFragment = getRootFragment(anyFragment.getNode());
 		WritableMap currentState = rootFragment.getNode().data();
 		RNNNState.INSTANCE.state = currentState.toHashMap();
 
@@ -89,12 +91,16 @@ class RNNativeNavigationModule extends ReactContextBaseJavaModule implements Lif
 		 * Clear all existing fragments before Facebook reloads them. The onStart method will
 		 * rebuild the fragments.
 		 */
-		for (Fragment fragment : _fragments)
+		FragmentActivity fragmentActivity = (FragmentActivity) getCurrentActivity();
+		assert fragmentActivity != null;
+		FragmentManager fragmentManager = fragmentActivity.getSupportFragmentManager();
+
+		for (RNNNFragment fragment : _fragments)
 		{
 			if (fragment != null)
 			{
-				FragmentTransaction transaction = fragment.getActivity().getSupportFragmentManager().beginTransaction();
-				transaction.remove(fragment);
+				FragmentTransaction transaction = fragmentManager.beginTransaction();
+				transaction.remove((Fragment) fragment);
 				transaction.commit();
 			}
 		}
@@ -111,7 +117,7 @@ class RNNativeNavigationModule extends ReactContextBaseJavaModule implements Lif
 	@ReactMethod
 	public void onStart(Callback callback)
 	{
-		HashMap <String, Object> state = RNNNState.INSTANCE.state;
+		HashMap<String, Object> state = RNNNState.INSTANCE.state;
 		if (state == null)
 		{
 			Log.i(kRNNN, "First load");
@@ -160,12 +166,13 @@ class RNNativeNavigationModule extends ReactContextBaseJavaModule implements Lif
 	{
 		assert getCurrentActivity() != null;
 		ReactFragmentActivity mainActivity = (ReactFragmentActivity) getCurrentActivity();
-		BaseFragment anyFragment = (BaseFragment) _fragments.toArray()[0];
-		final BaseFragment rootFragment = getRootFragment(anyFragment.getNode());
-		BaseFragment currentFragment = rootFragment.getCurrentFragment();
+		RNNNFragment anyFragment = (RNNNFragment) _fragments.toArray()[0];
+		final BaseFragment rootFragment = (BaseFragment) getRootFragment(anyFragment.getNode());
+		SingleFragment currentFragment = rootFragment.getCurrentFragment();
 		final StackFragment stackFragment = currentFragment.getStackFragment();
 
-		if (stackFragment != null) {
+		if (stackFragment != null)
+		{
 			mainActivity.runOnUiThread(new Runnable()
 			{
 				@Override
@@ -189,17 +196,17 @@ class RNNativeNavigationModule extends ReactContextBaseJavaModule implements Lif
 
 			assert getCurrentActivity() != null;
 			ReactFragmentActivity mainActivity = (ReactFragmentActivity) getCurrentActivity();
-			BaseFragment rootFragment = getRootFragment(node);
+			RNNNFragment rootFragment = getRootFragment(node);
 			assert rootFragment != null;
 
 			int lastSlash = node.getScreenID().lastIndexOf("/");
-			final BaseFragment findFragment = rootFragment.fragmentForPath(node.getScreenID().substring(0, lastSlash));
+			BaseFragment findFragment = rootFragment.fragmentForPath(node.getScreenID().substring(0, lastSlash));
 			if (findFragment == null)
 			{
 				return;
 			}
 
-			StackFragment stackFragment = findFragment.getStackFragment();
+			final StackFragment stackFragment = findFragment.getStackFragment();
 			StackNode stackNode = stackFragment.getNode();
 			Stack<Node> stack = stackNode.getStack();
 			stack.add(node);
@@ -211,13 +218,51 @@ class RNNativeNavigationModule extends ReactContextBaseJavaModule implements Lif
 				@Override
 				public void run()
 				{
-					SingleFragment singleFragment = (SingleFragment) findFragment;
-					singleFragment.getStackFragment().push();
+					stackFragment.pushNode(node, FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
 				}
 			});
 		}
-		catch (Exception ignored)
+		catch (Exception e)
 		{
+			e.printStackTrace();
+		}
+	}
+
+	@ReactMethod
+	public void showModal(final ReadableMap screen, Callback callback)
+	{
+		try
+		{
+			final Node node = NodeHelper.nodeFromMap(screen, getReactInstanceManager());
+
+			assert getCurrentActivity() != null;
+			ReactFragmentActivity mainActivity = (ReactFragmentActivity) getCurrentActivity();
+			RNNNFragment rootFragment = getRootFragment(node);
+			assert rootFragment != null;
+
+			int lastSlash = node.getScreenID().lastIndexOf("/");
+			final SingleFragment findFragment = (SingleFragment) rootFragment.fragmentForPath(node.getScreenID().substring(0, lastSlash));
+			if (findFragment == null)
+			{
+				return;
+			}
+
+			findFragment.getNode().setModal(node);
+
+			callback.invoke(Arguments.makeNativeMap(rootFragment.getNode().data().toHashMap()));
+
+			mainActivity.runOnUiThread(new Runnable()
+			{
+				@Override
+				public void run()
+				{
+					findFragment.showModal(node);
+				}
+			});
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
 		}
 	}
 
@@ -230,18 +275,17 @@ class RNNativeNavigationModule extends ReactContextBaseJavaModule implements Lif
 		return reactNativeHost.getReactInstanceManager();
 	}
 
-	private BaseFragment getRootFragment(Node node)
+	private RNNNFragment getRootFragment(Node node)
 	{
-		BaseFragment rootFragment = null;
+		RNNNFragment rootFragment = null;
 		String rootPath = node.getRootPath();
-		for (Fragment findFragment : _fragments)
+		for (RNNNFragment findFragment : _fragments)
 		{
 			if (findFragment != null)
 			{
-				BaseFragment findBaseFragment = (BaseFragment) findFragment;
-				if (findBaseFragment.getNode().getScreenID().equals(rootPath))
+				if (findFragment.getNode().getScreenID().equals(rootPath))
 				{
-					rootFragment = findBaseFragment;
+					rootFragment = findFragment;
 					break;
 				}
 			}

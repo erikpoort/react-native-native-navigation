@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 
 import com.facebook.react.ReactRootView;
+import com.mediamonks.rnnativenavigation.data.Node;
 import com.mediamonks.rnnativenavigation.data.SingleNode;
 
 import java.util.List;
@@ -36,7 +37,7 @@ public class SingleFragment extends BaseFragment<SingleNode>
 	{
 		super.onViewCreated(view, savedInstanceState);
 		ReactRootView rootView = (ReactRootView) view;
-		rootView.startReactApplication(this.getNode().getInstanceManager(), this.getNode().getScreenID());
+		rootView.startReactApplication(getNode().getInstanceManager(), getNode().getScreenID());
 	}
 
 	@Override
@@ -70,21 +71,10 @@ public class SingleFragment extends BaseFragment<SingleNode>
 		return this;
 	}
 
-	public BaseFragment getRootFragment()
+	public void showModal(Node node)
 	{
-		List<Fragment> fragments = getActivity().getSupportFragmentManager().getFragments();
-		for (Fragment fragment : fragments)
-		{
-			BaseFragment baseFragment;
-			if (fragment instanceof BaseFragment)
-			{
-				baseFragment = (BaseFragment) fragment;
-				if (baseFragment.isRootFragment())
-				{
-					return baseFragment;
-				}
-			}
-		}
-		return null;
+		ModalFragment modalFragment = new ModalFragment();
+		modalFragment.setNode(node);
+		modalFragment.show(getActivity().getSupportFragmentManager(), node.getScreenID());
 	}
 }

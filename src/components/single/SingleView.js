@@ -10,7 +10,7 @@ export default class SingleView extends Component {
 
 		let modalData = {};
 		if (modal) {
-			modalData = { modal: modal.type.mapToDictionary(modal, screenID) };
+			modalData = { modal: modal.type.mapToDictionary(modal, `${screenID}`/modal) };
 		}
 		return {
 			name,

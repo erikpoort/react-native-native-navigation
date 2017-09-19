@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
-import com.mediamonks.rnnativenavigation.data.BaseNode;
 import com.mediamonks.rnnativenavigation.data.DrawerNode;
 import com.mediamonks.rnnativenavigation.data.Node;
 

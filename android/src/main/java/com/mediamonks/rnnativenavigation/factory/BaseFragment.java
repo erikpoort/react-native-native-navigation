@@ -1,7 +1,6 @@
 package com.mediamonks.rnnativenavigation.factory;
 
 import android.support.v4.app.Fragment;
-import android.util.Log;
 
 import com.mediamonks.rnnativenavigation.data.Node;
 
@@ -10,7 +9,7 @@ import com.mediamonks.rnnativenavigation.data.Node;
  * RNNativeNavigation 2017
  */
 
-public abstract class BaseFragment<T extends Node> extends Fragment
+public abstract class BaseFragment<T extends Node> extends Fragment implements RNNNFragment
 {
 	private StackFragment _stackFragment;
 
@@ -41,16 +40,6 @@ public abstract class BaseFragment<T extends Node> extends Fragment
 	public StackFragment getStackFragment()
 	{
 		return _stackFragment;
-	}
-
-	protected String getRootPath()
-	{
-		return getNode().getRootPath();
-	}
-
-	protected boolean isRootFragment()
-	{
-		return getNode().getScreenID().equals(getRootPath());
 	}
 
 	public abstract SingleFragment getCurrentFragment();

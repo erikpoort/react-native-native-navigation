@@ -82,4 +82,13 @@ public class SingleNode extends BaseNode<SingleFragment> implements Node
 		return _title;
 	}
 
+	public void setModal(Node modal)
+	{
+		_modal = modal;
+	}
+
+	public Node getModal()
+	{
+		return _modal;
+	}
 }

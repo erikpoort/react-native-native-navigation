@@ -6,6 +6,6 @@
 
 @interface NNSingleNode : NNBaseNode <NNNode>
 
-@property (nonatomic, strong, readonly) id <NNNode> modal;
+@property (nonatomic, strong) id <NNNode> modal;
 
 @end

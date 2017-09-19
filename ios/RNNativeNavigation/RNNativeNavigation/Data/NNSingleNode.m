@@ -14,7 +14,6 @@ static NSString *const kModal = @"modal";
 
 @property (nonatomic, strong) RCTBridge *bridge;
 @property (nonatomic, copy) NSString *title;
-@property (nonatomic, strong) id <NNNode> modal;
 
 @end
 

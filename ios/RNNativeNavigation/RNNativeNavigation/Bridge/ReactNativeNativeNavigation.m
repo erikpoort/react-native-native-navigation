@@ -9,6 +9,7 @@
 #import "NNNodeHelper.h"
 #import "NNStackNode.h"
 #import "NNView.h"
+#import "NNSingleView.h"
 
 static NSString *const kRNNN = @"RNNN";
 
@@ -74,6 +75,28 @@ RCT_EXPORT_METHOD(push:(NSDictionary *)screen registerCallback:(RCTResponseSende
 	dispatch_async(dispatch_get_main_queue(), ^{
 		if (navigationController && viewController) {
 			[navigationController pushViewController:viewController animated:YES];
+		}
+	});
+}
+
+RCT_EXPORT_METHOD(showModal:(NSDictionary *)screen registerCallback:(RCTResponseSenderBlock)callback) {
+	NNSingleNode *nodeObject = [NNNodeHelper nodeFromMap:screen bridge:self.bridge];
+	UIViewController *viewController = [nodeObject generate];
+
+	UIViewController <NNView> *rootController = (UIViewController <NNView> *)[UIApplication sharedApplication].keyWindow.rootViewController;
+	NNSingleView *findController = (NNSingleView *)[rootController viewForPath:nodeObject.screenID.stringByDeletingLastPathComponent];
+	if (!findController) return;
+
+	NNSingleNode *singleNode = findController.node;
+	singleNode.modal = nodeObject;
+
+	NSDictionary *newState = rootController.node.data;
+	[RNNNState sharedInstance].state = newState;
+	callback(@[newState]);
+
+	dispatch_async(dispatch_get_main_queue(), ^{
+		if (viewController) {
+			[findController presentViewController:viewController animated:YES completion:nil];
 		}
 	});
 }

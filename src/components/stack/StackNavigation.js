@@ -17,7 +17,7 @@ export default class StackNavigation {
 	}
 
 	push = (screen) => {
-		const Screen = <SingleView screen={screen.type}/>;
+		const Screen = <SingleView screen={screen}/>;
 		const screenData = Screen.type.mapToDictionary(Screen, this.screenID);
 
 		return ReactNativeNativeNavigation.push(screenData, (register) => {

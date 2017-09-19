@@ -3,6 +3,7 @@ import { NativeModules } from 'react-native';
 
 const { ReactNativeNativeNavigation } = NativeModules;
 import { Navigation } from './../Navigation';
+import StackView from './../stack/StackView';
 import SingleView from './../single/SingleView';
 
 export default class SingleNavigation {
@@ -13,7 +14,7 @@ export default class SingleNavigation {
 	}
 
 	showModal = (screen) => {
-		const Screen = <SingleView screen={screen.type}/>;
+		const Screen = <SingleView screen={screen}/>;
 		const screenData = Screen.type.mapToDictionary(Screen, this.screenID);
 
 		return ReactNativeNativeNavigation.showModal(screenData, (register) => {

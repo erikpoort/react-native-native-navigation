@@ -53,11 +53,11 @@
 	UIViewController <NNView> *centerController = (UIViewController <NNView> *)self.centerViewController;
 	UIViewController <NNView> *rightController = (UIViewController <NNView> *)self.rightDrawerViewController;
 
-	if ([path rangeOfString:leftController.node.screenID].location == 0) {
+	if (leftController && [path rangeOfString:leftController.node.screenID].location == 0) {
 		foundController = leftController;
-	} else if ([path rangeOfString:centerController.node.screenID].location == 0) {
+	} else if (centerController && [path rangeOfString:centerController.node.screenID].location == 0) {
 		foundController = centerController;
-	} else if ([path rangeOfString:rightController.node.screenID].location == 0) {
+	} else if (rightController && [path rangeOfString:rightController.node.screenID].location == 0) {
 		foundController = rightController;
 	}
 	if (![foundController.node.screenID isEqualToString:path]) {

@@ -12,7 +12,9 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
+import com.mediamonks.rnnativenavigation.data.BaseNode;
 import com.mediamonks.rnnativenavigation.data.DrawerNode;
+import com.mediamonks.rnnativenavigation.data.Node;
 
 /**
  * Created by erik on 18/09/2017.
@@ -131,17 +133,21 @@ public class DrawerFragment extends BaseFragment<DrawerNode>
 		if (path.indexOf(getNode().getScreenID()) == 0)
 		{
 			BaseFragment foundFragment = null;
-			if (path.indexOf(getNode().getLeftNode().getScreenID()) == 0)
+			Node leftNode = getNode().getLeftNode();
+			Node centerNode = getNode().getCenterNode();
+			Node rightNode = getNode().getRightNode();
+
+			if (leftNode != null && path.indexOf(leftNode.getScreenID()) == 0)
 			{
-				foundFragment = getNode().getLeftNode().getFragment();
+				foundFragment = leftNode.getFragment();
 			}
-			else if (path.indexOf(getNode().getCenterNode().getScreenID()) == 0)
+			else if (centerNode != null && path.indexOf(centerNode.getScreenID()) == 0)
 			{
-				foundFragment = getNode().getCenterNode().getFragment();
+				foundFragment = centerNode.getFragment();
 			}
-			else if (path.indexOf(getNode().getRightNode().getScreenID()) == 0)
+			else if (rightNode != null && path.indexOf(rightNode.getScreenID()) == 0)
 			{
-				foundFragment = getNode().getRightNode().getFragment();
+				foundFragment = rightNode.getFragment();
 			}
 			if (foundFragment != null && !foundFragment.getNode().getScreenID().equals(path))
 			{

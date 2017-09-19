@@ -96,9 +96,20 @@ public class DrawerNode extends BaseNode<DrawerFragment> implements Node
 	public WritableMap data()
 	{
 		WritableMap map = super.data();
-		map.putMap(LEFT, _leftNode.data());
-		map.putMap(CENTER, _centerNode.data());
-		map.putMap(RIGHT, _rightNode.data());
+
+		if (_leftNode != null)
+		{
+			map.putMap(LEFT, _leftNode.data());
+		}
+		if (_centerNode != null)
+		{
+			map.putMap(CENTER, _centerNode.data());
+		}
+		if (_rightNode != null)
+		{
+			map.putMap(RIGHT, _rightNode.data());
+		}
+
 		String[] sides = new String[]{LEFT, CENTER, RIGHT};
 		Integer[] gravities = new Integer[]{Gravity.START, Gravity.NO_GRAVITY, Gravity.END};
 		int index = Arrays.asList(gravities).indexOf(_side);

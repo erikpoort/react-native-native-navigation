@@ -5,22 +5,18 @@ const { ReactNativeNativeNavigation } = NativeModules;
 import { Navigation } from './../Navigation';
 import SingleView from './../single/SingleView';
 
-export default class StackNavigation {
+export default class SingleNavigation {
 	screenID;
 
 	constructor(screenID) {
 		this.screenID = screenID;
 	}
 
-	handleBackButton = (callback) => {
-		ReactNativeNativeNavigation.handleBackButton(callback);
-	}
-
-	push = (screen) => {
+	showModal = (screen) => {
 		const Screen = <SingleView screen={screen.type}/>;
 		const screenData = Screen.type.mapToDictionary(Screen, this.screenID);
 
-		return ReactNativeNativeNavigation.push(screenData, (register) => {
+		return ReactNativeNativeNavigation.showModal(screenData, (register) => {
 			const view = Navigation.viewMap[register.type];
 			const registerScreens = view.reduceScreens(register, Navigation.viewMap, Navigation.pageMap).filter((screen) => {
 				return screen.screenID === screenData.screenID;

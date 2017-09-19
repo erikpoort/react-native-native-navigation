@@ -48,9 +48,15 @@ static NSString *const kSideKey = @"side";
 - (NSDictionary *)data
 {
 	NSMutableDictionary *data = [super data].mutableCopy;
-	data[kLeftKey] = self.leftNode.data;
-	data[kCenterKey] = self.centerNode.data;
-	data[kRightKey] = self.rightNode.data;
+	if (self.leftNode) {
+		data[kLeftKey] = self.leftNode.data;
+	}
+	if (self.centerNode) {
+		data[kCenterKey] = self.centerNode.data;
+	}
+	if (self.rightNode) {
+		data[kRightKey] = self.rightNode.data;
+	}
 	NSArray *sides = @[@"center", @"left", @"right"];
 	data[kSideKey] = sides[self.side];
 	return data.copy;

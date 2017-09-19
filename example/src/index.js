@@ -32,12 +32,11 @@ export default class example extends Component {
 										<StackView name="stack">
 											<SingleView screen={Home}/>
 											<SingleView screen={Detail}/>
-											<SingleView screen={Detail2}/>
 										</StackView>
 										<SingleView screen={Detail2}/>
 										<SplitView name="horizontal" axis={SplitView.AXIS.HORIZONTAL}>
 											<SingleView screen={Detail}/>
-											<SingleView screen={Detail2}/>
+											<SingleView screen={Detail}/>
 										</SplitView>
 										<SplitView name="vertical" axis={SplitView.AXIS.VERTICAL}>
 											<StackView name="stack_up">

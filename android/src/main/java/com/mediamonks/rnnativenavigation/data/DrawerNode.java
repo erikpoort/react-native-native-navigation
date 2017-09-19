@@ -60,9 +60,18 @@ public class DrawerNode extends BaseNode<DrawerFragment> implements Node
 
 		try
 		{
-			_leftNode = NodeHelper.nodeFromMap(map.getMap(LEFT), getInstanceManager());
-			_centerNode = NodeHelper.nodeFromMap(map.getMap(CENTER), getInstanceManager());
-			_rightNode = NodeHelper.nodeFromMap(map.getMap(RIGHT), getInstanceManager());
+			if (map.hasKey(LEFT))
+			{
+				_leftNode = NodeHelper.nodeFromMap(map.getMap(LEFT), getInstanceManager());
+			}
+			if (map.hasKey(CENTER))
+			{
+				_centerNode = NodeHelper.nodeFromMap(map.getMap(CENTER), getInstanceManager());
+			}
+			if (map.hasKey(RIGHT))
+			{
+				_rightNode = NodeHelper.nodeFromMap(map.getMap(RIGHT), getInstanceManager());
+			}
 		}
 		catch (Exception e)
 		{

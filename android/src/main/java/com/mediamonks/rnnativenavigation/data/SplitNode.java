@@ -12,7 +12,7 @@ import com.mediamonks.rnnativenavigation.factory.SplitFragment;
  * example 2017
  */
 
-public class SplitNode extends BaseNode<SplitFragment> implements Node
+public class SplitNode extends BaseNode implements Node
 {
 	public static String JS_NAME = "SplitView";
 
@@ -29,14 +29,11 @@ public class SplitNode extends BaseNode<SplitFragment> implements Node
 	private int _axis;
 
 	@Override
-	public BaseFragment getFragment()
+	public BaseFragment generateFragment()
 	{
-		if (_fragment == null)
-		{
-			_fragment = new SplitFragment();
-			_fragment.setNode(this);
-		}
-		return _fragment;
+		SplitFragment fragment = new SplitFragment();
+		fragment.setNode(this);
+		return fragment;
 	}
 
 	@Override

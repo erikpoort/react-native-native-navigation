@@ -4,7 +4,6 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
@@ -25,6 +24,7 @@ public class ModalFragment extends DialogFragment implements RNNNFragment
 {
 	private Node _node;
 	private DialogInterface.OnDismissListener _onDismissListener;
+	private BaseFragment _fragment;
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState)
@@ -59,8 +59,8 @@ public class ModalFragment extends DialogFragment implements RNNNFragment
 
 		FragmentManager fragmentManager = getChildFragmentManager();
 		FragmentTransaction transaction = fragmentManager.beginTransaction();
-		Fragment fragment = getNode().getFragment();
-		transaction.add(getView().getId(), fragment);
+		_fragment = getNode().generateFragment();
+		transaction.add(getView().getId(), _fragment);
 		transaction.commit();
 	}
 
@@ -89,7 +89,7 @@ public class ModalFragment extends DialogFragment implements RNNNFragment
 	@Override
 	public BaseFragment fragmentForPath(String path)
 	{
-		return _node.getFragment().fragmentForPath(path);
+		return _fragment.fragmentForPath(path);
 	}
 
 	public void setOnDismissListener(DialogInterface.OnDismissListener onDismissListener)

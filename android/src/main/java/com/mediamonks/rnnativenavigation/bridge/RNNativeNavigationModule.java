@@ -148,7 +148,7 @@ class RNNativeNavigationModule extends ReactContextBaseJavaModule implements Lif
 				public void run()
 				{
 					FragmentTransaction transaction = fragmentManager.beginTransaction();
-					Fragment fragment = node.getFragment();
+					Fragment fragment = node.generateFragment();
 					transaction.replace(android.R.id.content, fragment);
 					transaction.commit();
 					promise.resolve(true);
@@ -312,6 +312,6 @@ class RNNativeNavigationModule extends ReactContextBaseJavaModule implements Lif
 	@Override
 	public void onHostDestroy()
 	{
-		_fragments = null;
+		_fragments.clear();
 	}
 }

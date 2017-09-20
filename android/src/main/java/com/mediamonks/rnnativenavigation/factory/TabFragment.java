@@ -1,7 +1,5 @@
 package com.mediamonks.rnnativenavigation.factory;
 
-import android.content.res.ColorStateList;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -30,6 +28,8 @@ public class TabFragment extends BaseFragment<TabNode> implements BottomNavigati
 {
 	private ViewPager _viewPager;
 	private TabPagerAdapter _adapter;
+	private ViewPager.SimpleOnPageChangeListener _onPageChangeListener;
+	private BottomNavigationView _bottomNavigationView;
 
 	private static class TabPagerAdapter extends FragmentPagerAdapter
 	{
@@ -52,7 +52,7 @@ public class TabFragment extends BaseFragment<TabNode> implements BottomNavigati
 			{
 				if (_fragments.get(position) == null)
 				{
-					_fragments.put(position, _items.get(position).getFragment());
+					_fragments.put(position, _items.get(position).generateFragment());
 				}
 				return _fragments.get(position);
 			}
@@ -77,6 +77,14 @@ public class TabFragment extends BaseFragment<TabNode> implements BottomNavigati
 
 	}
 
+	@Override
+	public void onCreate(@Nullable Bundle savedInstanceState)
+	{
+		super.onCreate(savedInstanceState);
+
+		_adapter = new TabPagerAdapter(getChildFragmentManager(), getNode().getTabs());
+	}
+
 	@Nullable
 	@Override
 	public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
@@ -85,43 +93,25 @@ public class TabFragment extends BaseFragment<TabNode> implements BottomNavigati
 		linearLayout.setOrientation(LinearLayout.VERTICAL);
 		linearLayout.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 
-		_viewPager = new ViewPager(getContext());
-		_viewPager.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 1));
 		// I'm calling generateViewId() twice, calling it once doesn't work on first load. My assumption is the initial id is later hijacked by ReactNative, making it impossible to add fragments
 		View.generateViewId();
+
+		_viewPager = new ViewPager(getContext());
+		_viewPager.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 1));
 		_viewPager.setId(View.generateViewId());
 		linearLayout.addView(_viewPager);
 
-		final BottomNavigationView bottomNavigationView = new BottomNavigationView(getContext());
-		bottomNavigationView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-		int[][] states = new int[][]{
-				new int[]{android.R.attr.state_enabled}, // enabled
-				new int[]{android.R.attr.state_selected}, // disabled
-		};
-		int[] colors = new int[]{
-				Color.DKGRAY,
-				Color.GRAY,
-		};
+		_bottomNavigationView = new BottomNavigationView(getContext());
+		_bottomNavigationView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+
 		for (Node node : getNode().getTabs())
 		{
 			String title = node.getTitle();
 			int i = getNode().getTabs().indexOf(node);
-			bottomNavigationView.getMenu().add(0, i, i, title);
+			_bottomNavigationView.getMenu().add(0, i, i, title);
 		}
-		bottomNavigationView.setItemTextColor(new ColorStateList(states, colors));
-		bottomNavigationView.setOnNavigationItemSelectedListener(this);
-		linearLayout.addView(bottomNavigationView);
 
-		_viewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener()
-		{
-			@Override
-			public void onPageSelected(int position)
-			{
-				super.onPageSelected(position);
-				getNode().setSelectedTab(position);
-				bottomNavigationView.setSelectedItemId(position);
-			}
-		});
+		linearLayout.addView(_bottomNavigationView);
 
 		return linearLayout;
 	}
@@ -131,9 +121,41 @@ public class TabFragment extends BaseFragment<TabNode> implements BottomNavigati
 	{
 		super.onViewCreated(view, savedInstanceState);
 
-		_adapter = new TabPagerAdapter(getActivity().getSupportFragmentManager(), getNode().getTabs());
 		_viewPager.setAdapter(_adapter);
 		_viewPager.setCurrentItem(getNode().getSelectedTab());
+
+		_onPageChangeListener = new ViewPager.SimpleOnPageChangeListener()
+		{
+			@Override
+			public void onPageSelected(int position)
+			{
+				super.onPageSelected(position);
+				getNode().setSelectedTab(position);
+				_bottomNavigationView.setSelectedItemId(position);
+			}
+		};
+		_viewPager.addOnPageChangeListener(_onPageChangeListener);
+
+		_bottomNavigationView.setOnNavigationItemSelectedListener(this);
+	}
+
+	@Override
+	public void onDestroyView()
+	{
+		super.onDestroyView();
+
+		_viewPager.removeOnPageChangeListener(_onPageChangeListener);
+		_onPageChangeListener = null;
+
+		_bottomNavigationView.setOnNavigationItemSelectedListener(null);
+	}
+
+	@Override
+	public void onDestroy()
+	{
+		super.onDestroy();
+
+		_adapter = null;
 	}
 
 	@Override

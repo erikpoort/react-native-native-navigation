@@ -21,6 +21,6 @@ public interface Node extends Serializable
 	boolean isShown();
 	String getTitle();
 	String getScreenID();
-	BaseFragment getFragment();
+	BaseFragment generateFragment();
 	String getRootPath();
 }

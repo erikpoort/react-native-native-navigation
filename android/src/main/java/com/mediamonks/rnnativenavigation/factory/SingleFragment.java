@@ -20,6 +20,8 @@ import com.mediamonks.rnnativenavigation.data.SingleNode;
  */
 public class SingleFragment extends BaseFragment<SingleNode>
 {
+	private ModalFragment _modalFragment;
+
 	@Nullable
 	@Override
 	public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
@@ -36,6 +38,7 @@ public class SingleFragment extends BaseFragment<SingleNode>
 		super.onViewCreated(view, savedInstanceState);
 		ReactRootView rootView = (ReactRootView) view;
 		rootView.startReactApplication(getNode().getInstanceManager(), getNode().getScreenID());
+		Log.i("MMM onViewCreated", getNode().getScreenID());
 	}
 
 	@Override
@@ -45,6 +48,7 @@ public class SingleFragment extends BaseFragment<SingleNode>
 		if (rootView != null)
 		{
 			rootView.unmountReactApplication();
+			Log.i("MMM onDestroyView", getNode().getScreenID());
 		}
 		super.onDestroyView();
 	}
@@ -53,8 +57,6 @@ public class SingleFragment extends BaseFragment<SingleNode>
 	public void onStart()
 	{
 		super.onStart();
-
-		Log.i("MMM onStart", getNode().getScreenID());
 
 		if (getNode().getModal() != null)
 		{
@@ -67,15 +69,7 @@ public class SingleFragment extends BaseFragment<SingleNode>
 	{
 		if (getNode().getModal() != null)
 		{
-			String modalScreenID = getNode().getModal().getScreenID();
-			if (modalScreenID.equals(path))
-			{
-				return getNode().getModal().getFragment();
-			}
-			else if (path.contains(modalScreenID))
-			{
-				return getNode().getModal().getFragment().fragmentForPath(path);
-			}
+			return _modalFragment.fragmentForPath(path);
 		}
 		return this;
 	}
@@ -85,24 +79,24 @@ public class SingleFragment extends BaseFragment<SingleNode>
 	{
 		if (getNode().getModal() != null)
 		{
-			return getNode().getModal().getFragment().getCurrentFragment();
+			return getNode().getModal().generateFragment().getCurrentFragment();
 		}
 		return this;
 	}
 
 	public void showModal(Node node)
 	{
-		final ModalFragment modalFragment = new ModalFragment();
-		modalFragment.setNode(node);
-		modalFragment.setOnDismissListener(new DialogInterface.OnDismissListener()
+		_modalFragment = new ModalFragment();
+		_modalFragment.setNode(node);
+		_modalFragment.setOnDismissListener(new DialogInterface.OnDismissListener()
 		{
 			@Override
 			public void onDismiss(DialogInterface dialog)
 			{
-				modalFragment.setOnDismissListener(null);
+				_modalFragment.setOnDismissListener(null);
 				getNode().setModal(null);
 			}
 		});
-		modalFragment.show(getActivity().getSupportFragmentManager(), node.getScreenID());
+		_modalFragment.show(getChildFragmentManager(), node.getScreenID());
 	}
 }

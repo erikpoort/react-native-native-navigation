@@ -12,7 +12,7 @@ import com.mediamonks.rnnativenavigation.factory.SingleFragment;
  * RNNativeNavigation 2017
  */
 
-public class SingleNode extends BaseNode<SingleFragment> implements Node
+public class SingleNode extends BaseNode implements Node
 {
 	public static String JS_NAME = "SingleView";
 
@@ -24,14 +24,11 @@ public class SingleNode extends BaseNode<SingleFragment> implements Node
 	private Node _modal;
 
 	@Override
-	public BaseFragment<SingleNode> getFragment()
+	public BaseFragment<SingleNode> generateFragment()
 	{
-		if (_fragment == null)
-		{
-			_fragment = new SingleFragment();
-			_fragment.setNode(this);
-		}
-		return _fragment;
+		SingleFragment fragment = new SingleFragment();
+		fragment.setNode(this);
+		return fragment;
 	}
 
 	@Override

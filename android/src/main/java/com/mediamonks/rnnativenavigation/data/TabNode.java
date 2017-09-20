@@ -18,7 +18,7 @@ import java.util.List;
  * RNNativeNavigation 2017
  */
 
-public class TabNode extends BaseNode<TabFragment> implements Node
+public class TabNode extends BaseNode implements Node
 {
 	public static String JS_NAME = "TabView";
 
@@ -30,14 +30,11 @@ public class TabNode extends BaseNode<TabFragment> implements Node
 	private int _selectedTab;
 
 	@Override
-	public BaseFragment getFragment()
+	public BaseFragment generateFragment()
 	{
-		if (_fragment == null)
-		{
-			_fragment = new TabFragment();
-			_fragment.setNode(this);
-		}
-		return _fragment;
+		TabFragment fragment = new TabFragment();
+		fragment.setNode(this);
+		return fragment;
 	}
 
 	@Override

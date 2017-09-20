@@ -48,6 +48,7 @@ public class StackFragment extends BaseFragment<StackNode>
 		linearLayout.addView(_toolbar);
 
 		_holder = new FrameLayout(getActivity());
+
 		// I'm calling generateViewId() twice, calling it once doesn't work on first load. My assumption is the initial id is later hijacked by ReactNative, making it impossible to add fragments
 		View.generateViewId();
 		int id = View.generateViewId();
@@ -67,19 +68,6 @@ public class StackFragment extends BaseFragment<StackNode>
 		return linearLayout;
 	}
 
-	@Override
-	public void onDestroyView()
-	{
-		super.onDestroyView();
-
-		for (Node node : getNode().getStack())
-		{
-			FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-			transaction.remove(node.getFragment());
-			transaction.commit();
-		}
-	}
-
 	private void showPeek(int transition)
 	{
 		Node node = getNode().getStack().peek();
@@ -88,10 +76,10 @@ public class StackFragment extends BaseFragment<StackNode>
 
 	public void pushNode(Node node, int transition)
 	{
-		BaseFragment fragment = node.getFragment();
+		BaseFragment fragment = node.generateFragment();
 		fragment.setStackFragment(this);
-		FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-		transaction.add(_holder.getId(), fragment);
+		FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+		transaction.add(_holder.getId(), fragment, node.getScreenID());
 		transaction.setTransition(transition);
 		transaction.commit();
 		node.setShown(true);
@@ -111,8 +99,9 @@ public class StackFragment extends BaseFragment<StackNode>
 	{
 		if (getNode().getStack().size() > 1)
 		{
-			FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-			transaction.remove(getNode().getStack().pop().getFragment());
+			FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+			String topID = getNode().getStack().pop().getScreenID();
+			transaction.remove(getChildFragmentManager().findFragmentByTag(topID));
 			transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
 			transaction.commit();
 
@@ -145,7 +134,7 @@ public class StackFragment extends BaseFragment<StackNode>
 
 					if (path.indexOf(checkNode.getScreenID()) == 0)
 					{
-						foundFragment = checkNode.getFragment();
+						foundFragment = (BaseFragment) getChildFragmentManager().findFragmentByTag(checkNode.getScreenID());
 					}
 				}
 				else
@@ -171,7 +160,8 @@ public class StackFragment extends BaseFragment<StackNode>
 	@Override
 	public SingleFragment getCurrentFragment()
 	{
-		BaseFragment topFragment = getNode().getStack().peek().getFragment();
+		String topID = getNode().getStack().peek().getScreenID();
+		BaseFragment topFragment = (BaseFragment) getChildFragmentManager().findFragmentByTag(topID);
 		if (topFragment instanceof SingleFragment)
 		{
 			return (SingleFragment) topFragment;

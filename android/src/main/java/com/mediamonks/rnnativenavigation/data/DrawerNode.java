@@ -16,7 +16,7 @@ import java.util.Arrays;
  * example 2017
  */
 
-public class DrawerNode extends BaseNode<DrawerFragment> implements Node
+public class DrawerNode extends BaseNode implements Node
 {
 	public static String JS_NAME = "DrawerView";
 
@@ -32,14 +32,11 @@ public class DrawerNode extends BaseNode<DrawerFragment> implements Node
 	private int _side;
 
 	@Override
-	public BaseFragment getFragment()
+	public BaseFragment generateFragment()
 	{
-		if (_fragment == null)
-		{
-			_fragment = new DrawerFragment();
-			_fragment.setNode(this);
-		}
-		return _fragment;
+		DrawerFragment fragment = new DrawerFragment();
+		fragment.setNode(this);
+		return fragment;
 	}
 
 	@Override

@@ -19,6 +19,9 @@ import com.mediamonks.rnnativenavigation.data.SplitNode;
 
 public class SplitFragment extends BaseFragment<SplitNode>
 {
+	private BaseFragment _fragment1;
+	private BaseFragment _fragment2;
+
 	@Nullable
 	@Override
 	public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
@@ -40,13 +43,15 @@ public class SplitFragment extends BaseFragment<SplitNode>
 		frameLayout2.setId(View.generateViewId());
 		linearLayout.addView(frameLayout2);
 
-		FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+		FragmentManager fragmentManager = getChildFragmentManager();
 		FragmentTransaction transaction1 = fragmentManager.beginTransaction();
-		transaction1.add(frameLayout1.getId(), getNode().getNode1().getFragment());
+		_fragment1 = getNode().getNode1().generateFragment();
+		transaction1.add(frameLayout1.getId(), _fragment1);
 		transaction1.commit();
 
 		FragmentTransaction transaction2 = fragmentManager.beginTransaction();
-		transaction2.add(frameLayout2.getId(), getNode().getNode2().getFragment());
+		_fragment2 = getNode().getNode2().generateFragment();
+		transaction2.add(frameLayout2.getId(), _fragment2);
 		transaction2.commit();
 
 		return linearLayout;
@@ -57,14 +62,14 @@ public class SplitFragment extends BaseFragment<SplitNode>
 	{
 		super.onDestroyView();
 
-		FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+		FragmentManager fragmentManager = getChildFragmentManager();
 
 		FragmentTransaction transaction1 = fragmentManager.beginTransaction();
-		transaction1.remove(getNode().getNode1().getFragment());
+		transaction1.remove(_fragment1);
 		transaction1.commit();
 
 		FragmentTransaction transaction2 = fragmentManager.beginTransaction();
-		transaction2.remove(getNode().getNode2().getFragment());
+		transaction2.remove(_fragment2);
 		transaction2.commit();
 	}
 
@@ -76,11 +81,11 @@ public class SplitFragment extends BaseFragment<SplitNode>
 			BaseFragment foundFragment = null;
 			if (path.indexOf(getNode().getNode1().getScreenID()) == 0)
 			{
-				foundFragment = getNode().getNode1().getFragment();
+				foundFragment = _fragment1;
 			}
 			else if (path.indexOf(getNode().getNode2().getScreenID()) == 0)
 			{
-				foundFragment = getNode().getNode2().getFragment();
+				foundFragment = _fragment2;
 			}
 			if (foundFragment != null && !foundFragment.getNode().getScreenID().equals(path))
 			{
@@ -94,6 +99,6 @@ public class SplitFragment extends BaseFragment<SplitNode>
 	@Override
 	public SingleFragment getCurrentFragment()
 	{
-		return getNode().getNode1().getFragment().getCurrentFragment();
+		return _fragment1.getCurrentFragment();
 	}
 }

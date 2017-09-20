@@ -3,7 +3,6 @@ package com.mediamonks.rnnativenavigation.factory;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,8 +12,6 @@ import android.view.ViewGroup.LayoutParams;
 import com.facebook.react.ReactRootView;
 import com.mediamonks.rnnativenavigation.data.Node;
 import com.mediamonks.rnnativenavigation.data.SingleNode;
-
-import java.util.List;
 
 /**
  * Created by erik on 09/08/2017.
@@ -62,12 +59,28 @@ public class SingleFragment extends BaseFragment<SingleNode>
 	@Override
 	public BaseFragment fragmentForPath(String path)
 	{
-		return null;
+		if (getNode().getModal() != null)
+		{
+			String modalScreenID = getNode().getModal().getScreenID();
+			if (modalScreenID.equals(path))
+			{
+				return getNode().getModal().getFragment();
+			}
+			else if (path.contains(modalScreenID))
+			{
+				return getNode().getModal().getFragment().fragmentForPath(path);
+			}
+		}
+		return this;
 	}
 
 	@Override
 	public SingleFragment getCurrentFragment()
 	{
+		if (getNode().getModal() != null)
+		{
+			return getNode().getModal().getFragment().getCurrentFragment();
+		}
 		return this;
 	}
 

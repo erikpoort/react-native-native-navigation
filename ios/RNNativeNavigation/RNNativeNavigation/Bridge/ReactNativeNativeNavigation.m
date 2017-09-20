@@ -84,7 +84,8 @@ RCT_EXPORT_METHOD(showModal:(NSDictionary *)screen registerCallback:(RCTResponse
 	UIViewController *viewController = [nodeObject generate];
 
 	UIViewController <NNView> *rootController = (UIViewController <NNView> *)[UIApplication sharedApplication].keyWindow.rootViewController;
-	NNSingleView *findController = (NNSingleView *)[rootController viewForPath:nodeObject.screenID.stringByDeletingLastPathComponent];
+	NSString *parentPath = nodeObject.screenID.stringByDeletingLastPathComponent.stringByDeletingLastPathComponent;
+	NNSingleView *findController = (NNSingleView *)[rootController viewForPath:parentPath];
 	if (!findController) return;
 
 	NNSingleNode *singleNode = findController.node;

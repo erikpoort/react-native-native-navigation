@@ -55,7 +55,7 @@ public class SingleNode extends BaseNode<SingleFragment> implements Node
 		{
 			try
 			{
-				_modal = NodeHelper.nodeFromMap(map, getInstanceManager());
+				_modal = NodeHelper.nodeFromMap(map.getMap(MODAL), getInstanceManager());
 			}
 			catch (Exception e)
 			{

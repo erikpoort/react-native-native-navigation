@@ -4,7 +4,7 @@ import Detail2 from './../Detail2'
 
 export default class Detail extends Component {
 	handleDetail = () => {
-		this.props.single.showModal(Detail);
+		this.props.single.showModal(Detail2);
 	};
 	render(){
 		return (

@@ -1,5 +1,6 @@
 package com.mediamonks.rnnativenavigation.factory;
 
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -54,6 +55,11 @@ public class SingleFragment extends BaseFragment<SingleNode>
 		super.onStart();
 
 		Log.i("MMM onStart", getNode().getScreenID());
+
+		if (getNode().getModal() != null)
+		{
+			showModal(getNode().getModal());
+		}
 	}
 
 	@Override
@@ -86,8 +92,17 @@ public class SingleFragment extends BaseFragment<SingleNode>
 
 	public void showModal(Node node)
 	{
-		ModalFragment modalFragment = new ModalFragment();
+		final ModalFragment modalFragment = new ModalFragment();
 		modalFragment.setNode(node);
+		modalFragment.setOnDismissListener(new DialogInterface.OnDismissListener()
+		{
+			@Override
+			public void onDismiss(DialogInterface dialog)
+			{
+				modalFragment.setOnDismissListener(null);
+				getNode().setModal(null);
+			}
+		});
 		modalFragment.show(getActivity().getSupportFragmentManager(), node.getScreenID());
 	}
 }

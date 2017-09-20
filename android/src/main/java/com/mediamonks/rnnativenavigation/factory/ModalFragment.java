@@ -1,5 +1,6 @@
 package com.mediamonks.rnnativenavigation.factory;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
@@ -23,6 +24,7 @@ import com.mediamonks.rnnativenavigation.data.Node;
 public class ModalFragment extends DialogFragment implements RNNNFragment
 {
 	private Node _node;
+	private DialogInterface.OnDismissListener _onDismissListener;
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState)
@@ -63,6 +65,17 @@ public class ModalFragment extends DialogFragment implements RNNNFragment
 	}
 
 	@Override
+	public void onDismiss(DialogInterface dialog)
+	{
+		super.onDismiss(dialog);
+
+		if (_onDismissListener != null)
+		{
+			_onDismissListener.onDismiss(dialog);
+		}
+	}
+
+	@Override
 	public Node getNode()
 	{
 		return _node;
@@ -77,5 +90,10 @@ public class ModalFragment extends DialogFragment implements RNNNFragment
 	public BaseFragment fragmentForPath(String path)
 	{
 		return _node.getFragment().fragmentForPath(path);
+	}
+
+	public void setOnDismissListener(DialogInterface.OnDismissListener onDismissListener)
+	{
+		_onDismissListener = onDismissListener;
 	}
 }

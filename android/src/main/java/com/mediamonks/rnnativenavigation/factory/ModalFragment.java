@@ -48,9 +48,8 @@ public class ModalFragment extends DialogFragment implements RNNNFragment
 	{
 		FrameLayout view = new FrameLayout(getContext());
 		view.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-		view.setBackgroundColor(Color.WHITE);
-
-		view.setId(View.generateViewId() + 1000);
+		View.generateViewId();
+		view.setId(View.generateViewId());
 
 		return view;
 	}
@@ -60,11 +59,10 @@ public class ModalFragment extends DialogFragment implements RNNNFragment
 	{
 		super.onViewCreated(view, savedInstanceState);
 
-		Log.i("MMM", view.getId() + "");
-		FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+		FragmentManager fragmentManager = getChildFragmentManager();
 		FragmentTransaction transaction = fragmentManager.beginTransaction();
 		Fragment fragment = getNode().getFragment();
-		transaction.replace(android.R.id.content, fragment);
+		transaction.add(getView().getId(), fragment);
 		transaction.commit();
 	}
 

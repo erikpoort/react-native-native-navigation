@@ -83,19 +83,19 @@ RCT_EXPORT_METHOD(showModal:(NSDictionary *)screen registerCallback:(RCTResponse
 	NNSingleNode *nodeObject = [NNNodeHelper nodeFromMap:screen bridge:self.bridge];
 	UIViewController *viewController = [nodeObject generate];
 
-	UIViewController <NNView> *rootController = (UIViewController <NNView> *)[UIApplication sharedApplication].keyWindow.rootViewController;
-	NSString *parentPath = nodeObject.screenID.stringByDeletingLastPathComponent.stringByDeletingLastPathComponent;
-	NNSingleView *findController = (NNSingleView *)[rootController viewForPath:parentPath];
-	if (!findController) return;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        UIViewController <NNView> *rootController = (UIViewController <NNView> *)[UIApplication sharedApplication].keyWindow.rootViewController;
+        NSString *parentPath = nodeObject.screenID.stringByDeletingLastPathComponent.stringByDeletingLastPathComponent;
+        NNSingleView *findController = (NNSingleView *)[rootController viewForPath:parentPath];
+        if (!findController) return;
 
-	NNSingleNode *singleNode = findController.node;
-	singleNode.modal = nodeObject;
+        NNSingleNode *singleNode = findController.node;
+        singleNode.modal = nodeObject;
 
-	NSDictionary *newState = rootController.node.data;
-	[RNNNState sharedInstance].state = newState;
-	callback(@[newState]);
+        NSDictionary *newState = rootController.node.data;
+        [RNNNState sharedInstance].state = newState;
+        callback(@[newState]);
 
-	dispatch_async(dispatch_get_main_queue(), ^{
 		if (viewController) {
 			[findController presentViewController:viewController animated:YES completion:nil];
 		}

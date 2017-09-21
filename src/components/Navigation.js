@@ -15,6 +15,20 @@ class Navigation extends Component {
 		loading: true,
 	};
 
+	static mapChild = (dom, path) => {
+		if (typeof(dom.type.mapToDictionary) === 'function') {
+			return dom.type.mapToDictionary(dom, path);
+		} else {
+			let ComponentClass = dom.type;
+			let Component = new ComponentClass();
+			if (typeof(Component.render) === 'function') {
+				let ComponentRender = Component.render();
+				return Navigation.mapChild(ComponentRender, path);
+			}
+			return {};
+		}
+	}
+
 	static registerScreen = (screenID, screen) => {
 		const Screen = screen;
 		AppRegistry.registerComponent(screenID, () => {
@@ -27,6 +41,7 @@ class Navigation extends Component {
 			}
 		});
 	}
+
 	registerScreens = (screens) => {
 		screens.forEach((screenData) => {
 			const { screenID, screen } = screenData;

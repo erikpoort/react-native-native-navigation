@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Navigation } from './../Navigation';
 
 export default class DrawerView extends Component {
 	static SIDE = {
@@ -13,17 +14,17 @@ export default class DrawerView extends Component {
 		const leftData = dom.props.left;
 		let left;
 		if (leftData) {
-			left = leftData.type.mapToDictionary(leftData, `${screenID}/left`);
+			left = Navigation.mapChild(leftData, `${screenID}/left`)
 		}
 		const centerData = dom.props.center;
 		let center;
 		if (centerData) {
-			center = centerData.type.mapToDictionary(centerData, `${screenID}/center`);
+			center = Navigation.mapChild(centerData, `${screenID}/center`);
 		}
 		const rightData = dom.props.right;
 		let right;
 		if (rightData) {
-			right = rightData.type.mapToDictionary(rightData, `${screenID}/right`);
+			right = Navigation.mapChild(rightData, `${screenID}/right`);
 		}
 		const side = dom.props.side;
 		return {

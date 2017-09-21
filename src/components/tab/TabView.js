@@ -1,16 +1,17 @@
 import React, { Component } from 'react';
+import { Navigation } from './../Navigation';
 
 export default class TabView extends Component {
 	static mapChildren = (children, path) => {
 		if (!Array.isArray(children)) {
 			children = [children];
 		}
-		return children.map(dom => dom.type.mapToDictionary(dom, path));
-	}
+		return children.map(dom => Navigation.mapChild(dom, path));
+	};
 	static mapToDictionary = (dom, path) => {
 		const type = dom.type.name;
 		const screenID = `${path}/${dom.props.name}`;
-		const tabs = dom.type.mapChildren(dom.props.children, screenID);
+		const tabs = TabView.mapChildren(dom.props.children, screenID);
 		const selectedTab = dom.props.selectedTab;
 		return {
 			type,
@@ -18,7 +19,7 @@ export default class TabView extends Component {
 			tabs,
 			selectedTab,
 		};
-	}
+	};
 
 	static reduceScreens = (data, viewMap, pageMap) => {
 		return data.tabs.reduce((map, node) => {
@@ -33,7 +34,7 @@ export default class TabView extends Component {
 								return <Screen {...this.props} />
 							}
 						}
-					}
+					};
 					const Tab = TabScreen();
 					return ({
 						screenID,

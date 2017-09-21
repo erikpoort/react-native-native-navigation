@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Navigation } from './../Navigation';
 
 export default class SplitView extends Component {
 	static AXIS = {
@@ -10,9 +11,9 @@ export default class SplitView extends Component {
 		const type = dom.type.name;
 		const screenID = `${path}/${dom.props.name}`;
 		const dom1 = dom.props.children[0];
-		const node1 = dom1.type.mapToDictionary(dom1, screenID);
+		const node1 = Navigation.mapChild(dom1, screenID);
 		const dom2 = dom.props.children[1];
-		const node2 = dom2.type.mapToDictionary(dom2, screenID);
+		const node2 = Navigation.mapChild(dom2, screenID);
 		const axis = dom.props.axis;
 		return {
 			type,

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { BackHandler } from 'react-native';
 import StackNavigation from './StackNavigation';
+import { Navigation } from './../Navigation';
 
 export default class StackView extends Component {
 	static mapChildren = (children, path) => {
@@ -9,7 +10,7 @@ export default class StackView extends Component {
 		}
 		let buildPath = path;
 		return children.map(dom => {
-			let child = dom.type.mapToDictionary(dom, buildPath);
+			let child = Navigation.mapChild(dom, buildPath);
 			buildPath = child.screenID;
 			return child;
 		});

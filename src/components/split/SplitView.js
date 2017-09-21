@@ -8,12 +8,35 @@ export default class SplitView extends Component {
 	}
 
 	static mapToDictionary = (dom, path) => {
+		if (dom == null || dom.props == null || path == null) {
+			console.error("RNNN", "dom and path are mandatory parameters.");
+			return null;
+		}
+
+		const name = dom.props.name;
+		if (name == null) {
+			console.error("RNNN", "A name prop is mandatory");
+			return null;
+		}
+
+		const screenID = `${path}/${name}`;
 		const type = dom.type.name;
-		const screenID = `${path}/${dom.props.name}`;
+
+		if (dom.props.children.length != 2) {
+			console.error("RNNN", "A SplitView expects two children", screenID);
+			return null;
+		}
+
 		const dom1 = dom.props.children[0];
 		const node1 = Navigation.mapChild(dom1, screenID);
 		const dom2 = dom.props.children[1];
 		const node2 = Navigation.mapChild(dom2, screenID);
+
+		if (node1 == null || node2 == null) {
+			console.error("RNNN", "A SplitView expects two valid nodes", screenID);
+			return null;
+		}
+
 		const axis = dom.props.axis;
 		return {
 			type,

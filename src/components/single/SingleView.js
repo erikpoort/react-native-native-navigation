@@ -3,20 +3,35 @@ import SingleNavigation from './SingleNavigation';
 
 export default class SingleView extends Component {
 	static mapToDictionary = (dom, path) => {
-		const { screen, modal } = dom.props;
-		const type = dom.type.name;
-		const name = dom.props.name;
-		const screenID = `${path}/${name}`;
-
-		let modalData = {};
-		if (modal) {
-			modalData = { modal: modal.type.mapToDictionary(modal, `${screenID}/modal`) };
+		if (dom == null || dom.props == null || path == null) {
+			console.error("RNNN", "dom and path are mandatory parameters.");
+			return null;
 		}
+
+		const { name, screen, modal } = dom.props;
+
+		if (name == null) {
+			console.error("RNNN", "A name prop is mandatory");
+			return null;
+		}
+		if (screen == null) {
+			console.error("RNNN", "A screen prop is mandatory in SingleView", screenID);
+			return null;
+		}
+
+		const screenID = `${path}/${name}`;
+		const type = dom.type.name;
+
+		let modalData = null;
+		if (modal) {
+			modalData = modal.type.mapToDictionary(modal, `${screenID}/modal`, screenID);
+		}
+
 		return {
 			name,
 			type,
 			screenID,
-			...modalData,
+			modal: modalData,
 		};
 	};
 

@@ -24,6 +24,10 @@ public class NodeHelper
 
 	public static Node nodeFromMap(ReadableMap map, ReactInstanceManager instanceManager) throws Exception
 	{
+		if (map == null)
+		{
+			return null;
+		}
 		List<String> names = Arrays.asList(
 				SingleNode.JS_NAME,
 				StackNode.JS_NAME,

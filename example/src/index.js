@@ -21,36 +21,36 @@ export default class example extends Component {
 					name="drawer" side="center"
 					center={
 						<StackView name="stack">
-							<SingleView screen={Home}/>
+							<SingleView name="Home" screen={Home}/>
 							<DrawerView
 								name="drawer" side="center"
 								left={
-									<SingleView screen={Detail}/>
+									<SingleView name="Detail" screen={Detail}/>
 								}
 								center={
 									<TabView name="tabs" selectedTab={0}>
 										<StackView name="stack">
-											<SingleView screen={Home}/>
-											<SingleView screen={Detail}/>
+											<SingleView name="Home" screen={Home}/>
+											<SingleView name="Detail" screen={Detail}/>
 										</StackView>
-										<SingleView screen={Detail2}/>
+										<SingleView name="Detail2" screen={Detail2}/>
 										<SplitView name="horizontal" axis={SplitView.AXIS.HORIZONTAL}>
-											<SingleView screen={Detail}/>
-											<SingleView screen={Detail}/>
+											<SingleView name="Detail" screen={Detail}/>
+											<SingleView name="Detail" screen={Detail}/>
 										</SplitView>
 										<SplitView name="vertical" axis={SplitView.AXIS.VERTICAL}>
 											<StackView name="stack_up">
-												<SingleView screen={Home}/>
+												<SingleView name="Home" screen={Home}/>
 											</StackView>
 											<StackView name="stack_down">
-												<SingleView screen={Detail}/>
+												<SingleView name="Detail" screen={Detail}/>
 											</StackView>
 										</SplitView>
 									</TabView>}
 							/>
 						</StackView>}
 					right={
-						<SingleView screen={Detail}/>
+						<SingleView name="Detail" screen={Detail}/>
 					}
 				/>
 			</Navigation>

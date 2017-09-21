@@ -9,16 +9,46 @@ export default class StackView extends Component {
 			children = [children];
 		}
 		let buildPath = path;
-		return children.map(dom => {
-			let child = Navigation.mapChild(dom, buildPath);
-			buildPath = child.screenID;
-			return child;
-		});
+
+		const leni = children.length;
+		let nodes = [];
+		for (let i = 0; i < leni; ++i) {
+			const dom = children[i];
+			const node = Navigation.mapChild(dom, buildPath);
+			if (node == null) {
+				return null;
+			}
+			buildPath = node.screenID;
+			nodes.push(node);
+		}
+		return nodes;
 	}
 	static mapToDictionary = (dom, path) => {
+		if (dom == null || dom.props == null || path == null) {
+			console.error("RNNN", "dom and path are mandatory parameters.");
+			return null;
+		}
+
+		const name = dom.props.name;
+		if (name == null) {
+			console.error("RNNN", "A name prop is mandatory");
+			return null;
+		}
+
+		const screenID = `${path}/${name}`
 		const type = dom.type.name;
-		const screenID = `${path}/${dom.props.name}`
+
+		if (dom.props.children.length == 0) {
+			console.error("RNNN", "A StackView expects at least one child", screenID);
+			return null;
+		}
+
 		const stack = dom.type.mapChildren(dom.props.children, screenID);
+		if (stack == null) {
+			console.error("RNNN", "A StackView expects all children to be valid nodes", screenID);
+			return null;
+		}
+
 		return {
 			type,
 			screenID,

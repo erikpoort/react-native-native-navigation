@@ -8,30 +8,48 @@ export default class DrawerView extends Component {
 		RIGHT: "right",
 	}
 
+	static nodeToDictionary = (name, dom, path) => {
+		let result;
+		let data = dom.props[name];
+		if (data != null) {
+			return Navigation.mapChild(data, `${path}/${name}`);
+		}
+		return null;
+	}
 	static mapToDictionary = (dom, path) => {
+		if (dom == null || dom.props == null || path == null) {
+			console.error("RNNN", "dom and path are mandatory parameters.");
+			return null;
+		}
+
+		const name = dom.props.name;
+		if (name == null) {
+			console.error("RNNN", "A name prop is mandatory");
+			return null;
+		}
+
+		const screenID = `${path}/${name}`;
 		const type = dom.type.name;
-		const screenID = `${path}/${dom.props.name}`;
-		const leftData = dom.props.left;
-		let left;
-		if (leftData) {
-			left = Navigation.mapChild(leftData, `${screenID}/left`)
+
+		const center = DrawerView.nodeToDictionary('center', dom, screenID);
+		if (center == null) {
+			console.error('RNNN', 'A center node is mandatory in a Drawer', screenID);
+			return null;
 		}
-		const centerData = dom.props.center;
-		let center;
-		if (centerData) {
-			center = Navigation.mapChild(centerData, `${screenID}/center`);
+
+		const left = DrawerView.nodeToDictionary('left', dom, screenID);
+		const right = DrawerView.nodeToDictionary('right', dom, screenID);
+		if (left == null && right == null) {
+			console.error('RNNN', 'You need a left or right drawer', screenID);
+			return null;
 		}
-		const rightData = dom.props.right;
-		let right;
-		if (rightData) {
-			right = Navigation.mapChild(rightData, `${screenID}/right`);
-		}
+
 		const side = dom.props.side;
 		return {
 			type,
 			screenID,
-			left,
 			center,
+			left,
 			right,
 			side
 		}

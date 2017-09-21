@@ -25,8 +25,9 @@ class Navigation extends Component {
 				let ComponentRender = Component.render();
 				return Navigation.mapChild(ComponentRender, path);
 			}
-			return {};
 		}
+		console.error('RNNN', 'All children of Navigation need to support mapToDictionary');
+		return null;
 	}
 
 	static registerScreen = (screenID, screen) => {
@@ -51,7 +52,7 @@ class Navigation extends Component {
 
 	generateSiteMap = () => {
 		const dom = this.props.children[1];
-		return dom.type.mapToDictionary(dom, '');
+		return Navigation.mapChild(dom, '');
 	}
 
 	componentDidMount() {
@@ -72,17 +73,19 @@ class Navigation extends Component {
 		Navigation.viewMap = viewMap;
 
 		ReactNativeNativeNavigation.onStart((request) => {
-			if (request == null) {
+			// if (request == null) {
 				request = this.generateSiteMap();
+			// }
+
+			if (request != null) {
+				const dom = Navigation.viewMap[request.type];
+				const screens = dom.reduceScreens(request, Navigation.viewMap, Navigation.pageMap);
+				this.registerScreens(screens);
+
+				ReactNativeNativeNavigation.setSiteMap(request).then((loaded) => {
+					this.setState({ loading: !loaded });
+				});
 			}
-
-			const dom = Navigation.viewMap[request.type];
-			const screens = dom.reduceScreens(request, Navigation.viewMap, Navigation.pageMap);
-			this.registerScreens(screens);
-
-			ReactNativeNativeNavigation.setSiteMap(request).then((loaded) => {
-				this.setState({ loading: !loaded });
-			});
 		});
 	}
 

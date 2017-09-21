@@ -15,6 +15,9 @@ static NSString *const kJSViewName = @"type";
 @implementation NNNodeHelper
 
 + (id <NNNode>)nodeFromMap:(NSDictionary *)map bridge:(RCTBridge *)bridge {
+    if (map == nil || [map isEqual:[NSNull null]]) {
+        return nil;
+    }
 	NSArray <NSString *> *names = @[
 			[NNSingleNode jsName],
 			[NNStackNode jsName],

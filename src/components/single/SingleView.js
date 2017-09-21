@@ -5,7 +5,7 @@ export default class SingleView extends Component {
 	static mapToDictionary = (dom, path) => {
 		const { screen, modal } = dom.props;
 		const type = dom.type.name;
-		const name = screen.name;
+		const name = dom.props.name;
 		const screenID = `${path}/${name}`;
 
 		let modalData = {};

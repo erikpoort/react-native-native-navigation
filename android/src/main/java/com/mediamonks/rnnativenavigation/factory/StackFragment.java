@@ -112,6 +112,7 @@ public class StackFragment extends BaseFragment<StackNode> {
 
     public void popNode(Node node, int transition) {
         removeNode(node, transition);
+        getNode().getStack().remove(getNode().getStack().peek());
 
         if (!getNode().getStack().peek().isShown()) {
             showPeek(FragmentTransaction.TRANSIT_NONE);

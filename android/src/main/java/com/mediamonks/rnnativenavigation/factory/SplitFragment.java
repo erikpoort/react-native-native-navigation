@@ -18,6 +18,7 @@ import com.mediamonks.rnnativenavigation.data.SplitNode;
  */
 
 public class SplitFragment extends BaseFragment<SplitNode> {
+
     private BaseFragment _fragment1;
     private BaseFragment _fragment2;
 
@@ -44,13 +45,13 @@ public class SplitFragment extends BaseFragment<SplitNode> {
         FragmentManager fragmentManager = getChildFragmentManager();
         FragmentTransaction transaction1 = fragmentManager.beginTransaction();
         _fragment1 = getNode().getNode1().generateFragment();
-        transaction1.add(frameLayout1.getId(), _fragment1);
-        transaction1.commit();
+        transaction1.add(frameLayout1.getId(), _fragment1, getNode().getNode1().getScreenID());
+        transaction1.commitAllowingStateLoss();
 
         FragmentTransaction transaction2 = fragmentManager.beginTransaction();
         _fragment2 = getNode().getNode2().generateFragment();
-        transaction2.add(frameLayout2.getId(), _fragment2);
-        transaction2.commit();
+        transaction2.add(frameLayout2.getId(), _fragment2, getNode().getNode2().getScreenID());
+        transaction2.commitAllowingStateLoss();
 
         return linearLayout;
     }

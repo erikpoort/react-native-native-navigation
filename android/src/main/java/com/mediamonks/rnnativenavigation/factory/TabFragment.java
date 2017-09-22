@@ -7,6 +7,7 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,6 +17,7 @@ import android.widget.LinearLayout;
 import com.mediamonks.rnnativenavigation.data.Node;
 import com.mediamonks.rnnativenavigation.data.TabNode;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -32,16 +34,23 @@ public class TabFragment extends BaseFragment<TabNode> implements BottomNavigati
 
     private static class TabPagerAdapter extends FragmentPagerAdapter {
         private List<Node> _items;
+        private SparseArray<BaseFragment> _fragments;
 
         TabPagerAdapter(FragmentManager fm, List<Node> items) {
             super(fm);
 
             this._items = items;
+            this._fragments = new SparseArray<>(items.size());
         }
 
         @Override
         public BaseFragment getItem(int position) {
-            return _items.get(position).generateFragment();
+            BaseFragment fragment = _fragments.get(position);
+            if (fragment == null) {
+                fragment = _items.get(position).generateFragment();
+                _fragments.put(position, fragment);
+            }
+            return fragment;
         }
 
         @Override

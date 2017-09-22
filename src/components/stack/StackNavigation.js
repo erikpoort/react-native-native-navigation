@@ -16,8 +16,8 @@ export default class StackNavigation {
 		ReactNativeNativeNavigation.handleBackButton(callback);
 	}
 
-	push = (screen) => {
-		const Screen = <SingleView screen={screen}/>;
+	push = (name, screen) => {
+		const Screen = <SingleView name={name} screen={screen}/>;
 		const screenData = Screen.type.mapToDictionary(Screen, this.screenID);
 
 		return ReactNativeNativeNavigation.push(screenData, (register) => {

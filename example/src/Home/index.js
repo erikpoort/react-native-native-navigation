@@ -4,7 +4,7 @@ import Detail from '../Detail';
 
 export default class Home extends Component {
 	handleDetail = () => {
-		this.props.stack.push(Detail);
+		this.props.stack.push('Detail', Detail);
 	};
 	render(){
 		return (

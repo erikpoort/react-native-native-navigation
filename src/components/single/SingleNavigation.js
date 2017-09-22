@@ -13,8 +13,8 @@ export default class SingleNavigation {
 		this.screenID = screenID;
 	}
 
-	showModal = (screen) => {
-		const Screen = <SingleView screen={screen}/>;
+	showModal = (name, screen) => {
+		const Screen = <SingleView name={name} screen={screen}/>;
 		const screenData = Screen.type.mapToDictionary(Screen, `${this.screenID}/modal`);
 
 		return ReactNativeNativeNavigation.showModal(screenData, (register) => {

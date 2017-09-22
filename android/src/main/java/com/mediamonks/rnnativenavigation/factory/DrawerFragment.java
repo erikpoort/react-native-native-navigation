@@ -105,17 +105,17 @@ public class DrawerFragment extends BaseFragment<DrawerNode> {
         if (getNode().getLeftNode() != null) {
             FragmentTransaction leftTransaction = fragmentManager.beginTransaction();
             leftTransaction.remove(_leftFragment);
-            leftTransaction.commit();
+            leftTransaction.commitAllowingStateLoss();
         }
 
         FragmentTransaction centerTransaction = fragmentManager.beginTransaction();
         centerTransaction.remove(_centerFragment);
-        centerTransaction.commit();
+        centerTransaction.commitAllowingStateLoss();
 
         if (getNode().getRightNode() != null) {
             FragmentTransaction rightTransaction = fragmentManager.beginTransaction();
             rightTransaction.remove(_rightFragment);
-            rightTransaction.commit();
+            rightTransaction.commitAllowingStateLoss();
         }
 
         super.onDestroyView();

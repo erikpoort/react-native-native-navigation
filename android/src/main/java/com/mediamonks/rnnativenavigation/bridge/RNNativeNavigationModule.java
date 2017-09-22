@@ -174,7 +174,8 @@ class RNNativeNavigationModule extends ReactContextBaseJavaModule implements Lif
             assert rootFragment != null;
 
             int lastSlash = node.getScreenID().lastIndexOf("/");
-            BaseFragment findFragment = rootFragment.fragmentForPath(node.getScreenID().substring(0, lastSlash));
+            String parentPath = node.getScreenID().substring(0, lastSlash);
+            BaseFragment findFragment = rootFragment.fragmentForPath(parentPath);
             if (findFragment == null) {
                 return;
             }

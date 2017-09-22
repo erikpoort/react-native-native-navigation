@@ -12,80 +12,66 @@ import com.mediamonks.rnnativenavigation.factory.SingleFragment;
  * RNNativeNavigation 2017
  */
 
-public class SingleNode extends BaseNode implements Node
-{
-	public static String JS_NAME = "SingleView";
+public class SingleNode extends BaseNode implements Node {
+    public static String JS_NAME = "SingleView";
 
-	private static final String NAME = "name";
-	private static final String MODAL = "modal";
+    private static final String NAME = "name";
+    private static final String MODAL = "modal";
 
-	private ReactInstanceManager _instanceManager;
-	private String _title;
-	private Node _modal;
+    private ReactInstanceManager _instanceManager;
+    private String _title;
+    private Node _modal;
 
-	@Override
-	public BaseFragment<SingleNode> generateFragment()
-	{
-		SingleFragment fragment = new SingleFragment();
-		fragment.setNode(this);
-		return fragment;
-	}
+    @Override
+    public BaseFragment<SingleNode> generateFragment() {
+        SingleFragment fragment = new SingleFragment();
+        fragment.setNode(this);
+        return fragment;
+    }
 
-	@Override
-	public void setInstanceManager(ReactInstanceManager instanceManager)
-	{
-		_instanceManager = instanceManager;
-	}
+    @Override
+    public void setInstanceManager(ReactInstanceManager instanceManager) {
+        _instanceManager = instanceManager;
+    }
 
-	public ReactInstanceManager getInstanceManager()
-	{
-		return _instanceManager;
-	}
+    public ReactInstanceManager getInstanceManager() {
+        return _instanceManager;
+    }
 
-	@Override
-	public void setData(ReadableMap map)
-	{
-		super.setData(map);
-		_title = map.getString(NAME);
+    @Override
+    public void setData(ReadableMap map) {
+        super.setData(map);
+        _title = map.getString(NAME);
 
-		if (map.hasKey(MODAL))
-		{
-			try
-			{
-				_modal = NodeHelper.nodeFromMap(map.getMap(MODAL), getInstanceManager());
-			}
-			catch (Exception e)
-			{
-				e.printStackTrace();
-			}
-		}
-	}
+        if (map.hasKey(MODAL)) {
+            try {
+                _modal = NodeHelper.nodeFromMap(map.getMap(MODAL), getInstanceManager());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
-	@Override
-	public WritableMap data()
-	{
-		WritableMap data = super.data();
-		data.putString(NAME, _title);
-		if (_modal != null)
-		{
-			data.putMap(MODAL, _modal.data());
-		}
-		return data;
-	}
+    @Override
+    public WritableMap data() {
+        WritableMap data = super.data();
+        data.putString(NAME, _title);
+        if (_modal != null) {
+            data.putMap(MODAL, _modal.data());
+        }
+        return data;
+    }
 
-	@Override
-	public String getTitle()
-	{
-		return _title;
-	}
+    @Override
+    public String getTitle() {
+        return _title;
+    }
 
-	public void setModal(Node modal)
-	{
-		_modal = modal;
-	}
+    public void setModal(Node modal) {
+        _modal = modal;
+    }
 
-	public Node getModal()
-	{
-		return _modal;
-	}
+    public Node getModal() {
+        return _modal;
+    }
 }

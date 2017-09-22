@@ -17,80 +17,67 @@ import java.util.Stack;
  * RNNativeNavigation 2017
  */
 
-public class StackNode extends BaseNode implements Node
-{
-	public static String JS_NAME = "StackView";
+public class StackNode extends BaseNode implements Node {
+    public static String JS_NAME = "StackView";
 
-	private static final String STACK = "stack";
+    private static final String STACK = "stack";
 
-	private ReactInstanceManager _instanceManager;
-	private Stack<Node> _stack;
+    private ReactInstanceManager _instanceManager;
+    private Stack<Node> _stack;
 
-	@Override
-	public BaseFragment<StackNode> generateFragment()
-	{
-		StackFragment fragment = new StackFragment();
-		fragment.setNode(this);
-		return fragment;
-	}
+    @Override
+    public BaseFragment<StackNode> generateFragment() {
+        StackFragment fragment = new StackFragment();
+        fragment.setNode(this);
+        return fragment;
+    }
 
-	@Override
-	public void setInstanceManager(ReactInstanceManager instanceManager)
-	{
-		_instanceManager = instanceManager;
-	}
+    @Override
+    public void setInstanceManager(ReactInstanceManager instanceManager) {
+        _instanceManager = instanceManager;
+    }
 
-	private ReactInstanceManager getInstanceManager()
-	{
-		return _instanceManager;
-	}
+    private ReactInstanceManager getInstanceManager() {
+        return _instanceManager;
+    }
 
-	@Override
-	public void setData(ReadableMap map)
-	{
-		super.setData(map);
+    @Override
+    public void setData(ReadableMap map) {
+        super.setData(map);
 
-		Stack<Node> stack = new Stack<>();
-		ReadableArray stackArray = map.getArray(STACK);
+        Stack<Node> stack = new Stack<>();
+        ReadableArray stackArray = map.getArray(STACK);
 
-		int leni = stackArray.size();
-		for (int i = 0; i < leni; ++i)
-		{
-			ReadableMap obj = stackArray.getMap(i);
-			try
-			{
-				stack.add(NodeHelper.nodeFromMap(obj, getInstanceManager()));
-			}
-			catch (Exception e)
-			{
-				e.printStackTrace();
-			}
-		}
+        int leni = stackArray.size();
+        for (int i = 0; i < leni; ++i) {
+            ReadableMap obj = stackArray.getMap(i);
+            try {
+                stack.add(NodeHelper.nodeFromMap(obj, getInstanceManager()));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
 
-		_stack = stack;
-	}
+        _stack = stack;
+    }
 
-	@Override
-	public WritableMap data()
-	{
-		WritableMap map = super.data();
-		WritableArray stack = new WritableNativeArray();
-		for (Node node : _stack)
-		{
-			stack.pushMap(node.data());
-		}
-		map.putArray(STACK, stack);
-		return map;
-	}
+    @Override
+    public WritableMap data() {
+        WritableMap map = super.data();
+        WritableArray stack = new WritableNativeArray();
+        for (Node node : _stack) {
+            stack.pushMap(node.data());
+        }
+        map.putArray(STACK, stack);
+        return map;
+    }
 
-	@Override
-	public String getTitle()
-	{
-		return _stack.firstElement().getTitle();
-	}
+    @Override
+    public String getTitle() {
+        return _stack.firstElement().getTitle();
+    }
 
-	public Stack<Node> getStack()
-	{
-		return _stack;
-	}
+    public Stack<Node> getStack() {
+        return _stack;
+    }
 }

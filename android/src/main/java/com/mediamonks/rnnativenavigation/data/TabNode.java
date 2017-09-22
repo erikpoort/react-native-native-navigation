@@ -18,94 +18,79 @@ import java.util.List;
  * RNNativeNavigation 2017
  */
 
-public class TabNode extends BaseNode implements Node
-{
-	public static String JS_NAME = "TabView";
+public class TabNode extends BaseNode implements Node {
+    public static String JS_NAME = "TabView";
 
-	private static final String TABS = "tabs";
-	private static final String SELECTED_TAB = "selectedTab";
+    private static final String TABS = "tabs";
+    private static final String SELECTED_TAB = "selectedTab";
 
-	private ReactInstanceManager _instanceManager;
-	private List<Node> _tabs;
-	private int _selectedTab;
+    private ReactInstanceManager _instanceManager;
+    private List<Node> _tabs;
+    private int _selectedTab;
 
-	@Override
-	public BaseFragment generateFragment()
-	{
-		TabFragment fragment = new TabFragment();
-		fragment.setNode(this);
-		return fragment;
-	}
+    @Override
+    public BaseFragment generateFragment() {
+        TabFragment fragment = new TabFragment();
+        fragment.setNode(this);
+        return fragment;
+    }
 
-	@Override
-	public void setInstanceManager(ReactInstanceManager instanceManager)
-	{
-		_instanceManager = instanceManager;
-	}
+    @Override
+    public void setInstanceManager(ReactInstanceManager instanceManager) {
+        _instanceManager = instanceManager;
+    }
 
-	private ReactInstanceManager getInstanceManager()
-	{
-		return _instanceManager;
-	}
+    private ReactInstanceManager getInstanceManager() {
+        return _instanceManager;
+    }
 
-	@Override
-	public void setData(ReadableMap map)
-	{
-		super.setData(map);
+    @Override
+    public void setData(ReadableMap map) {
+        super.setData(map);
 
-		List<Node> stack = new ArrayList<>();
-		ReadableArray stackArray = map.getArray(TABS);
+        List<Node> stack = new ArrayList<>();
+        ReadableArray stackArray = map.getArray(TABS);
 
-		int leni = stackArray.size();
-		for (int i = 0; i < leni; ++i)
-		{
-			ReadableMap obj = stackArray.getMap(i);
-			try
-			{
-				stack.add(NodeHelper.nodeFromMap(obj, getInstanceManager()));
-			}
-			catch (Exception e)
-			{
-				e.printStackTrace();
-			}
-		}
+        int leni = stackArray.size();
+        for (int i = 0; i < leni; ++i) {
+            ReadableMap obj = stackArray.getMap(i);
+            try {
+                stack.add(NodeHelper.nodeFromMap(obj, getInstanceManager()));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
 
-		_tabs = stack;
-		_selectedTab = map.getInt(SELECTED_TAB);
-	}
+        _tabs = stack;
+        _selectedTab = map.getInt(SELECTED_TAB);
+    }
 
-	@Override
-	public WritableMap data()
-	{
-		WritableMap map = super.data();
-		WritableArray tabs = new WritableNativeArray();
-		for (Node node : _tabs)
-		{
-			tabs.pushMap(node.data());
-		}
-		map.putArray(TABS, tabs);
-		map.putInt(SELECTED_TAB, _selectedTab);
-		return map;
-	}
+    @Override
+    public WritableMap data() {
+        WritableMap map = super.data();
+        WritableArray tabs = new WritableNativeArray();
+        for (Node node : _tabs) {
+            tabs.pushMap(node.data());
+        }
+        map.putArray(TABS, tabs);
+        map.putInt(SELECTED_TAB, _selectedTab);
+        return map;
+    }
 
-	@Override
-	public String getTitle()
-	{
-		return "";
-	}
+    @Override
+    public String getTitle() {
+        return "";
+    }
 
-	public List<Node> getTabs()
-	{
-		return _tabs;
-	}
+    public List<Node> getTabs() {
+        return _tabs;
+    }
 
-	public int getSelectedTab()
-	{
-		return _selectedTab;
-	}
+    public int getSelectedTab() {
+        return _selectedTab;
+    }
 
-	public void setSelectedTab(int selectedTab)
-	{
-		_selectedTab = selectedTab;
-	}
+    public void setSelectedTab(int selectedTab) {
+        _selectedTab = selectedTab;
+    }
 }

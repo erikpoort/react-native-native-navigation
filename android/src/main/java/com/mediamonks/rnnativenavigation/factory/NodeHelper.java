@@ -18,37 +18,33 @@ import java.util.List;
  * example 2017
  */
 
-public class NodeHelper
-{
-	private static final String TYPE = "type";
+public class NodeHelper {
+    private static final String TYPE = "type";
 
-	public static Node nodeFromMap(ReadableMap map, ReactInstanceManager instanceManager) throws Exception
-	{
-		if (map == null)
-		{
-			return null;
-		}
-		List<String> names = Arrays.asList(
-				SingleNode.JS_NAME,
-				StackNode.JS_NAME,
-				TabNode.JS_NAME,
-				SplitNode.JS_NAME,
-				DrawerNode.JS_NAME);
-		List<? extends Class<? extends BaseNode>> classes = Arrays.asList(
-				SingleNode.class,
-				StackNode.class,
-				TabNode.class,
-				SplitNode.class,
-				DrawerNode.class);
-		int index = names.indexOf(map.getString(TYPE));
-		if (index >= 0)
-		{
-			Class<? extends BaseNode> nodeClass = classes.get(index);
-			Node nodeObject = (Node) nodeClass.newInstance();
-			nodeObject.setInstanceManager(instanceManager);
-			nodeObject.setData(map);
-			return nodeObject;
-		}
-		return new SingleNode();
-	}
+    public static Node nodeFromMap(ReadableMap map, ReactInstanceManager instanceManager) throws Exception {
+        if (map == null) {
+            return null;
+        }
+        List<String> names = Arrays.asList(
+                SingleNode.JS_NAME,
+                StackNode.JS_NAME,
+                TabNode.JS_NAME,
+                SplitNode.JS_NAME,
+                DrawerNode.JS_NAME);
+        List<? extends Class<? extends BaseNode>> classes = Arrays.asList(
+                SingleNode.class,
+                StackNode.class,
+                TabNode.class,
+                SplitNode.class,
+                DrawerNode.class);
+        int index = names.indexOf(map.getString(TYPE));
+        if (index >= 0) {
+            Class<? extends BaseNode> nodeClass = classes.get(index);
+            Node nodeObject = (Node) nodeClass.newInstance();
+            nodeObject.setInstanceManager(instanceManager);
+            nodeObject.setData(map);
+            return nodeObject;
+        }
+        return new SingleNode();
+    }
 }

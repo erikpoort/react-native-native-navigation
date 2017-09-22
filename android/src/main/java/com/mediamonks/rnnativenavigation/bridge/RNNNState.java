@@ -7,8 +7,7 @@ import java.util.HashMap;
  * example 2017
  */
 
-public enum RNNNState
-{
-	INSTANCE;
-	public HashMap <String, Object> state;
+public enum RNNNState {
+    INSTANCE;
+    public HashMap<String, Object> state;
 }

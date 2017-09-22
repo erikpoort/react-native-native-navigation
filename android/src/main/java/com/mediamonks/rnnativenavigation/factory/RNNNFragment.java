@@ -7,8 +7,8 @@ import com.mediamonks.rnnativenavigation.data.Node;
  * example 2017
  */
 
-public interface RNNNFragment
-{
-	Node getNode();
-	BaseFragment fragmentForPath(String path);
+public interface RNNNFragment {
+    Node getNode();
+
+    BaseFragment fragmentForPath(String path);
 }

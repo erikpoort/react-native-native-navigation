@@ -12,15 +12,22 @@ import java.io.Serializable;
  * RNNativeNavigation 2017
  */
 
-public interface Node extends Serializable
-{
-	void setInstanceManager(ReactInstanceManager instanceManager);
-	void setData(ReadableMap map);
-	WritableMap data();
-	void setShown(boolean shown);
-	boolean isShown();
-	String getTitle();
-	String getScreenID();
-	BaseFragment generateFragment();
-	String getRootPath();
+public interface Node extends Serializable {
+    void setInstanceManager(ReactInstanceManager instanceManager);
+
+    void setData(ReadableMap map);
+
+    WritableMap data();
+
+    void setShown(boolean shown);
+
+    boolean isShown();
+
+    String getTitle();
+
+    String getScreenID();
+
+    BaseFragment generateFragment();
+
+    String getRootPath();
 }

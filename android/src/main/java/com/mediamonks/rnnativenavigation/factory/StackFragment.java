@@ -31,6 +31,9 @@ public class StackFragment extends BaseFragment<StackNode> {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        // I'm calling generateViewId() twice, calling it once doesn't work on first load. My assumption is the initial id is later hijacked by ReactNative, making it impossible to add fragments
+        View.generateViewId();
+
         LinearLayout linearLayout = new LinearLayout(getActivity());
         linearLayout.setBackgroundColor(Color.WHITE);
         linearLayout.setOrientation(LinearLayout.VERTICAL);
@@ -46,21 +49,38 @@ public class StackFragment extends BaseFragment<StackNode> {
 
         _holder = new FrameLayout(getActivity());
 
-        // I'm calling generateViewId() twice, calling it once doesn't work on first load. My assumption is the initial id is later hijacked by ReactNative, making it impossible to add fragments
-        View.generateViewId();
-        int id = View.generateViewId();
-        _holder.setId(id);
+        _holder.setId(View.generateViewId());
         linearLayout.addView(_holder, new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, 1));
 
-        showPeek(FragmentTransaction.TRANSIT_NONE);
+        return linearLayout;
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
         _toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onBackPressed();
             }
         });
+    }
 
-        return linearLayout;
+    @Override public void onDestroyView() {
+        super.onDestroyView();
+
+        int leni = getNode().getStack().size();
+        for (int i = 0; i < leni; ++i) {
+            removeNode(getNode().getStack().get(i), FragmentTransaction.TRANSIT_NONE);
+        }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        showPeek(FragmentTransaction.TRANSIT_NONE);
     }
 
     private void showPeek(int transition) {
@@ -74,8 +94,27 @@ public class StackFragment extends BaseFragment<StackNode> {
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
         transaction.add(_holder.getId(), fragment, node.getScreenID());
         transaction.setTransition(transition);
-        transaction.commit();
+        transaction.commitAllowingStateLoss();
         node.setShown(true);
+
+        handleCurrentStack();
+    }
+
+    private void removeNode(Node node, int transition) {
+        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+        String topID = node.getScreenID();
+        transaction.remove(getChildFragmentManager().findFragmentByTag(topID));
+        transaction.setTransition(transition);
+        transaction.commitAllowingStateLoss();
+        node.setShown(false);
+    }
+
+    public void popNode(Node node, int transition) {
+        removeNode(node, transition);
+
+        if (!getNode().getStack().peek().isShown()) {
+            showPeek(FragmentTransaction.TRANSIT_NONE);
+        }
 
         handleCurrentStack();
     }
@@ -89,18 +128,7 @@ public class StackFragment extends BaseFragment<StackNode> {
     @Override
     public boolean onBackPressed() {
         if (getNode().getStack().size() > 1) {
-            FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
-            String topID = getNode().getStack().pop().getScreenID();
-            transaction.remove(getChildFragmentManager().findFragmentByTag(topID));
-            transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
-            transaction.commit();
-
-            if (!getNode().getStack().peek().isShown()) {
-                showPeek(FragmentTransaction.TRANSIT_NONE);
-            }
-
-            this.handleCurrentStack();
-
+            popNode(getNode().getStack().peek(), FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
             return true;
         }
         return false;

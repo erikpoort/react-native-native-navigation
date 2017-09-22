@@ -71,8 +71,9 @@ public class StackFragment extends BaseFragment<StackNode> {
         super.onDestroyView();
 
         int leni = getNode().getStack().size();
-        for (int i = 0; i < leni; ++i) {
-            removeNode(getNode().getStack().get(i), FragmentTransaction.TRANSIT_NONE);
+        for (int i = leni -1; i > 0; --i) {
+            Node node = getNode().getStack().get(i);
+            removeNode(node, FragmentTransaction.TRANSIT_NONE);
         }
     }
 

@@ -63,11 +63,11 @@ public class SplitFragment extends BaseFragment<SplitNode> {
 
         FragmentTransaction transaction1 = fragmentManager.beginTransaction();
         transaction1.remove(_fragment1);
-        transaction1.commit();
+        transaction1.commitAllowingStateLoss();
 
         FragmentTransaction transaction2 = fragmentManager.beginTransaction();
         transaction2.remove(_fragment2);
-        transaction2.commit();
+        transaction2.commitAllowingStateLoss();
     }
 
     @Override

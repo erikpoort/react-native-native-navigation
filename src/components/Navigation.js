@@ -73,9 +73,9 @@ class Navigation extends Component {
 		Navigation.viewMap = viewMap;
 
 		ReactNativeNativeNavigation.onStart((request) => {
-			// if (request == null) {
+			if (request == null) {
 				request = this.generateSiteMap();
-			// }
+			}
 
 			if (request != null) {
 				const dom = Navigation.viewMap[request.type];

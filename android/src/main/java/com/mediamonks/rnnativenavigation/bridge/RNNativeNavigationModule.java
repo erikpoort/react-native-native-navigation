@@ -73,28 +73,18 @@ class RNNativeNavigationModule extends ReactContextBaseJavaModule implements Lif
     @Override
     public void onCatalystInstanceDestroy() {
         /*
-		 * Save the state of the application before reload
+         * Save the state of the application before reload
 		 */
         RNNNFragment anyFragment = (RNNNFragment) _fragments.toArray()[0];
-        RNNNFragment rootFragment = getRootFragment(anyFragment.getNode());
+        final RNNNFragment rootFragment = getRootFragment(anyFragment.getNode());
         WritableMap currentState = rootFragment.getNode().data();
         RNNNState.INSTANCE.state = currentState.toHashMap();
 
-		/*
-		 * Clear all existing fragments before Facebook reloads them. The onStart method will
-		 * rebuild the fragments.
-		 */
-        FragmentActivity fragmentActivity = (FragmentActivity) getCurrentActivity();
-        assert fragmentActivity != null;
-        FragmentManager fragmentManager = fragmentActivity.getSupportFragmentManager();
-
-        for (RNNNFragment fragment : _fragments) {
-            if (fragment != null) {
-                FragmentTransaction transaction = fragmentManager.beginTransaction();
-                transaction.remove((Fragment) fragment);
-                transaction.commit();
+        getCurrentActivity().runOnUiThread(new Runnable() {
+            @Override public void run() {
+                rootFragment.invalidate();
             }
-        }
+        });
 
         super.onCatalystInstanceDestroy();
     }
@@ -132,7 +122,7 @@ class RNNativeNavigationModule extends ReactContextBaseJavaModule implements Lif
                     FragmentTransaction transaction = fragmentManager.beginTransaction();
                     Fragment fragment = node.generateFragment();
                     transaction.replace(android.R.id.content, fragment);
-                    transaction.commit();
+                    transaction.commitNowAllowingStateLoss();
                     promise.resolve(true);
                 }
             });

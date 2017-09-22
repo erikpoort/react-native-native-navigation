@@ -46,12 +46,12 @@ public class SplitFragment extends BaseFragment<SplitNode> {
         FragmentTransaction transaction1 = fragmentManager.beginTransaction();
         _fragment1 = getNode().getNode1().generateFragment();
         transaction1.add(frameLayout1.getId(), _fragment1, getNode().getNode1().getScreenID());
-        transaction1.commitAllowingStateLoss();
+        transaction1.commitNowAllowingStateLoss();
 
         FragmentTransaction transaction2 = fragmentManager.beginTransaction();
         _fragment2 = getNode().getNode2().generateFragment();
         transaction2.add(frameLayout2.getId(), _fragment2, getNode().getNode2().getScreenID());
-        transaction2.commitAllowingStateLoss();
+        transaction2.commitNowAllowingStateLoss();
 
         return linearLayout;
     }
@@ -64,11 +64,11 @@ public class SplitFragment extends BaseFragment<SplitNode> {
 
         FragmentTransaction transaction1 = fragmentManager.beginTransaction();
         transaction1.remove(_fragment1);
-        transaction1.commitAllowingStateLoss();
+        transaction1.commitNowAllowingStateLoss();
 
         FragmentTransaction transaction2 = fragmentManager.beginTransaction();
         transaction2.remove(_fragment2);
-        transaction2.commitAllowingStateLoss();
+        transaction2.commitNowAllowingStateLoss();
     }
 
     @Override
@@ -86,6 +86,15 @@ public class SplitFragment extends BaseFragment<SplitNode> {
             return foundFragment;
         }
         return null;
+    }
+
+    @Override public void invalidate() {
+        if (_fragment1 != null) {
+            _fragment1.invalidate();
+        }
+        if (_fragment2 != null) {
+            _fragment2.invalidate();
+        }
     }
 
     @Override

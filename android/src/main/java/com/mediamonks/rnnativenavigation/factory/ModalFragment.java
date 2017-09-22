@@ -56,7 +56,7 @@ public class ModalFragment extends DialogFragment implements RNNNFragment {
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         _fragment = getNode().generateFragment();
         transaction.add(getView().getId(), _fragment);
-        transaction.commit();
+        transaction.commitNowAllowingStateLoss();
     }
 
     @Override
@@ -80,6 +80,12 @@ public class ModalFragment extends DialogFragment implements RNNNFragment {
     @Override
     public BaseFragment fragmentForPath(String path) {
         return _fragment.fragmentForPath(path);
+    }
+
+    @Override public void invalidate() {
+        if (_fragment != null) {
+            _fragment.invalidate();
+        }
     }
 
     public void setOnDismissListener(DialogInterface.OnDismissListener onDismissListener) {

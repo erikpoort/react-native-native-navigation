@@ -95,7 +95,7 @@ public class StackFragment extends BaseFragment<StackNode> {
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
         transaction.add(_holder.getId(), fragment, node.getScreenID());
         transaction.setTransition(transition);
-        transaction.commitAllowingStateLoss();
+        transaction.commitNowAllowingStateLoss();
         node.setShown(true);
 
         handleCurrentStack();
@@ -106,7 +106,7 @@ public class StackFragment extends BaseFragment<StackNode> {
         String topID = node.getScreenID();
         transaction.remove(getChildFragmentManager().findFragmentByTag(topID));
         transaction.setTransition(transition);
-        transaction.commitAllowingStateLoss();
+        transaction.commitNowAllowingStateLoss();
         node.setShown(false);
     }
 
@@ -165,6 +165,15 @@ public class StackFragment extends BaseFragment<StackNode> {
             }
         }
         return null;
+    }
+
+    @Override public void invalidate() {
+        for (Node node : getNode().getStack()) {
+            BaseFragment fragment = (BaseFragment) getChildFragmentManager().findFragmentByTag(node.getScreenID());
+            if (fragment != null) {
+                fragment.invalidate();
+            }
+        }
     }
 
     @Override

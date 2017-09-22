@@ -33,19 +33,18 @@ public class SingleFragment extends BaseFragment<SingleNode> {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        Log.i("MMM onViewCreated", getNode().getScreenID());
         ReactRootView rootView = (ReactRootView) view;
         rootView.startReactApplication(getNode().getInstanceManager(), getNode().getScreenID());
-        Log.i("MMM onViewCreated", getNode().getScreenID());
     }
 
     @Override
     public void onDestroyView() {
-        ReactRootView rootView = (ReactRootView) getView();
-        if (rootView != null) {
-            rootView.unmountReactApplication();
-            Log.i("MMM onDestroyView", getNode().getScreenID());
-        }
         super.onDestroyView();
+
+        Log.i("MMM onDestroyView", getNode().getScreenID());
+
+        invalidate();
     }
 
     @Override
@@ -63,6 +62,14 @@ public class SingleFragment extends BaseFragment<SingleNode> {
             return _modalFragment.fragmentForPath(path);
         }
         return this;
+    }
+
+    @Override public void invalidate() {
+        final ReactRootView rootView = (ReactRootView) getView();
+        if (rootView != null) {
+            Log.i("MMM", "Clean " + getNode().getScreenID());
+            rootView.unmountReactApplication();
+        }
     }
 
     @Override

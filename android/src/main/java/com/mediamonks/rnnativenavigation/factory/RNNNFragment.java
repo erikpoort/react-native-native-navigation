@@ -11,4 +11,6 @@ public interface RNNNFragment {
     Node getNode();
 
     BaseFragment fragmentForPath(String path);
+
+    void invalidate();
 }

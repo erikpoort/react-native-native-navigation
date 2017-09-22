@@ -42,7 +42,7 @@ public class DrawerFragment extends BaseFragment<DrawerNode> {
         FragmentTransaction centerTransaction = fragmentManager.beginTransaction();
         _centerFragment = getNode().getCenterNode().generateFragment();
         centerTransaction.replace(centerLayout.getId(), _centerFragment);
-        centerTransaction.commit();
+        centerTransaction.commitNowAllowingStateLoss();
 
         if (getNode().getLeftNode() != null) {
             FrameLayout leftLayout = new FrameLayout(getContext());
@@ -55,7 +55,7 @@ public class DrawerFragment extends BaseFragment<DrawerNode> {
             FragmentTransaction leftTransaction = fragmentManager.beginTransaction();
             _leftFragment = getNode().getLeftNode().generateFragment();
             leftTransaction.replace(leftLayout.getId(), _leftFragment);
-            leftTransaction.commit();
+            leftTransaction.commitNowAllowingStateLoss();
         }
 
         if (getNode().getRightNode() != null) {
@@ -69,7 +69,7 @@ public class DrawerFragment extends BaseFragment<DrawerNode> {
             FragmentTransaction rightTransaction = fragmentManager.beginTransaction();
             _rightFragment = getNode().getRightNode().generateFragment();
             rightTransaction.replace(rightLayout.getId(), _rightFragment);
-            rightTransaction.commit();
+            rightTransaction.commitNowAllowingStateLoss();
         }
 
         if (getNode().getSide() != Gravity.NO_GRAVITY) {
@@ -105,17 +105,17 @@ public class DrawerFragment extends BaseFragment<DrawerNode> {
         if (getNode().getLeftNode() != null) {
             FragmentTransaction leftTransaction = fragmentManager.beginTransaction();
             leftTransaction.remove(_leftFragment);
-            leftTransaction.commitAllowingStateLoss();
+            leftTransaction.commitNowAllowingStateLoss();
         }
 
         FragmentTransaction centerTransaction = fragmentManager.beginTransaction();
         centerTransaction.remove(_centerFragment);
-        centerTransaction.commitAllowingStateLoss();
+        centerTransaction.commitNowAllowingStateLoss();
 
         if (getNode().getRightNode() != null) {
             FragmentTransaction rightTransaction = fragmentManager.beginTransaction();
             rightTransaction.remove(_rightFragment);
-            rightTransaction.commitAllowingStateLoss();
+            rightTransaction.commitNowAllowingStateLoss();
         }
 
         super.onDestroyView();
@@ -139,6 +139,18 @@ public class DrawerFragment extends BaseFragment<DrawerNode> {
             return foundFragment;
         }
         return null;
+    }
+
+    @Override public void invalidate() {
+        if (_leftFragment != null) {
+            _leftFragment.invalidate();
+        }
+        if (_centerFragment != null) {
+            _centerFragment.invalidate();
+        }
+        if (_rightFragment != null) {
+            _rightFragment.invalidate();
+        }
     }
 
     @Override

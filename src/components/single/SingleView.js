@@ -14,12 +14,14 @@ export default class SingleView extends Component {
 			console.error("RNNN", "A name prop is mandatory");
 			return null;
 		}
+
+		const screenID = `${path}/${name}`;
+
 		if (screen == null) {
 			console.error("RNNN", "A screen prop is mandatory in SingleView", screenID);
 			return null;
 		}
 
-		const screenID = `${path}/${name}`;
 		const type = dom.type.name;
 
 		let modalData = null;

@@ -14,13 +14,12 @@ export default class SingleNavigation {
 	}
 
 	showModal = (name, screen) => {
-		const Screen = <SingleView name={name} screen={screen}/>;
-		const screenData = Screen.type.mapToDictionary(Screen, `${this.screenID}/modal`);
+		const screenData = Navigation.mapChild(screen, this.screenID);
 
 		return ReactNativeNativeNavigation.showModal(screenData, (register) => {
 			const view = Navigation.viewMap[register.type];
 			const registerScreens = view.reduceScreens(register, Navigation.viewMap, Navigation.pageMap).filter((screen) => {
-				return screen.screenID === screenData.screenID;
+				return screen.screenID.includes(this.screenID) && screen.screenID !== this.screenID;
 			});
 			const registerScreenData = registerScreens[0];
 			Navigation.registerScreen(registerScreenData.screenID, registerScreenData.screen);

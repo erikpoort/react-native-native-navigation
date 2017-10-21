@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { View, Text, Button } from 'react-native';
+import { SingleView } from 'react-native-native-navigation';
 import Detail2 from './../Detail2'
 
 export default class Detail extends Component {
 	handleDetail = () => {
-		this.props.single.showModal('Detail2', Detail2);
+		this.props.single.showModal(<SingleView id="Detail 2" screen={Detail2} />);
 	};
 	render(){
 		return (

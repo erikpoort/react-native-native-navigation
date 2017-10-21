@@ -17,16 +17,14 @@ export default class StackNavigation {
 	}
 
 	push = (name, screen) => {
-		const Screen = <SingleView name={name} screen={screen}/>;
-		const screenData = Screen.type.mapToDictionary(Screen, this.screenID);
+		const screenData = Navigation.mapChild(screen, this.screenID);
 
 		return ReactNativeNativeNavigation.push(screenData, (register) => {
 			const view = Navigation.viewMap[register.type];
 			const registerScreens = view.reduceScreens(register, Navigation.viewMap, Navigation.pageMap).filter((screen) => {
-				return screen.screenID === screenData.screenID;
+				return this.screenID.includes(screen.screenID) && screen.screenID !== this.screenID;
 			});
-			const registerScreenData = registerScreens[0];
-			Navigation.registerScreen(registerScreenData.screenID, registerScreenData.screen);
+			Navigation.registerScreens(registerScreens);
 		});
 	}
 }

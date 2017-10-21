@@ -16,9 +16,9 @@ class Navigation extends Component {
 	};
 
 	static mapChild = (dom, path) => {
-		if (typeof(dom.type.mapToDictionary) === 'function') {
+		if (dom.type && typeof(dom.type.mapToDictionary) === 'function') {
 			return dom.type.mapToDictionary(dom, path);
-		} else {
+		} else if (dom.type) {
 			let ComponentClass = dom.type;
 			let Component = new ComponentClass();
 			if (typeof(Component.render) === 'function') {
@@ -28,7 +28,7 @@ class Navigation extends Component {
 		}
 		console.error('RNNN', 'All children of Navigation need to support mapToDictionary');
 		return null;
-	}
+	};
 
 	static registerScreen = (screenID, screen) => {
 		const Screen = screen;
@@ -41,46 +41,44 @@ class Navigation extends Component {
 				}
 			}
 		});
-	}
+	};
 
-	registerScreens = (screens) => {
+	static registerScreens = (screens) => {
 		screens.forEach((screenData) => {
 			const { screenID, screen } = screenData;
 			Navigation.registerScreen(screenID, screen)
 		});
-	}
+	};
 
 	generateSiteMap = () => {
 		const dom = this.props.children[1];
 		return Navigation.mapChild(dom, '');
-	}
+	};
 
 	componentDidMount() {
-		const pageMap = this.props.pages.reduce((map, page) => {
+		Navigation.pageMap = this.props.pages.reduce((map, page) => {
 			return {
 				...map,
 				[page.name]: page
 			}
 		}, {});
-		Navigation.pageMap = pageMap;
-		const viewMap = {
+		Navigation.viewMap = {
 			[SingleView.name]: SingleView,
 			[StackView.name]: StackView,
 			[TabView.name]: TabView,
 			[SplitView.name]: SplitView,
 			[DrawerView.name]: DrawerView,
 		};
-		Navigation.viewMap = viewMap;
 
 		ReactNativeNativeNavigation.onStart((request) => {
-			if (request == null) {
+			if (!request) {
 				request = this.generateSiteMap();
 			}
 
-			if (request != null) {
+			if (request) {
 				const dom = Navigation.viewMap[request.type];
 				const screens = dom.reduceScreens(request, Navigation.viewMap, Navigation.pageMap);
-				this.registerScreens(screens);
+				Navigation.registerScreens(screens);
 
 				ReactNativeNativeNavigation.setSiteMap(request).then((loaded) => {
 					this.setState({ loading: !loaded });
@@ -99,7 +97,7 @@ class Navigation extends Component {
 
 module.exports = {
 	Navigation,
-}
+};
 
 export {
 	Navigation,

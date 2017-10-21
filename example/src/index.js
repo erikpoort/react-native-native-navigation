@@ -18,39 +18,39 @@ export default class example extends Component {
 			<Navigation pages={[Loading, Home, Detail, Detail2]}>
 				<Loading/>
 				<DrawerView
-					name="drawer" side="center"
+					id="drawer" side="center"
 					center={
-						<StackView name="stack">
-							<SingleView name="Home" screen={Home}/>
+						<StackView id="stack">
+							<SingleView id="Home" screen={Home}/>
 							<DrawerView
-								name="drawer" side="center"
+								id="drawer" side="center"
 								left={
-									<SingleView name="Detail" screen={Detail}/>
+									<SingleView id="Detail" screen={Detail}/>
 								}
 								center={
-									<TabView name="tabs" selectedTab={0}>
-										<StackView name="stack">
-											<SingleView name="Home" screen={Home}/>
-											<SingleView name="Detail" screen={Detail}/>
+									<TabView id="tabs" selectedTab={0}>
+										<StackView id="stack">
+											<SingleView id="Home" screen={Home}/>
+											<SingleView id="Detail" screen={Detail}/>
 										</StackView>
-										<SingleView name="Detail2" screen={Detail2}/>
-										<SplitView name="horizontal" axis={SplitView.AXIS.HORIZONTAL}>
-											<SingleView name="Detail" screen={Detail}/>
-											<SingleView name="Detail" screen={Detail}/>
+										<SingleView id="Detail2" screen={Detail2}/>
+										<SplitView id="horizontal" axis={SplitView.AXIS.HORIZONTAL}>
+											<SingleView id="Detail" screen={Detail}/>
+											<SingleView id="Detail" screen={Detail}/>
 										</SplitView>
-										<SplitView name="vertical" axis={SplitView.AXIS.VERTICAL}>
-											<StackView name="stack_up">
-												<SingleView name="Home" screen={Home}/>
+										<SplitView id="vertical" axis={SplitView.AXIS.VERTICAL}>
+											<StackView id="stack_up">
+												<SingleView id="Home" screen={Home}/>
 											</StackView>
-											<StackView name="stack_down">
-												<SingleView name="Detail" screen={Detail}/>
+											<StackView id="stack_down">
+												<SingleView id="Detail" screen={Detail}/>
 											</StackView>
 										</SplitView>
 									</TabView>}
 							/>
 						</StackView>}
 					right={
-						<SingleView name="Detail" screen={Detail}/>
+						<SingleView id="Detail" screen={Detail}/>
 					}
 				/>
 			</Navigation>

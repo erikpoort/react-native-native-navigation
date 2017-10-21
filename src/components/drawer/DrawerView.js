@@ -9,7 +9,6 @@ export default class DrawerView extends Component {
 	}
 
 	static nodeToDictionary = (name, dom, path) => {
-		let result;
 		let data = dom.props[name];
 		if (data != null) {
 			return Navigation.mapChild(data, `${path}/${name}`);

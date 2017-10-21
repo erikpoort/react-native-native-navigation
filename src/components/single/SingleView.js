@@ -8,14 +8,14 @@ export default class SingleView extends Component {
 			return null;
 		}
 
-		const { name, screen, modal } = dom.props;
+		const { id, screen, modal } = dom.props;
 
-		if (name == null) {
-			console.error("RNNN", "A name prop is mandatory");
+		if (id == null) {
+			console.error("RNNN", "An id prop is mandatory");
 			return null;
 		}
 
-		const screenID = `${path}/${name}`;
+		const screenID = `${path}/${id}`;
 
 		if (screen == null) {
 			console.error("RNNN", "A screen prop is mandatory in SingleView", screenID);
@@ -23,6 +23,7 @@ export default class SingleView extends Component {
 		}
 
 		const type = dom.type.name;
+		const name = screen.name;
 
 		let modalData = null;
 		if (modal) {

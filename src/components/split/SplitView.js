@@ -13,13 +13,13 @@ export default class SplitView extends Component {
 			return null;
 		}
 
-		const name = dom.props.name;
-		if (name == null) {
-			console.error("RNNN", "A name prop is mandatory");
+		const id = dom.props.id;
+		if (id == null) {
+			console.error("RNNN", "An id prop is mandatory");
 			return null;
 		}
 
-		const screenID = `${path}/${name}`;
+		const screenID = `${path}/${id}`;
 		const type = dom.type.name;
 
 		if (dom.props.children.length != 2) {

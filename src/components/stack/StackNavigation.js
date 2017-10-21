@@ -16,13 +16,14 @@ export default class StackNavigation {
 		ReactNativeNativeNavigation.handleBackButton(callback);
 	}
 
-	push = (name, screen) => {
-		const screenData = Navigation.mapChild(screen, this.screenID);
+	push = (showScreen) => {
+		const Screen = showScreen;
+		const screenData = Navigation.mapChild(Screen, this.screenID);
 
 		return ReactNativeNativeNavigation.push(screenData, (register) => {
 			const view = Navigation.viewMap[register.type];
 			const registerScreens = view.reduceScreens(register, Navigation.viewMap, Navigation.pageMap).filter((screen) => {
-				return this.screenID.includes(screen.screenID) && screen.screenID !== this.screenID;
+				return screen.screenID.includes(this.screenID) && screen.screenID !== this.screenID;
 			});
 			Navigation.registerScreens(registerScreens);
 		});

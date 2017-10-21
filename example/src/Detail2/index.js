@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
-import { View, Text } from 'react-native';
+import { StackView, SingleView } from 'react-native-native-navigation';
+import Home from '../Home';
 
 export default class Detail2 extends Component {
 	render(){
 		return (
-			<View>
-				<Text>Detail 2</Text>
-			</View>
+			<StackView id="stack_up">
+				<SingleView id="Home" screen={Home}/>
+			</StackView>
 		);
 	}
 }

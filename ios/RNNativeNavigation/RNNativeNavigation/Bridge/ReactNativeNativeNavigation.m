@@ -73,11 +73,9 @@ RCT_EXPORT_METHOD(push:(NSDictionary *)screen registerCallback:(RCTResponseSende
 	callback(@[newState]);
 
 	dispatch_async(dispatch_get_main_queue(), ^{
-		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC), dispatch_get_main_queue(), ^{
-			if (navigationController && viewController) {
-				[navigationController pushViewController:viewController animated:YES];
-			}
-		});
+		if (navigationController && viewController) {
+			[navigationController pushViewController:viewController animated:YES];
+		}
 	});
 }
 
@@ -99,9 +97,7 @@ RCT_EXPORT_METHOD(showModal:(NSDictionary *)screen registerCallback:(RCTResponse
         callback(@[newState]);
 
 		if (viewController) {
-			dispatch_after(dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC), dispatch_get_main_queue(), ^{
-				[findController presentViewController:viewController animated:YES completion:nil];
-			});
+			[findController presentViewController:viewController animated:YES completion:nil];
 		}
 	});
 }

@@ -56,10 +56,23 @@ class Navigation extends Component {
 	};
 
 	componentDidMount() {
-		Navigation.pageMap = this.props.pages.reduce((map, page) => {
+		Navigation.pageMap = this.props.pages.reduce((array, page) => {
+			if (page.pageMap) {
+				return [
+					...array,
+					...page.pageMap,
+					page,
+				]
+			} else {
+				return [
+					...array,
+					page,
+				];
+			}
+		}, []).reduce((map, page) => {
 			return {
 				...map,
-				[page.name]: page
+				[page.name]: page,
 			}
 		}, {});
 		Navigation.viewMap = {

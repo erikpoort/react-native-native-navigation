@@ -2,7 +2,6 @@ package com.mediamonks.rnnativenavigation.bridge;
 
 import android.content.Context;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
@@ -20,6 +19,7 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.devsupport.interfaces.DevOptionHandler;
 import com.mediamonks.rnnativenavigation.data.Node;
 import com.mediamonks.rnnativenavigation.data.StackNode;
 import com.mediamonks.rnnativenavigation.factory.BaseFragment;
@@ -75,16 +75,20 @@ class RNNativeNavigationModule extends ReactContextBaseJavaModule implements Lif
         /*
          * Save the state of the application before reload
 		 */
-        RNNNFragment anyFragment = (RNNNFragment) _fragments.toArray()[0];
-        final RNNNFragment rootFragment = getRootFragment(anyFragment.getNode());
-        WritableMap currentState = rootFragment.getNode().data();
-        RNNNState.INSTANCE.state = currentState.toHashMap();
+        if (_fragments.size() > 0) {
+            RNNNFragment anyFragment = (RNNNFragment) _fragments.toArray()[0];
+            final RNNNFragment rootFragment = getRootFragment(anyFragment.getNode());
+            if (rootFragment != null) {
+                WritableMap currentState = rootFragment.getNode().data();
+                RNNNState.INSTANCE.state = currentState.toHashMap();
 
-        getCurrentActivity().runOnUiThread(new Runnable() {
-            @Override public void run() {
-                rootFragment.invalidate();
+                getCurrentActivity().runOnUiThread(new Runnable() {
+                    @Override public void run() {
+                        rootFragment.invalidate();
+                    }
+                });
             }
-        });
+        }
 
         super.onCatalystInstanceDestroy();
     }
@@ -246,6 +250,21 @@ class RNNativeNavigationModule extends ReactContextBaseJavaModule implements Lif
         ReactFragmentActivity mainActivity = (ReactFragmentActivity) getCurrentActivity();
         assert mainActivity != null;
         mainActivity.getSupportFragmentManager().registerFragmentLifecycleCallbacks(_lifecycleCallbacks, true);
+
+        getReactInstanceManager().getDevSupportManager().addCustomDevOption("Reset navigation", new DevOptionHandler() {
+            @Override public void onOptionSelected() {
+                RNNNFragment anyFragment = (RNNNFragment) _fragments.toArray()[0];
+                final RNNNFragment rootFragment = getRootFragment(anyFragment.getNode());
+                getCurrentActivity().runOnUiThread(new Runnable() {
+                    @Override public void run() {
+                        rootFragment.invalidate();
+                    }
+                });
+                _fragments = new HashSet<>();
+                RNNNState.INSTANCE.state = null;
+                getReactInstanceManager().getDevSupportManager().handleReloadJS();
+            }
+        });
     }
 
     @Override

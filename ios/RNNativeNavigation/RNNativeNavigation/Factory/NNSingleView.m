@@ -47,7 +47,7 @@
 	UIViewController <NNView> *modalController = (UIViewController <NNView> *)self.presentedViewController;
 	if (modalController && [path rangeOfString:modalController.node.screenID].location == 0) {
 		if (![modalController.node.screenID isEqualToString:path]) {
-			return [modalController viewForPath:path];
+			return (UIViewController <NNView> *)[modalController viewForPath:path];
 		} else {
 			return modalController;
 		}

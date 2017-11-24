@@ -103,7 +103,7 @@
 		} while(checkController != nil);
 
 		if (![foundController.node.screenID isEqualToString:path]) {
-			foundController = [foundController viewForPath:path];
+			foundController = (UIViewController <NNView> *)[foundController viewForPath:path];
 		}
 
 		return foundController;

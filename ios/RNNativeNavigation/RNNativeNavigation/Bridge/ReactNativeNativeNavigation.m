@@ -11,6 +11,12 @@
 #import "NNView.h"
 #import "NNSingleView.h"
 
+	#import <React/RCTDevMenu.h>
+#import <React/RCTKeyCommands.h>
+
+#if __has_include("RCTDevMenu.h")
+#endif
+
 static NSString *const kRNNN = @"RNNN";
 
 @implementation ReactNativeNativeNavigation
@@ -29,10 +35,10 @@ RCT_EXPORT_METHOD(onStart:(RCTResponseSenderBlock)callback) {
 
 	NSDictionary *state = [RNNNState sharedInstance].state;
 	if (state == nil) {
-		NSLog(@"%@ %@", kRNNN, @"First load");
+		printf("%s %s\n", kRNNN.UTF8String, "First load");
 		callback(@[]);
 	} else {
-		NSLog(@"%@ %@", kRNNN, @"Reload");
+		printf("%s %s\n", kRNNN.UTF8String, "Reload");
 		callback(@[state]);
 	}
 }
@@ -102,9 +108,41 @@ RCT_EXPORT_METHOD(showModal:(NSDictionary *)screen registerCallback:(RCTResponse
 	});
 }
 
+RCT_EXPORT_METHOD(resetApplication) {
+	[RNNNState sharedInstance].window.rootViewController = nil;
+	[RNNNState sharedInstance].state = nil;
+	[_bridge reload];
+}
+
+- (void)setBridge:(RCTBridge *)bridge
+{
+	_bridge = bridge;
+
+	[self addDeveloperOptions];
+}
+
+- (void)addDeveloperOptions {
+#if __has_include("RCTDevMenu.h")
+#endif
+	__weak ReactNativeNativeNavigation *weakSelf = self;
+	[_bridge.devMenu addItem:[RCTDevMenuItem buttonItemWithTitle:@"Reset navigation" handler:^
+	{
+		[weakSelf resetApplication];
+	}]];
+
+	[[RCTKeyCommands sharedInstance]
+			registerKeyCommandWithInput:@"e"
+			modifierFlags:UIKeyModifierCommand
+			action:^(UIKeyCommand *command)
+			{
+				[weakSelf resetApplication];
+			}
+	];
+}
+
 - (void)dealloc
 {
-	UIViewController <NNView> *viewController = (UIViewController <NNView> *)[UIApplication sharedApplication].keyWindow.rootViewController;
+	UIViewController <NNView> *viewController = (UIViewController <NNView> *)[RNNNState sharedInstance].window.rootViewController;
 	[RNNNState sharedInstance].state = [viewController node].data;
 }
 

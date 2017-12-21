@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text, Button } from 'react-native';
-import { SingleView } from 'react-native-native-navigation';
+import { SingleView } from '../../native-navigation';
 import Detail from '../Detail';
 
 export default class Home extends Component {

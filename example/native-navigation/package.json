@@ -1,0 +1,37 @@
+{
+  "name": "react-native-native-navigation",
+  "version": "0.1.0",
+  "description": "ReactNative Native Navigation",
+  "files": [
+    "src",
+    "ios",
+    "android"
+  ],
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node node_modules/react-native/local-cli/cli.js start",
+    "ios": "npm run ios --prefix example",
+    "android": "npm run android --prefix example"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ErikMediaMonks/react-native-native-navigation.git"
+  },
+  "keywords": [
+    "react",
+    "react-native",
+    "native",
+    "native-navigation"
+  ],
+  "author": "Erik Poort",
+  "license": "GNU General Public License v3.0",
+  "bugs": {
+    "url": "https://github.com/ErikMediaMonks/react-native-native-navigation/issues"
+  },
+  "homepage": "https://github.com/ErikMediaMonks/react-native-native-navigation#readme",
+  "dependencies": {},
+  "peerDependencies": {
+    "react": "^16.0.0-alpha.12",
+    "react-native": "0.47.1"
+  }
+}

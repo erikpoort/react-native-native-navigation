@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Button, Text, View } from 'react-native';
-import { SingleView } from 'react-native-native-navigation';
+import { SingleView } from '../../native-navigation';
 
 export default class Detail extends Component {
 	handleDetail = () => {

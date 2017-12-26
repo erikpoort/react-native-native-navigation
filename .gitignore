@@ -216,3 +216,6 @@ jsconfig.json
 .vscode/launchReactNative.js
 example/yarn.lock
 .tmp
+
+# Local
+native-navigation/examples.md

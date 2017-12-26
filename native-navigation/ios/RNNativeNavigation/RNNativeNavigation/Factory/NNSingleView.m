@@ -20,6 +20,9 @@
         self.singleNode = node;
         self.bridge = bridge;
         self.title = node.title;
+        if (node.lazyLoad) {
+            [self loadViewIfNeeded];
+        }
     }
     return self;
 }

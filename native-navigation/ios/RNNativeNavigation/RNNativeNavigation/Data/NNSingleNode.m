@@ -9,6 +9,7 @@
 
 static NSString *const kName = @"name";
 static NSString *const kModal = @"modal";
+static NSString *const kLazyLoad = @"lazyLoad";
 
 @interface NNSingleNode ()
 
@@ -32,11 +33,13 @@ static NSString *const kModal = @"modal";
 	[super setData:data];
 	self.title = data[kName];
 	self.modal = [NNNodeHelper nodeFromMap:data[kModal] bridge:self.bridge];
+    self.lazyLoad = [data[kLazyLoad] isEqualToString:@"true"] ? YES : NO;
 }
 
 - (NSDictionary *)data {
 	NSMutableDictionary *data = [super data].mutableCopy;
 	data[kName] = self.title;
+    data[kLazyLoad] = self.lazyLoad == YES ? @"true" : @"false";
 	if (self.modal) {
 		data[kModal] = self.modal.data;
 	}

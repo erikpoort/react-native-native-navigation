@@ -1,5 +1,15 @@
 import React, { Component } from 'react';
-import { Navigation, SingleView, StackView } from '../native-navigation';
+import { 
+	DrawerView,
+	SingleNavigation,
+	SingleView,
+	SplitView,
+	StackNavigation,
+	StackView,
+	TabView,
+	Navigation
+} from '../native-navigation';
+import { View, Text } from 'react-native';
 import Home from './Home';
 import Loading from './Loading';
 
@@ -9,7 +19,7 @@ export default class example extends Component {
 			<Navigation pages={[Loading, Home]}>
 				<Loading/>
 				<StackView id='stack'>
-					<SingleView id='home' screen={Home} />
+					<SingleView id='home' screen={Home} lazyLoad='true'/>
 				</StackView>
 			</Navigation>
 		);

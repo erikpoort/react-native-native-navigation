@@ -13,10 +13,10 @@ export default class BaseNavigation{
 
         return presentMethod(screenData, (register) => {
             const view = Navigation.viewMap[register.type];
-                const registerScreens = view.reduceScreens(register, Navigation.viewMap, Navigation.pageMap).filter((screen) => {
-                    return screen.screenID.includes(this.screenID) && screen.screenID !== this.screenID;
-                });
-                Navigation.registerScreens(registerScreens);
+            const registerScreens = view.reduceScreens(register, Navigation.viewMap, Navigation.pageMap).filter((screen) => {
+                return screen.screenID.includes(this.screenID) && screen.screenID !== this.screenID;
+            });
+            Navigation.registerScreens(registerScreens);
         })
     }
 }

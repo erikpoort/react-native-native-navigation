@@ -2,7 +2,6 @@ import React from 'react';
 import { NativeModules } from 'react-native';
 
 const { ReactNativeNativeNavigation } = NativeModules;
-import { Navigation } from './../Navigation';
 import StackView from './../stack/StackView';
 import SingleView from './../single/SingleView';
 import BaseNavigation from '../BaseNavigation';
@@ -16,6 +15,6 @@ export default class SingleNavigation extends BaseNavigation{
 	}
 
 	showModal = (showScreen) => {
-		return super.registerScreens(this, Navigation, showScreen);
+		return super.registerScreens(`${this.screenID}/modal`, ReactNativeNativeNavigation.showModal, showScreen);
 	}
 }

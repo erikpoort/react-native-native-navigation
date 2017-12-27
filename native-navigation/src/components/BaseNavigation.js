@@ -1,15 +1,13 @@
 import { NativeModules } from 'react-native';
-import StackNavigation from "./stack/StackNavigation";
+import { Navigation } from './Navigation';
 const { ReactNativeNativeNavigation } = NativeModules;
 
 export default class BaseNavigation{
 
-    registerScreens(cls, Navigation, showScreen) {
+    registerScreens(modalPath, presentMethod, showScreen) {
         const Screen = showScreen;
-        const modalPath = cls instanceof StackNavigation ? `${this.screenID}` : `${this.screenID}/modal`;
+        
         const screenData = Navigation.mapChild(Screen, modalPath);
-
-        const presentMethod = cls instanceof StackNavigation ? ReactNativeNativeNavigation.push : ReactNativeNativeNavigation.showModal
 
         return presentMethod(screenData, (register) => {
             const view = Navigation.viewMap[register.type];

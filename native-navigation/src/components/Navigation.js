@@ -7,6 +7,9 @@ import TabView from './tab/TabView';
 import SplitView from './split/SplitView';
 import DrawerView from './drawer/DrawerView';
 
+import { Provider, connect } from 'react-redux';
+import store from '../store/store';
+
 class Navigation extends Component {
 	static pageMap;
 	static viewMap;
@@ -104,7 +107,11 @@ class Navigation extends Component {
 		if (this.state.loading) {
 			return this.props.children[0]
 		}
-		return <View/>
+		return (
+			<Provider store={store}>
+				<View/>
+			</Provider>
+		)
 	}
 }
 

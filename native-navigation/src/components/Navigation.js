@@ -104,6 +104,16 @@ class Navigation extends Component {
 		if (this.state.loading) {
 			return this.props.children[0]
 		}
+
+		const { store } = this.props;
+
+		if (this.props.provider && store) {
+			return (
+				<this.props.provider store={store}>
+					<View/>
+				</this.props.provider>
+			)
+		}
 		return <View/>
 	}
 }

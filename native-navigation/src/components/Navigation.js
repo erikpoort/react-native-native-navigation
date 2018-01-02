@@ -105,13 +105,13 @@ class Navigation extends Component {
 			return this.props.children[0]
 		}
 
-		const { provider, customStore } = this.props;
+		const { store } = this.props;
 
-		if (provider && customStore) {
+		if (this.props.provider && store) {
 			return (
-				<provider store={customStore}>
+				<this.props.provider store={store}>
 					<View/>
-				</provider>
+				</this.props.provider>
 			)
 		}
 		return <View/>

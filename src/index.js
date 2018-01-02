@@ -20,7 +20,7 @@ import store from './store';
 export default class example extends Component {
 	render() {
 		return (
-			<Navigation pages={[Loading, Home]} provider={Provider} customStore={store}>
+			<Navigation pages={[Loading, Home]} provider={Provider} store={store}>
 				<Loading/>
 				<StackView id='stack'>
 					<SingleView id='home' screen={Home} lazyLoad='true'/>

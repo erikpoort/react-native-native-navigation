@@ -4,7 +4,7 @@ import { SingleView } from '../../native-navigation';
 
 export default class Detail extends Component {
 	handleDetail = () => {
-		this.props.stack.push(
+		this.props.single.showModal(
 			<SingleView id="Detail" screen={Detail}/>
 		);
 	};

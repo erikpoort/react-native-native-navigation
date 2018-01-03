@@ -1,5 +1,3 @@
-import { NativeModules } from 'react-native';
-
 export default class BaseNavigation{
     screenID;
     navigation;
@@ -9,10 +7,11 @@ export default class BaseNavigation{
         this.navigation = navigation;
     }
 
-    registerScreens(presentMethod, showScreen) {
+    registerScreens(appendPath, presentMethod, showScreen) {
         const Screen = showScreen;
+        const newPath = `${this.screenID}${appendPath}`;
 
-        const screenData = this.navigation.mapChild(Screen, this.screenID);
+        const screenData = this.navigation.mapChild(Screen, newPath);
 
         return presentMethod(screenData, (register) => {
             const viewMap = this.navigation.viewMap;

@@ -7,19 +7,11 @@ import SingleView from './../single/SingleView';
 import BaseNavigation from '../BaseNavigation';
 
 export default class StackNavigation extends BaseNavigation{
-	screenID;
-
-	constructor(screenID) {
-		super()
-		this.screenID = screenID;
-	}
-
 	handleBackButton = (callback) => {
 		ReactNativeNativeNavigation.handleBackButton(callback);
-	}
+	};
 
 	push = (showScreen) => {
-		return super.registerScreens(`${this.screenID}`, ReactNativeNativeNavigation.push, showScreen);
-		
+		return super.registerScreens(ReactNativeNativeNavigation.push, showScreen);
 	}
 }

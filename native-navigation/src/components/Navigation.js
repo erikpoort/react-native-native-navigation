@@ -8,12 +8,18 @@ import SplitView from './split/SplitView';
 import DrawerView from './drawer/DrawerView';
 
 class Navigation extends Component {
-	static pageMap;
-	static viewMap;
 
 	state = {
 		loading: true,
 	};
+	viewMap = {
+		[SingleView.name]: SingleView,
+		[StackView.name]: StackView,
+		[TabView.name]: TabView,
+		[SplitView.name]: SplitView,
+		[DrawerView.name]: DrawerView,
+	};
+	pageMap = null;
 
 	static mapChild = (dom, path) => {
 		if (dom.type && typeof(dom.type.mapToDictionary) === 'function') {
@@ -23,40 +29,42 @@ class Navigation extends Component {
 			let Component = new ComponentClass();
 			if (typeof(Component.render) === 'function') {
 				let ComponentRender = Component.render();
-				return Navigation.mapChild(ComponentRender, path);
+				return this.mapChild(ComponentRender, path);
 			}
 		}
 		console.error('RNNN', 'All children of Navigation need to support mapToDictionary');
 		return null;
 	};
+	mapChild = (dom, path) => Navigation.mapChild(dom, path);
 
-	static registerScreen = (screenID, screen) => {
+	registerScreen = (screenID, screen) => {
 		const Screen = screen;
 		AppRegistry.registerComponent(screenID, () => {
+			const nav = this;
 			return class extends Component {
 				render() {
 					return (
-						<Screen/>
+						<Screen navigation={nav}/>
 					)
 				}
 			}
 		});
 	};
 
-	static registerScreens = (screens) => {
+	registerScreens = (screens) => {
 		screens.forEach((screenData) => {
 			const { screenID, screen } = screenData;
-			Navigation.registerScreen(screenID, screen)
+			this.registerScreen(screenID, screen)
 		});
 	};
 
 	generateSiteMap = () => {
 		const dom = this.props.children[1];
-		return Navigation.mapChild(dom, '');
+		return this.mapChild(dom, '');
 	};
 
 	componentDidMount() {
-		Navigation.pageMap = this.props.pages.reduce((array, page) => {
+		this.pageMap = this.props.pages.reduce((array, page) => {
 			if (page.pageMap) {
 				return [
 					...array,
@@ -75,23 +83,15 @@ class Navigation extends Component {
 				[page.name]: page,
 			}
 		}, {});
-		Navigation.viewMap = {
-			[SingleView.name]: SingleView,
-			[StackView.name]: StackView,
-			[TabView.name]: TabView,
-			[SplitView.name]: SplitView,
-			[DrawerView.name]: DrawerView,
-		};
-
 		ReactNativeNativeNavigation.onStart((request) => {
 			if (!request) {
 				request = this.generateSiteMap();
 			}
 
 			if (request) {
-				const dom = Navigation.viewMap[request.type];
-				const screens = dom.reduceScreens(request, Navigation.viewMap, Navigation.pageMap);
-				Navigation.registerScreens(screens);
+				const dom = this.viewMap[request.type];
+				const screens = dom.reduceScreens(request, this.viewMap, this.pageMap);
+				this.registerScreens(screens);
 
 				ReactNativeNativeNavigation.setSiteMap(request).then((loaded) => {
 					this.setState({ loading: !loaded });

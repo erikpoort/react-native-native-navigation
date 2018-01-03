@@ -22,7 +22,8 @@ export default class StackView extends Component {
 			nodes.push(node);
 		}
 		return nodes;
-	}
+	};
+
 	static mapToDictionary = (dom, path) => {
 		if (dom == null || dom.props == null || path == null) {
 			console.error("RNNN", "dom and path are mandatory parameters.");
@@ -35,10 +36,10 @@ export default class StackView extends Component {
 			return null;
 		}
 
-		const screenID = `${path}/${id}`
+		const screenID = `${path}/${id}`;
 		const type = dom.type.name;
 
-		if (dom.props.children.length == 0) {
+		if (dom.props.children.length === 0) {
 			console.error("RNNN", "A StackView expects at least one child", screenID);
 			return null;
 		}
@@ -54,7 +55,7 @@ export default class StackView extends Component {
 			screenID,
 			stack,
 		};
-	}
+	};
 
 	static reduceScreens = (data, viewMap, pageMap) => {
 		return data.stack.reduce((map, node) => {
@@ -67,18 +68,15 @@ export default class StackView extends Component {
 							removeBackButtonListener;
 							stack;
 
-							constructor() {
-								super();
-								this.stack = new StackNavigation(screenID);
-							}
-
 							componentWillMount() {
+								this.stack = new StackNavigation(screenID, this.props.navigation);
+
 								const { remove } = BackHandler.addEventListener('hardwareBackPress', () => {
 									this.stack.handleBackButton((handled) => {
 										if (!handled) {
 											BackHandler.exitApp();
 										}
-									})
+									});
 									return true;
 								});
 								this.removeBackButtonListener = remove;
@@ -90,15 +88,13 @@ export default class StackView extends Component {
 								}
 							}
 
-							componentWillReceiveProps(newProps) {
-							}
-
 							render() {
 								const Screen = screen;
 								return <Screen stack={this.stack} {...this.props} />
 							}
 						}
-					}
+					};
+
 					const stack = StackScreen();
 					return ({
 						screenID,

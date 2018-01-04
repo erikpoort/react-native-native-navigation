@@ -29,7 +29,7 @@ class Navigation extends Component {
 			let Component = new ComponentClass();
 			if (typeof(Component.render) === 'function') {
 				let ComponentRender = Component.render();
-				return this.mapChild(ComponentRender, path);
+				return Navigation.mapChild(ComponentRender, path);
 			}
 		}
 		console.error('RNNN', 'All children of Navigation need to support mapToDictionary');

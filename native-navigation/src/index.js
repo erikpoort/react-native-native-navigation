@@ -1,5 +1,4 @@
-import React, { Component } from 'react';
-import ReactNativeNativeNavigation from './ReactNativeNativeNavigation';
+import React from 'react';
 import { Navigation } from './components/Navigation';
 import SingleView from './components/single/SingleView';
 import StackView from './components/stack/StackView';
@@ -18,4 +17,4 @@ module.exports = {
 	DrawerView,
 	StackNavigation,
 	SingleNavigation
-}
+};

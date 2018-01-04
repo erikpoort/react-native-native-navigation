@@ -1,30 +1,25 @@
 import React, { Component } from 'react';
-import { 
-	DrawerView,
-	SingleNavigation,
-	SingleView,
-	SplitView,
-	StackNavigation,
-	StackView,
-	TabView,
-	Navigation
-} from '../native-navigation';
-import { View, Text } from 'react-native';
+import { DrawerView, Navigation, SingleView } from '../native-navigation';
 import Home from './Home';
+import Menu from './Menu';
 import Loading from './Loading';
 
 import { Provider } from 'react-redux';
-import { createStore } from 'redux';
 import store from './store';
+import StackView from '../native-navigation/src/components/stack/StackView';
 
 export default class example extends Component {
 	render() {
 		return (
-			<Navigation pages={[Loading, Home]} provider={Provider} store={store}>
+			<Navigation pages={[Loading, Home, Menu]} provider={Provider} store={store}>
 				<Loading/>
-				<StackView id='stack'>
-					<SingleView id='home' screen={Home} lazyLoad='true'/>
-				</StackView>
+				<DrawerView
+					id='stack'
+					left={<SingleView id='menu' screen={Menu} lazyLoad='true'/>}
+					center={<StackView id='home_stack'>
+						<SingleView id='home' screen={Home} lazyLoad='true'/>
+					</StackView>}
+				/>
 			</Navigation>
 		);
 	}

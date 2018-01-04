@@ -35,6 +35,7 @@ class Navigation extends Component {
 		console.error('RNNN', 'All children of Navigation need to support mapToDictionary');
 		return null;
 	};
+	getNode = (dom) => Navigation.getNode(dom);
 
 	static mapChild = (dom, path) => {
 		const node = Navigation.getNode(dom);
@@ -68,21 +69,27 @@ class Navigation extends Component {
 		return this.mapChild(dom, '');
 	};
 
+	generatePageMap = (array, page) => {
+		if (page.pageMap) {
+			return [
+				...array,
+				...page.pageMap.reduce((innerArray, innerPage) => {
+					return this.generatePageMap(innerArray, innerPage);
+				}, []),
+				page,
+			]
+		} else {
+			return [
+				...array,
+				page,
+			];
+		}
+	};
+
 	componentDidMount() {
-		this.pageMap = this.props.pages.reduce((array, page) => {
-			if (page.pageMap) {
-				return [
-					...array,
-					...page.pageMap,
-					page,
-				]
-			} else {
-				return [
-					...array,
-					page,
-				];
-			}
-		}, []).reduce((map, page) => {
+		this.pageMap = this.props.pages.reduce((array, page) =>
+				this.generatePageMap(array, page),
+			[]).reduce((map, page) => {
 			return {
 				...map,
 				[page.name]: page,

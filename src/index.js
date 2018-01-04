@@ -6,7 +6,6 @@ import Loading from './Loading';
 
 import { Provider } from 'react-redux';
 import store from './store';
-import StackView from '../native-navigation/src/components/stack/StackView';
 
 export default class example extends Component {
 	render() {
@@ -16,9 +15,7 @@ export default class example extends Component {
 				<DrawerView
 					id='stack'
 					left={<SingleView id='menu' screen={Menu} lazyLoad='true'/>}
-					center={<StackView id='home_stack'>
-						<SingleView id='home' screen={Home} lazyLoad='true'/>
-					</StackView>}
+					center={<Home />}
 				/>
 			</Navigation>
 		);

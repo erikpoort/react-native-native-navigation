@@ -81,6 +81,7 @@ class Navigation extends Component {
 			[TabView.name]: TabView,
 			[SplitView.name]: SplitView,
 			[DrawerView.name]: DrawerView,
+			"ExampleView": SingleView
 		};
 
 		ReactNativeNativeNavigation.onStart((request) => {

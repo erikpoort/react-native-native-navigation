@@ -6,7 +6,7 @@
 #import <Foundation/Foundation.h>
 #import "NNNode.h"
 
-@interface NNBaseNode : NSObject
+@interface NNBaseNode : NSObject <NNNode>
 
 @property (nonatomic, copy, readonly) NSString *screenID;
 

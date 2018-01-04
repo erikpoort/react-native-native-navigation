@@ -36,7 +36,10 @@
 		2DCD954D1E0B4F2C00145EB5 /* exampleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* exampleTests.m */; };
 		5E9157361DD0AC6A00FF2AA8 /* libRCTAnimation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E9157331DD0AC6500FF2AA8 /* libRCTAnimation.a */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
+		B088B1F41FFD757600D625DC /* RNNativeNavigation.xcodeproj in Frameworks */ = {isa = PBXBuildFile; fileRef = B0F3852E1FEC249600297ED9 /* RNNativeNavigation.xcodeproj */; };
 		B0F385421FEC259100297ED9 /* libRNNativeNavigation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B0F385331FEC249600297ED9 /* libRNNativeNavigation.a */; };
+		BA8BB60277A2B0AB049F5371 /* ExampleView.m in Sources */ = {isa = PBXBuildFile; fileRef = BA8BBB7199E4C79A9C1545F3 /* ExampleView.m */; };
+		BA8BB619543E5209CFCB66F0 /* ExampleNode.m in Sources */ = {isa = PBXBuildFile; fileRef = BA8BBD70A606004061E3757B /* ExampleNode.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -292,6 +295,10 @@
 		78C398B01ACF4ADC00677621 /* RCTLinking.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTLinking.xcodeproj; path = "../node_modules/react-native/Libraries/LinkingIOS/RCTLinking.xcodeproj"; sourceTree = "<group>"; };
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "../node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
 		B0F3852E1FEC249600297ED9 /* RNNativeNavigation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNNativeNavigation.xcodeproj; path = "../native-navigation/ios/RNNativeNavigation/RNNativeNavigation.xcodeproj"; sourceTree = "<group>"; };
+		BA8BB220498D91B003A326A4 /* ExampleNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExampleNode.h; sourceTree = "<group>"; };
+		BA8BB63E11E4A114B0176AB6 /* ExampleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExampleView.h; sourceTree = "<group>"; };
+		BA8BBB7199E4C79A9C1545F3 /* ExampleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ExampleView.m; sourceTree = "<group>"; };
+		BA8BBD70A606004061E3757B /* ExampleNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ExampleNode.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -307,6 +314,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B088B1F41FFD757600D625DC /* RNNativeNavigation.xcodeproj in Frameworks */,
 				B0F385421FEC259100297ED9 /* libRNNativeNavigation.a in Frameworks */,
 				146834051AC3E58100842450 /* libReact.a in Frameworks */,
 				5E9157361DD0AC6A00FF2AA8 /* libRCTAnimation.a in Frameworks */,
@@ -434,6 +442,10 @@
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				13B07FB11A68108700A75B9A /* LaunchScreen.xib */,
 				13B07FB71A68108700A75B9A /* main.m */,
+				BA8BBB7199E4C79A9C1545F3 /* ExampleView.m */,
+				BA8BB63E11E4A114B0176AB6 /* ExampleView.h */,
+				BA8BBD70A606004061E3757B /* ExampleNode.m */,
+				BA8BB220498D91B003A326A4 /* ExampleNode.h */,
 			);
 			name = example;
 			sourceTree = "<group>";
@@ -1009,6 +1021,8 @@
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
+				BA8BB60277A2B0AB049F5371 /* ExampleView.m in Sources */,
+				BA8BB619543E5209CFCB66F0 /* ExampleNode.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1122,6 +1136,7 @@
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-native-navigation/ios/RNNativeNavigation/**",
+					"$(SRCROOT)/../native-navigation/ios/RNNativeNavigation/**",
 				);
 				INFOPLIST_FILE = example/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1145,6 +1160,7 @@
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-native-navigation/ios/RNNativeNavigation/**",
+					"$(SRCROOT)/../native-navigation/ios/RNNativeNavigation/**",
 				);
 				INFOPLIST_FILE = example/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

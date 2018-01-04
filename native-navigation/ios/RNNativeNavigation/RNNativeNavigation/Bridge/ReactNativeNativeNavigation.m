@@ -3,6 +3,7 @@
 //
 
 #import <React/RCTUtils.h>
+#import "NNBaseNode.h"
 #import "ReactNativeNativeNavigation.h"
 #import "RNNNState.h"
 #import "NNSingleNode.h"
@@ -10,8 +11,9 @@
 #import "NNStackNode.h"
 #import "NNView.h"
 #import "NNSingleView.h"
+#import "ExternalNodesManager.h"
 
-	#import <React/RCTDevMenu.h>
+#import <React/RCTDevMenu.h>
 #import <React/RCTKeyCommands.h>
 
 #if __has_include("RCTDevMenu.h")
@@ -29,6 +31,19 @@ RCT_EXPORT_MODULE();
 		[RNNNState sharedInstance];
 	}
 	return self;
+}
+
++ (void)addExternalNodes:(NSArray <Class <NNNode>> *)nodes {
+    NSMutableArray *nodesToLoad = [NSMutableArray new];
+
+    for (Class <NNNode> cls in nodes)
+    {
+        if([cls conformsToProtocol:@protocol(NNNode)])
+        {
+            [nodesToLoad addObject:cls];
+        }
+    }
+	[ExternalNodesManager.sharedInstance setExternalNodes:nodesToLoad];
 }
 
 RCT_EXPORT_METHOD(onStart:(RCTResponseSenderBlock)callback) {
@@ -49,7 +64,7 @@ RCT_EXPORT_METHOD(setSiteMap:(NSDictionary *)map
 	dispatch_async(dispatch_get_main_queue(), ^{
 		[RNNNState sharedInstance].state = map;
 
-		NNStackNode *nodeObject = [NNNodeHelper nodeFromMap:map bridge:self.bridge];
+        NNStackNode *nodeObject = [NNNodeHelper nodeFromMap:map bridge:self.bridge];
 		UIViewController *viewController = [nodeObject generate];
 
 		UIWindow *window = [RNNNState sharedInstance].window;

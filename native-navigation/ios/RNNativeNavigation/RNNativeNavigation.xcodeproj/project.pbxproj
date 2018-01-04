@@ -25,6 +25,7 @@
 		2FA28B1F404E077DC4924283 /* MMDrawerBarButtonItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FA28C0EFE4C2D1ECB0AB85F /* MMDrawerBarButtonItem.m */; };
 		2FA28DA2F0680FAE2C4C7E5F /* NNDrawerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FA281B88FDF714E9F743D97 /* NNDrawerView.m */; };
 		2FA28DD39C0B9E9FFEF6CB5A /* NNStackView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FA2864CBFE55A1F7ACDD12D /* NNStackView.m */; };
+		BA8BB14E34E1566276254DD6 /* ExternalNodesManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BA8BB7DB6890C455A83B5E01 /* ExternalNodesManager.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -86,6 +87,8 @@
 		2FA28FB1AE9A3EAFE4354075 /* NNDrawerNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NNDrawerNode.m; sourceTree = "<group>"; };
 		2FA28FEF8C629EA3319E2979 /* ReactNativeNativeNavigation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReactNativeNativeNavigation.h; sourceTree = "<group>"; };
 		2FA28FF223B6C82EA9933D1B /* NNSingleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NNSingleView.m; sourceTree = "<group>"; };
+		BA8BB7DB6890C455A83B5E01 /* ExternalNodesManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ExternalNodesManager.m; sourceTree = "<group>"; };
+		BA8BB86C3B7A05BA4276B205 /* ExternalNodesManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExternalNodesManager.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -211,6 +214,8 @@
 				2FA28419A84F8C37AA1ED511 /* ReactNativeNativeNavigation.m */,
 				2FA28E92F602A8F16F963A8F /* RNNNState.m */,
 				2FA28BF5021EAC6FEB5D196E /* RNNNState.h */,
+				BA8BB7DB6890C455A83B5E01 /* ExternalNodesManager.m */,
+				BA8BB86C3B7A05BA4276B205 /* ExternalNodesManager.h */,
 			);
 			path = Bridge;
 			sourceTree = "<group>";
@@ -290,6 +295,7 @@
 				2FA28A3560791E4206F356C1 /* UIViewController+MMDrawerController.m in Sources */,
 				2FA2812F3BBDB00B60AF1DC9 /* NNDrawerNode.m in Sources */,
 				2FA28DA2F0680FAE2C4C7E5F /* NNDrawerView.m in Sources */,
+				BA8BB14E34E1566276254DD6 /* ExternalNodesManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -7,6 +7,7 @@
 
 @protocol NNNode;
 @class RCTBridge;
+@class NNBaseNode;
 
 @interface NNNodeHelper : NSObject
 

@@ -5,6 +5,8 @@
 #import <Foundation/Foundation.h>
 #import <React/RCTBridgeModule.h>
 
-@interface ReactNativeNativeNavigation : NSObject <RCTBridgeModule>
+@class NNBaseNode;
 
+@interface ReactNativeNativeNavigation : NSObject <RCTBridgeModule>
++ (void)addExternalNodes:(NSArray <NNBaseNode*> *)nodes;
 @end

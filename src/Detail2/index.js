@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
-import { StackView, SingleView } from '../../native-navigation';
-import Home from '../Home';
+import { Button, Text, View } from 'react-native';
 
 export default class Detail2 extends Component {
 	render(){
 		return (
-			<StackView id="stack_up">
-				<SingleView id="Home" screen={Home}/>
-			</StackView>
+			<View>
+				<Text>Detail</Text>
+				<Button title="Detail 2" onPress={() => alert('pop!')} />
+			</View>
 		);
 	}
 }

@@ -6,7 +6,7 @@ import Detail2 from '../Detail2';
 export default class Detail extends Component {
 	static pageMap = [Detail2];
 	handleDetail = () => {
-		this.props.single.showModal(
+		this.props.stack.push(
 			<SingleView id="Detail2" screen={Detail2}/>
 		);
 	};

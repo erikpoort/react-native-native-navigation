@@ -24,7 +24,7 @@ class Navigation extends Component {
 	static getNode = (dom) => {
 		const domType = dom.type;
 		if (domType && typeof(domType.mapToDictionary) === 'function') {
-			return domType;
+			return dom;
 		} else if (domType) {
 			let Component = new domType();
 			if (typeof(Component.render) === 'function') {
@@ -38,7 +38,7 @@ class Navigation extends Component {
 
 	static mapChild = (dom, path) => {
 		const node = Navigation.getNode(dom);
-		return node.mapToDictionary(dom, path);
+		return node.type.mapToDictionary(node, path);
 	};
 	mapChild = (dom, path) => Navigation.mapChild(dom, path);
 

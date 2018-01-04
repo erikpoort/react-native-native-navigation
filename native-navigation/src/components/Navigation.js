@@ -21,19 +21,24 @@ class Navigation extends Component {
 	};
 	pageMap = null;
 
-	static mapChild = (dom, path) => {
-		if (dom.type && typeof(dom.type.mapToDictionary) === 'function') {
-			return dom.type.mapToDictionary(dom, path);
-		} else if (dom.type) {
-			let ComponentClass = dom.type;
-			let Component = new ComponentClass();
+	static getNode = (dom) => {
+		const domType = dom.type;
+		if (domType && typeof(domType.mapToDictionary) === 'function') {
+			return domType;
+		} else if (domType) {
+			let Component = new domType();
 			if (typeof(Component.render) === 'function') {
 				let ComponentRender = Component.render();
-				return Navigation.mapChild(ComponentRender, path);
+				return Navigation.getNode(ComponentRender);
 			}
 		}
 		console.error('RNNN', 'All children of Navigation need to support mapToDictionary');
 		return null;
+	};
+
+	static mapChild = (dom, path) => {
+		const node = Navigation.getNode(dom);
+		return node.mapToDictionary(dom, path);
 	};
 	mapChild = (dom, path) => Navigation.mapChild(dom, path);
 

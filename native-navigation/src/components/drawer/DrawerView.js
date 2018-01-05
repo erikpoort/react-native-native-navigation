@@ -76,7 +76,7 @@ export default class DrawerView extends Component {
 					...result,
 				]
 			} else {
-				return null;
+				return map;
 			}
 		}, []).filter((screen) => screen != null);
 	}

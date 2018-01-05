@@ -2,19 +2,14 @@ import React, { Component } from 'react';
 import { Navigation } from './../Navigation';
 
 export default class DrawerView extends Component {
-	static SIDE = {
-		LEFT: "left",
-		CENTER: "center",
-		RIGHT: "right",
-	}
-
 	static nodeToDictionary = (name, dom, path) => {
 		let data = dom.props[name];
-		if (data != null) {
+		if (data !== null && data !== undefined) {
 			return Navigation.mapChild(data, `${path}/${name}`);
 		}
 		return null;
-	}
+	};
+
 	static mapToDictionary = (dom, path) => {
 		if (dom == null || dom.props == null || path == null) {
 			console.error("RNNN", "dom and path are mandatory parameters.");
@@ -52,11 +47,11 @@ export default class DrawerView extends Component {
 			right,
 			side
 		}
-	}
+	};
 
 	static reduceScreens = (data, viewMap, pageMap) => {
 		return [data.left, data.center, data.right].filter((side) => {
-			return side != undefined;
+			return side !== undefined && side !== null;
 		}).reduce((map, node) => {
 			const viewData = viewMap[node.type];
 			if (viewData) {
@@ -69,7 +64,7 @@ export default class DrawerView extends Component {
 								return <Screen {...this.props} />
 							}
 						}
-					}
+					};
 					const Drawer = DrawerScreen();
 					return ({
 						screenID,

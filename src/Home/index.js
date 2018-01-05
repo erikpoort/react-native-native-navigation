@@ -1,21 +1,14 @@
 import React, { Component } from 'react';
-import { View, Text, Button } from 'react-native';
-import { SingleView } from '../../native-navigation';
+import { SingleView, StackView } from '../../native-navigation';
 import Detail from '../Detail';
 
 export default class Home extends Component {
 	static pageMap = [Detail];
-	handleDetail = () => {
-		this.props.stack.push(
-			<SingleView id="Detail" screen={Detail}/>
-		);
-	};
 	render(){
 		return (
-			<View>
-				<Text>Home</Text>
-				<Button title="Detail" onPress={this.handleDetail} />
-			</View>
+			<StackView id='home_stack'>
+				<SingleView id='detail' screen={Detail} lazyLoad='true'/>
+			</StackView>
 		);
 	}
 }

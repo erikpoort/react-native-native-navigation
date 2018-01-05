@@ -8,91 +8,102 @@ import SplitView from './split/SplitView';
 import DrawerView from './drawer/DrawerView';
 
 class Navigation extends Component {
-	static pageMap;
-	static viewMap;
 
 	state = {
 		loading: true,
 	};
+	viewMap = {
+		[SingleView.name]: SingleView,
+		[StackView.name]: StackView,
+		[TabView.name]: TabView,
+		[SplitView.name]: SplitView,
+		[DrawerView.name]: DrawerView,
+	};
+	pageMap = null;
 
-	static mapChild = (dom, path) => {
-		if (dom.type && typeof(dom.type.mapToDictionary) === 'function') {
-			return dom.type.mapToDictionary(dom, path);
-		} else if (dom.type) {
-			let ComponentClass = dom.type;
-			let Component = new ComponentClass();
+	static getNode = (dom) => {
+		const domType = dom.type;
+		if (domType && typeof(domType.mapToDictionary) === 'function') {
+			return dom;
+		} else if (domType) {
+			let Component = new domType();
 			if (typeof(Component.render) === 'function') {
 				let ComponentRender = Component.render();
-				return Navigation.mapChild(ComponentRender, path);
+				return Navigation.getNode(ComponentRender);
 			}
 		}
 		console.error('RNNN', 'All children of Navigation need to support mapToDictionary');
 		return null;
 	};
+	getNode = (dom) => Navigation.getNode(dom);
 
-	static registerScreen = (screenID, screen) => {
+	static mapChild = (dom, path) => {
+		const node = Navigation.getNode(dom);
+		return node.type.mapToDictionary(node, path);
+	};
+	mapChild = (dom, path) => Navigation.mapChild(dom, path);
+
+	registerScreen = (screenID, screen) => {
 		const Screen = screen;
 		AppRegistry.registerComponent(screenID, () => {
+			const nav = this;
 			return class extends Component {
 				render() {
 					return (
-						<Screen/>
+						<Screen navigation={nav}/>
 					)
 				}
 			}
 		});
 	};
 
-	static registerScreens = (screens) => {
+	registerScreens = (screens) => {
 		screens.forEach((screenData) => {
 			const { screenID, screen } = screenData;
-			Navigation.registerScreen(screenID, screen)
+			this.registerScreen(screenID, screen)
 		});
 	};
 
 	generateSiteMap = () => {
 		const dom = this.props.children[1];
-		return Navigation.mapChild(dom, '');
+		return this.mapChild(dom, '');
+	};
+
+	generatePageMap = (array, page) => {
+		if (page.pageMap) {
+			return [
+				...array,
+				...page.pageMap.reduce((innerArray, innerPage) => {
+					return this.generatePageMap(innerArray, innerPage);
+				}, []),
+				page,
+			]
+		} else {
+			return [
+				...array,
+				page,
+			];
+		}
 	};
 
 	componentDidMount() {
-		Navigation.pageMap = this.props.pages.reduce((array, page) => {
-			if (page.pageMap) {
-				return [
-					...array,
-					...page.pageMap,
-					page,
-				]
-			} else {
-				return [
-					...array,
-					page,
-				];
-			}
-		}, []).reduce((map, page) => {
+		this.pageMap = this.props.pages.reduce((array, page) =>
+				this.generatePageMap(array, page),
+			[]).reduce((map, page) => {
 			return {
 				...map,
 				[page.name]: page,
 			}
 		}, {});
-		Navigation.viewMap = {
-			[SingleView.name]: SingleView,
-			[StackView.name]: StackView,
-			[TabView.name]: TabView,
-			[SplitView.name]: SplitView,
-			[DrawerView.name]: DrawerView,
-			"ExampleView": SingleView
-		};
-
 		ReactNativeNativeNavigation.onStart((request) => {
 			if (!request) {
 				request = this.generateSiteMap();
 			}
 
 			if (request) {
-				const dom = Navigation.viewMap[request.type];
-				const screens = dom.reduceScreens(request, Navigation.viewMap, Navigation.pageMap);
-				Navigation.registerScreens(screens);
+				const dom = this.viewMap[request.type];
+				const screens = dom.reduceScreens(request, this.viewMap, this.pageMap);
+				this.registerScreens(screens);
 
 				ReactNativeNativeNavigation.setSiteMap(request).then((loaded) => {
 					this.setState({ loading: !loaded });

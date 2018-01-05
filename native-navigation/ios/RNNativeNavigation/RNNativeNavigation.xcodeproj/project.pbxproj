@@ -65,8 +65,6 @@
 		2FA2883BF0614197AB410739 /* MMDrawerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMDrawerController.h; sourceTree = "<group>"; };
 		2FA289192030B7F243F52D1A /* NNStackView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NNStackView.h; sourceTree = "<group>"; };
 		2FA2894B72697E630EEEE4E8 /* NNNodeHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NNNodeHelper.h; sourceTree = "<group>"; };
-		2FA2896CBA22374DF39988E1 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
-		2FA289766D17F1A15424DCDB /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		2FA2898CB4CC112EE37B35A5 /* NNTabNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NNTabNode.h; sourceTree = "<group>"; };
 		2FA28A03844645A4E1F9A096 /* MMDrawerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMDrawerController.m; sourceTree = "<group>"; };
 		2FA28AD048DAB1E614641810 /* UIViewController+MMDrawerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+MMDrawerController.m"; sourceTree = "<group>"; };
@@ -140,8 +138,6 @@
 				2FA28BBA536BA604E37AC3CE /* Assets.xcassets */,
 				2FA284493CA728C91BD1A2E6 /* LaunchScreen.storyboard */,
 				2FA288D82BE71526FA410DF3 /* Supporting Files */,
-				2FA2896CBA22374DF39988E1 /* AppDelegate.h */,
-				2FA289766D17F1A15424DCDB /* AppDelegate.m */,
 				2FA28A89019DF206877342A7 /* Data */,
 				2FA28227B3456E4996DA9EB5 /* Factory */,
 				2FA28DB3076CA0E9073D6A97 /* Bridge */,

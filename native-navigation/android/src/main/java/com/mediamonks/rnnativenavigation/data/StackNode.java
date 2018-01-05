@@ -1,6 +1,5 @@
 package com.mediamonks.rnnativenavigation.data;
 
-import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableArray;
@@ -22,7 +21,6 @@ public class StackNode extends BaseNode implements Node {
 
     private static final String STACK = "stack";
 
-    private ReactInstanceManager _instanceManager;
     private Stack<Node> _stack;
 
     @Override
@@ -30,15 +28,6 @@ public class StackNode extends BaseNode implements Node {
         StackFragment fragment = new StackFragment();
         fragment.setNode(this);
         return fragment;
-    }
-
-    @Override
-    public void setInstanceManager(ReactInstanceManager instanceManager) {
-        _instanceManager = instanceManager;
-    }
-
-    private ReactInstanceManager getInstanceManager() {
-        return _instanceManager;
     }
 
     @Override
@@ -52,7 +41,7 @@ public class StackNode extends BaseNode implements Node {
         for (int i = 0; i < leni; ++i) {
             ReadableMap obj = stackArray.getMap(i);
             try {
-                stack.add(NodeHelper.nodeFromMap(obj, getInstanceManager()));
+                stack.add(NodeHelper.getInstance().nodeFromMap(obj, getInstanceManager()));
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -62,11 +51,11 @@ public class StackNode extends BaseNode implements Node {
     }
 
     @Override
-    public WritableMap data() {
-        WritableMap map = super.data();
+    public WritableMap getData() {
+        WritableMap map = super.getData();
         WritableArray stack = new WritableNativeArray();
         for (Node node : _stack) {
-            stack.pushMap(node.data());
+            stack.pushMap(node.getData());
         }
         map.putArray(STACK, stack);
         return map;

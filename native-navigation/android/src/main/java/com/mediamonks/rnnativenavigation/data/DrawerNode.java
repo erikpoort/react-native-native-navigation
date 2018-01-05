@@ -2,7 +2,6 @@ package com.mediamonks.rnnativenavigation.data;
 
 import android.view.Gravity;
 
-import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableMap;
 import com.mediamonks.rnnativenavigation.factory.BaseFragment;
@@ -24,7 +23,6 @@ public class DrawerNode extends BaseNode implements Node {
     private static final String RIGHT = "right";
     private static final String SIDE = "side";
 
-    private ReactInstanceManager _instanceManager;
     private Node _leftNode;
     private Node _centerNode;
     private Node _rightNode;
@@ -38,33 +36,28 @@ public class DrawerNode extends BaseNode implements Node {
     }
 
     @Override
-    public void setInstanceManager(ReactInstanceManager instanceManager) {
-        _instanceManager = instanceManager;
-    }
-
-    private ReactInstanceManager getInstanceManager() {
-        return _instanceManager;
-    }
-
-    @Override
     public void setData(ReadableMap map) {
         super.setData(map);
 
         try {
             if (map.hasKey(LEFT)) {
-                _leftNode = NodeHelper.nodeFromMap(map.getMap(LEFT), getInstanceManager());
+                _leftNode = NodeHelper.getInstance().nodeFromMap(map.getMap(LEFT), getInstanceManager());
             }
             if (map.hasKey(CENTER)) {
-                _centerNode = NodeHelper.nodeFromMap(map.getMap(CENTER), getInstanceManager());
+                _centerNode = NodeHelper.getInstance().nodeFromMap(map.getMap(CENTER), getInstanceManager());
             }
             if (map.hasKey(RIGHT)) {
-                _rightNode = NodeHelper.nodeFromMap(map.getMap(RIGHT), getInstanceManager());
+                _rightNode = NodeHelper.getInstance().nodeFromMap(map.getMap(RIGHT), getInstanceManager());
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        String side = map.getString(SIDE);
+        String side = CENTER;
+        if (map.hasKey(SIDE)) {
+            side = map.getString(SIDE);
+        }
+
         String[] sides = new String[]{LEFT, CENTER, RIGHT};
         Integer[] gravities = new Integer[]{Gravity.START, Gravity.NO_GRAVITY, Gravity.END};
         int index = Arrays.asList(sides).indexOf(side);
@@ -76,17 +69,17 @@ public class DrawerNode extends BaseNode implements Node {
     }
 
     @Override
-    public WritableMap data() {
-        WritableMap map = super.data();
+    public WritableMap getData() {
+        WritableMap map = super.getData();
 
         if (_leftNode != null) {
-            map.putMap(LEFT, _leftNode.data());
+            map.putMap(LEFT, _leftNode.getData());
         }
         if (_centerNode != null) {
-            map.putMap(CENTER, _centerNode.data());
+            map.putMap(CENTER, _centerNode.getData());
         }
         if (_rightNode != null) {
-            map.putMap(RIGHT, _rightNode.data());
+            map.putMap(RIGHT, _rightNode.getData());
         }
 
         String[] sides = new String[]{LEFT, CENTER, RIGHT};

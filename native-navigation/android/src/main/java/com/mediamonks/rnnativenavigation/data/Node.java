@@ -17,7 +17,7 @@ public interface Node extends Serializable {
 
     void setData(ReadableMap map);
 
-    WritableMap data();
+    WritableMap getData();
 
     void setShown(boolean shown);
 

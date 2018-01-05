@@ -1,6 +1,5 @@
 package com.mediamonks.rnnativenavigation.data;
 
-import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableArray;
@@ -24,7 +23,6 @@ public class TabNode extends BaseNode implements Node {
     private static final String TABS = "tabs";
     private static final String SELECTED_TAB = "selectedTab";
 
-    private ReactInstanceManager _instanceManager;
     private List<Node> _tabs;
     private int _selectedTab;
 
@@ -33,15 +31,6 @@ public class TabNode extends BaseNode implements Node {
         TabFragment fragment = new TabFragment();
         fragment.setNode(this);
         return fragment;
-    }
-
-    @Override
-    public void setInstanceManager(ReactInstanceManager instanceManager) {
-        _instanceManager = instanceManager;
-    }
-
-    private ReactInstanceManager getInstanceManager() {
-        return _instanceManager;
     }
 
     @Override
@@ -55,7 +44,7 @@ public class TabNode extends BaseNode implements Node {
         for (int i = 0; i < leni; ++i) {
             ReadableMap obj = stackArray.getMap(i);
             try {
-                stack.add(NodeHelper.nodeFromMap(obj, getInstanceManager()));
+                stack.add(NodeHelper.getInstance().nodeFromMap(obj, getInstanceManager()));
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -66,11 +55,11 @@ public class TabNode extends BaseNode implements Node {
     }
 
     @Override
-    public WritableMap data() {
-        WritableMap map = super.data();
+    public WritableMap getData() {
+        WritableMap map = super.getData();
         WritableArray tabs = new WritableNativeArray();
         for (Node node : _tabs) {
-            tabs.pushMap(node.data());
+            tabs.pushMap(node.getData());
         }
         map.putArray(TABS, tabs);
         map.putInt(SELECTED_TAB, _selectedTab);

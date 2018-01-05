@@ -30,6 +30,8 @@ import com.mediamonks.rnnativenavigation.factory.StackFragment;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 
@@ -44,7 +46,7 @@ class RNNativeNavigationModule extends ReactContextBaseJavaModule implements Lif
     private Set<RNNNFragment> _fragments;
     private final FragmentManager.FragmentLifecycleCallbacks _lifecycleCallbacks;
 
-    RNNativeNavigationModule(ReactApplicationContext reactContext) {
+    RNNativeNavigationModule(ReactApplicationContext reactContext, Map<String, Class<? extends Node>> externalNodes) {
         super(reactContext);
 
         _fragments = new HashSet<>();
@@ -67,6 +69,8 @@ class RNNativeNavigationModule extends ReactContextBaseJavaModule implements Lif
             }
         };
 
+        NodeHelper.getInstance().addExternalNodes(externalNodes);
+
         reactContext.addLifecycleEventListener(this);
     }
 
@@ -79,7 +83,7 @@ class RNNativeNavigationModule extends ReactContextBaseJavaModule implements Lif
             RNNNFragment anyFragment = (RNNNFragment) _fragments.toArray()[0];
             final RNNNFragment rootFragment = getRootFragment(anyFragment.getNode());
             if (rootFragment != null) {
-                WritableMap currentState = rootFragment.getNode().data();
+                WritableMap currentState = rootFragment.getNode().getData();
                 RNNNState.INSTANCE.state = currentState.toHashMap();
 
                 getCurrentActivity().runOnUiThread(new Runnable() {
@@ -117,7 +121,7 @@ class RNNativeNavigationModule extends ReactContextBaseJavaModule implements Lif
         try {
             assert getCurrentActivity() != null;
             ReactFragmentActivity mainActivity = (ReactFragmentActivity) getCurrentActivity();
-            final Node node = NodeHelper.nodeFromMap(map, getReactInstanceManager());
+            final Node node = NodeHelper.getInstance().nodeFromMap(map, getReactInstanceManager());
             final FragmentManager fragmentManager = mainActivity.getSupportFragmentManager();
 
             mainActivity.runOnUiThread(new Runnable() {
@@ -160,7 +164,7 @@ class RNNativeNavigationModule extends ReactContextBaseJavaModule implements Lif
     @ReactMethod
     public void push(final ReadableMap screen, Callback callback) {
         try {
-            final Node node = NodeHelper.nodeFromMap(screen, getReactInstanceManager());
+            final Node node = NodeHelper.getInstance().nodeFromMap(screen, getReactInstanceManager());
 
             assert getCurrentActivity() != null;
             ReactFragmentActivity mainActivity = (ReactFragmentActivity) getCurrentActivity();
@@ -179,7 +183,7 @@ class RNNativeNavigationModule extends ReactContextBaseJavaModule implements Lif
             Stack<Node> stack = stackNode.getStack();
             stack.add(node);
 
-            callback.invoke(Arguments.makeNativeMap(rootFragment.getNode().data().toHashMap()));
+            callback.invoke(Arguments.makeNativeMap(rootFragment.getNode().getData().toHashMap()));
 
             mainActivity.runOnUiThread(new Runnable() {
                 @Override
@@ -195,7 +199,7 @@ class RNNativeNavigationModule extends ReactContextBaseJavaModule implements Lif
     @ReactMethod
     public void showModal(final ReadableMap screen, Callback callback) {
         try {
-            final Node node = NodeHelper.nodeFromMap(screen, getReactInstanceManager());
+            final Node node = NodeHelper.getInstance().nodeFromMap(screen, getReactInstanceManager());
 
             assert getCurrentActivity() != null;
             ReactFragmentActivity mainActivity = (ReactFragmentActivity) getCurrentActivity();
@@ -210,7 +214,7 @@ class RNNativeNavigationModule extends ReactContextBaseJavaModule implements Lif
 
             findFragment.getNode().setModal(node);
 
-            callback.invoke(Arguments.makeNativeMap(rootFragment.getNode().data().toHashMap()));
+            callback.invoke(Arguments.makeNativeMap(rootFragment.getNode().getData().toHashMap()));
 
             mainActivity.runOnUiThread(new Runnable() {
                 @Override

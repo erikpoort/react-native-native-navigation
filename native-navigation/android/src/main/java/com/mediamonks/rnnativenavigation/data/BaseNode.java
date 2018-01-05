@@ -1,5 +1,6 @@
 package com.mediamonks.rnnativenavigation.data;
 
+import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.WritableNativeMap;
@@ -13,17 +14,27 @@ public class BaseNode {
     private static final String SCREEN_ID = "screenID";
     private static final String TYPE = "type";
 
+    private ReactInstanceManager _instanceManager;
+
     private String _screenID;
     private String _type;
 
     private boolean _shown;
+
+    public void setInstanceManager(ReactInstanceManager instanceManager) {
+        _instanceManager = instanceManager;
+    }
+
+    public ReactInstanceManager getInstanceManager() {
+        return _instanceManager;
+    }
 
     public void setData(ReadableMap map) {
         _screenID = map.getString(SCREEN_ID);
         _type = map.getString(TYPE);
     }
 
-    public WritableMap data() {
+    public WritableMap getData() {
         WritableNativeMap data = new WritableNativeMap();
         data.putString(SCREEN_ID, _screenID);
         data.putString(TYPE, _type);

@@ -1,6 +1,5 @@
 package com.mediamonks.rnnativenavigation.data;
 
-import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableMap;
 import com.mediamonks.rnnativenavigation.factory.BaseFragment;
@@ -18,7 +17,6 @@ public class SingleNode extends BaseNode implements Node {
     private static final String NAME = "name";
     private static final String MODAL = "modal";
 
-    private ReactInstanceManager _instanceManager;
     private String _title;
     private Node _modal;
 
@@ -30,22 +28,13 @@ public class SingleNode extends BaseNode implements Node {
     }
 
     @Override
-    public void setInstanceManager(ReactInstanceManager instanceManager) {
-        _instanceManager = instanceManager;
-    }
-
-    public ReactInstanceManager getInstanceManager() {
-        return _instanceManager;
-    }
-
-    @Override
     public void setData(ReadableMap map) {
         super.setData(map);
         _title = map.getString(NAME);
 
         if (map.hasKey(MODAL)) {
             try {
-                _modal = NodeHelper.nodeFromMap(map.getMap(MODAL), getInstanceManager());
+                _modal = NodeHelper.getInstance().nodeFromMap(map.getMap(MODAL), getInstanceManager());
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -53,11 +42,11 @@ public class SingleNode extends BaseNode implements Node {
     }
 
     @Override
-    public WritableMap data() {
-        WritableMap data = super.data();
+    public WritableMap getData() {
+        WritableMap data = super.getData();
         data.putString(NAME, _title);
         if (_modal != null) {
-            data.putMap(MODAL, _modal.data());
+            data.putMap(MODAL, _modal.getData());
         }
         return data;
     }

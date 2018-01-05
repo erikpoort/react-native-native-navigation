@@ -1,6 +1,5 @@
 package com.mediamonks.rnnativenavigation.data;
 
-import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableMap;
 import com.mediamonks.rnnativenavigation.factory.BaseFragment;
@@ -22,7 +21,6 @@ public class SplitNode extends BaseNode implements Node {
     private static final String HORIZONTAL = "horizontal";
     private static final String VERTICAL = "vertical";
 
-    private ReactInstanceManager _instanceManager;
     private Node _node1;
     private Node _node2;
     private int _axis;
@@ -35,21 +33,12 @@ public class SplitNode extends BaseNode implements Node {
     }
 
     @Override
-    public void setInstanceManager(ReactInstanceManager instanceManager) {
-        _instanceManager = instanceManager;
-    }
-
-    private ReactInstanceManager getInstanceManager() {
-        return _instanceManager;
-    }
-
-    @Override
     public void setData(ReadableMap map) {
         super.setData(map);
 
         try {
-            _node1 = NodeHelper.nodeFromMap(map.getMap(NODE1), getInstanceManager());
-            _node2 = NodeHelper.nodeFromMap(map.getMap(NODE2), getInstanceManager());
+            _node1 = NodeHelper.getInstance().nodeFromMap(map.getMap(NODE1), getInstanceManager());
+            _node2 = NodeHelper.getInstance().nodeFromMap(map.getMap(NODE2), getInstanceManager());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -58,10 +47,10 @@ public class SplitNode extends BaseNode implements Node {
     }
 
     @Override
-    public WritableMap data() {
-        WritableMap map = super.data();
-        map.putMap(NODE1, _node1.data());
-        map.putMap(NODE2, _node2.data());
+    public WritableMap getData() {
+        WritableMap map = super.getData();
+        map.putMap(NODE1, _node1.getData());
+        map.putMap(NODE2, _node2.getData());
         map.putString(AXIS, _axis == 1 ? VERTICAL : HORIZONTAL);
         return map;
     }

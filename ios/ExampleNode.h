@@ -6,7 +6,8 @@
 #import <Foundation/Foundation.h>
 #import "NNBaseNode.h"
 
+@interface ExampleNode : NNBaseNode <NNNode>
 
-@interface ExampleNode : NNBaseNode  <NNNode>
-@property (assign) BOOL lazyLoad;
+@property(nonatomic, assign) BOOL lazyLoad;
+
 @end

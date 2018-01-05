@@ -9,11 +9,12 @@
 static NSString *const kName = @"name";
 static NSString *const kLazyLoad = @"lazyLoad";
 
-@interface ExampleNode()
-    @property (nonatomic, strong) RCTBridge *bridge;
-    @property (nonatomic, copy) NSString *title;
-@end
+@interface ExampleNode ()
 
+@property(nonatomic, strong) RCTBridge *bridge;
+@property(nonatomic, copy) NSString *title;
+
+@end
 
 @implementation ExampleNode
 

@@ -11,7 +11,6 @@
 #import "NNStackNode.h"
 #import "NNView.h"
 #import "NNSingleView.h"
-#import "ExternalNodesManager.h"
 
 #import <React/RCTDevMenu.h>
 #import <React/RCTKeyCommands.h>
@@ -43,11 +42,10 @@ RCT_EXPORT_MODULE();
             [nodesToLoad addObject:cls];
         }
     }
-	[ExternalNodesManager.sharedInstance setExternalNodes:nodesToLoad];
+	[NNNodeHelper.sharedInstance addExternalNodes:nodesToLoad];
 }
 
 RCT_EXPORT_METHOD(onStart:(RCTResponseSenderBlock)callback) {
-
 	NSDictionary *state = [RNNNState sharedInstance].state;
 	if (state == nil) {
 		printf("%s %s\n", kRNNN.UTF8String, "First load");
@@ -64,7 +62,7 @@ RCT_EXPORT_METHOD(setSiteMap:(NSDictionary *)map
 	dispatch_async(dispatch_get_main_queue(), ^{
 		[RNNNState sharedInstance].state = map;
 
-        NNStackNode *nodeObject = [NNNodeHelper nodeFromMap:map bridge:self.bridge];
+        NNStackNode *nodeObject = [NNNodeHelper.sharedInstance nodeFromMap:map bridge:self.bridge];
 		UIViewController *viewController = [nodeObject generate];
 
 		UIWindow *window = [RNNNState sharedInstance].window;
@@ -76,7 +74,7 @@ RCT_EXPORT_METHOD(setSiteMap:(NSDictionary *)map
 }
 
 RCT_EXPORT_METHOD(push:(NSDictionary *)screen registerCallback:(RCTResponseSenderBlock)callback) {
-	NNSingleNode *nodeObject = [NNNodeHelper nodeFromMap:screen bridge:self.bridge];
+	NNSingleNode *nodeObject = [NNNodeHelper.sharedInstance nodeFromMap:screen bridge:self.bridge];
 	UIViewController *viewController = [nodeObject generate];
 
 	UIViewController <NNView> *rootController = (UIViewController <NNView> *)[UIApplication sharedApplication].keyWindow.rootViewController;
@@ -101,7 +99,7 @@ RCT_EXPORT_METHOD(push:(NSDictionary *)screen registerCallback:(RCTResponseSende
 }
 
 RCT_EXPORT_METHOD(showModal:(NSDictionary *)screen registerCallback:(RCTResponseSenderBlock)callback) {
-	NNSingleNode *nodeObject = [NNNodeHelper nodeFromMap:screen bridge:self.bridge];
+	NNSingleNode *nodeObject = [NNNodeHelper.sharedInstance nodeFromMap:screen bridge:self.bridge];
 	UIViewController *viewController = [nodeObject generate];
 
     dispatch_async(dispatch_get_main_queue(), ^{

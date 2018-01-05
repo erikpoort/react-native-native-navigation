@@ -6,11 +6,15 @@
 #import <Foundation/Foundation.h>
 
 @protocol NNNode;
+
 @class RCTBridge;
 @class NNBaseNode;
 
 @interface NNNodeHelper : NSObject
 
-+ (id <NNNode>)nodeFromMap:(NSDictionary *)map bridge:(RCTBridge *)bridge;
++ (instancetype)sharedInstance;
+
+- (void)addExternalNodes:(NSArray <NNBaseNode *> *)nodes;
+- (id <NNNode>)nodeFromMap:(NSDictionary *)map bridge:(RCTBridge *)bridge;
 
 @end

@@ -16,6 +16,7 @@ export default class example extends Component {
 					id='stack'
 					left={<SingleView id='menu' screen={Menu} lazyLoad='true'/>}
 					center={<Home />}
+					right={<SingleView id='menu' screen={Menu} lazyLoad='true'/>}
 				/>
 			</Navigation>
 		);

@@ -7,7 +7,8 @@ import SingleView from './../single/SingleView';
 import BaseNavigation from '../BaseNavigation';
 
 export default class DrawerNavigation extends BaseNavigation{
-    sayHi = (callback) => {
-        ReactNativeNativeNavigation.testBridgeHola(callback)
+    sayHi = (view, callback) => {
+        console.log(view)
+        // ReactNativeNativeNavigation.testBridgeHola(callback)
     }
 }

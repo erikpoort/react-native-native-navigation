@@ -8,7 +8,7 @@ import {SingleView} from "../../native-navigation/src";
 export default class Menu extends Component {
 	static pageMap = [Detail];
 	handleMenuItem = (view) => {
-        this.props.drawer.sayHi()
+        this.props.drawer.sayHi(view)
 	};
 	render(){
 		return (

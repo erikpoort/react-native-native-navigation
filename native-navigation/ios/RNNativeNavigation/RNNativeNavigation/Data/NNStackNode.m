@@ -33,7 +33,7 @@ static NSString *const kStackKey = @"stack";
 	NSMutableArray <NNNode> *tempStack = (NSMutableArray <NNNode> *)@[].mutableCopy;
 	[objects enumerateObjectsUsingBlock:^(NSDictionary *obj, NSUInteger idx, BOOL *stop)
 	{
-		[tempStack addObject:[NNNodeHelper nodeFromMap:obj bridge:self.bridge]];
+		[tempStack addObject:[[NNNodeHelper sharedInstance] nodeFromMap:obj bridge:self.bridge]];
 	}];
 	self.stack = tempStack;
 }

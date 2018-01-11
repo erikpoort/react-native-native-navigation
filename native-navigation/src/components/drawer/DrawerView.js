@@ -66,6 +66,7 @@ export default class DrawerView extends Component {
 
 							componentWillMount() {
 								this.drawer = new DrawerNavigation(screenID, this.props.navigation)
+								this.drawer.drawerView = screen
 							}
 
 							render() {

@@ -14,9 +14,6 @@ static NSString *const kSideKey = @"side";
 @interface NNDrawerNode ()
 
 @property (nonatomic, strong) RCTBridge *bridge;
-@property (nonatomic, strong) id <NNNode> leftNode;
-@property (nonatomic, strong) id <NNNode> centerNode;
-@property (nonatomic, strong) id <NNNode> rightNode;
 
 @end
 
@@ -36,9 +33,9 @@ static NSString *const kSideKey = @"side";
 {
 	[super setData:data];
 
-	self.leftNode = [NNNodeHelper nodeFromMap:data[kLeftKey] bridge:self.bridge];
-	self.centerNode = [NNNodeHelper nodeFromMap:data[kCenterKey] bridge:self.bridge];
-	self.rightNode = [NNNodeHelper nodeFromMap:data[kRightKey] bridge:self.bridge];
+	self.leftNode = [NNNodeHelper.sharedInstance nodeFromMap:data[kLeftKey] bridge:self.bridge];
+	self.centerNode = [NNNodeHelper.sharedInstance nodeFromMap:data[kCenterKey] bridge:self.bridge];
+	self.rightNode = [NNNodeHelper.sharedInstance nodeFromMap:data[kRightKey] bridge:self.bridge];
 
 	NSArray *sides = @[@"center", @"left", @"right"];
 	NSString *side = data[kSideKey];

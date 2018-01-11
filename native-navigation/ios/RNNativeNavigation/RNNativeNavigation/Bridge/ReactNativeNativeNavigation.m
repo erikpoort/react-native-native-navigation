@@ -11,6 +11,9 @@
 #import "NNStackNode.h"
 #import "NNView.h"
 #import "NNSingleView.h"
+#import "NNDrawerNode.h"
+#import "NNDrawerView.h"
+#import "UIViewController+MMDrawerController.h"
 
 #import <React/RCTDevMenu.h>
 #import <React/RCTKeyCommands.h>
@@ -75,9 +78,32 @@ RCT_EXPORT_METHOD(setSiteMap:
     resolve(@[]);
 }
 
-RCT_EXPORT_METHOD(testBridgeHola: (RCTResponseSenderBlock) callback) {
-    NSLog(@"PRUEBA");
-    callback(@[]);
+RCT_EXPORT_METHOD(openView:
+    (NSDictionary *) screen
+            registerCallback:
+            (RCTResponseSenderBlock) callback) {
+
+    NNSingleNode *nodeObject = [NNNodeHelper.sharedInstance nodeFromMap:screen bridge:self.bridge];
+
+    UIViewController <NNView> *rootController = (UIViewController <NNView> *) [UIApplication sharedApplication].keyWindow.rootViewController;
+    NSString *parentPath = nodeObject.screenID.stringByDeletingLastPathComponent.stringByDeletingLastPathComponent;
+    NNSingleView *findController = (NNSingleView *) [rootController viewForPath:parentPath];
+    if (!findController) return;
+
+    NNDrawerView *drawerView = (NNDrawerView *) findController.mm_drawerController;
+    NNDrawerNode *drawerNode = drawerView.node;
+    drawerNode.centerNode = nodeObject;
+
+    NSDictionary *newState = rootController.node.data;
+    [RNNNState sharedInstance].state = newState;
+    callback(@[newState]);
+
+    dispatch_async(dispatch_get_main_queue(), ^{
+        UIViewController *viewController = [nodeObject generate];
+        if (viewController) {
+            [drawerView setCenterViewController:viewController withCloseAnimation:YES completion:nil];
+        }
+    });
 }
 
 RCT_EXPORT_METHOD(push:
@@ -85,7 +111,6 @@ RCT_EXPORT_METHOD(push:
             registerCallback:
             (RCTResponseSenderBlock) callback) {
     NNSingleNode *nodeObject = [NNNodeHelper.sharedInstance nodeFromMap:screen bridge:self.bridge];
-    UIViewController *viewController = [nodeObject generate];
 
     UIViewController <NNView> *rootController = (UIViewController <NNView> *) [UIApplication sharedApplication].keyWindow.rootViewController;
     UIViewController <NNView> *findController = [rootController viewForPath:nodeObject.screenID.stringByDeletingLastPathComponent];
@@ -102,6 +127,7 @@ RCT_EXPORT_METHOD(push:
     callback(@[newState]);
 
     dispatch_async(dispatch_get_main_queue(), ^{
+        UIViewController *viewController = [nodeObject generate];
         if (navigationController && viewController) {
             [navigationController pushViewController:viewController animated:YES];
         }
@@ -113,8 +139,6 @@ RCT_EXPORT_METHOD(showModal:
             registerCallback:
             (RCTResponseSenderBlock) callback) {
     NNSingleNode *nodeObject = [NNNodeHelper.sharedInstance nodeFromMap:screen bridge:self.bridge];
-    UIViewController *viewController = [nodeObject generate];
-
 
     UIViewController <NNView> *rootController = (UIViewController <NNView> *) [UIApplication sharedApplication].keyWindow.rootViewController;
     NSString *parentPath = nodeObject.screenID.stringByDeletingLastPathComponent.stringByDeletingLastPathComponent;
@@ -129,6 +153,7 @@ RCT_EXPORT_METHOD(showModal:
     callback(@[newState]);
 
     dispatch_async(dispatch_get_main_queue(), ^{
+        UIViewController *viewController = [nodeObject generate];
         if (viewController) {
             [findController presentViewController:viewController animated:YES completion:nil];
         }

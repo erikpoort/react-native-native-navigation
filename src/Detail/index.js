@@ -5,8 +5,8 @@ import Detail2 from '../Detail2';
 
 export default class Detail extends Component {
 	static pageMap = [Detail2];
-	handleDetail = () => {
-		this.props.stack.push(
+	handleDetail = (name) => {
+		this.props[name].push(
 			<SingleView id="Detail2" screen={Detail2}/>
 		);
 	};
@@ -14,7 +14,9 @@ export default class Detail extends Component {
 		return (
 			<View>
 				<Text>Detail</Text>
-				<Button title="Detail" onPress={this.handleDetail} />
+				<Button title="Detail" onPress={()=>this.handleDetail('stack')} />
+				<Button title="Detail" onPress={()=>this.handleDetail('home_stack')} />
+				<Button title="Detail" onPress={()=>this.handleDetail('two_stack')} />
 			</View>
 		);
 	}

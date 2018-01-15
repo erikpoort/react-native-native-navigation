@@ -54,6 +54,7 @@ export default class DrawerView extends Component {
 
 	static reduceScreens = (data, viewMap, pageMap) => {
 		const navigatorID = data.screenID;
+		const navigatorName = navigatorID.split("/").pop();
 		return [data.left, data.center, data.right].filter((side) => {
 			return side !== undefined && side !== null;
 		}).reduce((map, node) => {
@@ -72,7 +73,7 @@ export default class DrawerView extends Component {
 
 							render() {
 								const Screen = screen;
-								return <Screen drawer={this.drawer}  {...this.props} />
+								return <Screen {...{[navigatorName]:this.drawer, drawer:this.drawer}}  {...this.props} />
 							}
 						}
 					};

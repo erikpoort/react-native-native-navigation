@@ -40,6 +40,7 @@ export default class SingleView extends Component {
 
 	static reduceScreens = (data, viewMap, pageMap) => {
 		const screenID = data.screenID;
+		const screenName = data.screenID.split("/").pop();
 		const SingleScreen = (screen) => {
 			const Screen = screen;
 			return class extends Component {
@@ -48,7 +49,7 @@ export default class SingleView extends Component {
 					this.single = new SingleNavigation(screenID, screenID, this.props.navigation);
 				}
 				render() {
-					return <Screen single={this.single} {...this.props} />;
+					return <Screen {...{[screenName]:this.single, single:this.single}} {...this.props} />;
 				}
 			}
 		};

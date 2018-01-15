@@ -8,6 +8,9 @@ export default class Home extends Component {
 		return (
 			<StackView id='home_stack'>
 				<SingleView id='detail' screen={Detail} lazyLoad='true'/>
+				<StackView id='two_stack'>
+					<SingleView id='detail' screen={Detail} lazyLoad='true'/>
+				</StackView>
 			</StackView>
 		);
 	}

@@ -59,6 +59,7 @@ export default class StackView extends Component {
 
 	static reduceScreens = (data, viewMap, pageMap) => {
 		const navigatorID = data.screenID;
+		const navigatorName = navigatorID.split("/").pop();
 		return data.stack.reduce((map, node) => {
 			const viewData = viewMap[node.type];
 			if (viewData) {
@@ -91,7 +92,7 @@ export default class StackView extends Component {
 
 							render() {
 								const Screen = screen;
-								return <Screen stack={this.stack} {...this.props} />
+								return <Screen {...{[navigatorName]:this.stack, stack:this.stack}} {...this.props} />
 							}
 						}
 					};

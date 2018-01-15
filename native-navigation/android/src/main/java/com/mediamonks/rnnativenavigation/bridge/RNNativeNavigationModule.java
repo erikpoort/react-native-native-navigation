@@ -64,8 +64,10 @@ class RNNativeNavigationModule extends ReactContextBaseJavaModule implements Lif
             @Override
             public void onFragmentDetached(FragmentManager fm, Fragment f) {
                 super.onFragmentDetached(fm, f);
-                RNNNFragment baseFragment = (RNNNFragment) f;
-                _fragments.remove(baseFragment);
+                if (f instanceof RNNNFragment) {
+                    RNNNFragment baseFragment = (RNNNFragment) f;
+                    _fragments.remove(baseFragment);
+                }
             }
         };
 

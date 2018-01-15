@@ -10,6 +10,7 @@ export default class BaseNavigation {
 	}
 
 	registerScreens(newPath, presentMethod, showScreen) {
+		console.warn(this.navigatorID);
 		const Screen = showScreen;
 
 		const screenData = this.navigation.mapChild(Screen, newPath);

@@ -14,9 +14,9 @@ export default class Detail extends Component {
 		return (
 			<View>
 				<Text>Detail</Text>
-				<Button title="Detail" onPress={()=>this.handleDetail('stack')} />
-				<Button title="Detail" onPress={()=>this.handleDetail('home_stack')} />
-				<Button title="Detail" onPress={()=>this.handleDetail('two_stack')} />
+				<Button title="Up" onPress={()=>this.handleDetail('up_stack')} />
+				<Button title="Bottom" onPress={()=>this.handleDetail('bottom_stack')} />
+				<Button title="Top" onPress={()=>this.handleDetail('home_stack')} />
 			</View>
 		);
 	}

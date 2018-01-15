@@ -18,7 +18,7 @@ export default class example extends Component {
 				store={store}>
 				<Loading/>
 				<DrawerView
-					id='stack'
+					id='drawer_view'
 					left={<SingleView id='menu' screen={Menu} lazyLoad='true'/>}
 					center={<Home />}
 					right={<ExampleView id='menu' screen={Menu} lazyLoad='true'/>}

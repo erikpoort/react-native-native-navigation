@@ -45,7 +45,7 @@ export default class SingleView extends Component {
 			return class extends Component {
 				single;
 				componentWillMount() {
-					this.single = new SingleNavigation(screenID, this.props.navigation);
+					this.single = new SingleNavigation(screenID, screenID, this.props.navigation);
 				}
 				render() {
 					return <Screen single={this.single} {...this.props} />;

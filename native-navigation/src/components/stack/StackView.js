@@ -58,6 +58,7 @@ export default class StackView extends Component {
 	};
 
 	static reduceScreens = (data, viewMap, pageMap) => {
+		const navigatorID = data.screenID;
 		return data.stack.reduce((map, node) => {
 			const viewData = viewMap[node.type];
 			if (viewData) {
@@ -69,7 +70,7 @@ export default class StackView extends Component {
 							stack;
 
 							componentWillMount() {
-								this.stack = new StackNavigation(screenID, this.props.navigation);
+								this.stack = new StackNavigation(screenID, navigatorID, this.props.navigation);
 
 								const { remove } = BackHandler.addEventListener('hardwareBackPress', () => {
 									this.stack.handleBackButton((handled) => {

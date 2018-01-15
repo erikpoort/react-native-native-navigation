@@ -5,7 +5,7 @@ const { ReactNativeNativeNavigation } = NativeModules;
 
 import BaseNavigation from '../BaseNavigation';
 
-export default class StackNavigation extends BaseNavigation{
+export default class StackNavigation extends BaseNavigation {
 	handleBackButton = (callback) => {
 		ReactNativeNativeNavigation.handleBackButton(callback);
 	};

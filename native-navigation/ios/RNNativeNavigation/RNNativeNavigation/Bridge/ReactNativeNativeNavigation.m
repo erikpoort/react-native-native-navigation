@@ -92,7 +92,15 @@ RCT_EXPORT_METHOD(openView:
 
     NNDrawerView *drawerView = (NNDrawerView *) findController.mm_drawerController;
     NNDrawerNode *drawerNode = drawerView.node;
-    drawerNode.centerNode = nodeObject;
+    switch([drawerView sideForPath:parentPath]){
+        case NNDrawerSideLeft:
+            drawerNode.leftNode = nodeObject;
+        case NNDrawerSideCenter:
+            drawerNode.centerNode = nodeObject;
+        case NNDrawerSideRight:
+            drawerNode.rightNode = nodeObject;
+    }
+
 
     NSDictionary *newState = rootController.node.data;
     [RNNNState sharedInstance].state = newState;
@@ -101,7 +109,15 @@ RCT_EXPORT_METHOD(openView:
     dispatch_async(dispatch_get_main_queue(), ^{
         UIViewController *viewController = [nodeObject generate];
         if (viewController) {
-            [drawerView setCenterViewController:viewController withCloseAnimation:YES completion:nil];
+            switch([drawerView sideForPath:parentPath]){
+                case NNDrawerSideLeft:
+                    [drawerView setLeftDrawerViewController:viewController];
+                case NNDrawerSideCenter:
+                    [drawerView setCenterViewController:viewController withCloseAnimation:YES completion:nil];
+                case NNDrawerSideRight:
+                    [drawerView setRightDrawerViewController:viewController];
+            }
+
         }
     });
 }

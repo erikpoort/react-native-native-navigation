@@ -7,6 +7,18 @@
 #import "NNNode.h"
 #import "MMDrawerController.h"
 
+static NSString *const LEFT = @"left";
+static NSString *const CENTER = @"center";
+static NSString *const RIGHT = @"right";
+static NSString *const SIDE = @"side";
+
+typedef NS_ENUM(NSInteger , NNDrawerSide){
+    NNDrawerSideLeft,
+    NNDrawerSideCenter,
+    NNDrawerSideRight,
+};
+
+
 @interface NNDrawerNode : NNBaseNode <NNNode>
 
 @property (nonatomic, strong) id <NNNode> leftNode;

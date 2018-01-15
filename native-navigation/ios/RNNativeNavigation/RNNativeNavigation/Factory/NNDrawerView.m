@@ -54,14 +54,16 @@
 	UIViewController <NNView> *rightController = (UIViewController <NNView> *)self.rightDrawerViewController;
 
     if([path rangeOfString:self.drawerNode.screenID].location == 0) {
+        if([path isEqualToString:self.drawerNode.screenID]) return self;
+
         NSString *newPath = [path substringFromIndex:self.drawerNode.screenID.length + 1];
         NSArray *splittedArray = [newPath componentsSeparatedByString:@"/"];
         NSString *side = splittedArray.firstObject;
 
         NSMutableDictionary *sideMap = @{}.mutableCopy;
-        if(leftController) sideMap[@"left"] = leftController;
-        if(centerController) sideMap[@"center"] = centerController;
-        if(rightController) sideMap[@"right"] = rightController;
+        if(leftController) sideMap[LEFT] = leftController;
+        if(centerController) sideMap[CENTER] = centerController;
+        if(rightController) sideMap[RIGHT] = rightController;
 
         foundController = sideMap[side];
         if(splittedArray.count > 1){
@@ -73,5 +75,19 @@
 
     return nil;
 }
+
+- (NNDrawerSide)sideForPath:(NSString *)path
+{
+	if([path rangeOfString:self.drawerNode.screenID].location == 0) {
+		NSString *newPath = [path substringFromIndex:self.drawerNode.screenID.length + 1];
+		NSArray *splitArray = [newPath componentsSeparatedByString:@"/"];
+		NSString *side = splitArray.firstObject;
+		if([side isEqualToString:LEFT]) return NNDrawerSideLeft;
+		if([side isEqualToString:CENTER]) return NNDrawerSideCenter;
+		if([side isEqualToString:RIGHT]) return NNDrawerSideRight;
+	}
+	return nil;
+}
+
 
 @end

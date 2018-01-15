@@ -9,9 +9,9 @@
 
 @interface NNDrawerNode : NNBaseNode <NNNode>
 
-@property (nonatomic, strong, readonly) id <NNNode> leftNode;
-@property (nonatomic, strong, readonly) id <NNNode> centerNode;
-@property (nonatomic, strong, readonly) id <NNNode> rightNode;
+@property (nonatomic, strong) id <NNNode> leftNode;
+@property (nonatomic, strong) id <NNNode> centerNode;
+@property (nonatomic, strong) id <NNNode> rightNode;
 @property (nonatomic, assign) MMDrawerSide side;
 
 @end

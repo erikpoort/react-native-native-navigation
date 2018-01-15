@@ -35,7 +35,7 @@ static NSString *const kSelectedTabKey = @"selectedTab";
     NSMutableArray <NNNode> *tempTabs = (NSMutableArray <NNNode> *)@[].mutableCopy;
     [objects enumerateObjectsUsingBlock:^(NSDictionary *obj, NSUInteger idx, BOOL *stop)
     {
-        [tempTabs addObject:[NNNodeHelper nodeFromMap:obj bridge:self.bridge]];
+        [tempTabs addObject:[NNNodeHelper.sharedInstance nodeFromMap:obj bridge:self.bridge]];
     }];
     self.tabs = tempTabs.copy;
     self.selectedTab = [data[kSelectedTabKey] unsignedIntegerValue];

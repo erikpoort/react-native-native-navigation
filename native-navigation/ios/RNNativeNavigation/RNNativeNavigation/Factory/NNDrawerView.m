@@ -53,18 +53,25 @@
 	UIViewController <NNView> *centerController = (UIViewController <NNView> *)self.centerViewController;
 	UIViewController <NNView> *rightController = (UIViewController <NNView> *)self.rightDrawerViewController;
 
-	if (leftController && [path rangeOfString:leftController.node.screenID].location == 0) {
-		foundController = leftController;
-	} else if (centerController && [path rangeOfString:centerController.node.screenID].location == 0) {
-		foundController = centerController;
-	} else if (rightController && [path rangeOfString:rightController.node.screenID].location == 0) {
-		foundController = rightController;
-	}
-	if (![foundController.node.screenID isEqualToString:path]) {
-		foundController = [foundController viewForPath:path];
-	}
-	return foundController;
+    if([path rangeOfString:self.drawerNode.screenID].location == 0) {
+        NSString *newPath = [path substringFromIndex:self.drawerNode.screenID.length + 1];
+        NSArray *splittedArray = [newPath componentsSeparatedByString:@"/"];
+        NSString *side = splittedArray.firstObject;
 
+        NSMutableDictionary *sideMap = @{}.mutableCopy;
+        if(leftController) sideMap[@"left"] = leftController;
+        if(centerController) sideMap[@"center"] = centerController;
+        if(rightController) sideMap[@"right"] = rightController;
+
+        foundController = sideMap[side];
+        if(splittedArray.count > 1){
+            return [foundController viewForPath:path];
+        }
+
+        return foundController;
+    }
+
+    return nil;
 }
 
 @end

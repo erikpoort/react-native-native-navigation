@@ -36,8 +36,8 @@ static NSString *const kAxisKey = @"axis";
 {
 	[super setData:data];
 
-	self.node1 = [NNNodeHelper nodeFromMap:data[kNode1Key] bridge:self.bridge];
-	self.node2 = [NNNodeHelper nodeFromMap:data[kNode2Key] bridge:self.bridge];
+	self.node1 = [NNNodeHelper.sharedInstance nodeFromMap:data[kNode1Key] bridge:self.bridge];
+	self.node2 = [NNNodeHelper.sharedInstance nodeFromMap:data[kNode2Key] bridge:self.bridge];
 	self.axis = [data[kAxisKey] isEqualToString:@"vertical"] ? 1 : 0;
 }
 

@@ -37,6 +37,10 @@ class Navigation extends Component {
 	};
 	getNode = (dom) => Navigation.getNode(dom);
 
+	 getComponentById = (nodeId) => {
+		console.log(this)
+	}
+
 	static mapChild = (dom, path) => {
 		const node = Navigation.getNode(dom);
 		return node.type.mapToDictionary(node, path);

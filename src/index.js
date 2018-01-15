@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
-import { DrawerView, Navigation, SingleView } from '../native-navigation';
+import React, {Component} from 'react';
+import {DrawerView, Navigation, SingleView} from '../native-navigation';
 import Home from './Home';
 import Menu from './Menu';
 import Loading from './Loading';
 
-import { Provider } from 'react-redux';
+import {Provider} from 'react-redux';
 import store from './store';
 import ExampleView from './ExampleView';
 
@@ -27,3 +27,4 @@ export default class example extends Component {
 		);
 	}
 }
+

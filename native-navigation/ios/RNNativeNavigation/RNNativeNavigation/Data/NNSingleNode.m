@@ -32,14 +32,14 @@ static NSString *const kLazyLoad = @"lazyLoad";
 - (void)setData:(NSDictionary *)data {
 	[super setData:data];
 	self.title = data[kName];
-	self.modal = [NNNodeHelper nodeFromMap:data[kModal] bridge:self.bridge];
-    self.lazyLoad = [data[kLazyLoad] isEqualToString:@"true"] ? YES : NO;
+	self.modal = [NNNodeHelper.sharedInstance nodeFromMap:data[kModal] bridge:self.bridge];
+    self.lazyLoad = [data[kLazyLoad] isEqualToString:@"true"];
 }
 
 - (NSDictionary *)data {
 	NSMutableDictionary *data = [super data].mutableCopy;
 	data[kName] = self.title;
-    data[kLazyLoad] = self.lazyLoad == YES ? @"true" : @"false";
+    data[kLazyLoad] = self.lazyLoad ? @"true" : @"false";
 	if (self.modal) {
 		data[kModal] = self.modal.data;
 	}

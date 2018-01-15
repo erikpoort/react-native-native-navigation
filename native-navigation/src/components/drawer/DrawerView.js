@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Navigation } from './../Navigation';
+import DrawerNavigation from "./DrawerNavigation";
 
 export default class DrawerView extends Component {
 	static nodeToDictionary = (name, dom, path) => {
@@ -49,6 +50,8 @@ export default class DrawerView extends Component {
 		}
 	};
 
+
+
 	static reduceScreens = (data, viewMap, pageMap) => {
 		return [data.left, data.center, data.right].filter((side) => {
 			return side !== undefined && side !== null;
@@ -59,9 +62,16 @@ export default class DrawerView extends Component {
 					const { screenID, screen } = view;
 					const DrawerScreen = () => {
 						return class extends Component {
+							drawer;
+
+							componentWillMount() {
+								this.drawer = new DrawerNavigation(screenID, this.props.navigation)
+								this.drawer.drawerView = screen
+							}
+
 							render() {
 								const Screen = screen;
-								return <Screen {...this.props} />
+								return <Screen drawer={this.drawer}  {...this.props} />
 							}
 						}
 					};

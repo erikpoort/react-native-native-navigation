@@ -95,6 +95,17 @@ class Navigation extends Component {
 				[page.name]: page,
 			}
 		}, {});
+		if (this.props.customViews) {
+			this.viewMap = {
+				...this.viewMap,
+				...this.props.customViews.reduce((map, page) => {
+					return {
+						...map,
+						[page.name]: page,
+					}
+				}, {})
+			};
+		}
 		ReactNativeNativeNavigation.onStart((request) => {
 			if (!request) {
 				request = this.generateSiteMap();

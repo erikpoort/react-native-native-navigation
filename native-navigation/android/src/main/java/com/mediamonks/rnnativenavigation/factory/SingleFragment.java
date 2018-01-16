@@ -38,6 +38,11 @@ public class SingleFragment extends BaseFragment<SingleNode> {
         rootView.startReactApplication(getNode().getInstanceManager(), getNode().getScreenID());
     }
 
+    @Override public void onResume() {
+        super.onResume();
+        Log.i("MMM onResume", getNode().getScreenID());
+    }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();

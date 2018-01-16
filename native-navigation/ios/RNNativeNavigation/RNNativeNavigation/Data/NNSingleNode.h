@@ -7,6 +7,5 @@
 @interface NNSingleNode : NNBaseNode <NNNode>
 
 @property (nonatomic, strong) id <NNNode> modal;
-@property (assign) BOOL lazyLoad;
 
 @end

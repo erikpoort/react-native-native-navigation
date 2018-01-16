@@ -7,7 +7,6 @@
 #import "ExampleView.h"
 
 static NSString *const kName = @"name";
-static NSString *const kLazyLoad = @"lazyLoad";
 
 @interface ExampleNode ()
 
@@ -29,13 +28,11 @@ static NSString *const kLazyLoad = @"lazyLoad";
 - (void)setData:(NSDictionary *)data {
     [super setData:data];
     self.title = data[kName];
-    self.lazyLoad = [data[kLazyLoad] isEqualToString:@"true"];
 }
 
 - (NSDictionary *)data {
     NSMutableDictionary *data = [super data].mutableCopy;
     data[kName] = self.title;
-    data[kLazyLoad] = self.lazyLoad ? @"true" : @"false";
     return data.copy;
 }
 

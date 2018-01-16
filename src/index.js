@@ -19,9 +19,9 @@ export default class example extends Component {
 				<Loading/>
 				<DrawerView
 					id='drawer_view'
-					left={<SingleView id='menu' screen={Menu} lazyLoad='true'/>}
+					left={<SingleView id='menu' screen={Menu} />}
 					center={<Home />}
-					right={<ExampleView id='menu' screen={Menu} lazyLoad='true'/>}
+					right={<ExampleView id='menu' screen={Menu} />}
 				/>
 			</Navigation>
 		);

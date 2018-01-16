@@ -8,7 +8,7 @@ export default class SingleView extends Component {
 			return null;
 		}
 
-		const { id, screen, modal, lazyLoad } = dom.props;
+		const { id, screen, modal } = dom.props;
 
 		if (id == null) {
 			console.error("RNNN", "An id prop is mandatory");
@@ -34,7 +34,6 @@ export default class SingleView extends Component {
 			type,
 			screenID,
 			modal: modalData,
-			lazyLoad
 		};
 	};
 

@@ -20,9 +20,6 @@
         self.singleNode = node;
         self.bridge = bridge;
         self.title = node.title;
-        if (node.lazyLoad) {
-            [self loadViewIfNeeded];
-        }
     }
     return self;
 }
@@ -50,7 +47,7 @@
 	UIViewController <NNView> *modalController = (UIViewController <NNView> *)self.presentedViewController;
 	if (modalController && [path rangeOfString:modalController.node.screenID].location == 0) {
 		if (![modalController.node.screenID isEqualToString:path]) {
-			return (UIViewController <NNView> *)[modalController viewForPath:path];
+			return [modalController viewForPath:path];
 		} else {
 			return modalController;
 		}

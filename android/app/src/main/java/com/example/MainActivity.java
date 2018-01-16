@@ -1,6 +1,8 @@
 package com.example;
 
+import com.facebook.react.ReactActivityDelegate;
 import com.facebook.react.ReactFragmentActivity;
+import com.mediamonks.rnnativenavigation.devsupport.RNActivityDelegate;
 
 public class MainActivity extends ReactFragmentActivity
 {
@@ -11,5 +13,9 @@ public class MainActivity extends ReactFragmentActivity
     @Override
     protected String getMainComponentName() {
         return "example";
+    }
+
+    @Override protected ReactActivityDelegate createReactActivityDelegate() {
+        return new RNActivityDelegate(this, getMainComponentName());
     }
 }

@@ -54,6 +54,7 @@
 	UIViewController <NNView> *rightController = (UIViewController <NNView> *)self.rightDrawerViewController;
 
     if([path rangeOfString:self.drawerNode.screenID].location == 0) {
+        if([path isEqualToString:self.drawerNode.screenID]) return self;
         NSString *newPath = [path substringFromIndex:self.drawerNode.screenID.length + 1];
         NSArray *splittedArray = [newPath componentsSeparatedByString:@"/"];
         NSString *side = splittedArray.firstObject;

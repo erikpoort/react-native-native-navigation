@@ -17,7 +17,7 @@ import java.util.List;
  * RNNativeNavigation 2017
  */
 
-public class TabNode extends BaseNode implements Node {
+public class TabNode extends BaseNode {
     public static String JS_NAME = "TabView";
 
     private static final String TABS = "tabs";

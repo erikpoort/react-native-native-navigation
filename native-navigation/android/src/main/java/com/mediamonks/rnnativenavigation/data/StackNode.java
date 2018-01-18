@@ -16,7 +16,7 @@ import java.util.Stack;
  * RNNativeNavigation 2017
  */
 
-public class StackNode extends BaseNode implements Node {
+public class StackNode extends BaseNode  {
     public static String JS_NAME = "StackView";
 
     private static final String STACK = "stack";

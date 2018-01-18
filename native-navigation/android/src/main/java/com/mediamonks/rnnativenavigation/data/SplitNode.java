@@ -11,7 +11,7 @@ import com.mediamonks.rnnativenavigation.factory.SplitFragment;
  * example 2017
  */
 
-public class SplitNode extends BaseNode implements Node {
+public class SplitNode extends BaseNode  {
     public static String JS_NAME = "SplitView";
 
     private static final String NODE1 = "node1";

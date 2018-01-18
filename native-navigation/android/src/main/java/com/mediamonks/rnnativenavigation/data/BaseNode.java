@@ -10,7 +10,7 @@ import com.facebook.react.bridge.WritableNativeMap;
  * example 2017
  */
 
-public class BaseNode {
+public abstract class BaseNode implements Node {
     private static final String SCREEN_ID = "screenID";
     private static final String TYPE = "type";
 

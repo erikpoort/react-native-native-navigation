@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import { Navigation } from './../Navigation';
 import DrawerNavigation from "./DrawerNavigation";
+import { mapChild } from '../../utils/NavigationUtils';
 
 export default class DrawerView extends Component {
 	static nodeToDictionary = (name, dom, path) => {
 		let data = dom.props[name];
 		if (data !== null && data !== undefined) {
-			return Navigation.mapChild(data, `${path}/${name}`);
+			return mapChild(data, `${path}/${name}`);
 		}
 		return null;
 	};
@@ -50,8 +50,6 @@ export default class DrawerView extends Component {
 		}
 	};
 
-
-
 	static reduceScreens = (data, viewMap, pageMap) => {
 		const navigatorID = data.screenID;
 		const navigatorName = navigatorID.split("/").pop();
@@ -73,7 +71,10 @@ export default class DrawerView extends Component {
 
 							render() {
 								const Screen = screen;
-								return <Screen {...{[navigatorName]:this.drawer, drawer:this.drawer}}  {...this.props} />
+								return <Screen {...{
+									[navigatorName]: this.drawer,
+									drawer: this.drawer
+								}} {...this.props} />
 							}
 						}
 					};

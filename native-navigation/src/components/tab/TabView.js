@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Navigation } from './../Navigation';
+import { mapChild } from '../../utils/NavigationUtils';
 
 export default class TabView extends Component {
 	static mapChildren = (children, path) => {
@@ -11,7 +11,7 @@ export default class TabView extends Component {
 		let nodes = [];
 		for (let i = 0; i < leni; ++i) {
 			const dom = children[i];
-			const node = Navigation.mapChild(dom, path);
+			const node = mapChild(dom, path);
 			if (node == null) {
 				return null;
 			}

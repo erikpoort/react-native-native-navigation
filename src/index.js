@@ -9,21 +9,26 @@ import store from './redux/store';
 import ExampleView from './custom_nodes/ExampleView';
 
 export default class example extends Component {
-	render() {
-		return (
-			<Navigation
-				pages={[Loading, Home, Menu]}
-				customViews={[ExampleView]}
-				provider={Provider}
-				store={store}>
-				<Loading/>
-				<DrawerView
-					id='drawer_view'
-					left={<SingleView id='menu' screen={Menu}/>}
-					center={<Home/>}
-					right={<ExampleView id='menu' screen={Menu}/>}
-				/>
-			</Navigation>
+	constructor() {
+		super();
+
+		const navigation = new Navigation(
+			[Loading, Home, Menu],
+			[ExampleView],
+			Provider, store
 		);
+
+		navigation.start(
+			<DrawerView
+				id='drawer_view'
+				left={<SingleView id='menu' screen={Menu}/>}
+				center={<Home/>}
+				right={<ExampleView id='menu' screen={Menu}/>}
+			/>
+		);
+	}
+
+	render() {
+		return <Loading/>
 	}
 }

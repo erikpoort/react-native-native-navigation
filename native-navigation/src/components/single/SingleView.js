@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import SingleNavigation from './SingleNavigation';
+import { mapChild } from '../../utils/NavigationUtils';
 
 export default class SingleView extends Component {
 	static mapToDictionary = (dom, path) => {
@@ -27,7 +28,7 @@ export default class SingleView extends Component {
 
 		let modalData = null;
 		if (modal) {
-			modalData = modal.type.mapToDictionary(modal, `${screenID}/modal`, screenID);
+			modalData = mapChild(modal, `${screenID}/modal${screenID}`);
 		}
 		return {
 			name,

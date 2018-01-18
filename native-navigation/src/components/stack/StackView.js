@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { BackHandler } from 'react-native';
 import StackNavigation from './StackNavigation';
-import { Navigation } from './../Navigation';
+import { mapChild } from '../../utils/NavigationUtils';
 
 export default class StackView extends Component {
 	static mapChildren = (children, path) => {
@@ -14,7 +14,7 @@ export default class StackView extends Component {
 		let nodes = [];
 		for (let i = 0; i < leni; ++i) {
 			const dom = children[i];
-			const node = Navigation.mapChild(dom, buildPath);
+			const node = mapChild(dom, buildPath);
 			if (node == null) {
 				return null;
 			}

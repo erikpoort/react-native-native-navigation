@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Navigation } from './../Navigation';
+import { mapChild } from '../../utils/NavigationUtils';
 
 export default class SplitView extends Component {
 	static AXIS = {
@@ -28,9 +28,9 @@ export default class SplitView extends Component {
 		}
 
 		const dom1 = dom.props.children[0];
-		const node1 = Navigation.mapChild(dom1, screenID);
+		const node1 = mapChild(dom1, screenID);
 		const dom2 = dom.props.children[1];
-		const node2 = Navigation.mapChild(dom2, screenID);
+		const node2 = mapChild(dom2, screenID);
 
 		if (node1 == null || node2 == null) {
 			console.error("RNNN", "A SplitView expects two valid nodes", screenID);

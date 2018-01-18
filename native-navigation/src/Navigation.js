@@ -2,8 +2,8 @@ import React from 'react';
 import ReactNativeNativeNavigation from './ReactNativeNativeNavigation';
 import { generatePageList, registerScreens, mapChild } from './utils/NavigationUtils';
 import SingleView, { SingleNode } from './components/single/SingleView';
-import TabView from './components/tab/TabView';
 import StackView, { StackNode } from './components/stack/StackView';
+import TabView, { TabNode } from './components/tab/TabView';
 import SplitView, { SplitNode } from './components/split/SplitView';
 import DrawerView, { DrawerNode } from './components/drawer/DrawerView';
 
@@ -13,8 +13,8 @@ class Navigation {
 	store = null;
 	viewMap = {
 		[SingleView.name]: SingleNode,
-		[TabView.name]: TabView,
 		[StackView.name]: StackNode,
+		[TabView.name]: TabNode,
 		[SplitView.name]: SplitNode,
 		[DrawerView.name]: DrawerNode,
 	};

@@ -1,25 +1,26 @@
 import React, { Component } from 'react';
 import { mapChild } from '../../utils/NavigationUtils';
 
-export default class TabView {
-	static mapChildren = (children, path) => {
-		if (!Array.isArray(children)) {
-			children = [children];
-		}
+const mapChildren = (viewMap, children, path) => {
+	if (!Array.isArray(children)) {
+		children = [children];
+	}
 
-		const leni = children.length;
-		let nodes = [];
-		for (let i = 0; i < leni; ++i) {
-			const dom = children[i];
-			const node = mapChild(dom, path);
-			if (node == null) {
-				return null;
-			}
-			nodes.push(node);
+	const leni = children.length;
+	let nodes = [];
+	for (let i = 0; i < leni; ++i) {
+		const dom = children[i];
+		const node = mapChild(viewMap, dom, path);
+		if (node == null) {
+			return null;
 		}
-		return nodes;
-	};
-	static mapToDictionary = (dom, path) => {
+		nodes.push(node);
+	}
+	return nodes;
+};
+
+export const TabNode = {
+	mapToDictionary: (viewMap, dom, path) => {
 		if (dom == null || dom.props == null || path == null) {
 			console.error("RNNN", "dom and path are mandatory parameters.");
 			return null;
@@ -31,7 +32,7 @@ export default class TabView {
 			return null;
 		}
 
-		const screenID = `${path}/${id}`
+		const screenID = `${path}/${id}`;
 		const type = dom.type.name;
 
 		if (dom.props.children.length < 2) {
@@ -39,7 +40,7 @@ export default class TabView {
 			return null;
 		}
 
-		const tabs = TabView.mapChildren(dom.props.children, screenID);
+		const tabs = mapChildren(viewMap, dom.props.children, screenID);
 		if (tabs == null) {
 			console.error("RNNN", "A TabView expects all children to be valid nodes", screenID);
 			return null;
@@ -52,9 +53,8 @@ export default class TabView {
 			tabs,
 			selectedTab,
 		};
-	};
-
-	static reduceScreens = (data, viewMap, pageMap) => {
+	},
+	reduceScreens: (data, viewMap, pageMap) => {
 		return data.tabs.reduce((map, node) => {
 			const viewData = viewMap[node.type];
 			if (viewData) {
@@ -81,5 +81,7 @@ export default class TabView {
 			}
 			return map;
 		}, []);
-	}
-}
+	},
+};
+
+export default class TabView {}

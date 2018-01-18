@@ -14,6 +14,7 @@ import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
+import com.facebook.infer.annotation.Assertions;
 import com.mediamonks.rnnativenavigation.R;
 import com.mediamonks.rnnativenavigation.data.Node;
 
@@ -58,6 +59,20 @@ public class ModalFragment extends DialogFragment implements RNNNFragment {
         }
     };
 
+    private ViewTreeObserver.OnGlobalFocusChangeListener _globalFocusChangeListener = new ViewTreeObserver.OnGlobalFocusChangeListener() {
+        @Override
+        public void onGlobalFocusChanged(View oldFocus, View newFocus) {
+            if (oldFocus != null) {
+                oldFocus.setOnKeyListener(null);
+            }
+            if (newFocus != null) {
+                // DialogsFragment views don't bubble alphanumeric key events up to the containing Activity, because their containing PhoneVWindow discards them.
+                // Here we forward them forcefully in order to allow development shortcuts on the emulator
+                newFocus.setOnKeyListener(_forwardKeyListener);
+            }
+        }
+    };
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -77,19 +92,6 @@ public class ModalFragment extends DialogFragment implements RNNNFragment {
         view.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         View.generateViewId();
         view.setId(View.generateViewId());
-
-        ViewTreeObserver viewTreeObserver = view.getViewTreeObserver();
-        viewTreeObserver.addOnGlobalFocusChangeListener(new ViewTreeObserver.OnGlobalFocusChangeListener() {
-            @Override
-            public void onGlobalFocusChanged(View oldFocus, View newFocus) {
-                if (newFocus != null) {
-                    // DialogsFragment views don't bubble alphanumeric key events up to the containing Activity, because their containing PhoneVWindow discards them.
-                    // Here we forward them forcefully in order to allow development shortcuts on the emulator
-                    newFocus.setOnKeyListener(_forwardKeyListener);
-                }
-            }
-        });
-
         return view;
     }
 

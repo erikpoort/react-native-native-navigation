@@ -43,16 +43,22 @@ class Navigation extends Component {
 	mapChild = (dom, path) => Navigation.mapChild(dom, path);
 
 	registerScreens = (screens) => {
+		const { store, provider } = this.props;
+		const ReduxProvider = provider;
+		const nav = this;
+
 		screens.forEach((screenData) => {
 			const { screenID, screen } = screenData;
 			const Screen = screen;
-			AppRegistry.registerComponent(screenID, () => {
-				const nav = this;
+
+				AppRegistry.registerComponent(screenID, () => {
 				return class extends Component {
+					renderScreen = () => <Screen navigation={nav}/>;
+
 					render() {
-						return (
-							<Screen navigation={nav}/>
-						)
+						return store && provider
+							? <ReduxProvider store={store}>{this.renderScreen()}</ReduxProvider>
+							: this.renderScreen();
 					}
 				}
 			});

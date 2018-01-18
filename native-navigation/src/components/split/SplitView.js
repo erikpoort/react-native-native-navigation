@@ -5,7 +5,7 @@ export default class SplitView extends Component {
 	static AXIS = {
 		HORIZONTAL: "horizontal",
 		VERTICAL: "vertical",
-	}
+	};
 
 	static mapToDictionary = (dom, path) => {
 		if (dom == null || dom.props == null || path == null) {
@@ -22,7 +22,7 @@ export default class SplitView extends Component {
 		const screenID = `${path}/${id}`;
 		const type = dom.type.name;
 
-		if (dom.props.children.length != 2) {
+		if (dom.props.children.length !== 2) {
 			console.error("RNNN", "A SplitView expects two children", screenID);
 			return null;
 		}
@@ -45,7 +45,7 @@ export default class SplitView extends Component {
 			node2,
 			axis,
 		}
-	}
+	};
 
 	static reduceScreens = (data, viewMap, pageMap) => {
 		return [data.node1, data.node2].reduce((map, node) => {
@@ -60,7 +60,7 @@ export default class SplitView extends Component {
 								return <Screen {...this.props} />
 							}
 						}
-					}
+					};
 					const Split = SplitScreen();
 					return ({
 						screenID,

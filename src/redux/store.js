@@ -1,18 +1,9 @@
-import { createStore } from 'redux';
+import { createStore, combineReducers } from 'redux';
+import splitReducer from './reducers/split-reducer';
 
-export const rootReducer = (state = {}, action) => {
-	switch (action.type) {
-		case 'updateButton': return {
-			...state,
-			label: "clicked",
-		};
-		default:
-			return {
-				...state,
-				label: "unclicked",
-			}
-	}
-};
+export const rootReducer = combineReducers({
+	split: splitReducer,
+});
 
 let store = createStore(rootReducer);
 

@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Button, Text, View } from 'react-native';
-import { SingleView } from '../../../native-navigation/src/index';
+import { changeAxis } from '../../redux/actions/split-actions';
+import { SingleView, SplitView } from '../../../native-navigation/src/index';
 import Detail2 from '../Detail2/index';
 
 class Detail extends Component {
@@ -20,23 +21,16 @@ class Detail extends Component {
 				<Button title="Up" onPress={() => this.handleDetail('up_stack')}/>
 				<Button title="Bottom" onPress={() => this.handleDetail('bottom_stack')}/>
 				<Button title="Top" onPress={() => this.handleDetail('home_stack')}/>
-				<Button title={this.props.label} onPress={this.props.updateButton}/>
+				<Button title="Vertical" onPress={() => this.props.changeAxis(SplitView.AXIS.VERTICAL)}/>
+				<Button title="Horizontal"
+				        onPress={() => this.props.changeAxis(SplitView.AXIS.HORIZONTAL)}/>
 			</View>
 		);
 	}
 }
 
-mapStateToProps = (state) => {
-	return {
-		label: state.label,
-	};
-};
-
 mapDispatchToProps = (dispatch) => bindActionCreators({
-		updateButton: () => dispatch({
-			type: 'updateButton'
-		})
-	},
-	dispatch);
+	changeAxis: (axis) => changeAxis(axis),
+}, dispatch);
 
-export default connect(mapStateToProps, mapDispatchToProps)(Detail);
+export default connect(null, mapDispatchToProps)(Detail);

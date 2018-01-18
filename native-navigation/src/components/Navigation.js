@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { AppRegistry, View } from 'react-native';
+import { AppRegistry } from 'react-native';
 import ReactNativeNativeNavigation from './../ReactNativeNativeNavigation';
 import SingleView from './single/SingleView';
 import StackView from './stack/StackView';
@@ -94,6 +94,7 @@ class Navigation extends Component {
 				[page.name]: page,
 			}
 		}, {});
+
 		if (this.props.customViews) {
 			this.viewMap = {
 				...this.viewMap,
@@ -105,6 +106,7 @@ class Navigation extends Component {
 				}, {})
 			};
 		}
+
 		ReactNativeNativeNavigation.onStart((request) => {
 			if (!request) {
 				request = this.generateSiteMap();
@@ -123,20 +125,7 @@ class Navigation extends Component {
 	}
 
 	render() {
-		if (this.state.loading) {
-			return this.props.children[0]
-		}
-
-		const { store } = this.props;
-
-		if (this.props.provider && store) {
-			return (
-				<this.props.provider store={store}>
-					<View/>
-				</this.props.provider>
-			)
-		}
-		return <View/>
+		return this.props.children[0]
 	}
 }
 

@@ -6,9 +6,11 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
@@ -24,6 +26,37 @@ public class ModalFragment extends DialogFragment implements RNNNFragment {
     private Node _node;
     private DialogInterface.OnDismissListener _onDismissListener;
     private BaseFragment _fragment;
+
+    private View.OnKeyListener _forwardKeyListener = new View.OnKeyListener() {
+        @Override
+        public boolean onKey(View v, int keyCode, KeyEvent event) {
+            switch (keyCode) {
+                // Ignore all these keys, as they are the ones that PhoneWindow cares about
+                case KeyEvent.KEYCODE_VOLUME_UP:
+                case KeyEvent.KEYCODE_VOLUME_DOWN:
+                case KeyEvent.KEYCODE_VOLUME_MUTE:
+                case KeyEvent.KEYCODE_MEDIA_PLAY:
+                case KeyEvent.KEYCODE_MEDIA_PAUSE:
+                case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE:
+                case KeyEvent.KEYCODE_MUTE:
+                case KeyEvent.KEYCODE_HEADSETHOOK:
+                case KeyEvent.KEYCODE_MEDIA_STOP:
+                case KeyEvent.KEYCODE_MEDIA_NEXT:
+                case KeyEvent.KEYCODE_MEDIA_PREVIOUS:
+                case KeyEvent.KEYCODE_MEDIA_REWIND:
+                case KeyEvent.KEYCODE_MEDIA_RECORD:
+                case KeyEvent.KEYCODE_MEDIA_FAST_FORWARD:
+                case KeyEvent.KEYCODE_MENU:
+                case KeyEvent.KEYCODE_BACK:
+                case KeyEvent.KEYCODE_SEARCH:
+                case KeyEvent.KEYCODE_WINDOW:
+                    return false;
+                default:
+                    getActivity().onKeyUp(keyCode, event);
+                    return true;
+            }
+        }
+    };
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -44,6 +77,18 @@ public class ModalFragment extends DialogFragment implements RNNNFragment {
         view.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         View.generateViewId();
         view.setId(View.generateViewId());
+
+        ViewTreeObserver viewTreeObserver = view.getViewTreeObserver();
+        viewTreeObserver.addOnGlobalFocusChangeListener(new ViewTreeObserver.OnGlobalFocusChangeListener() {
+            @Override
+            public void onGlobalFocusChanged(View oldFocus, View newFocus) {
+                if (newFocus != null) {
+                    // DialogsFragment views don't bubble alphanumeric key events up to the containing Activity, because their containing PhoneVWindow discards them.
+                    // Here we forward them forcefully in order to allow development shortcuts on the emulator
+                    newFocus.setOnKeyListener(_forwardKeyListener);
+                }
+            }
+        });
 
         return view;
     }

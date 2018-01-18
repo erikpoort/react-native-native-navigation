@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { mapChild } from '../../utils/NavigationUtils';
 
-export default class SplitView extends Component {
+export default class SplitView {
 	static AXIS = {
 		HORIZONTAL: "horizontal",
 		VERTICAL: "vertical",

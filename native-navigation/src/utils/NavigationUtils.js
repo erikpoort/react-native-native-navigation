@@ -41,22 +41,19 @@ export const registerScreens = (navigation, screens) => {
 	});
 };
 
-export const getNode = (dom) => {
-	const domType = dom.type;
-	if (domType && typeof(domType.mapToDictionary) === 'function') {
-		return dom;
-	} else if (domType) {
-		let Component = new domType();
-		if (typeof(Component.render) === 'function') {
-			let ComponentRender = Component.render();
-			return getNode(ComponentRender);
-		}
+export const getNode = (viewMap, dom) => {
+	const domType = dom.type.name;
+	const node = viewMap[domType];
+
+	if (node && typeof(node.mapToDictionary) === 'function') {
+		return node;
 	}
+
 	console.error('RNNN', 'All children of Navigation need to support mapToDictionary');
 	return null;
 };
 
-export const mapChild = (dom, path) => {
-	const node = getNode(dom);
-	return node.type.mapToDictionary(node, path);
+export const mapChild = (viewMap, dom, path) => {
+	const node = getNode(viewMap, dom);
+	return node.mapToDictionary(dom, path);
 };

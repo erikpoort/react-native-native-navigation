@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { mapChild } from '../../utils/NavigationUtils';
 
-export default class TabView extends Component {
+export default class TabView {
 	static mapChildren = (children, path) => {
 		if (!Array.isArray(children)) {
 			children = [children];

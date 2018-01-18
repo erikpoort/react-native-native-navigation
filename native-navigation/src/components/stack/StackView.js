@@ -3,7 +3,7 @@ import { BackHandler } from 'react-native';
 import StackNavigation from './StackNavigation';
 import { mapChild } from '../../utils/NavigationUtils';
 
-export default class StackView extends Component {
+export default class StackView {
 	static mapChildren = (children, path) => {
 		if (!Array.isArray(children)) {
 			children = [children];

@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactNativeNativeNavigation from './ReactNativeNativeNavigation';
 import { generatePageList, registerScreens, mapChild } from './utils/NavigationUtils';
-import SingleView from './components/single/SingleView';
+import SingleView, { SingleNode } from './components/single/SingleView';
 import StackView from './components/stack/StackView';
 import TabView from './components/tab/TabView';
 import SplitView from './components/split/SplitView';
@@ -12,7 +12,7 @@ class Navigation {
 	provider = null;
 	store = null;
 	viewMap = {
-		[SingleView.name]: SingleView,
+		[SingleView.name]: SingleNode,
 		[StackView.name]: StackView,
 		[TabView.name]: TabView,
 		[SplitView.name]: SplitView,
@@ -64,7 +64,7 @@ class Navigation {
 			 * rendered. Otherwise we need to generate a new one.
 			 */
 			if (!request) {
-				request = mapChild(node, '');
+				request = mapChild(this.viewMap, node, '');
 			}
 
 			if (request) {

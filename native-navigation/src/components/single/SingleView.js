@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import SingleNavigation from './SingleNavigation';
 import { mapChild } from '../../utils/NavigationUtils';
 
-export default class SingleView extends Component {
-	static mapToDictionary = (dom, path) => {
+export const SingleNode = {
+	mapToDictionary: (dom, path) => {
 		if (dom == null || dom.props == null || path == null) {
 			console.error("RNNN", "dom and path are mandatory parameters.");
 			return null;
@@ -36,20 +36,21 @@ export default class SingleView extends Component {
 			screenID,
 			modal: modalData,
 		};
-	};
-
-	static reduceScreens = (data, viewMap, pageMap) => {
+	},
+	reduceScreens: (data, viewMap, pageMap) => {
 		const screenID = data.screenID;
 		const screenName = data.screenID.split("/").pop();
 		const SingleScreen = (screen) => {
 			const Screen = screen;
 			return class extends Component {
 				single;
+
 				componentWillMount() {
 					this.single = new SingleNavigation(screenID, screenID, this.props.navigation);
 				}
+
 				render() {
-					return <Screen {...{[screenName]:this.single, single:this.single}} {...this.props} />;
+					return <Screen {...{ [screenName]: this.single, single: this.single }} {...this.props} />;
 				}
 			}
 		};
@@ -65,5 +66,7 @@ export default class SingleView extends Component {
 			screenID,
 			screen,
 		}, ...modal];
-	}
-}
+	},
+};
+
+export default class SingleView {}

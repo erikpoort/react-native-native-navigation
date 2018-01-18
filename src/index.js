@@ -7,6 +7,7 @@ import Loading from './pages/Loading';
 import { Provider } from 'react-redux';
 import store from './redux/store';
 import ExampleView from './custom_nodes/ExampleView';
+import TabView from '../native-navigation/src/components/tab/TabView';
 
 export default class example extends Component {
 	constructor() {
@@ -19,14 +20,17 @@ export default class example extends Component {
 		);
 
 		navigation.start(
-			<DrawerView
-				id='drawer_view'
-				left={<SingleView id='menu' screen={Menu}/>}
-				center={<Home/>}
-				right={<ExampleView id='menu' screen={Menu}/>}
-			/>
+					<SingleView id='menu' screen={Menu}/>
 		);
 	}
+			// <DrawerView
+			// 	id='drawer_view'
+			// 	left={<SingleView id='menu' screen={Menu}/>}
+			// 	center={<TabView id='tab'>
+			// 		<Home/>
+			// 	</TabView>}
+			// 	right={<ExampleView id='menu' screen={Menu}/>}
+			// />
 
 	render() {
 		return <Loading/>

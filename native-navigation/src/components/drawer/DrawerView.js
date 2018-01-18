@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import DrawerNavigation from "./DrawerNavigation";
 import { mapChild } from '../../utils/NavigationUtils';
 
-export default class DrawerView extends Component {
+export default class DrawerView {
 	static nodeToDictionary = (name, dom, path) => {
 		let data = dom.props[name];
 		if (data !== null && data !== undefined) {

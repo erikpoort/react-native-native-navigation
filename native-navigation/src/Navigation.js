@@ -1,22 +1,22 @@
 import React from 'react';
 import ReactNativeNativeNavigation from './ReactNativeNativeNavigation';
-import { generatePageList, registerScreens, mapChild } from './utils/NavigationUtils';
-import SingleView, { SingleNode } from './components/single/SingleView';
-import StackView, { StackNode } from './components/stack/StackView';
-import TabView, { TabNode } from './components/tab/TabView';
-import SplitView, { SplitNode } from './components/split/SplitView';
-import DrawerView, { DrawerNode } from './components/drawer/DrawerView';
+import { generatePageList, mapChild, registerScreens } from './utils/NavigationUtils';
+import { SingleNode } from './components/single/SingleView';
+import { StackNode } from './components/stack/StackView';
+import { TabNode } from './components/tab/TabView';
+import { SplitNode } from './components/split/SplitView';
+import { DrawerNode } from './components/drawer/DrawerView';
 
 class Navigation {
 
 	provider = null;
 	store = null;
 	viewMap = {
-		[SingleView.name]: SingleNode,
-		[StackView.name]: StackNode,
-		[TabView.name]: TabNode,
-		[SplitView.name]: SplitNode,
-		[DrawerView.name]: DrawerNode,
+		...SingleNode,
+		...StackNode,
+		...TabNode,
+		...SplitNode,
+		...DrawerNode,
 	};
 	pageMap = null;
 
@@ -43,12 +43,7 @@ class Navigation {
 		if (customViews) {
 			this.viewMap = {
 				...this.viewMap,
-				...customViews.reduce((map, page) => {
-					return {
-						...map,
-						[page.name]: page,
-					}
-				}, {})
+				...customViews.reduce((map, node) => ({...map, ...node}), {}),
 			};
 		}
 	}

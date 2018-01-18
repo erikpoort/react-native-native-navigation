@@ -13,15 +13,15 @@ import Loading from './pages/Loading';
 
 import { Provider } from 'react-redux';
 import store from './redux/store';
-import ExampleView from './custom_nodes/ExampleView';
+import ExampleView, { ExampleNode } from './custom_nodes/ExampleView';
 
 export default class example extends Component {
 	constructor() {
 		super();
 
 		const navigation = new Navigation(
-			[Loading, Home, Menu],
-			[ExampleView],
+			[Home, Menu],
+			[ExampleNode],
 			Provider, store
 		);
 
@@ -37,7 +37,7 @@ export default class example extends Component {
 							</StackView>
 						</SplitView>
 					}
-					center={<SingleView id='menu' screen={Menu}/>}/>
+					center={<ExampleView id='menu' screen={Menu}/>}/>
 				<SingleView id='menu' screen={Menu}/>
 			</TabView>
 		);

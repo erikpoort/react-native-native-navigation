@@ -3,7 +3,7 @@ import SingleNavigation from './SingleNavigation';
 import { mapChild } from '../../utils/NavigationUtils';
 
 export const SingleNode = {
-	mapToDictionary: (dom, path) => {
+	mapToDictionary: (viewMap, dom, path) => {
 		if (dom == null || dom.props == null || path == null) {
 			console.error("RNNN", "dom and path are mandatory parameters.");
 			return null;

@@ -1,5 +1,12 @@
 import React, { Component } from 'react';
-import { DrawerView, Navigation, SingleView } from '../native-navigation';
+import {
+	Navigation,
+	DrawerView,
+	SingleView,
+	SplitView,
+	StackView,
+	TabView
+} from '../native-navigation';
 import Home from './pages/Home';
 import Menu from './pages/Menu';
 import Loading from './pages/Loading';
@@ -7,7 +14,6 @@ import Loading from './pages/Loading';
 import { Provider } from 'react-redux';
 import store from './redux/store';
 import ExampleView from './custom_nodes/ExampleView';
-import TabView from '../native-navigation/src/components/tab/TabView';
 
 export default class example extends Component {
 	constructor() {
@@ -20,17 +26,22 @@ export default class example extends Component {
 		);
 
 		navigation.start(
-					<SingleView id='menu' screen={Menu}/>
+			<TabView id='tab'>
+				<DrawerView
+					id='drawer'
+					left={
+						<SplitView id='split' axis={SplitView.AXIS.VERTICAL}>
+							<SingleView id='menu' screen={Menu}/>
+							<StackView id='stack'>
+								<SingleView id='menu' screen={Menu}/>
+							</StackView>
+						</SplitView>
+					}
+					center={<SingleView id='menu' screen={Menu}/>}/>
+				<SingleView id='menu' screen={Menu}/>
+			</TabView>
 		);
 	}
-			// <DrawerView
-			// 	id='drawer_view'
-			// 	left={<SingleView id='menu' screen={Menu}/>}
-			// 	center={<TabView id='tab'>
-			// 		<Home/>
-			// 	</TabView>}
-			// 	right={<ExampleView id='menu' screen={Menu}/>}
-			// />
 
 	render() {
 		return <Loading/>

@@ -55,5 +55,5 @@ export const getNode = (viewMap, dom) => {
 
 export const mapChild = (viewMap, dom, path) => {
 	const node = getNode(viewMap, dom);
-	return node.mapToDictionary(dom, path);
+	return node.mapToDictionary(viewMap, dom, path);
 };

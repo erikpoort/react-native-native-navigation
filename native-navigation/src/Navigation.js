@@ -4,8 +4,8 @@ import { generatePageList, registerScreens, mapChild } from './utils/NavigationU
 import SingleView, { SingleNode } from './components/single/SingleView';
 import StackView from './components/stack/StackView';
 import TabView from './components/tab/TabView';
-import SplitView from './components/split/SplitView';
 import DrawerView from './components/drawer/DrawerView';
+import SplitView, { SplitNode } from './components/split/SplitView';
 
 class Navigation {
 
@@ -15,8 +15,8 @@ class Navigation {
 		[SingleView.name]: SingleNode,
 		[StackView.name]: StackView,
 		[TabView.name]: TabView,
-		[SplitView.name]: SplitView,
 		[DrawerView.name]: DrawerView,
+		[SplitView.name]: SplitNode,
 	};
 	pageMap = null;
 

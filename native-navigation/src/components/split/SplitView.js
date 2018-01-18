@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import { mapChild } from '../../utils/NavigationUtils';
 
-export default class SplitView {
-	static AXIS = {
-		HORIZONTAL: "horizontal",
-		VERTICAL: "vertical",
-	};
+export const AXIS = {
+	HORIZONTAL: "horizontal",
+	VERTICAL: "vertical",
+};
 
-	static mapToDictionary = (dom, path) => {
+export const SplitNode = {
+	mapToDictionary: (viewMap, dom, path) => {
 		if (dom == null || dom.props == null || path == null) {
 			console.error("RNNN", "dom and path are mandatory parameters.");
 			return null;
@@ -28,9 +28,9 @@ export default class SplitView {
 		}
 
 		const dom1 = dom.props.children[0];
-		const node1 = mapChild(dom1, screenID);
+		const node1 = mapChild(viewMap, dom1, screenID);
 		const dom2 = dom.props.children[1];
-		const node2 = mapChild(dom2, screenID);
+		const node2 = mapChild(viewMap, dom2, screenID);
 
 		if (node1 == null || node2 == null) {
 			console.error("RNNN", "A SplitView expects two valid nodes", screenID);
@@ -45,9 +45,8 @@ export default class SplitView {
 			node2,
 			axis,
 		}
-	};
-
-	static reduceScreens = (data, viewMap, pageMap) => {
+	},
+	reduceScreens: (data, viewMap, pageMap) => {
 		return [data.node1, data.node2].reduce((map, node) => {
 			const viewData = viewMap[node.type];
 			if (viewData) {
@@ -75,5 +74,9 @@ export default class SplitView {
 				return null;
 			}
 		}, []).filter((screen) => screen != null);
-	}
+	},
+};
+
+export default class SplitView {
+	static AXIS = AXIS;
 }

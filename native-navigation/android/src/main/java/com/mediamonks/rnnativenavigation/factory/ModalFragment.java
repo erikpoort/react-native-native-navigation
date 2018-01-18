@@ -31,6 +31,9 @@ public class ModalFragment extends DialogFragment implements RNNNFragment {
     private View.OnKeyListener _forwardKeyListener = new View.OnKeyListener() {
         @Override
         public boolean onKey(View v, int keyCode, KeyEvent event) {
+            if (event.getAction() != KeyEvent.ACTION_UP) {
+                return false;
+            }
             switch (keyCode) {
                 // Ignore all these keys, as they are the ones that PhoneWindow cares about
                 case KeyEvent.KEYCODE_VOLUME_UP:

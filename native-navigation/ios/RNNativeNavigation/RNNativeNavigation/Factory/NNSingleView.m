@@ -5,6 +5,9 @@
 #import <React/RCTRootView.h>
 #import "NNSingleView.h"
 #import "NNSingleNode.h"
+#import "NNStackNode.h"
+#import "NNNodeHelper.h"
+#import "RNNNState.h"
 
 @interface NNSingleView ()
 
@@ -56,6 +59,37 @@
 		}
 	}
 	return self;
+}
+
+- (void)callMethodWithName:(NSString *)methodName arguments:(NSDictionary *)arguments callback:(void (^)(NSArray *))callback {
+    NSMutableDictionary *methodDictionary = @{}.mutableCopy;
+    methodDictionary[@"push"] = [NSValue valueWithPointer:@selector(push:callback:)];
+
+    SEL thisSelector = [methodDictionary[methodName] pointerValue];
+    [self performSelector:thisSelector withObject:arguments withObject:^(NSArray *array){
+        callback(array);
+    }];
+}
+
+- (void)push: (NSDictionary *) arguments callback: (void(^)(NSArray *)) callback{
+    UIViewController <NNView> *rootController = (UIViewController <NNView> *) [UIApplication sharedApplication].keyWindow.rootViewController;
+    NNSingleNode *nodeObject = [NNNodeHelper.sharedInstance nodeFromMap:arguments[@"screen"] bridge:self.bridge];
+    UINavigationController <NNView> *navigationController = (UINavigationController <NNView> *) self.navigationController;
+    NNStackNode *stackNode = navigationController.node;
+    NSMutableArray *stack = stackNode.stack.mutableCopy;
+    [stack addObject:nodeObject];
+    stackNode.stack = stack;
+
+    NSDictionary *newState = rootController.node.data;
+    [RNNNState sharedInstance].state = newState;
+    callback(@[newState]);
+
+    dispatch_async(dispatch_get_main_queue(), ^{
+        UIViewController *viewController = [nodeObject generate];
+        if (navigationController && viewController) {
+            [navigationController pushViewController:viewController animated:YES];
+        }
+    });
 }
 
 @end

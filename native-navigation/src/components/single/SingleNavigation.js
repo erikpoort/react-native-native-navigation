@@ -7,6 +7,8 @@ const { ReactNativeNativeNavigation } = NativeModules;
 export default class SingleNavigation extends BaseNavigation {
 	showModal = (showScreen) => {
 		const newPath = `${this.screenID}/modal`;
-		return super.registerScreens(newPath, ReactNativeNativeNavigation.showModal, showScreen);
+		return super.registerScreens(newPath, "showModal", showScreen);
+
+		// return super.registerScreens(newPath, ReactNativeNativeNavigation.showModal, showScreen);
 	}
 }

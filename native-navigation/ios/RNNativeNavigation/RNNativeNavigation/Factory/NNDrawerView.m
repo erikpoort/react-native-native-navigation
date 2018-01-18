@@ -4,6 +4,10 @@
 
 #import "NNDrawerView.h"
 #import "NNDrawerNode.h"
+#import "NNSingleNode.h"
+#import "NNNodeHelper.h"
+#import "UIViewController+MMDrawerController.h"
+#import "RNNNState.h"
 
 @interface NNDrawerView ()
 
@@ -73,6 +77,35 @@
     }
 
     return nil;
+}
+
+- (void)callMethodWithName:(NSString *)methodName arguments:(NSDictionary *)arguments callback:(void (^)(NSArray *))callback {
+    NSMutableDictionary *methodDictionary = @{}.mutableCopy;
+    methodDictionary[@"openView"] = [NSValue valueWithPointer:@selector(openView:callback:)];
+
+    SEL thisSelector = [methodDictionary[methodName] pointerValue];
+    [self performSelector:thisSelector withObject:arguments withObject:^(NSArray *array){
+        callback(array);
+    }];
+}
+
+- (void)openView: (NSDictionary *) arguments callback: (void(^)(NSArray *)) callback {
+    NNSingleNode *nodeObject = [NNNodeHelper.sharedInstance nodeFromMap:arguments[@"screen"] bridge:arguments[@"bridge"]];
+    UIViewController <NNView> *rootController = (UIViewController <NNView> *) [UIApplication sharedApplication].keyWindow.rootViewController;
+
+    NNDrawerNode *drawerNode = ((NNDrawerView *)self.mm_drawerController).node;
+    drawerNode.centerNode = nodeObject;
+
+    NSDictionary *newState = rootController.node.data;
+    [RNNNState sharedInstance].state = newState;
+    callback(@[newState]);
+
+    dispatch_async(dispatch_get_main_queue(), ^{
+        UIViewController *viewController = [nodeObject generate];
+        if (viewController) {
+            [self setCenterViewController:viewController withCloseAnimation:YES completion:nil];
+        }
+    });
 }
 
 @end

@@ -2,9 +2,9 @@ import React from 'react';
 import ReactNativeNativeNavigation from './ReactNativeNativeNavigation';
 import { generatePageList, registerScreens, mapChild } from './utils/NavigationUtils';
 import SingleView, { SingleNode } from './components/single/SingleView';
-import StackView from './components/stack/StackView';
 import TabView from './components/tab/TabView';
 import DrawerView from './components/drawer/DrawerView';
+import StackView, { StackNode } from './components/stack/StackView';
 import SplitView, { SplitNode } from './components/split/SplitView';
 
 class Navigation {
@@ -13,9 +13,9 @@ class Navigation {
 	store = null;
 	viewMap = {
 		[SingleView.name]: SingleNode,
-		[StackView.name]: StackView,
 		[TabView.name]: TabView,
 		[DrawerView.name]: DrawerView,
+		[StackView.name]: StackNode,
 		[SplitView.name]: SplitNode,
 	};
 	pageMap = null;

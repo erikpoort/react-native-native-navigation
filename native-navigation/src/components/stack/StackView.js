@@ -3,28 +3,28 @@ import { BackHandler } from 'react-native';
 import StackNavigation from './StackNavigation';
 import { mapChild } from '../../utils/NavigationUtils';
 
-export default class StackView {
-	static mapChildren = (children, path) => {
-		if (!Array.isArray(children)) {
-			children = [children];
-		}
-		let buildPath = path;
+const mapChildren = (viewMap, children, path) => {
+	if (!Array.isArray(children)) {
+		children = [children];
+	}
+	let buildPath = path;
 
-		const leni = children.length;
-		let nodes = [];
-		for (let i = 0; i < leni; ++i) {
-			const dom = children[i];
-			const node = mapChild(dom, buildPath);
-			if (node == null) {
-				return null;
-			}
-			buildPath = node.screenID;
-			nodes.push(node);
+	const leni = children.length;
+	let nodes = [];
+	for (let i = 0; i < leni; ++i) {
+		const dom = children[i];
+		const node = mapChild(viewMap, dom, buildPath);
+		if (node == null) {
+			return null;
 		}
-		return nodes;
-	};
+		buildPath = node.screenID;
+		nodes.push(node);
+	}
+	return nodes;
+};
 
-	static mapToDictionary = (dom, path) => {
+export const StackNode = {
+	mapToDictionary: (viewMap, dom, path) => {
 		if (dom == null || dom.props == null || path == null) {
 			console.error("RNNN", "dom and path are mandatory parameters.");
 			return null;
@@ -44,7 +44,7 @@ export default class StackView {
 			return null;
 		}
 
-		const stack = dom.type.mapChildren(dom.props.children, screenID);
+		const stack = mapChildren(viewMap, dom.props.children, screenID);
 		if (stack == null) {
 			console.error("RNNN", "A StackView expects all children to be valid nodes", screenID);
 			return null;
@@ -55,9 +55,8 @@ export default class StackView {
 			screenID,
 			stack,
 		};
-	};
-
-	static reduceScreens = (data, viewMap, pageMap) => {
+	},
+	reduceScreens: (data, viewMap, pageMap) => {
 		const navigatorID = data.screenID;
 		const navigatorName = navigatorID.split("/").pop();
 		return data.stack.reduce((map, node) => {
@@ -110,5 +109,7 @@ export default class StackView {
 			}
 			return map;
 		}, []);
-	}
-}
+	},
+};
+
+export default class StackView {}

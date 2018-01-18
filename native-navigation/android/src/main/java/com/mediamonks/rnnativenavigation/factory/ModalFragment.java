@@ -107,6 +107,24 @@ public class ModalFragment extends DialogFragment implements RNNNFragment {
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+
+        Assertions.assertNotNull(getView())
+                .getViewTreeObserver()
+                .addOnGlobalFocusChangeListener(_globalFocusChangeListener);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        Assertions.assertNotNull(getView())
+                .getViewTreeObserver()
+                .removeOnGlobalFocusChangeListener(_globalFocusChangeListener);
+    }
+
+    @Override
     public void onDismiss(DialogInterface dialog) {
         super.onDismiss(dialog);
 

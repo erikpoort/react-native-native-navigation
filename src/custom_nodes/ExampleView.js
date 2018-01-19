@@ -1,8 +1,13 @@
 import React from 'react';
-import { SingleView } from '../../native-navigation/src/index';
+import { SingleNode } from '../../native-navigation/src/components/single/SingleView';
 
-export default class ExampleView extends SingleView {
-    constructor() {
-        super()
-    }
-}
+class ExampleView {}
+
+export const ExampleNode = {
+	[ExampleView.name]: {
+		reduceScreens: SingleNode.SingleView.reduceScreens,
+		mapToDictionary: SingleNode.SingleView.mapToDictionary,
+	}
+};
+
+export default ExampleView;

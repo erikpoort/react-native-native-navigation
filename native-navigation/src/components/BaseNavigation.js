@@ -11,13 +11,13 @@ export default class BaseNavigation {
 		this.screenID = screenID;
 	}
 
-	registerScreens(newPath, presentMethod, showScreen) {
+	addScreens(newPath, presentMethod, showScreen) {
 		const Screen = showScreen;
 
-		const screenData = mapChild(Screen, newPath);
+		const viewMap = this.navigation.viewMap;
+		const screenData = mapChild(viewMap, Screen, newPath);
 
 		return presentMethod(screenData, (register) => {
-			const viewMap = this.navigation.viewMap;
 			const view = viewMap[register.type];
 			const screens = view.reduceScreens(register, viewMap, this.navigation.pageMap).filter((screen) => {
 				return screen.screenID.includes(newPath) && screen.screenID !== newPath;

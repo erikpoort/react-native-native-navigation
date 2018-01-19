@@ -21,6 +21,7 @@ class Detail extends Component {
 				<Button title="Up" onPress={() => this.handleDetail('up_stack')}/>
 				<Button title="Bottom" onPress={() => this.handleDetail('bottom_stack')}/>
 				<Button title="Top" onPress={() => this.handleDetail('home_stack')}/>
+				<Button title="Stack" onPress={() => this.handleDetail('stack')}/>
 				<Button title="Vertical" onPress={() => this.props.changeAxis(SplitView.AXIS.VERTICAL)}/>
 				<Button title="Horizontal"
 				        onPress={() => this.props.changeAxis(SplitView.AXIS.HORIZONTAL)}/>

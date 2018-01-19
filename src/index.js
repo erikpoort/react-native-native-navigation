@@ -9,6 +9,7 @@ import {
 } from '../native-navigation';
 import Home from './pages/Home';
 import Menu from './pages/Menu';
+import Detail from './pages/Detail'
 import Loading from './pages/Loading';
 
 import { Provider } from 'react-redux';
@@ -19,8 +20,9 @@ export default class example extends Component {
 	constructor() {
 		super();
 
+		this.home = new Home();
 		const navigation = new Navigation(
-			[Home, Menu],
+			[Home, Menu, Detail],
 			[ExampleNode],
 			Provider, store
 		);
@@ -33,12 +35,12 @@ export default class example extends Component {
 						<SplitView id='split' axis={SplitView.AXIS.VERTICAL}>
 							<SingleView id='menu' screen={Menu}/>
 							<StackView id='stack'>
-								<SingleView id='menu' screen={Menu}/>
+								<SingleView id='detail' screen={Detail}/>
 							</StackView>
 						</SplitView>
 					}
 					center={<ExampleView id='menu' screen={Menu}/>}/>
-				<SingleView id='menu' screen={Menu}/>
+				{this.home.siteMap()}
 			</TabView>
 		);
 	}

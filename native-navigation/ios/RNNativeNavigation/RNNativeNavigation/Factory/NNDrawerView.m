@@ -59,14 +59,15 @@
 
     if([path rangeOfString:self.drawerNode.screenID].location == 0) {
         if([path isEqualToString:self.drawerNode.screenID]) return self;
+
         NSString *newPath = [path substringFromIndex:self.drawerNode.screenID.length + 1];
         NSArray *splittedArray = [newPath componentsSeparatedByString:@"/"];
         NSString *side = splittedArray.firstObject;
 
         NSMutableDictionary *sideMap = @{}.mutableCopy;
-        if(leftController) sideMap[@"left"] = leftController;
-        if(centerController) sideMap[@"center"] = centerController;
-        if(rightController) sideMap[@"right"] = rightController;
+        if(leftController) sideMap[LEFT] = leftController;
+        if(centerController) sideMap[CENTER] = centerController;
+        if(rightController) sideMap[RIGHT] = rightController;
 
         foundController = sideMap[side];
         if(splittedArray.count > 1){
@@ -78,6 +79,7 @@
 
     return nil;
 }
+
 
 - (void)callMethodWithName:(NSString *)methodName arguments:(NSDictionary *)arguments callback:(void (^)(NSArray *))callback {
     NSMutableDictionary *methodDictionary = @{}.mutableCopy;
@@ -92,9 +94,17 @@
 - (void)openView: (NSDictionary *) arguments callback: (void(^)(NSArray *)) callback {
     NNSingleNode *nodeObject = [NNNodeHelper.sharedInstance nodeFromMap:arguments[@"screen"] bridge:arguments[@"bridge"]];
     UIViewController <NNView> *rootController = (UIViewController <NNView> *) [UIApplication sharedApplication].keyWindow.rootViewController;
+    NSString *parentPath = nodeObject.screenID.stringByDeletingLastPathComponent.stringByDeletingLastPathComponent;
+    NNDrawerNode *drawerNode = self.node;
 
-    NNDrawerNode *drawerNode = ((NNDrawerView *)self.mm_drawerController).node;
-    drawerNode.centerNode = nodeObject;
+    switch ([self sideForPath: parentPath]){
+        case NNDrawerSideLeft:
+            drawerNode.leftNode = nodeObject;
+        case NNDrawerSideCenter:
+            drawerNode.centerNode = nodeObject;
+        case NNDrawerSideRight:
+            drawerNode.rightNode = nodeObject;
+    }
 
     NSDictionary *newState = rootController.node.data;
     [RNNNState sharedInstance].state = newState;
@@ -103,9 +113,30 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         UIViewController *viewController = [nodeObject generate];
         if (viewController) {
-            [self setCenterViewController:viewController withCloseAnimation:YES completion:nil];
+            switch ([self sideForPath:parentPath]){
+                case NNDrawerSideLeft:
+                    [self.mm_drawerController setLeftDrawerViewController:viewController];
+                case NNDrawerSideCenter:
+                    [self.mm_drawerController setCenterViewController:viewController withCloseAnimation:YES completion:nil];
+                case NNDrawerSideRight:
+                    [self.mm_drawerController setRightDrawerViewController:viewController];
+            }
         }
     });
 }
+
+- (NNDrawerSide)sideForPath:(NSString *)path
+{
+	if([path rangeOfString:self.drawerNode.screenID].location == 0) {
+		NSString *newPath = [path substringFromIndex:self.drawerNode.screenID.length + 1];
+		NSArray *splitArray = [newPath componentsSeparatedByString:@"/"];
+		NSString *side = splitArray.firstObject;
+		if([side isEqualToString:LEFT]) return NNDrawerSideLeft;
+		if([side isEqualToString:CENTER]) return NNDrawerSideCenter;
+		if([side isEqualToString:RIGHT]) return NNDrawerSideRight;
+	}
+	return nil;
+}
+
 
 @end

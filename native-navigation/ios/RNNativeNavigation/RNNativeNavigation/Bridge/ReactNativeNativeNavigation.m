@@ -6,12 +6,12 @@
 #import "NNBaseNode.h"
 #import "ReactNativeNativeNavigation.h"
 #import "RNNNState.h"
-#import "NNSingleNode.h"
 #import "NNNodeHelper.h"
 #import "NNStackNode.h"
 #import "NNView.h"
-#import "NNSingleView.h"
 #import "NNDrawerNode.h"
+#import "NNSingleNode.h"
+#import "NNSingleView.h"
 #import "NNDrawerView.h"
 #import "UIViewController+MMDrawerController.h"
 
@@ -88,49 +88,20 @@ RCT_EXPORT_METHOD(callMethodOnNode:
             (NSDictionary *) arguments
             responseCallback:
             (RCTResponseSenderBlock) callback) {
-
-    NNSingleNode *nodeObject = [NNNodeHelper.sharedInstance nodeFromMap:arguments[@"screen"] bridge:self.bridge];
-
     UIViewController <NNView> *rootController = (UIViewController <NNView> *) [UIApplication sharedApplication].keyWindow.rootViewController;
-    NSString *parentPath = nodeObject.screenID.stringByDeletingLastPathComponent;
-    __kindof UIViewController <NNView> *findController = [rootController viewForPath:parentPath];
+    __kindof UIViewController <NNView> *findController = [rootController viewForPath:navigator];
     if (!findController) return;
 
-    NSMutableDictionary *newArguemnts = @{}.mutableCopy;
-    newArguemnts[@"bridge"] = self.bridge;
-    [newArguemnts addEntriesFromDictionary:arguments];
+    NSMutableDictionary *newArguments = @{}.mutableCopy;
+    newArguments[@"bridge"] = self.bridge;
+    [newArguments addEntriesFromDictionary:arguments];
 
-    [findController callMethodWithName:methodName arguments:newArguemnts callback:^(NSArray *response) {
-        callback(response);
-    }];
+    if ([findController respondsToSelector:@selector(callMethodWithName:arguments:callback:)]) {
+        [findController callMethodWithName:methodName arguments:newArguments callback:^(NSArray *response) {
+            callback(response);
+        }];
+    }
 
-
-}
-
-RCT_EXPORT_METHOD(showModal:
-    (NSDictionary *) screen
-            registerCallback:
-            (RCTResponseSenderBlock) callback) {
-    NNSingleNode *nodeObject = [NNNodeHelper.sharedInstance nodeFromMap:screen bridge:self.bridge];
-
-    UIViewController <NNView> *rootController = (UIViewController <NNView> *) [UIApplication sharedApplication].keyWindow.rootViewController;
-    NSString *parentPath = nodeObject.screenID.stringByDeletingLastPathComponent.stringByDeletingLastPathComponent;
-    NNSingleView *findController = (NNSingleView *) [rootController viewForPath:parentPath];
-    if (!findController) return;
-
-    NNSingleNode *singleNode = findController.node;
-    singleNode.modal = nodeObject;
-
-    NSDictionary *newState = rootController.node.data;
-    [RNNNState sharedInstance].state = newState;
-    callback(@[newState]);
-
-    dispatch_async(dispatch_get_main_queue(), ^{
-        UIViewController *viewController = [nodeObject generate];
-        if (viewController) {
-            [findController presentViewController:viewController animated:YES completion:nil];
-        }
-    });
 }
 
 RCT_EXPORT_METHOD(resetApplication) {

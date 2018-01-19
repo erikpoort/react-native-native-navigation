@@ -52,8 +52,9 @@
 {
 	UIViewController <NNView> *modalController = (UIViewController <NNView> *)self.presentedViewController;
 	if (modalController && [path rangeOfString:modalController.node.screenID].location == 0) {
+        if([path isEqualToString:self.singleNode.screenID]) return self;
 		if (![modalController.node.screenID isEqualToString:path]) {
-			return (UIViewController <NNView> *)[modalController viewForPath:path];
+			return [modalController viewForPath:path];
 		} else {
 			return modalController;
 		}
@@ -63,7 +64,7 @@
 
 - (void)callMethodWithName:(NSString *)methodName arguments:(NSDictionary *)arguments callback:(void (^)(NSArray *))callback {
     NSMutableDictionary *methodDictionary = @{}.mutableCopy;
-    methodDictionary[@"push"] = [NSValue valueWithPointer:@selector(push:callback:)];
+    methodDictionary[@"showModal"] = [NSValue valueWithPointer:@selector(showModal:callback:)];
 
     SEL thisSelector = [methodDictionary[methodName] pointerValue];
     [self performSelector:thisSelector withObject:arguments withObject:^(NSArray *array){
@@ -71,14 +72,13 @@
     }];
 }
 
-- (void)push: (NSDictionary *) arguments callback: (void(^)(NSArray *)) callback{
-    UIViewController <NNView> *rootController = (UIViewController <NNView> *) [UIApplication sharedApplication].keyWindow.rootViewController;
+- (void)showModal: (NSDictionary *) arguments callback: (void(^)(NSArray *)) callback{
     NNSingleNode *nodeObject = [NNNodeHelper.sharedInstance nodeFromMap:arguments[@"screen"] bridge:self.bridge];
-    UINavigationController <NNView> *navigationController = (UINavigationController <NNView> *) self.navigationController;
-    NNStackNode *stackNode = navigationController.node;
-    NSMutableArray *stack = stackNode.stack.mutableCopy;
-    [stack addObject:nodeObject];
-    stackNode.stack = stack;
+
+    UIViewController <NNView> *rootController = (UIViewController <NNView> *) [UIApplication sharedApplication].keyWindow.rootViewController;
+
+    NNSingleNode *singleNode = self.node;
+    singleNode.modal = nodeObject;
 
     NSDictionary *newState = rootController.node.data;
     [RNNNState sharedInstance].state = newState;
@@ -86,8 +86,8 @@
 
     dispatch_async(dispatch_get_main_queue(), ^{
         UIViewController *viewController = [nodeObject generate];
-        if (navigationController && viewController) {
-            [navigationController pushViewController:viewController animated:YES];
+        if (viewController) {
+            [self presentViewController:viewController animated:YES completion:nil];
         }
     });
 }

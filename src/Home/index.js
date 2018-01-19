@@ -14,7 +14,7 @@ export default class Home extends Component {
 						<SingleView id='detail' screen={Detail} lazyLoad='true'/>
 					</StackView>
 					<StackView id='bottom_stack'>
-						<SingleView id='detail' screen={Detail} lazyLoad='true'/>
+						<SingleView id='detail2' screen={Detail} lazyLoad='true'/>
 					</StackView>
 				</SplitView>
 			</StackView>

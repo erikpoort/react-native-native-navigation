@@ -13,9 +13,10 @@ export default class BaseNavigation {
 		this.navigation = navigation;
 	}
 
-	registerScreens(newPath, presentMethod, showScreen){
+	registerScreens(newPath, presentMethod, showScreen, extraArguments){
 		const args = {
 			"screen": this.navigation.mapChild(showScreen, this.screenID),
+			...extraArguments
 		};
 		return ReactNativeNativeNavigation.callMethodOnNode(newPath, this.navigatorID, presentMethod, args, (register) => {
 			const viewMap = this.navigation.viewMap;

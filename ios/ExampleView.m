@@ -7,28 +7,27 @@
 #import <React/RCTRootView.h>
 #import "ExampleView.h"
 #import "ExampleNode.h"
-#import "NNNode.h"
 
-@interface ExampleView()
-@property (nonatomic, strong) ExampleNode *exampleNode;
-@property (nonatomic, strong) RCTBridge *bridge;
+@interface ExampleView ()
+
+@property(nonatomic, strong) ExampleNode *exampleNode;
+@property(nonatomic, strong) RCTBridge *bridge;
+
 @end
 
 @implementation ExampleView
+
 - (instancetype)initWithBridge:(RCTBridge *)bridge node:(ExampleNode *)node {
     if (self = [super init]) {
         self.exampleNode = node;
         self.bridge = bridge;
         self.title = node.title;
-        if (node.lazyLoad) {
-            [self loadViewIfNeeded];
-        }
     }
+
     return self;
 }
 
-- (__kindof id <NNNode>)node
-{
+- (__kindof id <NNNode>)node {
     return self.exampleNode;
 }
 
@@ -36,19 +35,17 @@
     self.view = [[RCTRootView alloc] initWithBridge:self.bridge moduleName:self.node.screenID initialProperties:nil];
 }
 
-- (void)viewDidAppear:(BOOL)animated
-{
+- (void)viewDidAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 
     self.view.backgroundColor = UIColor.redColor;
 }
 
-- (UIViewController <NNView> *)viewForPath:(NSString *)path
-{
-    UIViewController <NNView> *modalController = (UIViewController <NNView> *)self.presentedViewController;
+- (UIViewController <NNView> *)viewForPath:(NSString *)path {
+    UIViewController <NNView> *modalController = (UIViewController <NNView> *) self.presentedViewController;
     if (modalController && [path rangeOfString:modalController.node.screenID].location == 0) {
         if (![modalController.node.screenID isEqualToString:path]) {
-            return (UIViewController <NNView> *)[modalController viewForPath:path];
+            return [modalController viewForPath:path];
         } else {
             return modalController;
         }

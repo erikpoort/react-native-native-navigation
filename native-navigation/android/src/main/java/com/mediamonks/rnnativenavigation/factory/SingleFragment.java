@@ -10,9 +10,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 
-import com.facebook.react.ReactRootView;
 import com.mediamonks.rnnativenavigation.data.Node;
 import com.mediamonks.rnnativenavigation.data.SingleNode;
+import com.mediamonks.rnnativenavigation.react.RNRootView;
 
 /**
  * Created by erik on 09/08/2017.
@@ -24,7 +24,7 @@ public class SingleFragment extends BaseFragment<SingleNode> {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        ReactRootView rootView = new ReactRootView(getActivity());
+        RNRootView rootView = new RNRootView(getActivity());
         rootView.setBackgroundColor(Color.WHITE);
         rootView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
         return rootView;
@@ -34,8 +34,13 @@ public class SingleFragment extends BaseFragment<SingleNode> {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         Log.i("MMM onViewCreated", getNode().getScreenID());
-        ReactRootView rootView = (ReactRootView) view;
+        RNRootView rootView = (RNRootView) view;
         rootView.startReactApplication(getNode().getInstanceManager(), getNode().getScreenID());
+    }
+
+    @Override public void onResume() {
+        super.onResume();
+        Log.i("MMM onResume", getNode().getScreenID());
     }
 
     @Override
@@ -65,10 +70,10 @@ public class SingleFragment extends BaseFragment<SingleNode> {
     }
 
     @Override public void invalidate() {
-        final ReactRootView rootView = (ReactRootView) getView();
+        final RNRootView rootView = (RNRootView) getView();
         if (rootView != null) {
             Log.i("MMM", "Clean " + getNode().getScreenID());
-            rootView.unmountReactApplication();
+            rootView.invalidate();
         }
     }
 

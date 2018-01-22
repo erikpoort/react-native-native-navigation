@@ -30,7 +30,6 @@ import com.mediamonks.rnnativenavigation.factory.StackFragment;
 
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
@@ -40,7 +39,7 @@ import java.util.Stack;
  * example 2017
  */
 
-class RNNativeNavigationModule extends ReactContextBaseJavaModule implements LifecycleEventListener {
+public class RNNativeNavigationModule extends ReactContextBaseJavaModule implements LifecycleEventListener {
     private static final String kRNNN = "RNNN";
 
     private Set<RNNNFragment> _fragments;
@@ -251,6 +250,23 @@ class RNNativeNavigationModule extends ReactContextBaseJavaModule implements Lif
         return rootFragment;
     }
 
+    public void resetNavigation() {
+        if (_fragments.size() > 0) {
+            RNNNFragment anyFragment = (RNNNFragment) _fragments.toArray()[0];
+            final RNNNFragment rootFragment = getRootFragment(anyFragment.getNode());
+            getCurrentActivity().runOnUiThread(new Runnable() {
+                @Override public void run() {
+                    rootFragment.invalidate();
+
+
+                    _fragments = new HashSet<>();
+                    RNNNState.INSTANCE.state = null;
+                    getReactInstanceManager().getDevSupportManager().handleReloadJS();
+                }
+            });
+        }
+    }
+
     @Override
     public void onHostResume() {
         ReactFragmentActivity mainActivity = (ReactFragmentActivity) getCurrentActivity();
@@ -259,16 +275,7 @@ class RNNativeNavigationModule extends ReactContextBaseJavaModule implements Lif
 
         getReactInstanceManager().getDevSupportManager().addCustomDevOption("Reset navigation", new DevOptionHandler() {
             @Override public void onOptionSelected() {
-                RNNNFragment anyFragment = (RNNNFragment) _fragments.toArray()[0];
-                final RNNNFragment rootFragment = getRootFragment(anyFragment.getNode());
-                getCurrentActivity().runOnUiThread(new Runnable() {
-                    @Override public void run() {
-                        rootFragment.invalidate();
-                    }
-                });
-                _fragments = new HashSet<>();
-                RNNNState.INSTANCE.state = null;
-                getReactInstanceManager().getDevSupportManager().handleReloadJS();
+                resetNavigation();
             }
         });
     }

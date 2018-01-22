@@ -1,5 +1,4 @@
 //
-
 // Copyright (c) 2017 MediaMonks. All rights reserved.
 //
 

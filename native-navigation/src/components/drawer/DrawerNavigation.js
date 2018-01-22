@@ -21,8 +21,6 @@ export default class DrawerNavigation extends BaseNavigation {
 				newPath = `/${comp}${newPath}`
 			}
 		}
-		this.screenID = newPath;
-		return super.registerScreens(newPath, "openView", showScreen, null);
+		return super.addScreens(newPath, "openView", showScreen, null);
 	}
-
 }

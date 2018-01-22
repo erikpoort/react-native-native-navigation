@@ -9,7 +9,8 @@
 @class RCTBridge;
 @class ExampleNode;
 
-
 @interface ExampleView : UIViewController <NNView>
-    - (instancetype)initWithBridge:(RCTBridge *)bridge node:(ExampleNode *)node;
+
+- (instancetype)initWithBridge:(RCTBridge *)bridge node:(ExampleNode *)node;
+
 @end

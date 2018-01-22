@@ -8,6 +8,4 @@
 
 @interface ExampleNode : NNBaseNode <NNNode>
 
-@property(nonatomic, assign) BOOL lazyLoad;
-
 @end

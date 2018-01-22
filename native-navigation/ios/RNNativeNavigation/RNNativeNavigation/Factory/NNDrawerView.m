@@ -8,6 +8,7 @@
 #import "NNNodeHelper.h"
 #import "UIViewController+MMDrawerController.h"
 #import "RNNNState.h"
+#import "NNSingleView.h"
 
 @interface NNDrawerView ()
 
@@ -93,9 +94,14 @@
 
 - (void)openView: (NSDictionary *) arguments callback: (void(^)(NSArray *)) callback {
     NNSingleNode *nodeObject = [NNNodeHelper.sharedInstance nodeFromMap:arguments[@"screen"] bridge:arguments[@"bridge"]];
+
     UIViewController <NNView> *rootController = (UIViewController <NNView> *) [UIApplication sharedApplication].keyWindow.rootViewController;
     NSString *parentPath = nodeObject.screenID.stringByDeletingLastPathComponent.stringByDeletingLastPathComponent;
-    NNDrawerNode *drawerNode = self.node;
+    NNSingleView *findController = (NNSingleView *) [rootController viewForPath:parentPath];
+    if (!findController) return;
+
+    NNDrawerView *drawerView = (NNDrawerView *) findController.mm_drawerController;
+    NNDrawerNode *drawerNode = drawerView.node;
 
     switch ([self sideForPath: parentPath]){
         case NNDrawerSideLeft:
@@ -115,11 +121,14 @@
         if (viewController) {
             switch ([self sideForPath:parentPath]){
                 case NNDrawerSideLeft:
-                    [self.mm_drawerController setLeftDrawerViewController:viewController];
+                    [drawerView setLeftDrawerViewController:viewController];
+                    break;
                 case NNDrawerSideCenter:
-                    [self.mm_drawerController setCenterViewController:viewController withCloseAnimation:YES completion:nil];
+                    [drawerView setCenterViewController:viewController withCloseAnimation:YES completion:nil];
+                    break;
                 case NNDrawerSideRight:
-                    [self.mm_drawerController setRightDrawerViewController:viewController];
+                    [drawerView setRightDrawerViewController:viewController];
+                    break;
             }
         }
     });

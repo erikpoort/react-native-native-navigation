@@ -21,7 +21,6 @@ export default class DrawerNavigation extends BaseNavigation {
 				newPath = `/${comp}${newPath}`
 			}
 		}
-		return super.addScreens(newPath, ReactNativeNativeNavigation.openView, showScreen);
+		return super.addScreens(newPath, "openView", showScreen, null);
 	}
-
 }

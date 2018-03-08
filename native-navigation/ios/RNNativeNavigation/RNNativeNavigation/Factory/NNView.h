@@ -9,7 +9,12 @@
 
 @protocol NNView <NSObject>
 
+@required
 - (__kindof id <NNNode>)node;
+
 - (UIViewController <NNView> *)viewForPath:(NSString *)path;
+
+@optional
+- (void)callMethodWithName:(NSString *)methodName arguments:(NSDictionary *)arguments callback:(void (^)(NSArray *))callback;
 
 @end

@@ -4,6 +4,11 @@
 
 #import "NNDrawerView.h"
 #import "NNDrawerNode.h"
+#import "NNSingleNode.h"
+#import "NNNodeHelper.h"
+#import "UIViewController+MMDrawerController.h"
+#import "RNNNState.h"
+#import "NNSingleView.h"
 
 @interface NNDrawerView ()
 
@@ -74,6 +79,58 @@
     }
 
     return nil;
+}
+
+- (void)callMethodWithName:(NSString *)methodName arguments:(NSDictionary *)arguments callback:(void (^)(NSArray *))callback {
+    NSMutableDictionary *methodDictionary = @{}.mutableCopy;
+    methodDictionary[@"openView"] = [NSValue valueWithPointer:@selector(openView:callback:)];
+
+    SEL thisSelector = [methodDictionary[methodName] pointerValue];
+    [self performSelector:thisSelector withObject:arguments withObject:^(NSArray *array){
+        callback(array);
+    }];
+}
+
+- (void)openView: (NSDictionary *) arguments callback: (void(^)(NSArray *)) callback {
+    NNSingleNode *nodeObject = [NNNodeHelper.sharedInstance nodeFromMap:arguments[@"screen"] bridge:arguments[@"bridge"]];
+
+    UIViewController <NNView> *rootController = (UIViewController <NNView> *) [UIApplication sharedApplication].keyWindow.rootViewController;
+    NSString *parentPath = nodeObject.screenID.stringByDeletingLastPathComponent.stringByDeletingLastPathComponent;
+    NNSingleView *findController = (NNSingleView *) [rootController viewForPath:parentPath];
+    if (!findController) return;
+
+    NNDrawerView *drawerView = (NNDrawerView *) findController.mm_drawerController;
+    NNDrawerNode *drawerNode = drawerView.node;
+
+    switch ([self sideForPath: parentPath]){
+        case NNDrawerSideLeft:
+            drawerNode.leftNode = nodeObject;
+        case NNDrawerSideCenter:
+            drawerNode.centerNode = nodeObject;
+        case NNDrawerSideRight:
+            drawerNode.rightNode = nodeObject;
+    }
+
+    NSDictionary *newState = rootController.node.data;
+    [RNNNState sharedInstance].state = newState;
+    callback(@[newState]);
+
+    dispatch_async(dispatch_get_main_queue(), ^{
+        UIViewController *viewController = [nodeObject generate];
+        if (viewController) {
+            switch ([self sideForPath:parentPath]){
+                case NNDrawerSideLeft:
+                    [drawerView setLeftDrawerViewController:viewController];
+                    break;
+                case NNDrawerSideCenter:
+                    [drawerView setCenterViewController:viewController withCloseAnimation:YES completion:nil];
+                    break;
+                case NNDrawerSideRight:
+                    [drawerView setRightDrawerViewController:viewController];
+                    break;
+            }
+        }
+    });
 }
 
 - (NNDrawerSide)sideForPath:(NSString *)path

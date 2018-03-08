@@ -5,6 +5,9 @@
 #import <React/RCTRootView.h>
 #import "NNSingleView.h"
 #import "NNSingleNode.h"
+#import "NNStackNode.h"
+#import "NNNodeHelper.h"
+#import "RNNNState.h"
 
 @interface NNSingleView ()
 
@@ -46,6 +49,7 @@
 {
 	UIViewController <NNView> *modalController = (UIViewController <NNView> *)self.presentedViewController;
 	if (modalController && [path rangeOfString:modalController.node.screenID].location == 0) {
+        if([path isEqualToString:self.singleNode.screenID]) return self;
 		if (![modalController.node.screenID isEqualToString:path]) {
 			return [modalController viewForPath:path];
 		} else {
@@ -53,6 +57,36 @@
 		}
 	}
 	return self;
+}
+
+- (void)callMethodWithName:(NSString *)methodName arguments:(NSDictionary *)arguments callback:(void (^)(NSArray *))callback {
+    NSMutableDictionary *methodDictionary = @{}.mutableCopy;
+    methodDictionary[@"showModal"] = [NSValue valueWithPointer:@selector(showModal:callback:)];
+
+    SEL thisSelector = [methodDictionary[methodName] pointerValue];
+    [self performSelector:thisSelector withObject:arguments withObject:^(NSArray *array){
+        callback(array);
+    }];
+}
+
+- (void)showModal: (NSDictionary *) arguments callback: (void(^)(NSArray *)) callback{
+    NNSingleNode *nodeObject = [NNNodeHelper.sharedInstance nodeFromMap:arguments[@"screen"] bridge:self.bridge];
+
+    UIViewController <NNView> *rootController = (UIViewController <NNView> *) [UIApplication sharedApplication].keyWindow.rootViewController;
+
+    NNSingleNode *singleNode = self.node;
+    singleNode.modal = nodeObject;
+
+    NSDictionary *newState = rootController.node.data;
+    [RNNNState sharedInstance].state = newState;
+    callback(@[newState]);
+
+    dispatch_async(dispatch_get_main_queue(), ^{
+        UIViewController *viewController = [nodeObject generate];
+        if (viewController) {
+            [self presentViewController:viewController animated:YES completion:nil];
+        }
+    });
 }
 
 @end

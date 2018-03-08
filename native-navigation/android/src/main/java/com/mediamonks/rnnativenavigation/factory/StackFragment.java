@@ -71,7 +71,7 @@ public class StackFragment extends BaseFragment<StackNode> {
         super.onDestroyView();
 
         int leni = getNode().getStack().size();
-        for (int i = leni -1; i > 0; --i) {
+        for (int i = leni - 1; i > 0; --i) {
             Node node = getNode().getStack().get(i);
             removeNode(node, FragmentTransaction.TRANSIT_NONE);
         }
@@ -138,7 +138,10 @@ public class StackFragment extends BaseFragment<StackNode> {
 
     @Override
     public BaseFragment fragmentForPath(String path) {
-        if (path.indexOf(getNode().getScreenID()) == 0) {
+        if (path.equals(getNode().getScreenID())) {
+            return this;
+        } else if (path.indexOf(getNode().getScreenID()) == 0) {
+
             BaseFragment foundFragment = null;
             Node checkNode;
 

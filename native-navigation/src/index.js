@@ -1,5 +1,5 @@
 import React from 'react';
-import { Navigation } from './components/Navigation';
+import { Navigation } from './Navigation';
 import { BaseNavigation } from './components/BaseNavigation';
 import SingleView from './components/single/SingleView';
 import StackView from './components/stack/StackView';

@@ -1,16 +1,12 @@
 package com.mediamonks.rnnativenavigation.devsupport;
 
-import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.view.KeyEvent;
 
 import com.facebook.infer.annotation.Assertions;
 import com.facebook.react.ReactActivityDelegate;
 import com.facebook.react.ReactFragmentActivity;
 import com.mediamonks.rnnativenavigation.bridge.RNNativeNavigationModule;
-import com.mediamonks.rnnativenavigation.bridge.RNNativeNavigationPackage;
 
 import javax.annotation.Nullable;
 
@@ -38,20 +34,12 @@ public class RNActivityDelegate extends ReactActivityDelegate {
     @Override public boolean onKeyUp(int keyCode, KeyEvent event) {
         if (getReactNativeHost().hasInstance() && getReactNativeHost().getUseDeveloperSupport()) {
             boolean didDoubleTapE = Assertions.assertNotNull(_doubleTapResetRecognizer)
-                    .didDoubleTapE(keyCode, getPlainActivity().getCurrentFocus());
+                    .didDoubleTapE(keyCode, _activity.getCurrentFocus());
             if (didDoubleTapE) {
                 getReactInstanceManager().getCurrentReactContext().getNativeModule(RNNativeNavigationModule.class).resetNavigation();
             }
         }
 
         return super.onKeyUp(keyCode, event);
-    }
-
-    private Context getContext() {
-        return Assertions.assertNotNull(_activity);
-    }
-
-    private Activity getPlainActivity() {
-        return ((Activity) getContext());
     }
 }

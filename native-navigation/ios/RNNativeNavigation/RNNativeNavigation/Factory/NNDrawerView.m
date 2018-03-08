@@ -81,17 +81,15 @@
     return nil;
 }
 
-- (void)callMethodWithName:(NSString *)methodName arguments:(NSDictionary *)arguments callback:(void (^)(NSArray *))callback {
+- (void)callMethodWithName:(NSString *)methodName arguments:(NSDictionary *)arguments callback:(RCTResponseSenderBlock)callback {
     NSMutableDictionary *methodDictionary = @{}.mutableCopy;
     methodDictionary[@"openView"] = [NSValue valueWithPointer:@selector(openView:callback:)];
 
     SEL thisSelector = [methodDictionary[methodName] pointerValue];
-    [self performSelector:thisSelector withObject:arguments withObject:^(NSArray *array){
-        callback(array);
-    }];
+    [self performSelector:thisSelector withObject:arguments withObject:callback];
 }
 
-- (void)openView: (NSDictionary *) arguments callback: (void(^)(NSArray *)) callback {
+- (void)openView: (NSDictionary *) arguments callback: (RCTResponseSenderBlock) callback {
     NNSingleNode *nodeObject = [NNNodeHelper.sharedInstance nodeFromMap:arguments[@"screen"] bridge:arguments[@"bridge"]];
 
     UIViewController <NNView> *rootController = (UIViewController <NNView> *) [UIApplication sharedApplication].keyWindow.rootViewController;

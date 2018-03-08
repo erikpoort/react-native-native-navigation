@@ -59,17 +59,15 @@
 	return self;
 }
 
-- (void)callMethodWithName:(NSString *)methodName arguments:(NSDictionary *)arguments callback:(void (^)(NSArray *))callback {
+- (void)callMethodWithName:(NSString *)methodName arguments:(NSDictionary *)arguments callback:(RCTResponseSenderBlock)callback {
     NSMutableDictionary *methodDictionary = @{}.mutableCopy;
     methodDictionary[@"showModal"] = [NSValue valueWithPointer:@selector(showModal:callback:)];
 
     SEL thisSelector = [methodDictionary[methodName] pointerValue];
-    [self performSelector:thisSelector withObject:arguments withObject:^(NSArray *array){
-        callback(array);
-    }];
+    [self performSelector:thisSelector withObject:arguments withObject:callback];
 }
 
-- (void)showModal: (NSDictionary *) arguments callback: (void(^)(NSArray *)) callback{
+- (void)showModal: (NSDictionary *) arguments callback: (RCTResponseSenderBlock) callback{
     NNSingleNode *nodeObject = [NNNodeHelper.sharedInstance nodeFromMap:arguments[@"screen"] bridge:self.bridge];
 
     UIViewController <NNView> *rootController = (UIViewController <NNView> *) [UIApplication sharedApplication].keyWindow.rootViewController;

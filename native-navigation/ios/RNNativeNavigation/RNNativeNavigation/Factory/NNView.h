@@ -1,9 +1,9 @@
 //
-
 // Copyright (c) 2017 MediaMonks. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
+#import <React/RCTBridgeModule.h>
 
 @protocol NNNode;
 
@@ -15,6 +15,6 @@
 - (UIViewController <NNView> *)viewForPath:(NSString *)path;
 
 @optional
-- (void)callMethodWithName:(NSString *)methodName arguments:(NSDictionary *)arguments callback:(void (^)(NSArray *))callback;
+- (void)callMethodWithName:(NSString *)methodName arguments:(NSDictionary *)arguments callback:(RCTResponseSenderBlock)callback;
 
 @end

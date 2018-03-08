@@ -6,7 +6,9 @@ export default class Detail2 extends Component {
 		return (
 			<View>
 				<Text>Detail</Text>
-				<Button title="Detail 2" onPress={() => alert('pop!')} />
+				<Button title="Detail 2" onPress={() => {
+					this.props.up_stack.pop();
+				}} />
 			</View>
 		);
 	}

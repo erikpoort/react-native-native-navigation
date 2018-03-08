@@ -51,7 +51,8 @@ static NSString *const kStackKey = @"stack";
 
 + (NSDictionary<NSString *, id> *)constantsToExport {
     return @{
-            kPush: kPush
+            kPush: kPush,
+            kPop: kPop
     };
 }
 

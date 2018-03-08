@@ -11,5 +11,9 @@ export default class StackNavigation extends BaseNavigation {
 
 	push = (showScreen) => {
 		return super.addScreens(this.screenID, ReactNativeNativeNavigation.push, showScreen, null);
-	}
+	};
+
+	pop = () => {
+		return ReactNativeNativeNavigation.callMethodOnNode(this.navigatorID, ReactNativeNativeNavigation.pop, null, () => {});
+	};
 }

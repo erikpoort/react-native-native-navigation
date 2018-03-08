@@ -6,6 +6,7 @@
 #import "NNView.h"
 
 FOUNDATION_EXPORT NSString *const kPush;
+FOUNDATION_EXPORT NSString *const kPop;
 
 @class NNStackNode;
 

@@ -9,6 +9,7 @@
 #import "RNNNState.h"
 
 NSString *const kPush = @"push";
+NSString *const kPop = @"pop";
 
 @interface NNStackView () <UINavigationControllerDelegate>
 
@@ -76,6 +77,7 @@ NSString *const kPush = @"push";
 - (void)callMethodWithName:(NSString *)methodName arguments:(NSDictionary *)arguments callback:(RCTResponseSenderBlock)callback {
     NSMutableDictionary *methodDictionary = @{}.mutableCopy;
     methodDictionary[kPush] = [NSValue valueWithPointer:@selector(push:callback:)];
+    methodDictionary[kPop] = [NSValue valueWithPointer:@selector(pop:callback:)];
 
     SEL thisSelector = [methodDictionary[methodName] pointerValue];
     [self performSelector:thisSelector withObject:arguments withObject:callback];
@@ -97,6 +99,24 @@ NSString *const kPush = @"push";
         UIViewController *viewController = [nodeObject generate];
         if (self && viewController) {
             [self pushViewController:viewController animated:YES];
+        }
+    });
+}
+
+- (void)pop:(NSDictionary *)arguments callback:(RCTResponseSenderBlock)callback {
+    UIViewController <NNView> *rootController = (UIViewController <NNView> *) [UIApplication sharedApplication].keyWindow.rootViewController;
+    NNStackNode *stackNode = self.node;
+    NSMutableArray *stack = stackNode.stack.mutableCopy;
+    [stack removeLastObject];
+    stackNode.stack = stack;
+
+    NSDictionary *newState = rootController.node.data;
+    [RNNNState sharedInstance].state = newState;
+    callback(@[newState]);
+
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (self) {
+            [self popViewControllerAnimated:YES];
         }
     });
 }

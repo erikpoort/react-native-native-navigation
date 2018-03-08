@@ -17,7 +17,7 @@ export default class BaseNavigation {
 		const viewMap = this.navigation.viewMap;
 		const args = {
 			screen: mapChild(viewMap, showScreen, newPath),
-			...extraArguments
+			arguments: extraArguments,
 		};
 		return ReactNativeNativeNavigation.callMethodOnNode(this.navigatorID, presentMethod, args, (register) => {
 			const view = viewMap[register.type];

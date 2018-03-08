@@ -19,7 +19,7 @@ export default class BaseNavigation {
 			screen: mapChild(viewMap, showScreen, newPath),
 			...extraArguments
 		};
-		return ReactNativeNativeNavigation.callMethodOnNode(newPath, this.navigatorID, presentMethod, args, (register) => {
+		return ReactNativeNativeNavigation.callMethodOnNode(this.navigatorID, presentMethod, args, (register) => {
 			const view = viewMap[register.type];
 			const screens = view.reduceScreens(register, viewMap, this.navigation.pageMap).filter((screen) => {
 				return screen.screenID.includes(newPath) && screen.screenID !== newPath;

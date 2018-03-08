@@ -12,13 +12,10 @@
 
 static NSString *const kJSViewName = @"type";
 
-@interface NNNodeHelper ()
-
-@property (nonatomic, strong) NSArray <Class <NNNode>> *externalNodes;
-
-@end
-
-@implementation NNNodeHelper
+@implementation NNNodeHelper {
+    NSArray <Class <NNNode>> *_internalNodes;
+    NSArray <Class <NNNode>> *_externalNodes;
+}
 
 + (instancetype)sharedInstance {
     static dispatch_once_t once;
@@ -32,13 +29,20 @@ static NSString *const kJSViewName = @"type";
 - (instancetype)init {
     self = [super init];
     if (self) {
-        self.externalNodes = @[];
+        _internalNodes = @[
+                [NNSingleNode class],
+                [NNStackNode class],
+                [NNTabNode class],
+                [NNSplitNode class],
+                [NNDrawerNode class],
+        ];
+        _externalNodes = @[];
     }
     return self;
 }
 
 - (void)addExternalNodes:(NSArray <NNBaseNode *> *)nodes {
-    self.externalNodes = [self.externalNodes arrayByAddingObjectsFromArray:nodes];
+    _externalNodes = [_externalNodes arrayByAddingObjectsFromArray:nodes];
 }
 
 - (id <NNNode>)nodeFromMap:(NSDictionary *)map bridge:(RCTBridge *)bridge {
@@ -46,16 +50,10 @@ static NSString *const kJSViewName = @"type";
         return nil;
     }
 
-    NSMutableArray <NSString *> *names = [@[[NNSingleNode jsName], [NNStackNode jsName], [NNTabNode jsName], [NNSplitNode jsName], [NNDrawerNode jsName]] mutableCopy];
-    NSMutableArray <Class <NNNode>> *classes = @[
-            [NNSingleNode class],
-            [NNStackNode class],
-            [NNTabNode class],
-            [NNSplitNode class],
-            [NNDrawerNode class],
-    ].mutableCopy;
+    NSMutableArray <NSString *> *names = @[[NNSingleNode jsName], [NNStackNode jsName], [NNTabNode jsName], [NNSplitNode jsName], [NNDrawerNode jsName]].mutableCopy;
+    NSMutableArray <Class <NNNode>> *classes = _internalNodes.mutableCopy;
 
-    [self.externalNodes enumerateObjectsUsingBlock:^(Class <NNNode> cls, NSUInteger idx, BOOL *stop) {
+    [_externalNodes enumerateObjectsUsingBlock:^(Class <NNNode> cls, NSUInteger idx, BOOL *stop) {
         if ([cls conformsToProtocol:@protocol(NNNode)]) {
             [names addObject:[cls jsName]];
             [classes addObject:cls.class];
@@ -72,6 +70,18 @@ static NSString *const kJSViewName = @"type";
         return nodeObject;
     }
     return nil;
+}
+
+- (NSDictionary<NSString *, id> *)constantsToExport {
+    NSMutableArray <Class <NNNode>> *classes = _internalNodes.mutableCopy;
+    [classes addObjectsFromArray:_externalNodes];
+
+    NSMutableDictionary *constants = @{}.mutableCopy;
+    [classes enumerateObjectsUsingBlock:^(Class <NNNode> cls, NSUInteger idx, BOOL *stop) {
+        [constants addEntriesFromDictionary:[cls constantsToExport]];
+    }];
+
+    return constants.copy;
 }
 
 @end

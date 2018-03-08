@@ -55,4 +55,10 @@ static NSString *const kStackKey = @"stack";
 	return self.stack.lastObject.title;
 }
 
++ (NSDictionary<NSString *, id> *)constantsToExport {
+	return @{
+			kPush: kPush
+	};
+}
+
 @end

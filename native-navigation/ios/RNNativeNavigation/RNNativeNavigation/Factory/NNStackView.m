@@ -8,6 +8,8 @@
 #import "NNNodeHelper.h"
 #import "RNNNState.h"
 
+NSString *const kPush = @"push";
+
 @interface NNStackView () <UINavigationControllerDelegate>
 
 @property (nonatomic, strong) NNStackNode *stackNode;
@@ -76,7 +78,7 @@
 
 - (void)callMethodWithName:(NSString *)methodName arguments:(NSDictionary *)arguments callback:(RCTResponseSenderBlock)callback {
 	NSMutableDictionary *methodDictionary = @{}.mutableCopy;
-	methodDictionary[@"push"] = [NSValue valueWithPointer:@selector(push:callback:)];
+	methodDictionary[kPush] = [NSValue valueWithPointer:@selector(push:callback:)];
 
 	SEL thisSelector = [methodDictionary[methodName] pointerValue];
 	[self performSelector:thisSelector withObject:arguments withObject:callback];

@@ -18,7 +18,6 @@ typedef NS_ENUM(NSInteger , NNDrawerSide){
     NNDrawerSideRight,
 };
 
-
 @interface NNDrawerNode : NNBaseNode <NNNode>
 
 @property (nonatomic, strong) id <NNNode> leftNode;

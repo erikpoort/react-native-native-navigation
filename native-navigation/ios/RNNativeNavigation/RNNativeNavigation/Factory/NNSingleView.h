@@ -5,6 +5,8 @@
 #import <UIKit/UIKit.h>
 #import "NNView.h"
 
+FOUNDATION_EXPORT NSString *const kShowModal;
+
 @class NNSingleNode;
 
 @interface NNSingleView : UIViewController <NNView>

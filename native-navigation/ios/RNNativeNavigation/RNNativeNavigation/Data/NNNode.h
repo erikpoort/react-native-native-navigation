@@ -16,5 +16,6 @@
 - (NSString *)title;
 - (NSString *)screenID;
 - (UIViewController <NNView> *)generate;
++ (NSDictionary<NSString *, id> *)constantsToExport;
 
 @end

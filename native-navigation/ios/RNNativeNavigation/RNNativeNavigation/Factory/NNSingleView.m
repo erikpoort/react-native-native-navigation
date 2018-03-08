@@ -9,6 +9,8 @@
 #import "NNNodeHelper.h"
 #import "RNNNState.h"
 
+NSString *const kShowModal = @"showModal";
+
 @interface NNSingleView ()
 
 @property (nonatomic, strong) NNSingleNode *singleNode;
@@ -61,7 +63,7 @@
 
 - (void)callMethodWithName:(NSString *)methodName arguments:(NSDictionary *)arguments callback:(RCTResponseSenderBlock)callback {
     NSMutableDictionary *methodDictionary = @{}.mutableCopy;
-    methodDictionary[@"showModal"] = [NSValue valueWithPointer:@selector(showModal:callback:)];
+    methodDictionary[kShowModal] = [NSValue valueWithPointer:@selector(showModal:callback:)];
 
     SEL thisSelector = [methodDictionary[methodName] pointerValue];
     [self performSelector:thisSelector withObject:arguments withObject:callback];

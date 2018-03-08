@@ -43,4 +43,10 @@ static NSString *const kModal = @"modal";
 	return data.copy;
 }
 
++ (NSDictionary<NSString *, id> *)constantsToExport {
+	return @{
+			kShowModal: kShowModal
+	};
+}
+
 @end

@@ -42,6 +42,10 @@ RCT_EXPORT_MODULE();
     [NNNodeHelper.sharedInstance addExternalNodes:nodesToLoad];
 }
 
+- (NSDictionary<NSString *, id> *)constantsToExport {
+    return [NNNodeHelper.sharedInstance constantsToExport];
+}
+
 RCT_EXPORT_METHOD(
             onStart: (RCTResponseSenderBlock)callback
 ) {
@@ -93,7 +97,6 @@ RCT_EXPORT_METHOD(
             callback(response);
         }];
     }
-
 }
 
 RCT_EXPORT_METHOD(resetApplication) {

@@ -59,4 +59,10 @@
 	return self.centerNode.title;
 }
 
++ (NSDictionary<NSString *, id> *)constantsToExport {
+	return @{
+			kOpenView: kOpenView,
+	};
+}
+
 @end

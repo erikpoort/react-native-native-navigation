@@ -10,6 +10,8 @@
 #import "RNNNState.h"
 #import "NNSingleView.h"
 
+NSString *const kOpenView = @"openView";
+
 @interface NNDrawerView ()
 
 @property (nonatomic, strong) NNDrawerNode *drawerNode;
@@ -83,7 +85,7 @@
 
 - (void)callMethodWithName:(NSString *)methodName arguments:(NSDictionary *)arguments callback:(RCTResponseSenderBlock)callback {
     NSMutableDictionary *methodDictionary = @{}.mutableCopy;
-    methodDictionary[@"openView"] = [NSValue valueWithPointer:@selector(openView:callback:)];
+    methodDictionary[kOpenView] = [NSValue valueWithPointer:@selector(openView:callback:)];
 
     SEL thisSelector = [methodDictionary[methodName] pointerValue];
     [self performSelector:thisSelector withObject:arguments withObject:callback];

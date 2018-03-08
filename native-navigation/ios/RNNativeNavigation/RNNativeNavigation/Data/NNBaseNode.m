@@ -30,4 +30,27 @@ NSString *const kType = @"type";
 	};
 }
 
++ (NSDictionary<NSString *, id> *)constantsToExport {
+	return @{};
+}
+
++ (NSString *)jsName {
+	NSAssert(NO, @"%@ should be overridden", NSStringFromSelector(_cmd));
+	return nil;
+}
+
+- (void)setBridge:(RCTBridge *)bridge {
+	NSAssert(NO, @"%@ should be overridden", NSStringFromSelector(_cmd));
+}
+
+- (NSString *)title {
+	NSAssert(NO, @"%@ should be overridden", NSStringFromSelector(_cmd));
+	return nil;
+}
+
+- (UIViewController <NNView> *)generate {
+	NSAssert(NO, @"%@ should be overridden", NSStringFromSelector(_cmd));
+	return nil;
+}
+
 @end

@@ -45,9 +45,11 @@ RCT_EXPORT_MODULE();
     return [NNNodeHelper.sharedInstance constantsToExport];
 }
 
+// @formatter:off
 RCT_EXPORT_METHOD(
             onStart: (RCTResponseSenderBlock)callback
 ) {
+// @formatter:on
     NSDictionary *state = [RNNNState sharedInstance].state;
     if (state == nil) {
         printf("%s %s\n", kRNNN.UTF8String, "First load");
@@ -58,11 +60,13 @@ RCT_EXPORT_METHOD(
     }
 }
 
+// @formatter:off
 RCT_EXPORT_METHOD(
             setSiteMap: (NSDictionary *)map
             resolver: (RCTPromiseResolveBlock)resolve
             rejecter: (RCTPromiseRejectBlock)reject
 ) {
+// @formatter:on
     dispatch_async(dispatch_get_main_queue(), ^{
         [RNNNState sharedInstance].state = map;
 
@@ -77,12 +81,14 @@ RCT_EXPORT_METHOD(
     resolve(@[]);
 }
 
+// @formatter:off
 RCT_EXPORT_METHOD(
             callMethodOnNode: (NSString *)navigator
             methodName: (NSString *)methodName
             arguments: (NSDictionary *)arguments
             responseCallback: (RCTResponseSenderBlock)callback
 ) {
+// @formatter:on
     UIViewController <NNView> *rootController = (UIViewController <NNView> *) [UIApplication sharedApplication].keyWindow.rootViewController;
     __kindof UIViewController <NNView> *findController = [rootController viewForPath:navigator];
     if (!findController) return;
@@ -98,7 +104,11 @@ RCT_EXPORT_METHOD(
     }
 }
 
-RCT_EXPORT_METHOD(resetApplication) {
+// @formatter:off
+RCT_EXPORT_METHOD(
+        resetApplication
+) {
+// @formatter:on
     [RNNNState sharedInstance].window.rootViewController = nil;
     [RNNNState sharedInstance].state = nil;
     [_bridge reload];

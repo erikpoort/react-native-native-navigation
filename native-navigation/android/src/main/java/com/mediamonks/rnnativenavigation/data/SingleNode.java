@@ -11,7 +11,7 @@ import com.mediamonks.rnnativenavigation.factory.SingleFragment;
  * RNNativeNavigation 2017
  */
 
-public class SingleNode extends BaseNode implements Node {
+public class SingleNode extends BaseNode  {
     public static String JS_NAME = "SingleView";
 
     private static final String NAME = "name";

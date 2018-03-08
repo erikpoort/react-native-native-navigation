@@ -15,7 +15,7 @@ import java.util.Arrays;
  * example 2017
  */
 
-public class DrawerNode extends BaseNode implements Node {
+public class DrawerNode extends BaseNode  {
     public static String JS_NAME = "DrawerView";
 
     private static final String LEFT = "left";

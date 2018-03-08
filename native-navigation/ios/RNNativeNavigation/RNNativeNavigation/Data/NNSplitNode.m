@@ -13,46 +13,41 @@ static NSString *const kAxisKey = @"axis";
 
 @interface NNSplitNode ()
 
-@property (nonatomic, strong) RCTBridge *bridge;
-@property (nonatomic, strong) id <NNNode> node1;
-@property (nonatomic, strong) id <NNNode> node2;
-@property (nonatomic, assign) UILayoutConstraintAxis axis;
+@property(nonatomic, strong) RCTBridge *bridge;
+@property(nonatomic, strong) id <NNNode> node1;
+@property(nonatomic, strong) id <NNNode> node2;
+@property(nonatomic, assign) UILayoutConstraintAxis axis;
 
 @end
 
 @implementation NNSplitNode
 
-+ (NSString *)jsName
-{
-	return @"SplitView";
++ (NSString *)jsName {
+    return @"SplitView";
 }
 
-- (UIViewController <NNView> *)generate
-{
-	return [[NNSplitView alloc] initWithNode:self];
+- (UIViewController <NNView> *)generate {
+    return [[NNSplitView alloc] initWithNode:self];
 }
 
-- (void)setData:(NSDictionary *)data
-{
-	[super setData:data];
+- (void)setData:(NSDictionary *)data {
+    [super setData:data];
 
-	self.node1 = [NNNodeHelper.sharedInstance nodeFromMap:data[kNode1Key] bridge:self.bridge];
-	self.node2 = [NNNodeHelper.sharedInstance nodeFromMap:data[kNode2Key] bridge:self.bridge];
-	self.axis = [data[kAxisKey] isEqualToString:@"vertical"] ? 1 : 0;
+    self.node1 = [NNNodeHelper.sharedInstance nodeFromMap:data[kNode1Key] bridge:self.bridge];
+    self.node2 = [NNNodeHelper.sharedInstance nodeFromMap:data[kNode2Key] bridge:self.bridge];
+    self.axis = [data[kAxisKey] isEqualToString:@"vertical"] ? 1 : 0;
 }
 
-- (NSDictionary *)data
-{
-	NSMutableDictionary *data = [super data].mutableCopy;
-	data[kNode1Key] = self.node1.data;
-	data[kNode2Key] = self.node2.data;
-	data[kAxisKey] = self.axis == UILayoutConstraintAxisHorizontal ? @"horizontal" : @"vertical";
-	return data.copy;
+- (NSDictionary *)data {
+    NSMutableDictionary *data = [super data].mutableCopy;
+    data[kNode1Key] = self.node1.data;
+    data[kNode2Key] = self.node2.data;
+    data[kAxisKey] = self.axis == UILayoutConstraintAxisHorizontal ? @"horizontal" : @"vertical";
+    return data.copy;
 }
 
-- (NSString *)title
-{
-	return self.node1.title;
+- (NSString *)title {
+    return self.node1.title;
 }
 
 @end

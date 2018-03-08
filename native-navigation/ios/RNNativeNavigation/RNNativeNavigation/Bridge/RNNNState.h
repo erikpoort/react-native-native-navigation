@@ -6,9 +6,9 @@
 
 @interface RNNNState : NSObject
 
-@property (nonatomic, readonly) UIWindow *window;
+@property(nonatomic, readonly) UIWindow *window;
 
-@property (nonatomic, strong) NSDictionary *state;
+@property(nonatomic, strong) NSDictionary *state;
 
 + (instancetype)sharedInstance;
 

@@ -14,6 +14,7 @@
 + (instancetype)sharedInstance;
 
 - (void)addExternalNodes:(NSArray <NNBaseNode *> *)nodes;
+
 - (id <NNNode>)nodeFromMap:(NSDictionary *)map bridge:(RCTBridge *)bridge;
 
 - (NSDictionary<NSString *, id> *)constantsToExport;

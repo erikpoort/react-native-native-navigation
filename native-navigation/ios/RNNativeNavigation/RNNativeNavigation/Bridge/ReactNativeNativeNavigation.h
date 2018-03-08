@@ -8,5 +8,5 @@
 @class NNBaseNode;
 
 @interface ReactNativeNativeNavigation : NSObject <RCTBridgeModule>
-+ (void)addExternalNodes:(NSArray <NNBaseNode*> *)nodes;
++ (void)addExternalNodes:(NSArray <NNBaseNode *> *)nodes;
 @end

@@ -50,40 +50,40 @@
     - Support container view controllers other than `UINavigationController` as the center view controller. 
  */
 
-typedef NS_ENUM(NSInteger,MMDrawerSide){
+typedef NS_ENUM(NSInteger, MMDrawerSide) {
     MMDrawerSideNone = 0,
     MMDrawerSideLeft,
     MMDrawerSideRight,
 };
 
 typedef NS_OPTIONS(NSInteger, MMOpenDrawerGestureMode) {
-    MMOpenDrawerGestureModeNone                     = 0,
-    MMOpenDrawerGestureModePanningNavigationBar     = 1 << 1,
-    MMOpenDrawerGestureModePanningCenterView        = 1 << 2,
-    MMOpenDrawerGestureModeBezelPanningCenterView   = 1 << 3,
-    MMOpenDrawerGestureModeCustom                   = 1 << 4,
-    MMOpenDrawerGestureModeAll                      =   MMOpenDrawerGestureModePanningNavigationBar     |
-                                                        MMOpenDrawerGestureModePanningCenterView        |
-                                                        MMOpenDrawerGestureModeBezelPanningCenterView   |
-                                                        MMOpenDrawerGestureModeCustom,
+    MMOpenDrawerGestureModeNone = 0,
+    MMOpenDrawerGestureModePanningNavigationBar = 1 << 1,
+    MMOpenDrawerGestureModePanningCenterView = 1 << 2,
+    MMOpenDrawerGestureModeBezelPanningCenterView = 1 << 3,
+    MMOpenDrawerGestureModeCustom = 1 << 4,
+    MMOpenDrawerGestureModeAll = MMOpenDrawerGestureModePanningNavigationBar |
+            MMOpenDrawerGestureModePanningCenterView |
+            MMOpenDrawerGestureModeBezelPanningCenterView |
+            MMOpenDrawerGestureModeCustom,
 };
 
 typedef NS_OPTIONS(NSInteger, MMCloseDrawerGestureMode) {
-    MMCloseDrawerGestureModeNone                    = 0,
-    MMCloseDrawerGestureModePanningNavigationBar    = 1 << 1,
-    MMCloseDrawerGestureModePanningCenterView       = 1 << 2,
-    MMCloseDrawerGestureModeBezelPanningCenterView  = 1 << 3,
-    MMCloseDrawerGestureModeTapNavigationBar        = 1 << 4,
-    MMCloseDrawerGestureModeTapCenterView           = 1 << 5,
-    MMCloseDrawerGestureModePanningDrawerView       = 1 << 6,
-    MMCloseDrawerGestureModeCustom                  = 1 << 7,
-    MMCloseDrawerGestureModeAll                     =   MMCloseDrawerGestureModePanningNavigationBar    |
-                                                        MMCloseDrawerGestureModePanningCenterView       |
-                                                        MMCloseDrawerGestureModeBezelPanningCenterView  |
-                                                        MMCloseDrawerGestureModeTapNavigationBar        |
-                                                        MMCloseDrawerGestureModeTapCenterView           |
-                                                        MMCloseDrawerGestureModePanningDrawerView       |
-                                                        MMCloseDrawerGestureModeCustom,
+    MMCloseDrawerGestureModeNone = 0,
+    MMCloseDrawerGestureModePanningNavigationBar = 1 << 1,
+    MMCloseDrawerGestureModePanningCenterView = 1 << 2,
+    MMCloseDrawerGestureModeBezelPanningCenterView = 1 << 3,
+    MMCloseDrawerGestureModeTapNavigationBar = 1 << 4,
+    MMCloseDrawerGestureModeTapCenterView = 1 << 5,
+    MMCloseDrawerGestureModePanningDrawerView = 1 << 6,
+    MMCloseDrawerGestureModeCustom = 1 << 7,
+    MMCloseDrawerGestureModeAll = MMCloseDrawerGestureModePanningNavigationBar |
+            MMCloseDrawerGestureModePanningCenterView |
+            MMCloseDrawerGestureModeBezelPanningCenterView |
+            MMCloseDrawerGestureModeTapNavigationBar |
+            MMCloseDrawerGestureModeTapCenterView |
+            MMCloseDrawerGestureModePanningDrawerView |
+            MMCloseDrawerGestureModeCustom,
 };
 
 typedef NS_ENUM(NSInteger, MMDrawerOpenCenterInteractionMode) {
@@ -92,8 +92,9 @@ typedef NS_ENUM(NSInteger, MMDrawerOpenCenterInteractionMode) {
     MMDrawerOpenCenterInteractionModeNavigationBarOnly,
 };
 
-@class  MMDrawerController;
-typedef void (^MMDrawerControllerDrawerVisualStateBlock)(MMDrawerController * drawerController, MMDrawerSide drawerSide, CGFloat percentVisible);
+@class MMDrawerController;
+
+typedef void (^MMDrawerControllerDrawerVisualStateBlock)(MMDrawerController *drawerController, MMDrawerSide drawerSide, CGFloat percentVisible);
 
 @interface MMDrawerController : UIViewController
 
@@ -106,28 +107,28 @@ typedef void (^MMDrawerControllerDrawerVisualStateBlock)(MMDrawerController * dr
  
  This can only be set via the init methods, as well as the `setNewCenterViewController:...` methods. The size of this view controller will automatically be set to the size of the drawer container view controller, and it's position is modified from within this class. Do not modify the frame externally.
  */
-@property (nonatomic, strong) UIViewController * centerViewController;
+@property(nonatomic, strong) UIViewController *centerViewController;
 
 /**
  The left drawer view controller. 
  
  The size of this view controller is managed within this class, and is automatically set to the appropriate size based on the `maximumLeftDrawerWidth`. Do not modify the frame externally.
  */
-@property (nonatomic, strong) UIViewController * leftDrawerViewController;
+@property(nonatomic, strong) UIViewController *leftDrawerViewController;
 
 /**
  The right drawer view controller. 
  
  The size of this view controller is managed within this class, and is automatically set to the appropriate size based on the `maximumRightDrawerWidth`. Do not modify the frame externally.
  */
-@property (nonatomic, strong) UIViewController * rightDrawerViewController;
+@property(nonatomic, strong) UIViewController *rightDrawerViewController;
 
 /**
  The maximum width of the `leftDrawerViewController`. 
  
  By default, this is set to 280. If the `leftDrawerViewController` is nil, this property will return 0.0;
  */
-@property (nonatomic, assign) CGFloat maximumLeftDrawerWidth;
+@property(nonatomic, assign) CGFloat maximumLeftDrawerWidth;
 
 /**
  The maximum width of the `rightDrawerViewController`. 
@@ -135,126 +136,126 @@ typedef void (^MMDrawerControllerDrawerVisualStateBlock)(MMDrawerController * dr
  By default, this is set to 280. If the `rightDrawerViewController` is nil, this property will return 0.0;
 
  */
-@property (nonatomic, assign) CGFloat maximumRightDrawerWidth;
+@property(nonatomic, assign) CGFloat maximumRightDrawerWidth;
 
 /**
  The visible width of the `leftDrawerViewController`. 
  
  Note this value can be greater than `maximumLeftDrawerWidth` during the full close animation when setting a new center view controller;
  */
-@property (nonatomic, assign, readonly) CGFloat visibleLeftDrawerWidth;
+@property(nonatomic, assign, readonly) CGFloat visibleLeftDrawerWidth;
 
 /**
  The visible width of the `rightDrawerViewController`. 
  
  Note this value can be greater than `maximumRightDrawerWidth` during the full close animation when setting a new center view controller;
  */
-@property (nonatomic, assign, readonly) CGFloat visibleRightDrawerWidth;
+@property(nonatomic, assign, readonly) CGFloat visibleRightDrawerWidth;
 
 /**
  The animation velocity of the open and close methods, measured in points per second.
  
  By default, this is set to 840 points per second (three times the default drawer width), meaning it takes 1/3 of a second for the `centerViewController` to open/close across the default drawer width. Note that there is a minimum .1 second duration for built in animations, to account for small distance animations.
  */
-@property (nonatomic, assign) CGFloat animationVelocity;
+@property(nonatomic, assign) CGFloat animationVelocity;
 
 /** 
  A boolean that determines whether or not the panning gesture will "hard-stop" at the maximum width for a given drawer side.
  
  By default, this value is set to YES. Enabling `shouldStretchDrawer` will give the pan a gradual asymptotic stopping point much like `UIScrollView` behaves. Note that if this value is set to YES, the `drawerVisualStateBlock` can be passed a `percentVisible` greater than 1.0, so be sure to handle that case appropriately.
  */
-@property (nonatomic, assign) BOOL shouldStretchDrawer;
+@property(nonatomic, assign) BOOL shouldStretchDrawer;
 
 /**
  The current open side of the drawer. 
  
  Note this value will change as soon as a pan gesture opens a drawer, or when a open/close animation is finished.
  */
-@property (nonatomic, assign, readonly) MMDrawerSide openSide;
+@property(nonatomic, assign, readonly) MMDrawerSide openSide;
 
 /**
  How a user is allowed to open a drawer using gestures. 
  
  By default, this is set to `MMOpenDrawerGestureModeNone`. Note these gestures may affect user interaction with the `centerViewController`, so be sure to use appropriately.
  */
-@property (nonatomic, assign) MMOpenDrawerGestureMode openDrawerGestureModeMask;
+@property(nonatomic, assign) MMOpenDrawerGestureMode openDrawerGestureModeMask;
 
 /**
  How a user is allowed to close a drawer. 
  
  By default, this is set to `MMCloseDrawerGestureModeNone`. Note these gestures may affect user interaction with the `centerViewController`, so be sure to use appropriately.
  */
-@property (nonatomic, assign) MMCloseDrawerGestureMode closeDrawerGestureModeMask;
+@property(nonatomic, assign) MMCloseDrawerGestureMode closeDrawerGestureModeMask;
 
 /**
  The value determining if the user can interact with the `centerViewController` when a side drawer is open. 
  
  By default, it is `MMDrawerOpenCenterInteractionModeNavigationBarOnly`, meaning that the user can only interact with the buttons on the `UINavigationBar`, if the center view controller is a `UINavigationController`. Otherwise, the user cannot interact with any other center view controller elements.
  */
-@property (nonatomic, assign) MMDrawerOpenCenterInteractionMode centerHiddenInteractionMode;
+@property(nonatomic, assign) MMDrawerOpenCenterInteractionMode centerHiddenInteractionMode;
 
 /**
  The flag determining if a shadow should be drawn off of `centerViewController` when a drawer is open. 
  
  By default, this is set to YES.
  */
-@property (nonatomic, assign) BOOL showsShadow;
+@property(nonatomic, assign) BOOL showsShadow;
 
 /**
  The shadow radius of `centerViewController` when a drawer is open.
  
  By default, this is set to 10.0f;
  */
-@property (nonatomic, assign) CGFloat shadowRadius;
+@property(nonatomic, assign) CGFloat shadowRadius;
 
 /**
  The shadow opacity of `centerViewController` when a drawer is open.
  
  By default, this is set to 0.8f;
  */
-@property (nonatomic, assign) CGFloat shadowOpacity;
+@property(nonatomic, assign) CGFloat shadowOpacity;
 
 /**
  The shadow offset of `centerViewController` when a drawer is open.
  
  By default, this is set to (0, -3);
  */
-@property (nonatomic, assign) CGSize shadowOffset;
+@property(nonatomic, assign) CGSize shadowOffset;
 
 /**
  The color of the shadow drawn off of 'centerViewController` when a drawer is open.
  
  By default, this is set to the systme default (opaque black).
  */
-@property (nonatomic, strong) UIColor * shadowColor;
+@property(nonatomic, strong) UIColor *shadowColor;
 
 /**
  The flag determining if a custom background view should appear beneath the status bar, forcing the child content to be drawn lower than the status bar.
  
  By default, this is set to NO.
  */
-@property (nonatomic, assign) BOOL showsStatusBarBackgroundView;
+@property(nonatomic, assign) BOOL showsStatusBarBackgroundView;
 
 /**
  The color of the status bar background view if `showsStatusBarBackgroundView` is set to YES.
  
  By default, this is set `[UIColor blackColor]`.
  */
-@property (nonatomic, strong) UIColor * statusBarViewBackgroundColor;
+@property(nonatomic, strong) UIColor *statusBarViewBackgroundColor;
 
 /**
  The value determining panning range of centerView's bezel if the user can open drawer with 'MMOpenDrawerGestureModeBezelPanningCenterView' or close drawer with 'MMCloseDrawerGestureModeBezelPanningCenterView' .
  
  By default, this is set 20.0f.
  */
-@property (nonatomic, assign) CGFloat bezelPanningCenterViewRange;
+@property(nonatomic, assign) CGFloat bezelPanningCenterViewRange;
 
 /**
  The value determining if the user can open or close drawer with panGesture velocity.
  
  By default, this is set 200.0f.
  */
-@property (nonatomic, assign) CGFloat panVelocityXAnimationThreshold;
+@property(nonatomic, assign) CGFloat panVelocityXAnimationThreshold;
 
 ///---------------------------------------
 /// @name Initializing a `MMDrawerController`
@@ -269,7 +270,7 @@ typedef void (^MMDrawerControllerDrawerVisualStateBlock)(MMDrawerController * dr
  
  @return The newly-initialized drawer container view controller.
  */
--(instancetype)initWithCenterViewController:(UIViewController *)centerViewController leftDrawerViewController:(UIViewController *)leftDrawerViewController rightDrawerViewController:(UIViewController *)rightDrawerViewController;
+- (instancetype)initWithCenterViewController:(UIViewController *)centerViewController leftDrawerViewController:(UIViewController *)leftDrawerViewController rightDrawerViewController:(UIViewController *)rightDrawerViewController;
 
 /**
  Creates and initializes an `MMDrawerController` object with the specified center view controller, left drawer view controller.
@@ -279,7 +280,7 @@ typedef void (^MMDrawerControllerDrawerVisualStateBlock)(MMDrawerController * dr
  
  @return The newly-initialized drawer container view controller.
  */
--(instancetype)initWithCenterViewController:(UIViewController *)centerViewController leftDrawerViewController:(UIViewController *)leftDrawerViewController;
+- (instancetype)initWithCenterViewController:(UIViewController *)centerViewController leftDrawerViewController:(UIViewController *)leftDrawerViewController;
 
 /**
  Creates and initializes an `MMDrawerController` object with the specified center view controller, right drawer view controller.
@@ -289,7 +290,7 @@ typedef void (^MMDrawerControllerDrawerVisualStateBlock)(MMDrawerController * dr
  
  @return The newly-initialized drawer container view controller.
  */
--(instancetype)initWithCenterViewController:(UIViewController *)centerViewController rightDrawerViewController:(UIViewController *)rightDrawerViewController;
+- (instancetype)initWithCenterViewController:(UIViewController *)centerViewController rightDrawerViewController:(UIViewController *)rightDrawerViewController;
 
 ///---------------------------------------
 /// @name Opening and Closing a Drawer
@@ -305,7 +306,7 @@ typedef void (^MMDrawerControllerDrawerVisualStateBlock)(MMDrawerController * dr
  @param completion The block that is called when the toggle is complete, or if no toggle took place at all.
  
  */
--(void)toggleDrawerSide:(MMDrawerSide)drawerSide animated:(BOOL)animated completion:(void(^)(BOOL finished))completion;
+- (void)toggleDrawerSide:(MMDrawerSide)drawerSide animated:(BOOL)animated completion:(void (^)(BOOL finished))completion;
 
 /**
  Closes the open drawer.
@@ -314,7 +315,7 @@ typedef void (^MMDrawerControllerDrawerVisualStateBlock)(MMDrawerController * dr
  @param completion The block that is called when the close is complete
  
  */
--(void)closeDrawerAnimated:(BOOL)animated completion:(void(^)(BOOL finished))completion;
+- (void)closeDrawerAnimated:(BOOL)animated completion:(void (^)(BOOL finished))completion;
 
 /**
  Opens the `drawer` passed in.
@@ -324,7 +325,7 @@ typedef void (^MMDrawerControllerDrawerVisualStateBlock)(MMDrawerController * dr
  @param completion The block that is called when the toggle is open.
  
  */
--(void)openDrawerSide:(MMDrawerSide)drawerSide animated:(BOOL)animated completion:(void(^)(BOOL finished))completion;
+- (void)openDrawerSide:(MMDrawerSide)drawerSide animated:(BOOL)animated completion:(void (^)(BOOL finished))completion;
 
 ///---------------------------------------
 /// @name Setting a new Center View Controller
@@ -340,7 +341,7 @@ typedef void (^MMDrawerControllerDrawerVisualStateBlock)(MMDrawerController * dr
  @param completion The block called when the animation is finsihed.
  
  */
--(void)setCenterViewController:(UIViewController *)centerViewController withCloseAnimation:(BOOL)closeAnimated completion:(void(^)(BOOL finished))completion;
+- (void)setCenterViewController:(UIViewController *)centerViewController withCloseAnimation:(BOOL)closeAnimated completion:(void (^)(BOOL finished))completion;
 
 /**
  Sets the new `centerViewController`. 
@@ -352,7 +353,7 @@ typedef void (^MMDrawerControllerDrawerVisualStateBlock)(MMDrawerController * dr
  @param completion The block called when the animation is finsihed.
  
  */
--(void)setCenterViewController:(UIViewController *)newCenterViewController withFullCloseAnimation:(BOOL)fullCloseAnimated completion:(void(^)(BOOL finished))completion;
+- (void)setCenterViewController:(UIViewController *)newCenterViewController withFullCloseAnimation:(BOOL)fullCloseAnimated completion:(void (^)(BOOL finished))completion;
 
 ///---------------------------------------
 /// @name Animating the Width of a Drawer
@@ -368,7 +369,7 @@ typedef void (^MMDrawerControllerDrawerVisualStateBlock)(MMDrawerController * dr
  @param completion The block called when the animation is finished.
  
  */
--(void)setMaximumLeftDrawerWidth:(CGFloat)width animated:(BOOL)animated completion:(void(^)(BOOL finished))completion;
+- (void)setMaximumLeftDrawerWidth:(CGFloat)width animated:(BOOL)animated completion:(void (^)(BOOL finished))completion;
 
 /**
  Sets the maximum width of the right drawer view controller. 
@@ -380,7 +381,7 @@ typedef void (^MMDrawerControllerDrawerVisualStateBlock)(MMDrawerController * dr
  @param completion The block called when the animation is finished.
  
  */
--(void)setMaximumRightDrawerWidth:(CGFloat)width animated:(BOOL)animated completion:(void(^)(BOOL finished))completion;
+- (void)setMaximumRightDrawerWidth:(CGFloat)width animated:(BOOL)animated completion:(void (^)(BOOL finished))completion;
 
 ///---------------------------------------
 /// @name Previewing a Drawer
@@ -393,7 +394,7 @@ typedef void (^MMDrawerControllerDrawerVisualStateBlock)(MMDrawerController * dr
  @param completion The block called when the animation is finsihed.
  
  */
--(void)bouncePreviewForDrawerSide:(MMDrawerSide)drawerSide completion:(void(^)(BOOL finished))completion;
+- (void)bouncePreviewForDrawerSide:(MMDrawerSide)drawerSide completion:(void (^)(BOOL finished))completion;
 
 /**
  Bounce preview for the specified `drawerSide`.
@@ -403,7 +404,7 @@ typedef void (^MMDrawerControllerDrawerVisualStateBlock)(MMDrawerController * dr
  @param completion The block called when the animation is finsihed.
  
  */
--(void)bouncePreviewForDrawerSide:(MMDrawerSide)drawerSide distance:(CGFloat)distance completion:(void(^)(BOOL finished))completion;
+- (void)bouncePreviewForDrawerSide:(MMDrawerSide)drawerSide distance:(CGFloat)distance completion:(void (^)(BOOL finished))completion;
 
 ///---------------------------------------
 /// @name Custom Drawer Animations
@@ -422,7 +423,7 @@ typedef void (^MMDrawerControllerDrawerVisualStateBlock)(MMDrawerController * dr
  
  @param drawerVisualStateBlock A block object to be called that allows the implementer to update visual state properties on the drawer. `percentVisible` represents the amount of the drawer space that is current visible, with drawer space being defined as the edge of the screen to the maxmimum drawer width. Note that you do have access to the drawerController, which will allow you to update things like the anchor point of the side drawer layer.
  */
--(void)setDrawerVisualStateBlock:(void(^)(MMDrawerController * drawerController, MMDrawerSide drawerSide, CGFloat percentVisible))drawerVisualStateBlock;
+- (void)setDrawerVisualStateBlock:(void (^)(MMDrawerController *drawerController, MMDrawerSide drawerSide, CGFloat percentVisible))drawerVisualStateBlock;
 
 ///---------------------------------------
 /// @name Gesture Completion Handling
@@ -435,7 +436,7 @@ typedef void (^MMDrawerControllerDrawerVisualStateBlock)(MMDrawerController * dr
  
  @param gestureCompletionBlock A block object to be called that allows the implementer be notified when a gesture action has been completed.
  */
--(void)setGestureCompletionBlock:(void(^)(MMDrawerController * drawerController, UIGestureRecognizer * gesture))gestureCompletionBlock;
+- (void)setGestureCompletionBlock:(void (^)(MMDrawerController *drawerController, UIGestureRecognizer *gesture))gestureCompletionBlock;
 
 ///---------------------------------------
 /// @name Custom Gesture Handler
@@ -450,6 +451,6 @@ typedef void (^MMDrawerControllerDrawerVisualStateBlock)(MMDrawerController * dr
  
  @param gestureShouldRecognizeTouchBlock A block object to be called to determine if the given `touch` should be recognized by the given gesture.
  */
--(void)setGestureShouldRecognizeTouchBlock:(BOOL(^)(MMDrawerController * drawerController, UIGestureRecognizer * gesture, UITouch * touch))gestureShouldRecognizeTouchBlock;
+- (void)setGestureShouldRecognizeTouchBlock:(BOOL(^)(MMDrawerController *drawerController, UIGestureRecognizer *gesture, UITouch *touch))gestureShouldRecognizeTouchBlock;
 
 @end

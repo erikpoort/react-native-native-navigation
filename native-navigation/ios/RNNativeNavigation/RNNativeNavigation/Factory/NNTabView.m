@@ -8,10 +8,10 @@
 
 @interface NNTabView () <UITabBarDelegate>
 
-@property (nonatomic, strong) NNTabNode *tabNode;
-@property (nonatomic, strong) UIView *holder;
-@property (nonatomic, strong) UITabBar *tabBar;
-@property (nonatomic, strong) NSArray <UIViewController <NNView> *> *viewControllers;
+@property(nonatomic, strong) NNTabNode *tabNode;
+@property(nonatomic, strong) UIView *holder;
+@property(nonatomic, strong) UITabBar *tabBar;
+@property(nonatomic, strong) NSArray <UIViewController <NNView> *> *viewControllers;
 
 @end
 
@@ -21,10 +21,10 @@
     if (self = [super init]) {
         self.tabNode = node;
 
-		self.title = node.title;
-		self.view.backgroundColor = [UIColor whiteColor];
+        self.title = node.title;
+        self.view.backgroundColor = [UIColor whiteColor];
 
-		NSMutableArray *viewControllers = [@[] mutableCopy];
+        NSMutableArray *viewControllers = [@[] mutableCopy];
         NSMutableArray *items = [@[] mutableCopy];
         [node.tabs enumerateObjectsUsingBlock:^(id <NNNode> view, NSUInteger idx, BOOL *stop) {
             UIViewController *viewController = [view generate];
@@ -85,29 +85,29 @@
 
 - (UIViewController <NNView> *)viewForPath:(NSString *)path {
     if ([path rangeOfString:self.node.screenID].location == 0) {
-		UIViewController <NNView> *checkController;
-		UIViewController <NNView> *foundController;
+        UIViewController <NNView> *checkController;
+        UIViewController <NNView> *foundController;
 
-		NSUInteger i = 0;
-		do {
-			if (i < self.viewControllers.count) {
-				checkController = self.viewControllers[i++];
+        NSUInteger i = 0;
+        do {
+            if (i < self.viewControllers.count) {
+                checkController = self.viewControllers[i++];
 
-				if ([path rangeOfString:checkController.node.screenID].location == 0) {
-					foundController = checkController;
-					checkController = nil;
-				}
-			} else {
-				checkController = nil;
-			}
-		} while(checkController != nil);
+                if ([path rangeOfString:checkController.node.screenID].location == 0) {
+                    foundController = checkController;
+                    checkController = nil;
+                }
+            } else {
+                checkController = nil;
+            }
+        } while (checkController != nil);
 
-		if (![foundController.node.screenID isEqualToString:path]) {
-			foundController = (UIViewController <NNView> *)[foundController viewForPath:path];
-		}
+        if (![foundController.node.screenID isEqualToString:path]) {
+            foundController = (UIViewController <NNView> *) [foundController viewForPath:path];
+        }
 
-		return foundController;
-	}
+        return foundController;
+    }
 
     return nil;
 }

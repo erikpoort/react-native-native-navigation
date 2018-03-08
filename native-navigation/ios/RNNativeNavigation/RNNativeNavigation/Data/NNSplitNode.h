@@ -8,8 +8,8 @@
 
 @interface NNSplitNode : NNBaseNode <NNNode>
 
-@property (nonatomic, strong, readonly) id <NNNode> node1;
-@property (nonatomic, strong, readonly) id <NNNode> node2;
-@property (nonatomic, assign, readonly) UILayoutConstraintAxis axis;
+@property(nonatomic, strong, readonly) id <NNNode> node1;
+@property(nonatomic, strong, readonly) id <NNNode> node2;
+@property(nonatomic, assign, readonly) UILayoutConstraintAxis axis;
 
 @end

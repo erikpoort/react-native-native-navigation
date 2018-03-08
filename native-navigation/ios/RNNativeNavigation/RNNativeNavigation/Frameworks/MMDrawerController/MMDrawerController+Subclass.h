@@ -35,7 +35,7 @@
  
  @param tapGesture The single-tap gesture recognizer instance that triggered the callback
  */
--(void)tapGestureCallback:(UITapGestureRecognizer *)tapGesture __attribute((objc_requires_super));
+- (void)tapGestureCallback:(UITapGestureRecognizer *)tapGesture __attribute((objc_requires_super));
 
 /** 
  `MMDrawerController`'s pan gesture recognizer callback. This method is called every time the `UIPanGestureRecognizer` is updated.
@@ -44,7 +44,7 @@
  
  @param panGesture The pan gesture recognizer instance that triggered the callback
  */
--(void)panGestureCallback:(UIPanGestureRecognizer *)panGesture __attribute((objc_requires_super));
+- (void)panGestureCallback:(UIPanGestureRecognizer *)panGesture __attribute((objc_requires_super));
 
 /**
  A `UIGestureRecognizerDelegate` method that is queried by `MMDrawerController`'s gestures to determine if it should receive the touch.
@@ -52,7 +52,7 @@
  @param gestureRecognizer The gesture recognizer that is asking if it should recieve a touch
  @param touch The touch in question in gestureRecognizer.view's coordinate space
  */
--(BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch __attribute((objc_requires_super));
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch __attribute((objc_requires_super));
 
 ///---------------------------------------
 /// @name Drawer Presentation
@@ -63,7 +63,7 @@
  @param drawer The drawer side that will be presented
  @param animated A boolean that indicates whether the presentation is being animated or not
  */
--(void)prepareToPresentDrawer:(MMDrawerSide)drawer animated:(BOOL)animated __attribute((objc_requires_super));
+- (void)prepareToPresentDrawer:(MMDrawerSide)drawer animated:(BOOL)animated __attribute((objc_requires_super));
 
 ///---------------------------------------
 /// @name Opening/Closing Drawer
@@ -76,7 +76,7 @@
  @param animationOptions A mask defining the animation options of the animation
  @param completion A completion block to be called when the drawer is finished closing
  */
--(void)closeDrawerAnimated:(BOOL)animated velocity:(CGFloat)velocity animationOptions:(UIViewAnimationOptions)options completion:(void (^)(BOOL))completion __attribute((objc_requires_super));
+- (void)closeDrawerAnimated:(BOOL)animated velocity:(CGFloat)velocity animationOptions:(UIViewAnimationOptions)options completion:(void (^)(BOOL))completion __attribute((objc_requires_super));
 
 /**
  The method that handles opening the drawer. You can subclass this method to get a callback every time the drawer is about to be opened.
@@ -87,7 +87,7 @@
  @param animationOptions A mask defining the animation options of the animation
  @param completion A completion block to be called when the drawer is finished opening
  */
--(void)openDrawerSide:(MMDrawerSide)drawerSide animated:(BOOL)animated velocity:(CGFloat)velocity animationOptions:(UIViewAnimationOptions)options completion:(void (^)(BOOL))completion __attribute((objc_requires_super));
+- (void)openDrawerSide:(MMDrawerSide)drawerSide animated:(BOOL)animated velocity:(CGFloat)velocity animationOptions:(UIViewAnimationOptions)options completion:(void (^)(BOOL))completion __attribute((objc_requires_super));
 
 ///---------------------------------------
 /// @name `UIViewController` Subclass Methods
@@ -98,7 +98,7 @@
  @param toInterfaceOrientation The interface orientation that the interface is moving to
  @param duration The duration of the interface orientation animation
  */
--(void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration __attribute((objc_requires_super));
+- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration __attribute((objc_requires_super));
 
 /** 
  Included here to ensure subclasses call `super`.
@@ -106,6 +106,6 @@
  @param toInterfaceOrientation The interface orientation that the interface is moving to
  @param duration The duration of the interface orientation animation
  */
--(void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration __attribute((objc_requires_super));
+- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration __attribute((objc_requires_super));
 
 @end

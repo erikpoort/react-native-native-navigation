@@ -12,7 +12,7 @@ static NSString *const CENTER = @"center";
 static NSString *const RIGHT = @"right";
 static NSString *const SIDE = @"side";
 
-typedef NS_ENUM(NSInteger , NNDrawerSide){
+typedef NS_ENUM(NSInteger, NNDrawerSide) {
     NNDrawerSideLeft,
     NNDrawerSideCenter,
     NNDrawerSideRight,
@@ -20,9 +20,9 @@ typedef NS_ENUM(NSInteger , NNDrawerSide){
 
 @interface NNDrawerNode : NNBaseNode <NNNode>
 
-@property (nonatomic, strong) id <NNNode> leftNode;
-@property (nonatomic, strong) id <NNNode> centerNode;
-@property (nonatomic, strong) id <NNNode> rightNode;
-@property (nonatomic, assign) MMDrawerSide side;
+@property(nonatomic, strong) id <NNNode> leftNode;
+@property(nonatomic, strong) id <NNNode> centerNode;
+@property(nonatomic, strong) id <NNNode> rightNode;
+@property(nonatomic, assign) MMDrawerSide side;
 
 @end

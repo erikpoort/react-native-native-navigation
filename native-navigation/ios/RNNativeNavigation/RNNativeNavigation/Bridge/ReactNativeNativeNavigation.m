@@ -10,10 +10,6 @@
 #import "NNStackNode.h"
 #import "NNView.h"
 #import "NNDrawerNode.h"
-#import "NNSingleNode.h"
-#import "NNSingleView.h"
-#import "NNDrawerView.h"
-#import "UIViewController+MMDrawerController.h"
 
 #import <React/RCTDevMenu.h>
 #import <React/RCTKeyCommands.h>
@@ -46,8 +42,9 @@ RCT_EXPORT_MODULE();
     [NNNodeHelper.sharedInstance addExternalNodes:nodesToLoad];
 }
 
-RCT_EXPORT_METHOD(onStart:
-    (RCTResponseSenderBlock) callback) {
+RCT_EXPORT_METHOD(
+            onStart: (RCTResponseSenderBlock)callback
+) {
     NSDictionary *state = [RNNNState sharedInstance].state;
     if (state == nil) {
         printf("%s %s\n", kRNNN.UTF8String, "First load");
@@ -58,12 +55,11 @@ RCT_EXPORT_METHOD(onStart:
     }
 }
 
-RCT_EXPORT_METHOD(setSiteMap:
-    (NSDictionary *) map
-            resolver:
-            (RCTPromiseResolveBlock) resolve
-            rejecter:
-            (RCTPromiseRejectBlock) reject) {
+RCT_EXPORT_METHOD(
+            setSiteMap: (NSDictionary *)map
+            resolver: (RCTPromiseResolveBlock)resolve
+            rejecter: (RCTPromiseRejectBlock)reject
+) {
     dispatch_async(dispatch_get_main_queue(), ^{
         [RNNNState sharedInstance].state = map;
 
@@ -78,16 +74,12 @@ RCT_EXPORT_METHOD(setSiteMap:
     resolve(@[]);
 }
 
-RCT_EXPORT_METHOD(callMethodOnNode:
-    (NSString *) path
-            navigator:
-            (NSString *) navigator
-            methodName:
-            (NSString *) methodName
-            arguments:
-            (NSDictionary *) arguments
-            responseCallback:
-            (RCTResponseSenderBlock) callback) {
+RCT_EXPORT_METHOD(
+            callMethodOnNode: (NSString *)navigator
+            methodName: (NSString *)methodName
+            arguments: (NSDictionary *)arguments
+            responseCallback: (RCTResponseSenderBlock)callback
+) {
     UIViewController <NNView> *rootController = (UIViewController <NNView> *) [UIApplication sharedApplication].keyWindow.rootViewController;
     __kindof UIViewController <NNView> *findController = [rootController viewForPath:navigator];
     if (!findController) return;

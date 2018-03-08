@@ -16,7 +16,7 @@ export default class BaseNavigation {
 	addScreens(newPath, presentMethod, showScreen, extraArguments){
 		const viewMap = this.navigation.viewMap;
 		const args = {
-			"screen": mapChild(viewMap, showScreen, newPath),
+			screen: mapChild(viewMap, showScreen, newPath),
 			...extraArguments
 		};
 		return ReactNativeNativeNavigation.callMethodOnNode(newPath, this.navigatorID, presentMethod, args, (register) => {

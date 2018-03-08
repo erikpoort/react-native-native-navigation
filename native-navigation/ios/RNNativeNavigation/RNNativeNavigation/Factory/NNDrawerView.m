@@ -81,7 +81,6 @@
     return nil;
 }
 
-
 - (void)callMethodWithName:(NSString *)methodName arguments:(NSDictionary *)arguments callback:(void (^)(NSArray *))callback {
     NSMutableDictionary *methodDictionary = @{}.mutableCopy;
     methodDictionary[@"openView"] = [NSValue valueWithPointer:@selector(openView:callback:)];

@@ -87,7 +87,6 @@
 - (void)push: (NSDictionary *) arguments callback: (void(^)(NSArray *)) callback{
 	UIViewController <NNView> *rootController = (UIViewController <NNView> *) [UIApplication sharedApplication].keyWindow.rootViewController;
 	NNSingleNode *nodeObject = [NNNodeHelper.sharedInstance nodeFromMap:arguments[@"screen"] bridge:arguments[@"bridge"]];
-	UINavigationController <NNView> *navigationController = (UINavigationController <NNView> *) self.navigationController;
 	NNStackNode *stackNode = self.node;
 	NSMutableArray *stack = stackNode.stack.mutableCopy;
 	[stack addObject:nodeObject];

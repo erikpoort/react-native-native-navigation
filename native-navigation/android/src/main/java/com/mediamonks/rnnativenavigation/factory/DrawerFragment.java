@@ -12,14 +12,18 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
+import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.Callback;
+import com.facebook.react.bridge.ReadableMap;
 import com.mediamonks.rnnativenavigation.data.DrawerNode;
+import com.mediamonks.rnnativenavigation.data.Node;
 
 /**
  * Created by erik on 18/09/2017.
  * example 2017
  */
 
-public class DrawerFragment extends BaseFragment<DrawerNode> {
+public class DrawerFragment extends BaseFragment<DrawerNode> implements Navigatable {
     private BaseFragment _centerFragment;
     private BaseFragment _leftFragment;
     private BaseFragment _rightFragment;
@@ -119,6 +123,81 @@ public class DrawerFragment extends BaseFragment<DrawerNode> {
         }
 
         super.onDestroyView();
+    }
+
+    @Override public void callMethodWithName(String name, ReadableMap arguments, RNNNFragment rootFragment, Callback callback) {
+        switch (name) {
+            case DrawerNode.OPEN_VIEW: {
+                this.handleOpenViewCall(arguments, rootFragment, callback);
+                break;
+            }
+        }
+    }
+
+    private void handleOpenViewCall(ReadableMap arguments, RNNNFragment rootFragment, Callback callback) {
+		try {
+			final Node node = NodeHelper.getInstance().nodeFromMap(arguments.getMap("screen"), getNode().getInstanceManager());
+
+			final String side = this.sideForPath(node.getScreenID());
+			if (side != null) {
+				switch (side) {
+					case DrawerNode.LEFT: {
+						getNode().setLeftNode(node);
+						break;
+					}
+					case DrawerNode.CENTER: {
+						getNode().setCenterNode(node);
+						break;
+					}
+					case DrawerNode.RIGHT: {
+						getNode().setRightNode(node);
+						break;
+					}
+				}
+
+				callback.invoke(Arguments.makeNativeMap(rootFragment.getNode().getData().toHashMap()));
+
+                FragmentManager fragmentManager = getChildFragmentManager();
+                final FragmentTransaction transaction = fragmentManager.beginTransaction();
+                final BaseFragment newFragment = node.generateFragment();
+
+				getActivity().runOnUiThread(new Runnable() {
+					@Override public void run() {
+                        switch (side) {
+                            case DrawerNode.LEFT: {
+                                transaction.replace(_leftFragment.getId(), newFragment);
+                                _leftFragment = newFragment;
+                                break;
+                            }
+                            case DrawerNode.CENTER: {
+                                transaction.replace(_centerFragment.getId(), newFragment);
+                                _centerFragment = newFragment;
+                                break;
+                            }
+                            case DrawerNode.RIGHT: {
+                                transaction.replace(_rightFragment.getId(), newFragment);
+                                _rightFragment = newFragment;
+                                break;
+                            }
+                        }
+
+                        transaction.commitNowAllowingStateLoss();
+                    }
+				});
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+    private String sideForPath(String path) {
+        if (path.indexOf(this.getNode().getScreenID()) == 0) {
+            String newPath = path.substring(this.getNode().getScreenID().length() + 1);
+            String[] splitArray = newPath.split("/");
+            return splitArray[0];
+        }
+        return null;
     }
 
     @Override

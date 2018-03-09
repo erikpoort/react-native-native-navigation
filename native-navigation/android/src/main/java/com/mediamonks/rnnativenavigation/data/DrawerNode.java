@@ -9,6 +9,8 @@ import com.mediamonks.rnnativenavigation.factory.DrawerFragment;
 import com.mediamonks.rnnativenavigation.factory.NodeHelper;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by erik on 18/09/2017.
@@ -16,11 +18,18 @@ import java.util.Arrays;
  */
 
 public class DrawerNode extends BaseNode  {
-    public static String JS_NAME = "DrawerView";
+    public static final String OPEN_VIEW = "openView";
 
-    private static final String LEFT = "left";
-    private static final String CENTER = "center";
-    private static final String RIGHT = "right";
+    public static String JS_NAME = "DrawerView";
+    public static Map<String, Object> getConstants() {
+        Map<String, Object> map = new HashMap<>();
+        map.put(OPEN_VIEW, OPEN_VIEW);
+        return map;
+    }
+
+    public static final String LEFT = "left";
+    public static final String CENTER = "center";
+    public static final String RIGHT = "right";
     private static final String SIDE = "side";
 
     private Node _leftNode;
@@ -102,12 +111,24 @@ public class DrawerNode extends BaseNode  {
         return _leftNode;
     }
 
+    public void setLeftNode(Node leftNode) {
+        _leftNode = leftNode;
+    }
+
     public Node getCenterNode() {
         return _centerNode;
     }
 
+    public void setCenterNode(Node centerNode) {
+        _centerNode = centerNode;
+    }
+
     public Node getRightNode() {
         return _rightNode;
+    }
+
+    public void setRightNode(Node rightNode) {
+        _rightNode = rightNode;
     }
 
     public int getSide() {

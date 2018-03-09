@@ -92,20 +92,19 @@ NSString *const kOpenView = @"openView";
     NNSingleNode *nodeObject = [NNNodeHelper.sharedInstance nodeFromMap:arguments[@"screen"] bridge:arguments[@"bridge"]];
 
     UIViewController <NNView> *rootController = (UIViewController <NNView> *) [UIApplication sharedApplication].keyWindow.rootViewController;
-    NSString *parentPath = nodeObject.screenID.stringByDeletingLastPathComponent.stringByDeletingLastPathComponent;
-    NNSingleView *findController = (NNSingleView *) [rootController viewForPath:parentPath];
-    if (!findController) return;
 
-    NNDrawerView *drawerView = (NNDrawerView *) findController.mm_drawerController;
-    NNDrawerNode *drawerNode = drawerView.node;
+    NNDrawerSide side = [self sideForPath:nodeObject.screenID];
 
-    switch ([self sideForPath:parentPath]) {
+    switch (side) {
         case NNDrawerSideLeft:
-            drawerNode.leftNode = nodeObject;
+            self.drawerNode.leftNode = nodeObject;
+            break;
         case NNDrawerSideCenter:
-            drawerNode.centerNode = nodeObject;
+            self.drawerNode.centerNode = nodeObject;
+            break;
         case NNDrawerSideRight:
-            drawerNode.rightNode = nodeObject;
+            self.drawerNode.rightNode = nodeObject;
+            break;
     }
 
     NSDictionary *newState = rootController.node.data;
@@ -115,15 +114,15 @@ NSString *const kOpenView = @"openView";
     dispatch_async(dispatch_get_main_queue(), ^{
         UIViewController *viewController = [nodeObject generate];
         if (viewController) {
-            switch ([self sideForPath:parentPath]) {
+            switch (side) {
                 case NNDrawerSideLeft:
-                    [drawerView setLeftDrawerViewController:viewController];
+                    [self setLeftDrawerViewController:viewController];
                     break;
                 case NNDrawerSideCenter:
-                    [drawerView setCenterViewController:viewController withCloseAnimation:YES completion:nil];
+                    [self setCenterViewController:viewController withCloseAnimation:YES completion:nil];
                     break;
                 case NNDrawerSideRight:
-                    [drawerView setRightDrawerViewController:viewController];
+                    [self setRightDrawerViewController:viewController];
                     break;
             }
         }

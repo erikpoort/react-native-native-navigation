@@ -44,8 +44,7 @@ public class NodeHelper {
 //        _constants.add(SplitNode.getConstants());
 
         _nodes.put(DrawerNode.JS_NAME, DrawerNode.class);
-//        _constants.add(DrawerNode.getConstants());
-
+        _constants.putAll(DrawerNode.getConstants());
     }
 
     public static NodeHelper getInstance() {

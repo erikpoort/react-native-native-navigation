@@ -51,7 +51,9 @@ public class TabNode extends BaseNode {
         }
 
         _tabs = stack;
-        _selectedTab = map.getInt(SELECTED_TAB);
+        if (map.hasKey(SELECTED_TAB)) {
+            _selectedTab = map.getInt(SELECTED_TAB);
+        }
     }
 
     @Override

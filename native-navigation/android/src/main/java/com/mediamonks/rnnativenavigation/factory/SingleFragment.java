@@ -60,7 +60,7 @@ public class SingleFragment extends BaseFragment<SingleNode> implements Navigata
         super.onStart();
 
         if (getNode().getModal() != null) {
-            showModal(getNode().getModal());
+            showModal(getNode().getModal(), false);
         }
     }
 
@@ -83,6 +83,10 @@ public class SingleFragment extends BaseFragment<SingleNode> implements Navigata
         if (rootView != null) {
             Log.i("MMM", "Clean " + getNode().getScreenID());
             rootView.invalidate();
+        }
+
+        if (_modalFragment != null) {
+            _modalFragment.invalidate();
         }
     }
 
@@ -114,7 +118,7 @@ public class SingleFragment extends BaseFragment<SingleNode> implements Navigata
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    SingleFragment.this.showModal(node);
+                    SingleFragment.this.showModal(node, true);
                 }
             });
         } catch (Exception e) {
@@ -122,9 +126,10 @@ public class SingleFragment extends BaseFragment<SingleNode> implements Navigata
         }
     }
 
-    public void showModal(Node node) {
+    public void showModal(Node node, boolean animated) {
         _modalFragment = new ModalFragment();
         _modalFragment.setNode(node);
+        _modalFragment.setAnimated(animated);
         _modalFragment.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {

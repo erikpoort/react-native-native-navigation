@@ -31,7 +31,7 @@ export const SingleNode = {
 
 			let modalData = null;
 			if (modal) {
-				modalData = mapChild(modal, `${screenID}/modal${screenID}`);
+				modalData = mapChild(viewMap, modal, `${screenID}/modal`);
 			}
 			return {
 				name,

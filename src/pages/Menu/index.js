@@ -18,9 +18,7 @@ export default class Menu extends Component {
 					<Button title="Detail" onPress={() => this.handleMenuItem(<SingleView id="Detail" screen={Detail}/>)} />
 					<Button title="Detail 2" onPress={() => this.handleMenuItem(
 						<StackView id="stackert">
-                            <SingleView id="Detail2" screen={Detail2}/>
-                            <SingleView id="Detail2" screen={Detail2}/>
-                            <SingleView id="Detail2" screen={Detail2}/>
+                            <SingleView id="Detail2" screen={Detail2} modal={<SingleView id="Detail2" screen={Detail2} />} />
 						</StackView>
 					)} />
 				</View>

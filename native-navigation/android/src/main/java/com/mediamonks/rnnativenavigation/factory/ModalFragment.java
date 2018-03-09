@@ -27,6 +27,7 @@ public class ModalFragment extends DialogFragment implements RNNNFragment {
     private Node _node;
     private DialogInterface.OnDismissListener _onDismissListener;
     private BaseFragment _fragment;
+    private boolean _animated = true;
 
     private View.OnKeyListener _forwardKeyListener = new View.OnKeyListener() {
         @Override
@@ -79,7 +80,10 @@ public class ModalFragment extends DialogFragment implements RNNNFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        getDialog().getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+
+        if (_animated) {
+            getDialog().getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+        }
     }
 
     @Override
@@ -107,6 +111,16 @@ public class ModalFragment extends DialogFragment implements RNNNFragment {
         _fragment = getNode().generateFragment();
         transaction.add(view.getId(), _fragment);
         transaction.commitNowAllowingStateLoss();
+    }
+
+    @Override public void onDestroyView() {
+        super.onDestroyView();
+
+        FragmentManager fragmentManager = getChildFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.remove(_fragment);
+        transaction.setTransition(FragmentTransaction.TRANSIT_NONE);
+        transaction.commitAllowingStateLoss();
     }
 
     @Override
@@ -162,5 +176,9 @@ public class ModalFragment extends DialogFragment implements RNNNFragment {
 
     public void setOnDismissListener(DialogInterface.OnDismissListener onDismissListener) {
         _onDismissListener = onDismissListener;
+    }
+
+    public void setAnimated(boolean animated) {
+        _animated = animated;
     }
 }

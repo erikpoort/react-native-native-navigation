@@ -35,7 +35,9 @@ static NSString *const kAxisKey = @"axis";
 
     self.node1 = [NNNodeHelper.sharedInstance nodeFromMap:data[kNode1Key] bridge:self.bridge];
     self.node2 = [NNNodeHelper.sharedInstance nodeFromMap:data[kNode2Key] bridge:self.bridge];
-    self.axis = [data[kAxisKey] isEqualToString:@"vertical"] ? 1 : 0;
+    self.axis = [data[kAxisKey] isEqualToString:@"vertical"]
+            ? UILayoutConstraintAxisVertical
+            : UILayoutConstraintAxisHorizontal;
 }
 
 - (NSDictionary *)data {

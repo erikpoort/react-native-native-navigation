@@ -26,6 +26,7 @@
  `MMDrawerVisualState` provides prebuilt visual state update blocks that can be used in the callback block of `MMDrawerController` for drawer animation.
  */
 
+
 @interface MMDrawerVisualState : NSObject
 
 /**

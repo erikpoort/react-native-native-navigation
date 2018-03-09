@@ -4,8 +4,9 @@
 
 #import "NNBaseNode.h"
 
+
 @interface NNSingleNode : NNBaseNode <NNNode>
 
-@property(nonatomic, strong) id <NNNode> modal;
+@property (nonatomic, strong) id<NNNode> modal;
 
 @end

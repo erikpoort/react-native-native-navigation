@@ -5,17 +5,20 @@
 #import "NNSplitView.h"
 #import "NNSplitNode.h"
 
+
 @interface NNSplitView ()
 
-@property(nonatomic, strong) NNSplitNode *splitNode;
-@property(nonatomic, strong) UIViewController <NNView> *controller1;
-@property(nonatomic, strong) UIViewController <NNView> *controller2;
+@property (nonatomic, strong) NNSplitNode *splitNode;
+@property (nonatomic, strong) UIViewController<NNView> *controller1;
+@property (nonatomic, strong) UIViewController<NNView> *controller2;
 
 @end
 
+
 @implementation NNSplitView
 
-- (instancetype)initWithNode:(NNSplitNode *)node {
+- (instancetype)initWithNode:(NNSplitNode *)node
+{
     if (self = [super init]) {
         self.splitNode = node;
 
@@ -35,7 +38,7 @@
         [self.view addSubview:view2];
         [self.controller2 didMoveToParentViewController:self];
 
-        NSMutableArray *axes = @[@"H", @"V"].mutableCopy;
+        NSMutableArray *axes = @[ @"H", @"V" ].mutableCopy;
         NSString *baseAxis = axes[self.splitNode.axis];
         [axes removeObjectAtIndex:self.splitNode.axis];
         NSString *oppositeAxis = axes.firstObject;
@@ -51,12 +54,14 @@
     return self;
 }
 
-- (__kindof id <NNNode>)node {
+- (__kindof id<NNNode>)node
+{
     return self.splitNode;
 }
 
-- (UIViewController <NNView> *)viewForPath:(NSString *)path {
-    UIViewController <NNView> *foundController;
+- (UIViewController<NNView> *)viewForPath:(NSString *)path
+{
+    UIViewController<NNView> *foundController;
     if ([path isEqualToString:self.splitNode.screenID]) {
         return self;
     }

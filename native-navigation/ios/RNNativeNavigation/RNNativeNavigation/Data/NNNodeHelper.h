@@ -9,13 +9,14 @@
 @class RCTBridge;
 @class NNBaseNode;
 
+
 @interface NNNodeHelper : NSObject
 
 + (instancetype)sharedInstance;
 
-- (void)addExternalNodes:(NSArray <NNBaseNode *> *)nodes;
+- (void)addExternalNodes:(NSArray<NNBaseNode *> *)nodes;
 
-- (id <NNNode>)nodeFromMap:(NSDictionary *)map bridge:(RCTBridge *)bridge;
+- (id<NNNode>)nodeFromMap:(NSDictionary *)map bridge:(RCTBridge *)bridge;
 
 - (NSDictionary<NSString *, id> *)constantsToExport;
 

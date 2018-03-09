@@ -7,46 +7,55 @@
 NSString *const kScreenId = @"screenID";
 NSString *const kType = @"type";
 
+
 @interface NNBaseNode ()
 
-@property(nonatomic, copy) NSString *screenID;
-@property(nonatomic, copy) NSString *type;
+@property (nonatomic, copy) NSString *screenID;
+@property (nonatomic, copy) NSString *type;
 
 @end
 
+
 @implementation NNBaseNode
 
-- (void)setData:(NSDictionary *)data {
+- (void)setData:(NSDictionary *)data
+{
     self.screenID = data[kScreenId];
     self.type = data[kType];
 }
 
-- (NSDictionary *)data {
+- (NSDictionary *)data
+{
     return @{
-            kScreenId: self.screenID,
-            kType: self.type,
+        kScreenId : self.screenID,
+        kType : self.type,
     };
 }
 
-+ (NSDictionary<NSString *, id> *)constantsToExport {
++ (NSDictionary<NSString *, id> *)constantsToExport
+{
     return @{};
 }
 
-+ (NSString *)jsName {
++ (NSString *)jsName
+{
     NSAssert(NO, @"%@ should be overridden", NSStringFromSelector(_cmd));
     return nil;
 }
 
-- (void)setBridge:(RCTBridge *)bridge {
+- (void)setBridge:(RCTBridge *)bridge
+{
     NSAssert(NO, @"%@ should be overridden", NSStringFromSelector(_cmd));
 }
 
-- (NSString *)title {
+- (NSString *)title
+{
     NSAssert(NO, @"%@ should be overridden", NSStringFromSelector(_cmd));
     return nil;
 }
 
-- (UIViewController <NNView> *)generate {
+- (UIViewController<NNView> *)generate
+{
     NSAssert(NO, @"%@ should be overridden", NSStringFromSelector(_cmd));
     return nil;
 }

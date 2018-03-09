@@ -9,19 +9,22 @@
 
 NSString *const kOpenView = @"openView";
 
+
 @interface NNDrawerView ()
 
-@property(nonatomic, strong) NNDrawerNode *drawerNode;
+@property (nonatomic, strong) NNDrawerNode *drawerNode;
 
 @end
 
+
 @implementation NNDrawerView
 
-- (instancetype)initWithNode:(NNDrawerNode *)node {
+- (instancetype)initWithNode:(NNDrawerNode *)node
+{
     NNDrawerNode *drawerNode = node;
-    UIViewController <NNView> *leftController = [drawerNode.leftNode generate];
-    UIViewController <NNView> *centerController = [drawerNode.centerNode generate];
-    UIViewController <NNView> *rightController = [drawerNode.rightNode generate];
+    UIViewController<NNView> *leftController = [drawerNode.leftNode generate];
+    UIViewController<NNView> *centerController = [drawerNode.centerNode generate];
+    UIViewController<NNView> *rightController = [drawerNode.rightNode generate];
 
     if (self = [super initWithCenterViewController:centerController
                           leftDrawerViewController:leftController
@@ -43,21 +46,22 @@ NSString *const kOpenView = @"openView";
     return self;
 }
 
-- (__kindof id <NNNode>)node {
+- (__kindof id<NNNode>)node
+{
     return self.drawerNode;
 }
 
-- (UIViewController <NNView> *)viewForPath:(NSString *)path {
-    UIViewController <NNView> *foundController;
-    UIViewController <NNView> *leftController = (UIViewController <NNView> *) self.leftDrawerViewController;
-    UIViewController <NNView> *centerController = (UIViewController <NNView> *) self.centerViewController;
-    UIViewController <NNView> *rightController = (UIViewController <NNView> *) self.rightDrawerViewController;
+- (UIViewController<NNView> *)viewForPath:(NSString *)path
+{
+    UIViewController<NNView> *foundController;
+    UIViewController<NNView> *leftController = (UIViewController<NNView> *)self.leftDrawerViewController;
+    UIViewController<NNView> *centerController = (UIViewController<NNView> *)self.centerViewController;
+    UIViewController<NNView> *rightController = (UIViewController<NNView> *)self.rightDrawerViewController;
 
     if ([path isEqualToString:self.drawerNode.screenID]) {
         return self;
     }
     if ([path rangeOfString:self.drawerNode.screenID].location == 0) {
-
         NSString *newPath = [path substringFromIndex:self.drawerNode.screenID.length + 1];
         NSArray *splittedArray = [newPath componentsSeparatedByString:@"/"];
         NSString *side = splittedArray.firstObject;
@@ -78,7 +82,8 @@ NSString *const kOpenView = @"openView";
     return nil;
 }
 
-- (void)callMethodWithName:(NSString *)methodName arguments:(NSDictionary *)arguments callback:(RCTResponseSenderBlock)callback {
+- (void)callMethodWithName:(NSString *)methodName arguments:(NSDictionary *)arguments callback:(RCTResponseSenderBlock)callback
+{
     NSMutableDictionary *methodDictionary = @{}.mutableCopy;
     methodDictionary[kOpenView] = [NSValue valueWithPointer:@selector(openView:callback:)];
 
@@ -86,10 +91,11 @@ NSString *const kOpenView = @"openView";
     [self performSelector:thisSelector withObject:arguments withObject:callback];
 }
 
-- (void)openView:(NSDictionary *)arguments callback:(RCTResponseSenderBlock)callback {
+- (void)openView:(NSDictionary *)arguments callback:(RCTResponseSenderBlock)callback
+{
     NNSingleNode *nodeObject = [NNNodeHelper.sharedInstance nodeFromMap:arguments[@"screen"] bridge:arguments[@"bridge"]];
 
-    UIViewController <NNView> *rootController = (UIViewController <NNView> *) [UIApplication sharedApplication].keyWindow.rootViewController;
+    UIViewController<NNView> *rootController = (UIViewController<NNView> *)[UIApplication sharedApplication].keyWindow.rootViewController;
 
     NNDrawerSide side = [self sideForPath:nodeObject.screenID];
 
@@ -107,7 +113,7 @@ NSString *const kOpenView = @"openView";
 
     NSDictionary *newState = rootController.node.data;
     [RNNNState sharedInstance].state = newState;
-    callback(@[newState]);
+    callback(@[ newState ]);
 
     dispatch_async(dispatch_get_main_queue(), ^{
         UIViewController *viewController = [nodeObject generate];
@@ -127,7 +133,8 @@ NSString *const kOpenView = @"openView";
     });
 }
 
-- (NNDrawerSide)sideForPath:(NSString *)path {
+- (NNDrawerSide)sideForPath:(NSString *)path
+{
     if ([path rangeOfString:self.drawerNode.screenID].location == 0) {
         NSString *newPath = [path substringFromIndex:self.drawerNode.screenID.length + 1];
         NSArray *splitArray = [newPath componentsSeparatedByString:@"/"];

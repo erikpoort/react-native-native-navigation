@@ -21,12 +21,13 @@
 
 #import "MMDrawerBarButtonItem.h"
 
-@interface MMDrawerMenuButtonView : UIButton
-@property(nonatomic, strong) UIColor *menuButtonNormalColor;
-@property(nonatomic, strong) UIColor *menuButtonHighlightedColor;
 
-@property(nonatomic, strong) UIColor *shadowNormalColor;
-@property(nonatomic, strong) UIColor *shadowHighlightedColor;
+@interface MMDrawerMenuButtonView : UIButton
+@property (nonatomic, strong) UIColor *menuButtonNormalColor;
+@property (nonatomic, strong) UIColor *menuButtonHighlightedColor;
+
+@property (nonatomic, strong) UIColor *shadowNormalColor;
+@property (nonatomic, strong) UIColor *shadowHighlightedColor;
 
 - (UIColor *)menuButtonColorForState:(UIControlState)state;
 
@@ -38,9 +39,11 @@
 
 @end
 
+
 @implementation MMDrawerMenuButtonView
 
-- (instancetype)initWithFrame:(CGRect)frame {
+- (instancetype)initWithFrame:(CGRect)frame
+{
     self = [super initWithFrame:frame];
     if (self) {
         [self setMenuButtonNormalColor:[[UIColor whiteColor] colorWithAlphaComponent:0.9f]];
@@ -55,7 +58,8 @@
     return self;
 }
 
-- (UIColor *)menuButtonColorForState:(UIControlState)state {
+- (UIColor *)menuButtonColorForState:(UIControlState)state
+{
     UIColor *color;
     switch (state) {
         case UIControlStateNormal:
@@ -70,7 +74,8 @@
     return color;
 }
 
-- (void)setMenuButtonColor:(UIColor *)color forState:(UIControlState)state {
+- (void)setMenuButtonColor:(UIColor *)color forState:(UIControlState)state
+{
     switch (state) {
         case UIControlStateNormal:
             [self setMenuButtonNormalColor:color];
@@ -84,7 +89,8 @@
     [self setNeedsDisplay];
 }
 
-- (UIColor *)shadowColorForState:(UIControlState)state {
+- (UIColor *)shadowColorForState:(UIControlState)state
+{
     UIColor *color;
     switch (state) {
         case UIControlStateNormal:
@@ -99,7 +105,8 @@
     return color;
 }
 
-- (void)setShadowColor:(UIColor *)color forState:(UIControlState)state {
+- (void)setShadowColor:(UIColor *)color forState:(UIControlState)state
+{
     switch (state) {
         case UIControlStateNormal:
             [self setShadowNormalColor:color];
@@ -113,7 +120,8 @@
     [self setNeedsDisplay];
 }
 
-- (void)drawRect:(CGRect)rect {
+- (void)drawRect:(CGRect)rect
+{
     //// General Declarations
     CGContextRef context = UIGraphicsGetCurrentContext();
 
@@ -159,52 +167,61 @@
     CGContextRestoreGState(context);
 }
 
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
     [super touchesBegan:touches withEvent:event];
     [self setNeedsDisplay];
 }
 
-- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
+{
     [super touchesEnded:touches withEvent:event];
     [self setNeedsDisplay];
 }
 
-- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
+- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
+{
     [super touchesCancelled:touches withEvent:event];
     [self setNeedsDisplay];
 }
 
-- (void)setSelected:(BOOL)selected {
+- (void)setSelected:(BOOL)selected
+{
     [super setSelected:selected];
     [self setNeedsDisplay];
 }
 
-- (void)setHighlighted:(BOOL)highlighted {
+- (void)setHighlighted:(BOOL)highlighted
+{
     [super setHighlighted:highlighted];
     [self setNeedsDisplay];
 }
 
-- (void)setTintColor:(UIColor *)tintColor {
+- (void)setTintColor:(UIColor *)tintColor
+{
     if ([super respondsToSelector:@selector(setTintColor:)]) {
         [super setTintColor:tintColor];
     }
 }
 
-- (void)tintColorDidChange {
+- (void)tintColorDidChange
+{
     [self setNeedsDisplay];
 }
 
 @end
 
+
 @interface MMDrawerBarButtonItem ()
-@property(nonatomic, strong) MMDrawerMenuButtonView *buttonView;
+@property (nonatomic, strong) MMDrawerMenuButtonView *buttonView;
 
 @end
 
+
 @implementation MMDrawerBarButtonItem
 
-+ (UIImage *)drawerButtonItemImage {
-
++ (UIImage *)drawerButtonItemImage
+{
     static UIImage *drawerButtonImage = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -240,8 +257,8 @@
     return drawerButtonImage;
 }
 
-- (instancetype)initWithTarget:(id)target action:(SEL)action {
-
+- (instancetype)initWithTarget:(id)target action:(SEL)action
+{
     if ((floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_6_1)) {
         return [self initWithImage:[self.class drawerButtonItemImage]
                              style:UIBarButtonItemStylePlain
@@ -260,38 +277,43 @@
     }
 }
 
-- (instancetype)initWithCoder:(NSCoder *)aDecoder {
+- (instancetype)initWithCoder:(NSCoder *)aDecoder
+{
     // non-ideal way to get the target/action, but it works
     UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc] initWithCoder:aDecoder];
     return [self initWithTarget:barButtonItem.target action:barButtonItem.action];
 }
 
-- (void)touchUpInside:(id)sender {
-
+- (void)touchUpInside:(id)sender
+{
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
     [self.target performSelector:self.action withObject:sender];
 #pragma clang diagnostic pop;
-
 }
 
-- (UIColor *)menuButtonColorForState:(UIControlState)state {
+- (UIColor *)menuButtonColorForState:(UIControlState)state
+{
     return [self.buttonView menuButtonColorForState:state];
 }
 
-- (void)setMenuButtonColor:(UIColor *)color forState:(UIControlState)state {
+- (void)setMenuButtonColor:(UIColor *)color forState:(UIControlState)state
+{
     [self.buttonView setMenuButtonColor:color forState:state];
 }
 
-- (UIColor *)shadowColorForState:(UIControlState)state {
+- (UIColor *)shadowColorForState:(UIControlState)state
+{
     return [self.buttonView shadowColorForState:state];
 }
 
-- (void)setShadowColor:(UIColor *)color forState:(UIControlState)state {
+- (void)setShadowColor:(UIColor *)color forState:(UIControlState)state
+{
     [self.buttonView setShadowColor:color forState:state];
 }
 
-- (void)setTintColor:(UIColor *)tintColor {
+- (void)setTintColor:(UIColor *)tintColor
+{
     if ([super respondsToSelector:@selector(setTintColor:)]) {
         [super setTintColor:tintColor];
     }

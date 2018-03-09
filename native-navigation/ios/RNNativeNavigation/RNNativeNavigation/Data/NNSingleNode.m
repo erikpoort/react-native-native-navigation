@@ -10,30 +10,36 @@
 static NSString *const kName = @"name";
 static NSString *const kModal = @"modal";
 
+
 @interface NNSingleNode ()
 
-@property(nonatomic, strong) RCTBridge *bridge;
-@property(nonatomic, copy) NSString *title;
+@property (nonatomic, strong) RCTBridge *bridge;
+@property (nonatomic, copy) NSString *title;
 
 @end
 
+
 @implementation NNSingleNode
 
-+ (NSString *)jsName {
++ (NSString *)jsName
+{
     return @"SingleView";
 }
 
-- (UIViewController <NNView> *)generate {
+- (UIViewController<NNView> *)generate
+{
     return [[NNSingleView alloc] initWithBridge:self.bridge node:self];
 }
 
-- (void)setData:(NSDictionary *)data {
+- (void)setData:(NSDictionary *)data
+{
     [super setData:data];
     self.title = data[kName];
     self.modal = [NNNodeHelper.sharedInstance nodeFromMap:data[kModal] bridge:self.bridge];
 }
 
-- (NSDictionary *)data {
+- (NSDictionary *)data
+{
     NSMutableDictionary *data = [super data].mutableCopy;
     data[kName] = self.title;
     if (self.modal) {
@@ -42,9 +48,10 @@ static NSString *const kModal = @"modal";
     return data.copy;
 }
 
-+ (NSDictionary<NSString *, id> *)constantsToExport {
++ (NSDictionary<NSString *, id> *)constantsToExport
+{
     return @{
-            kShowModal: kShowModal
+        kShowModal : kShowModal
     };
 }
 

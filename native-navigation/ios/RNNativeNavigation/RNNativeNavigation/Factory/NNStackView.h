@@ -10,6 +10,7 @@ FOUNDATION_EXPORT NSString *const kPop;
 
 @class NNStackNode;
 
+
 @interface NNStackView : UINavigationController <NNView>
 
 - (instancetype)initWithNode:(NNStackNode *)node;

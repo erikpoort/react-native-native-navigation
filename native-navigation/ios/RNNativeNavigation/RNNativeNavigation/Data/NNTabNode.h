@@ -6,9 +6,10 @@
 #import "NNNode.h"
 #import "NNBaseNode.h"
 
+
 @interface NNTabNode : NNBaseNode <NNNode>
 
-@property(nonatomic, copy, readonly) NSArray <id <NNNode>> *tabs;
-@property(nonatomic, assign) NSUInteger selectedTab;
+@property (nonatomic, copy, readonly) NSArray<id<NNNode>> *tabs;
+@property (nonatomic, assign) NSUInteger selectedTab;
 
 @end

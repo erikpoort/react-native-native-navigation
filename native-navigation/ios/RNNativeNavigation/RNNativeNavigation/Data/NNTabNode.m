@@ -9,28 +9,33 @@
 static NSString *const kTabsKey = @"tabs";
 static NSString *const kSelectedTabKey = @"selectedTab";
 
+
 @interface NNTabNode ()
 
-@property(nonatomic, strong) RCTBridge *bridge;
-@property(nonatomic, copy) NSArray <id <NNNode>> *tabs;
+@property (nonatomic, strong) RCTBridge *bridge;
+@property (nonatomic, copy) NSArray<id<NNNode>> *tabs;
 
 @end
 
+
 @implementation NNTabNode
 
-+ (NSString *)jsName {
++ (NSString *)jsName
+{
     return @"TabView";
 }
 
-- (UIViewController <NNView> *)generate {
+- (UIViewController<NNView> *)generate
+{
     return [[NNTabView alloc] initWithNode:self];
 }
 
-- (void)setData:(NSDictionary *)data {
+- (void)setData:(NSDictionary *)data
+{
     [super setData:data];
 
-    NSArray <NSDictionary *> *objects = data[kTabsKey];
-    NSMutableArray <NNNode> *tempTabs = (NSMutableArray <NNNode> *) @[].mutableCopy;
+    NSArray<NSDictionary *> *objects = data[kTabsKey];
+    NSMutableArray<NNNode> *tempTabs = (NSMutableArray<NNNode> *)@[].mutableCopy;
     [objects enumerateObjectsUsingBlock:^(NSDictionary *obj, NSUInteger idx, BOOL *stop) {
         [tempTabs addObject:[NNNodeHelper.sharedInstance nodeFromMap:obj bridge:self.bridge]];
     }];
@@ -38,10 +43,11 @@ static NSString *const kSelectedTabKey = @"selectedTab";
     self.selectedTab = [data[kSelectedTabKey] unsignedIntegerValue];
 }
 
-- (NSDictionary *)data {
+- (NSDictionary *)data
+{
     NSMutableDictionary *data = [super data].mutableCopy;
     NSMutableArray *tabs = @[].mutableCopy;
-    [self.tabs enumerateObjectsUsingBlock:^(id <NNNode> obj, NSUInteger idx, BOOL *stop) {
+    [self.tabs enumerateObjectsUsingBlock:^(id<NNNode> obj, NSUInteger idx, BOOL *stop) {
         [tabs addObject:obj.data];
     }];
     data[kTabsKey] = tabs;
@@ -49,7 +55,8 @@ static NSString *const kSelectedTabKey = @"selectedTab";
     return data.copy;
 }
 
-- (NSString *)title {
+- (NSString *)title
+{
     return self.tabs.firstObject.title;
 }
 

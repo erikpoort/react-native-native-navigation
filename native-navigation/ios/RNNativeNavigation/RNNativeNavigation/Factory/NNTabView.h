@@ -7,6 +7,7 @@
 
 @class NNTabNode;
 
+
 @interface NNTabView : UIViewController <NNView>
 
 - (instancetype)initWithNode:(NNTabNode *)node;

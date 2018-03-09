@@ -9,6 +9,7 @@ FOUNDATION_EXPORT NSString *const kShowModal;
 
 @class NNSingleNode;
 
+
 @interface NNSingleView : UIViewController <NNView>
 
 - (instancetype)initWithBridge:(RCTBridge *)bridge node:(NNSingleNode *)node;

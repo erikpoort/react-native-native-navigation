@@ -6,18 +6,21 @@
 #import "NNNode.h"
 #import "NNTabNode.h"
 
+
 @interface NNTabView () <UITabBarDelegate>
 
-@property(nonatomic, strong) NNTabNode *tabNode;
-@property(nonatomic, strong) UIView *holder;
-@property(nonatomic, strong) UITabBar *tabBar;
-@property(nonatomic, strong) NSArray <UIViewController <NNView> *> *viewControllers;
+@property (nonatomic, strong) NNTabNode *tabNode;
+@property (nonatomic, strong) UIView *holder;
+@property (nonatomic, strong) UITabBar *tabBar;
+@property (nonatomic, strong) NSArray<UIViewController<NNView> *> *viewControllers;
 
 @end
 
+
 @implementation NNTabView
 
-- (instancetype)initWithNode:(NNTabNode *)node {
+- (instancetype)initWithNode:(NNTabNode *)node
+{
     if (self = [super init]) {
         self.tabNode = node;
 
@@ -26,7 +29,7 @@
 
         NSMutableArray *viewControllers = [@[] mutableCopy];
         NSMutableArray *items = [@[] mutableCopy];
-        [node.tabs enumerateObjectsUsingBlock:^(id <NNNode> view, NSUInteger idx, BOOL *stop) {
+        [node.tabs enumerateObjectsUsingBlock:^(id<NNNode> view, NSUInteger idx, BOOL *stop) {
             UIViewController *viewController = [view generate];
             [viewControllers addObject:viewController];
             UITabBarItem *tabBarItem = [[UITabBarItem alloc] initWithTitle:viewController.title image:nil tag:idx];
@@ -53,12 +56,14 @@
     return self;
 }
 
-- (void)viewWillAppear:(BOOL)animated {
+- (void)viewWillAppear:(BOOL)animated
+{
     [super viewWillAppear:animated];
     [self showTabBarViewControllerForItem:self.tabBar.items[self.tabNode.selectedTab]];
 }
 
-- (void)showTabBarViewControllerForItem:(UITabBarItem *)item {
+- (void)showTabBarViewControllerForItem:(UITabBarItem *)item
+{
     [self.tabBar setSelectedItem:item];
 
     self.tabNode.selectedTab = [self.tabBar.items indexOfObject:item];
@@ -79,18 +84,20 @@
     [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[view]-0-|" options:0 metrics:nil views:views]];
 }
 
-- (__kindof id <NNNode>)node {
+- (__kindof id<NNNode>)node
+{
     return self.tabNode;
 }
 
-- (UIViewController <NNView> *)viewForPath:(NSString *)path {
+- (UIViewController<NNView> *)viewForPath:(NSString *)path
+{
     if ([path isEqualToString:self.tabNode.screenID]) {
         return self;
     }
 
     if ([path rangeOfString:self.node.screenID].location == 0) {
-        UIViewController <NNView> *checkController;
-        UIViewController <NNView> *foundController;
+        UIViewController<NNView> *checkController;
+        UIViewController<NNView> *foundController;
 
         NSUInteger i = 0;
         do {
@@ -118,10 +125,11 @@
 
 #pragma mark - UITabBarDelegate
 
-- (void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item {
+- (void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item
+{
     if ([self.tabBar.items indexOfObject:item] == self.tabNode.selectedTab) {
         if ([self.viewControllers[self.tabNode.selectedTab] isKindOfClass:[UINavigationController class]]) {
-            UINavigationController *navigationController = (UINavigationController *) self.viewControllers[self.tabNode.selectedTab];
+            UINavigationController *navigationController = (UINavigationController *)self.viewControllers[self.tabNode.selectedTab];
             [navigationController popToRootViewControllerAnimated:YES];
         }
     } else {

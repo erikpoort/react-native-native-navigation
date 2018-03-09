@@ -32,7 +32,7 @@ public class NodeHelper {
         _constants = new HashMap<>();
 
         _nodes.put(SingleNode.JS_NAME, SingleNode.class);
-//        _constants.add(SingleNode.getConstants());
+        _constants.putAll(SingleNode.getConstants());
 
         _nodes.put(StackNode.JS_NAME, StackNode.class);
         _constants.putAll(StackNode.getConstants());

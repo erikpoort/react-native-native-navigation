@@ -10,6 +10,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 
+import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.Callback;
+import com.facebook.react.bridge.ReadableMap;
 import com.mediamonks.rnnativenavigation.data.Node;
 import com.mediamonks.rnnativenavigation.data.SingleNode;
 import com.mediamonks.rnnativenavigation.react.RNRootView;
@@ -18,7 +21,7 @@ import com.mediamonks.rnnativenavigation.react.RNRootView;
  * Created by erik on 09/08/2017.
  * RNNativeNavigation 2017
  */
-public class SingleFragment extends BaseFragment<SingleNode> {
+public class SingleFragment extends BaseFragment<SingleNode> implements Navigatable {
     private ModalFragment _modalFragment;
 
     @Nullable
@@ -89,6 +92,34 @@ public class SingleFragment extends BaseFragment<SingleNode> {
             return getNode().getModal().generateFragment().getCurrentFragment();
         }
         return this;
+    }
+
+    @Override public void callMethodWithName(String name, ReadableMap arguments, RNNNFragment rootFragment, Callback callback) {
+        switch (name) {
+            case SingleNode.SHOW_MODAL: {
+                this.handleShowModalCall(arguments, rootFragment, callback);
+                break;
+            }
+        }
+    }
+
+    public void handleShowModalCall(final ReadableMap arguments, RNNNFragment rootFragment, Callback callback) {
+        try {
+            final Node node = NodeHelper.getInstance().nodeFromMap(arguments.getMap("screen"), getNode().getInstanceManager());
+
+            this.getNode().setModal(node);
+
+            callback.invoke(Arguments.makeNativeMap(rootFragment.getNode().getData().toHashMap()));
+
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    SingleFragment.this.showModal(node);
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void showModal(Node node) {

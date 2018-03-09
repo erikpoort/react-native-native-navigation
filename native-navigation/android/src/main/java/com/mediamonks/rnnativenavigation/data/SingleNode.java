@@ -6,13 +6,23 @@ import com.mediamonks.rnnativenavigation.factory.BaseFragment;
 import com.mediamonks.rnnativenavigation.factory.NodeHelper;
 import com.mediamonks.rnnativenavigation.factory.SingleFragment;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Created by erik on 09/08/2017.
  * RNNativeNavigation 2017
  */
 
 public class SingleNode extends BaseNode  {
+    public static final String SHOW_MODAL = "showModal";
+
     public static String JS_NAME = "SingleView";
+    public static Map<String, Object> getConstants() {
+        Map<String, Object> map = new HashMap<>();
+        map.put(SHOW_MODAL, SHOW_MODAL);
+        return map;
+    }
 
     private static final String NAME = "name";
     private static final String MODAL = "modal";

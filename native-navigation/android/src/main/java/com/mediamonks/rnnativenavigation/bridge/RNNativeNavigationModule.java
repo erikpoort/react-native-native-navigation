@@ -162,37 +162,6 @@ public class RNNativeNavigationModule extends ReactContextBaseJavaModule impleme
     }
 
     @ReactMethod
-    public void showModal(final ReadableMap screen, Callback callback) {
-        try {
-            final Node node = NodeHelper.getInstance().nodeFromMap(screen, getReactInstanceManager());
-
-            assert getCurrentActivity() != null;
-            ReactFragmentActivity mainActivity = (ReactFragmentActivity) getCurrentActivity();
-            RNNNFragment rootFragment = getRootFragment(node);
-            assert rootFragment != null;
-
-            int lastSlash = node.getScreenID().lastIndexOf("/modal");
-            final SingleFragment findFragment = (SingleFragment) rootFragment.fragmentForPath(node.getScreenID().substring(0, lastSlash));
-            if (findFragment == null) {
-                return;
-            }
-
-            findFragment.getNode().setModal(node);
-
-            callback.invoke(Arguments.makeNativeMap(rootFragment.getNode().getData().toHashMap()));
-
-            mainActivity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    findFragment.showModal(node);
-                }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    @ReactMethod
     public void handleBackButton(final Callback callback) {
         assert getCurrentActivity() != null;
         ReactFragmentActivity mainActivity = (ReactFragmentActivity) getCurrentActivity();

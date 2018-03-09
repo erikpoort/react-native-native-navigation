@@ -84,6 +84,10 @@
 }
 
 - (UIViewController <NNView> *)viewForPath:(NSString *)path {
+    if ([path isEqualToString:self.tabNode.screenID]) {
+        return self;
+    }
+
     if ([path rangeOfString:self.node.screenID].location == 0) {
         UIViewController <NNView> *checkController;
         UIViewController <NNView> *foundController;
@@ -103,7 +107,7 @@
         } while (checkController != nil);
 
         if (![foundController.node.screenID isEqualToString:path]) {
-            foundController = (UIViewController <NNView> *) [foundController viewForPath:path];
+            foundController = [foundController viewForPath:path];
         }
 
         return foundController;

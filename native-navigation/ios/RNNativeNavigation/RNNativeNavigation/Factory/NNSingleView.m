@@ -46,15 +46,17 @@ NSString *const kShowModal = @"showModal";
 
 - (UIViewController <NNView> *)viewForPath:(NSString *)path {
     UIViewController <NNView> *modalController = (UIViewController <NNView> *) self.presentedViewController;
+    if ([path isEqualToString:self.singleNode.screenID]) {
+        return self;
+    }
     if (modalController && [path rangeOfString:modalController.node.screenID].location == 0) {
-        if ([path isEqualToString:self.singleNode.screenID]) return self;
         if (![modalController.node.screenID isEqualToString:path]) {
             return [modalController viewForPath:path];
         } else {
             return modalController;
         }
     }
-    return self;
+    return nil;
 }
 
 - (void)callMethodWithName:(NSString *)methodName arguments:(NSDictionary *)arguments callback:(RCTResponseSenderBlock)callback {

@@ -57,6 +57,9 @@
 
 - (UIViewController <NNView> *)viewForPath:(NSString *)path {
     UIViewController <NNView> *foundController;
+    if ([path isEqualToString:self.splitNode.screenID]) {
+        return self;
+    }
     if ([path rangeOfString:self.controller1.node.screenID].location == 0) {
         foundController = self.controller1;
     } else if ([path rangeOfString:self.controller2.node.screenID].location == 0) {

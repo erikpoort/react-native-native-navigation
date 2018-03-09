@@ -45,8 +45,10 @@ NSString *const kPop = @"pop";
 }
 
 - (UIViewController <NNView> *)viewForPath:(NSString *)path {
+    if ([path isEqualToString:self.stackNode.screenID]) {
+        return self;
+    }
     if ([path rangeOfString:self.node.screenID].location == 0) {
-        if ([path isEqualToString:self.stackNode.screenID]) return self;
 
         UIViewController <NNView> *checkController;
         UIViewController <NNView> *foundController;

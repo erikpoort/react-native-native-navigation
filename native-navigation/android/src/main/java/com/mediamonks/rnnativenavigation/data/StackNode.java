@@ -19,12 +19,14 @@ import java.util.Stack;
  */
 
 public class StackNode extends BaseNode  {
-    private static final String PUSH = "push";
+    public static final String PUSH = "push";
+    public static final String POP = "pop";
 
     public static String JS_NAME = "StackView";
     public static Map<String, Object> getConstants() {
         Map<String, Object> map = new HashMap<>();
         map.put(PUSH, PUSH);
+        map.put(POP, POP);
         return map;
     }
 

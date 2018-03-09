@@ -8,7 +8,7 @@ export default class Detail2 extends Component {
 			<View>
 				<Text>Detail</Text>
 				<Button title="Detail 2" onPress={() => {
-					this.props.up_stack.pop();
+					this.props.stack.pop();
 				}} />
 				<Button title="Modal" onPress={() => {
 					this.props.single.showModal(<SingleView id="modal" screen={Detail2} />);

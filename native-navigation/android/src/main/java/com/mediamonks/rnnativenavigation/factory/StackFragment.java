@@ -91,8 +91,13 @@ public class StackFragment extends BaseFragment<StackNode> implements Navigatabl
 
     @Override public void callMethodWithName(String name, ReadableMap arguments, RNNNFragment rootFragment, Callback callback) {
         switch (name) {
-            case "push": {
+            case StackNode.PUSH: {
                 this.push(arguments, rootFragment, callback);
+                break;
+            }
+            case StackNode.POP: {
+                this.pop(arguments, rootFragment, callback);
+                break;
             }
         }
     }
@@ -112,6 +117,23 @@ public class StackFragment extends BaseFragment<StackNode> implements Navigatabl
                     StackFragment.this.pushNode(node, FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
                 }
             });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void pop(final ReadableMap arguments, RNNNFragment rootFragment, final Callback callback) {
+        try {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (getNode().getStack().size() > 1) {
+                        popNode(getNode().getStack().peek(), FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
+                    }
+                }
+            });
+
+            callback.invoke(Arguments.makeNativeMap(rootFragment.getNode().getData().toHashMap()));
         } catch (Exception e) {
             e.printStackTrace();
         }

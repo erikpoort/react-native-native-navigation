@@ -136,6 +136,10 @@ public class ModalFragment extends DialogFragment implements RNNNFragment {
         }
     }
 
+    public BaseFragment getFragment() {
+        return _fragment;
+    }
+
     @Override
     public Node getNode() {
         return _node;

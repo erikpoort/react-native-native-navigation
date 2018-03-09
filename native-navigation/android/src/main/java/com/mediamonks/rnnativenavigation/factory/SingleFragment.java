@@ -63,10 +63,16 @@ public class SingleFragment extends BaseFragment<SingleNode> {
 
     @Override
     public BaseFragment fragmentForPath(String path) {
-        if (getNode().getModal() != null) {
+        if (path.equals(getNode().getScreenID())) {
+            return this;
+        }
+        if (_modalFragment != null && getNode().getModal() != null) {
+            if (path.equals(getNode().getModal().getScreenID())) {
+                return _modalFragment.getFragment();
+            }
             return _modalFragment.fragmentForPath(path);
         }
-        return this;
+        return null;
     }
 
     @Override public void invalidate() {

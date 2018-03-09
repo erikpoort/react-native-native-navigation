@@ -125,7 +125,8 @@ public class DrawerFragment extends BaseFragment<DrawerNode> {
     public BaseFragment fragmentForPath(String path) {
         if (path.equals(getNode().getScreenID())) {
             return this;
-        } else if (path.indexOf(getNode().getScreenID()) == 0) {
+        }
+        if (path.indexOf(getNode().getScreenID()) == 0) {
             BaseFragment foundFragment = null;
 
             if (_leftFragment != null && path.indexOf(_leftFragment.getNode().getScreenID()) == 0) {

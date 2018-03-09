@@ -73,6 +73,9 @@ public class SplitFragment extends BaseFragment<SplitNode> {
 
     @Override
     public BaseFragment fragmentForPath(String path) {
+        if (path.equals(getNode().getScreenID())) {
+            return this;
+        }
         if (path.indexOf(getNode().getScreenID()) == 0) {
             BaseFragment foundFragment = null;
             if (path.indexOf(getNode().getNode1().getScreenID()) == 0) {

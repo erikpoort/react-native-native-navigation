@@ -152,6 +152,9 @@ public class TabFragment extends BaseFragment<TabNode> implements BottomNavigati
 
     @Override
     public BaseFragment fragmentForPath(String path) {
+        if (path.equals(getNode().getScreenID())) {
+            return this;
+        }
         if (path.indexOf(getNode().getScreenID()) == 0) {
             BaseFragment checkFragment;
             BaseFragment foundFragment = null;

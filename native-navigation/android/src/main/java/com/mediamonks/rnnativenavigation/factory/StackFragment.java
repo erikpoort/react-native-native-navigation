@@ -140,7 +140,8 @@ public class StackFragment extends BaseFragment<StackNode> {
     public BaseFragment fragmentForPath(String path) {
         if (path.equals(getNode().getScreenID())) {
             return this;
-        } else if (path.indexOf(getNode().getScreenID()) == 0) {
+        }
+        if (path.indexOf(getNode().getScreenID()) == 0) {
 
             BaseFragment foundFragment = null;
             Node checkNode;

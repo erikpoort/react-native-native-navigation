@@ -88,6 +88,7 @@ public class RNNativeNavigationModule extends ReactContextBaseJavaModule impleme
                 WritableMap currentState = rootFragment.getNode().getData();
                 RNNNState.INSTANCE.state = currentState.toHashMap();
 
+                assert getCurrentActivity() != null;
                 getCurrentActivity().runOnUiThread(new Runnable() {
                     @Override public void run() {
                         rootFragment.invalidate();
@@ -239,6 +240,8 @@ public class RNNativeNavigationModule extends ReactContextBaseJavaModule impleme
         if (_fragments.size() > 0) {
             RNNNFragment anyFragment = (RNNNFragment) _fragments.toArray()[0];
             final RNNNFragment rootFragment = getRootFragment(anyFragment.getNode());
+
+            assert getCurrentActivity() != null;
             getCurrentActivity().runOnUiThread(new Runnable() {
                 @Override public void run() {
                     rootFragment.invalidate();

@@ -117,7 +117,7 @@ NSString *const kOpenView = @"openView";
                     [self setLeftDrawerViewController:viewController];
                     break;
                 case NNDrawerSideCenter:
-                    [self setCenterViewController:viewController withCloseAnimation:YES completion:nil];
+                    [self setCenterViewController:viewController];
                     break;
                 case NNDrawerSideRight:
                     [self setRightDrawerViewController:viewController];

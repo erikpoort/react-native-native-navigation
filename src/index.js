@@ -28,20 +28,17 @@ export default class example extends Component {
 		);
 
 		navigation.start(
-			<TabView id='tab'>
-				<DrawerView
-					id='drawer'
-					left={
-						<SplitView id='split' axis={SplitView.AXIS.VERTICAL}>
-							<SingleView id='menu' screen={Menu}/>
-							<StackView id='stack'>
-								<SingleView id='detail' screen={Detail}/>
-							</StackView>
-						</SplitView>
-					}
-					center={<ExampleView id='menu' screen={Menu}/>}/>
-				{this.home.siteMap()}
-			</TabView>
+			<DrawerView
+				id='drawer'
+				left={
+					<SplitView id='split' axis={SplitView.AXIS.VERTICAL}>
+						<SingleView id='menu' screen={Menu}/>
+						<StackView id='stack'>
+							<SingleView id='detail' screen={Detail}/>
+						</StackView>
+					</SplitView>
+				}
+				center={<ExampleView id='menu' screen={Menu}/>}/>
 		);
 	}
 

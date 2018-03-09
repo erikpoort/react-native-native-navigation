@@ -14,7 +14,6 @@ export default class Menu extends Component {
 		return (
 				<View>
 					<Text>Menu</Text>
-					<Button title="Home" onPress={() => this.handleMenuItem(<Home/>)} />
 					<Button title="Detail" onPress={() => this.handleMenuItem(<SingleView id="Detail" screen={Detail}/>)} />
 					<Button title="Detail 2" onPress={() => this.handleMenuItem(
 						<StackView id="stackert">

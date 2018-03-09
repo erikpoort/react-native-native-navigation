@@ -96,7 +96,7 @@ public class StackFragment extends BaseFragment<StackNode> implements Navigatabl
                 break;
             }
             case StackNode.POP: {
-                this.pop(arguments, rootFragment, callback);
+                this.pop(rootFragment, callback);
                 break;
             }
         }
@@ -122,7 +122,7 @@ public class StackFragment extends BaseFragment<StackNode> implements Navigatabl
         }
     }
 
-    private void pop(final ReadableMap arguments, RNNNFragment rootFragment, final Callback callback) {
+    private void pop(RNNNFragment rootFragment, final Callback callback) {
         try {
             getActivity().runOnUiThread(new Runnable() {
                 @Override

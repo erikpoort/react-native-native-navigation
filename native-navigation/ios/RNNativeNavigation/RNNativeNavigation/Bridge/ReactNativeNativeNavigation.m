@@ -98,9 +98,7 @@ RCT_EXPORT_METHOD(
     [newArguments addEntriesFromDictionary:arguments];
 
     if ([findController respondsToSelector:@selector(callMethodWithName:arguments:callback:)]) {
-        [findController callMethodWithName:methodName arguments:newArguments callback:^(NSArray *response) {
-            callback(response);
-        }];
+        [findController callMethodWithName:methodName arguments:newArguments callback:callback];
     }
 }
 

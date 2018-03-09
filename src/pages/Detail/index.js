@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Button, Text, View } from 'react-native';
 import { changeAxis } from '../../redux/actions/split-actions';
-import { SplitView } from '../../../native-navigation/src/index';
+import { SplitView, SingleView } from '../../../native-navigation/src/index';
 import Detail2 from '../Detail2/index';
 
 class Detail extends Component {
@@ -20,6 +20,10 @@ class Detail extends Component {
 				<Button
 					title="Horizontal"
 					onPress={() => this.props.changeAxis(SplitView.AXIS.HORIZONTAL)}
+				/>
+				<Button
+					title="Push"
+					onPress={() => this.props.stack.push(<SingleView id="ja" screen={Detail2} />)}
 				/>
 			</View>
 		);

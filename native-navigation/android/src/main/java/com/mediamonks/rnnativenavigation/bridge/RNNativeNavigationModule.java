@@ -23,6 +23,7 @@ import com.facebook.react.devsupport.interfaces.DevOptionHandler;
 import com.mediamonks.rnnativenavigation.data.Node;
 import com.mediamonks.rnnativenavigation.data.StackNode;
 import com.mediamonks.rnnativenavigation.factory.BaseFragment;
+import com.mediamonks.rnnativenavigation.factory.Navigatable;
 import com.mediamonks.rnnativenavigation.factory.NodeHelper;
 import com.mediamonks.rnnativenavigation.factory.RNNNFragment;
 import com.mediamonks.rnnativenavigation.factory.SingleFragment;
@@ -33,6 +34,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
+
+import javax.annotation.Nullable;
 
 /**
  * Created by erik on 29/08/2017.
@@ -141,6 +144,21 @@ public class RNNativeNavigationModule extends ReactContextBaseJavaModule impleme
     }
 
     @ReactMethod
+    public void callMethodOnNode(String navigator, String methodName, ReadableMap arguments, Callback callback) {
+        RNNNFragment anyFragment = (RNNNFragment) _fragments.toArray()[0];
+        final BaseFragment rootFragment = (BaseFragment) getRootFragment(anyFragment.getNode());
+
+        BaseFragment findFragment = rootFragment.fragmentForPath(navigator);
+        if (findFragment == null) {
+            return;
+        }
+
+        if (findFragment instanceof Navigatable) {
+            ((Navigatable) findFragment).callMethodWithName(methodName, arguments, rootFragment, callback);
+        }
+    }
+
+    @ReactMethod
     public void handleBackButton(final Callback callback) {
         assert getCurrentActivity() != null;
         ReactFragmentActivity mainActivity = (ReactFragmentActivity) getCurrentActivity();
@@ -160,41 +178,6 @@ public class RNNativeNavigationModule extends ReactContextBaseJavaModule impleme
         }
 
         callback.invoke(false);
-    }
-
-    @ReactMethod
-    public void push(final ReadableMap screen, Callback callback) {
-        try {
-            final Node node = NodeHelper.getInstance().nodeFromMap(screen, getReactInstanceManager());
-
-            assert getCurrentActivity() != null;
-            ReactFragmentActivity mainActivity = (ReactFragmentActivity) getCurrentActivity();
-            RNNNFragment rootFragment = getRootFragment(node);
-            assert rootFragment != null;
-
-            int lastSlash = node.getScreenID().lastIndexOf("/");
-            String parentPath = node.getScreenID().substring(0, lastSlash);
-            BaseFragment findFragment = rootFragment.fragmentForPath(parentPath);
-            if (findFragment == null) {
-                return;
-            }
-
-            final StackFragment stackFragment = findFragment.getStackFragment();
-            StackNode stackNode = stackFragment.getNode();
-            Stack<Node> stack = stackNode.getStack();
-            stack.add(node);
-
-            callback.invoke(Arguments.makeNativeMap(rootFragment.getNode().getData().toHashMap()));
-
-            mainActivity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    stackFragment.pushNode(node, FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-                }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     @ReactMethod
@@ -226,6 +209,10 @@ public class RNNativeNavigationModule extends ReactContextBaseJavaModule impleme
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Nullable @Override public Map<String, Object> getConstants() {
+        return NodeHelper.getInstance().getConstants();
     }
 
     private ReactInstanceManager getReactInstanceManager() {

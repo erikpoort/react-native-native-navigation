@@ -9,6 +9,8 @@ import com.mediamonks.rnnativenavigation.factory.BaseFragment;
 import com.mediamonks.rnnativenavigation.factory.NodeHelper;
 import com.mediamonks.rnnativenavigation.factory.StackFragment;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Stack;
 
 /**
@@ -17,7 +19,14 @@ import java.util.Stack;
  */
 
 public class StackNode extends BaseNode  {
+    private static final String PUSH = "push";
+
     public static String JS_NAME = "StackView";
+    public static Map<String, Object> getConstants() {
+        Map<String, Object> map = new HashMap<>();
+        map.put(PUSH, PUSH);
+        return map;
+    }
 
     private static final String STACK = "stack";
 

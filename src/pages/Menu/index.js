@@ -8,7 +8,7 @@ import {SingleView,StackView} from "../../../native-navigation/src/index";
 export default class Menu extends Component {
 	static pageMap = [Detail];
 	handleMenuItem = (view) => {
-		this.props.drawer.openView('center', view, (callback) => {
+		this.props.stack.openView('center', view, (callback) => {
 
 		})
 	};

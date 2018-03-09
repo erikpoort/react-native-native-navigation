@@ -9,7 +9,9 @@ import com.mediamonks.rnnativenavigation.data.SplitNode;
 import com.mediamonks.rnnativenavigation.data.StackNode;
 import com.mediamonks.rnnativenavigation.data.TabNode;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -23,14 +25,27 @@ public class NodeHelper {
     private static NodeHelper _instance;
 
     private Map<String, Class<? extends Node>> _nodes;
+    private Map<String, Object> _constants;
 
     private NodeHelper() {
         _nodes = new HashMap<>();
+        _constants = new HashMap<>();
+
         _nodes.put(SingleNode.JS_NAME, SingleNode.class);
+//        _constants.add(SingleNode.getConstants());
+
         _nodes.put(StackNode.JS_NAME, StackNode.class);
+        _constants.putAll(StackNode.getConstants());
+
         _nodes.put(TabNode.JS_NAME, TabNode.class);
+//        _constants.add(TabNode.getConstants());
+
         _nodes.put(SplitNode.JS_NAME, SplitNode.class);
+//        _constants.add(SplitNode.getConstants());
+
         _nodes.put(DrawerNode.JS_NAME, DrawerNode.class);
+//        _constants.add(DrawerNode.getConstants());
+
     }
 
     public static NodeHelper getInstance() {
@@ -59,5 +74,9 @@ public class NodeHelper {
 
     public void addExternalNodes(Map<String, Class<? extends Node>> externalNodes) {
         _nodes.putAll(externalNodes);
+    }
+
+    public Map<String, Object> getConstants() {
+        return _constants;
     }
 }

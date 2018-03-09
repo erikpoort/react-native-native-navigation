@@ -14,16 +14,21 @@ import android.view.ViewGroup.LayoutParams;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
+import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.Callback;
+import com.facebook.react.bridge.ReadableMap;
 import com.mediamonks.rnnativenavigation.R;
 import com.mediamonks.rnnativenavigation.data.Node;
 import com.mediamonks.rnnativenavigation.data.StackNode;
+
+import java.util.Stack;
 
 /**
  * Created by erik on 12/08/2017.
  * RNNativeNavigation 2017
  */
 
-public class StackFragment extends BaseFragment<StackNode> {
+public class StackFragment extends BaseFragment<StackNode> implements Navigatable {
     private FrameLayout _holder;
     private Toolbar _toolbar;
     private Drawable _upIcon;
@@ -82,6 +87,34 @@ public class StackFragment extends BaseFragment<StackNode> {
         super.onStart();
 
         showPeek(FragmentTransaction.TRANSIT_NONE);
+    }
+
+    @Override public void callMethodWithName(String name, ReadableMap arguments, RNNNFragment rootFragment, Callback callback) {
+        switch (name) {
+            case "push": {
+                this.push(arguments, rootFragment, callback);
+            }
+        }
+    }
+
+    private void push(final ReadableMap arguments, RNNNFragment rootFragment, final Callback callback) {
+        try {
+            final Node node = NodeHelper.getInstance().nodeFromMap(arguments.getMap("screen"), getNode().getInstanceManager());
+
+            Stack<Node> stack = getNode().getStack();
+            stack.add(node);
+
+            callback.invoke(Arguments.makeNativeMap(rootFragment.getNode().getData().toHashMap()));
+
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    StackFragment.this.pushNode(node, FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void showPeek(int transition) {

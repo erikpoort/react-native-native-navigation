@@ -11,21 +11,21 @@ import com.mediamonks.rnnativenavigation.factory.BaseFragment;
  */
 
 public interface Node {
-    void setInstanceManager(ReactInstanceManager instanceManager);
+	void setInstanceManager(ReactInstanceManager instanceManager);
 
-    void setData(ReadableMap map);
+	void setData(ReadableMap map);
 
-    WritableMap getData();
+	WritableMap getData();
 
-    void setShown(boolean shown);
+	void setShown(boolean shown);
 
-    boolean isShown();
+	boolean isShown();
 
-    String getTitle();
+	String getTitle();
 
-    String getScreenID();
+	String getScreenID();
 
-    BaseFragment generateFragment();
+	BaseFragment generateFragment();
 
-    String getRootPath();
+	String getRootPath();
 }

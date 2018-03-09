@@ -8,6 +8,6 @@ import java.util.HashMap;
  */
 
 public enum RNNNState {
-    INSTANCE;
-    public HashMap<String, Object> state;
+	INSTANCE;
+	public HashMap<String, Object> state;
 }

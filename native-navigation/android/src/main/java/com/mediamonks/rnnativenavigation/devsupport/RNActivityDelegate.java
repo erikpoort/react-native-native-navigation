@@ -16,30 +16,30 @@ import javax.annotation.Nullable;
  */
 
 public class RNActivityDelegate extends ReactActivityDelegate {
-    private final ReactFragmentActivity _activity;
+	private final ReactFragmentActivity _activity;
 
-    private @Nullable DoubleTapResetRecognizer _doubleTapResetRecognizer;
+	private @Nullable DoubleTapResetRecognizer _doubleTapResetRecognizer;
 
-    public RNActivityDelegate(ReactFragmentActivity fragmentActivity, @Nullable String mainComponentName) {
-        super(fragmentActivity, mainComponentName);
-        _activity = fragmentActivity;
-    }
+	public RNActivityDelegate(ReactFragmentActivity fragmentActivity, @Nullable String mainComponentName) {
+		super(fragmentActivity, mainComponentName);
+		_activity = fragmentActivity;
+	}
 
-    @Override protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+	@Override protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
 
-        _doubleTapResetRecognizer = new DoubleTapResetRecognizer();
-    }
+		_doubleTapResetRecognizer = new DoubleTapResetRecognizer();
+	}
 
-    @Override public boolean onKeyUp(int keyCode, KeyEvent event) {
-        if (getReactNativeHost().hasInstance() && getReactNativeHost().getUseDeveloperSupport()) {
-            boolean didDoubleTapE = Assertions.assertNotNull(_doubleTapResetRecognizer)
-                    .didDoubleTapE(keyCode, _activity.getCurrentFocus());
-            if (didDoubleTapE) {
-                getReactInstanceManager().getCurrentReactContext().getNativeModule(RNNativeNavigationModule.class).resetNavigation();
-            }
-        }
+	@Override public boolean onKeyUp(int keyCode, KeyEvent event) {
+		if (getReactNativeHost().hasInstance() && getReactNativeHost().getUseDeveloperSupport()) {
+			boolean didDoubleTapE = Assertions.assertNotNull(_doubleTapResetRecognizer)
+					.didDoubleTapE(keyCode, _activity.getCurrentFocus());
+			if (didDoubleTapE) {
+				getReactInstanceManager().getCurrentReactContext().getNativeModule(RNNativeNavigationModule.class).resetNavigation();
+			}
+		}
 
-        return super.onKeyUp(keyCode, event);
-    }
+		return super.onKeyUp(keyCode, event);
+	}
 }

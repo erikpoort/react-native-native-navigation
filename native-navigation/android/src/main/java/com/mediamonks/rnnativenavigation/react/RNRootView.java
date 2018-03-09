@@ -11,32 +11,32 @@ import com.facebook.react.ReactRootView;
  */
 
 public class RNRootView extends ReactRootView {
-    private boolean _invalidated;
+	private boolean _invalidated;
 
-    public RNRootView(Context context) {
-        super(context);
-    }
+	public RNRootView(Context context) {
+		super(context);
+	}
 
-    public RNRootView(Context context, AttributeSet attrs) {
-        super(context, attrs);
-    }
+	public RNRootView(Context context, AttributeSet attrs) {
+		super(context, attrs);
+	}
 
-    public RNRootView(Context context, AttributeSet attrs, int defStyle) {
-        super(context, attrs, defStyle);
-    }
+	public RNRootView(Context context, AttributeSet attrs, int defStyle) {
+		super(context, attrs, defStyle);
+	}
 
-    public void invalidate() {
-        _invalidated = true;
-        unmountReactApplication();
-    }
+	public void invalidate() {
+		_invalidated = true;
+		unmountReactApplication();
+	}
 
-    @Override protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        if (_invalidated) {
-            setMeasuredDimension(
-                    MeasureSpec.getSize(widthMeasureSpec),
-                    MeasureSpec.getSize(heightMeasureSpec));
-            return;
-        }
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-    }
+	@Override protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+		if (_invalidated) {
+			setMeasuredDimension(
+					MeasureSpec.getSize(widthMeasureSpec),
+					MeasureSpec.getSize(heightMeasureSpec));
+			return;
+		}
+		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+	}
 }

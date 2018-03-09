@@ -8,9 +8,9 @@ import com.mediamonks.rnnativenavigation.data.Node;
  */
 
 public interface RNNNFragment {
-    Node getNode();
+	Node getNode();
 
-    BaseFragment fragmentForPath(String path);
+	BaseFragment fragmentForPath(String path);
 
-    void invalidate();
+	void invalidate();
 }

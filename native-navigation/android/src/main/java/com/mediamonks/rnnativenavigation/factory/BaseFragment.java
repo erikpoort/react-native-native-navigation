@@ -10,31 +10,31 @@ import com.mediamonks.rnnativenavigation.data.Node;
  */
 
 public abstract class BaseFragment<T extends Node> extends Fragment implements RNNNFragment {
-    private StackFragment _stackFragment;
+	private StackFragment _stackFragment;
 
-    private T _node;
+	private T _node;
 
-    public void setNode(T node) {
-        _node = node;
-    }
+	public void setNode(T node) {
+		_node = node;
+	}
 
-    public T getNode() {
-        return _node;
-    }
+	public T getNode() {
+		return _node;
+	}
 
-    public boolean onBackPressed() {
-        return false;
-    }
+	public boolean onBackPressed() {
+		return false;
+	}
 
-    public abstract BaseFragment fragmentForPath(String path);
+	public abstract BaseFragment fragmentForPath(String path);
 
-    public void setStackFragment(StackFragment stackFragment) {
-        _stackFragment = stackFragment;
-    }
+	public void setStackFragment(StackFragment stackFragment) {
+		_stackFragment = stackFragment;
+	}
 
-    public StackFragment getStackFragment() {
-        return _stackFragment;
-    }
+	public StackFragment getStackFragment() {
+		return _stackFragment;
+	}
 
-    public abstract SingleFragment getCurrentFragment();
+	public abstract SingleFragment getCurrentFragment();
 }

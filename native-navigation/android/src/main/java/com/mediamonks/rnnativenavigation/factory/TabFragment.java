@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -18,7 +17,6 @@ import android.widget.LinearLayout;
 import com.mediamonks.rnnativenavigation.data.Node;
 import com.mediamonks.rnnativenavigation.data.TabNode;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -27,179 +25,179 @@ import java.util.List;
  */
 
 public class TabFragment extends BaseFragment<TabNode> implements BottomNavigationView.OnNavigationItemSelectedListener {
-    private ViewPager _viewPager;
-    private TabPagerAdapter _adapter;
-    private ViewPager.SimpleOnPageChangeListener _onPageChangeListener;
-    private BottomNavigationView _bottomNavigationView;
-    private int _pagerId;
+	private ViewPager _viewPager;
+	private TabPagerAdapter _adapter;
+	private ViewPager.SimpleOnPageChangeListener _onPageChangeListener;
+	private BottomNavigationView _bottomNavigationView;
+	private int _pagerId;
 
-    private static class TabPagerAdapter extends FragmentPagerAdapter {
-        private List<Node> _items;
-        private SparseArray<BaseFragment> _fragments;
+	private static class TabPagerAdapter extends FragmentPagerAdapter {
+		private List<Node> _items;
+		private SparseArray<BaseFragment> _fragments;
 
-        TabPagerAdapter(FragmentManager fm, List<Node> items) {
-            super(fm);
+		TabPagerAdapter(FragmentManager fm, List<Node> items) {
+			super(fm);
 
-            this._items = items;
-            this._fragments = new SparseArray<>(items.size());
-        }
+			this._items = items;
+			this._fragments = new SparseArray<>(items.size());
+		}
 
-        @Override
-        public BaseFragment getItem(int position) {
-            BaseFragment fragment = _fragments.get(position);
-            if (fragment == null) {
-                fragment = _items.get(position).generateFragment();
-                _fragments.put(position, fragment);
-            }
-            return fragment;
-        }
+		@Override
+		public BaseFragment getItem(int position) {
+			BaseFragment fragment = _fragments.get(position);
+			if (fragment == null) {
+				fragment = _items.get(position).generateFragment();
+				_fragments.put(position, fragment);
+			}
+			return fragment;
+		}
 
-        @Override
-        public int getCount() {
-            return _items.size();
-        }
+		@Override
+		public int getCount() {
+			return _items.size();
+		}
 
-        public SparseArray<BaseFragment> getFragments() {
-            return _fragments;
-        }
-    }
+		public SparseArray<BaseFragment> getFragments() {
+			return _fragments;
+		}
+	}
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+	@Override
+	public void onCreate(@Nullable Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
 
-        // I'm calling generateViewId() twice, calling it once doesn't work on first load. My assumption is the initial id is later hijacked by ReactNative, making it impossible to add fragments
-        View.generateViewId();
+		// I'm calling generateViewId() twice, calling it once doesn't work on first load. My assumption is the initial id is later hijacked by ReactNative, making it impossible to add fragments
+		View.generateViewId();
 
-        _adapter = new TabPagerAdapter(getChildFragmentManager(), getNode().getTabs());
-        _pagerId = View.generateViewId();
-    }
+		_adapter = new TabPagerAdapter(getChildFragmentManager(), getNode().getTabs());
+		_pagerId = View.generateViewId();
+	}
 
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        LinearLayout linearLayout = new LinearLayout(getContext());
-        linearLayout.setOrientation(LinearLayout.VERTICAL);
-        linearLayout.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+	@Nullable
+	@Override
+	public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+		LinearLayout linearLayout = new LinearLayout(getContext());
+		linearLayout.setOrientation(LinearLayout.VERTICAL);
+		linearLayout.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 
-        _viewPager = new ViewPager(getContext());
-        _viewPager.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 1));
-        _viewPager.setId(_pagerId);
-        linearLayout.addView(_viewPager);
+		_viewPager = new ViewPager(getContext());
+		_viewPager.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 1));
+		_viewPager.setId(_pagerId);
+		linearLayout.addView(_viewPager);
 
-        _bottomNavigationView = new BottomNavigationView(getContext());
-        _bottomNavigationView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+		_bottomNavigationView = new BottomNavigationView(getContext());
+		_bottomNavigationView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
-        for (Node node : getNode().getTabs()) {
-            String title = node.getTitle();
-            int i = getNode().getTabs().indexOf(node);
-            _bottomNavigationView.getMenu().add(0, i, i, title);
-        }
+		for (Node node : getNode().getTabs()) {
+			String title = node.getTitle();
+			int i = getNode().getTabs().indexOf(node);
+			_bottomNavigationView.getMenu().add(0, i, i, title);
+		}
 
-        linearLayout.addView(_bottomNavigationView);
+		linearLayout.addView(_bottomNavigationView);
 
-        return linearLayout;
-    }
+		return linearLayout;
+	}
 
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+	@Override
+	public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+		super.onViewCreated(view, savedInstanceState);
 
-        _viewPager.setAdapter(_adapter);
-        _viewPager.setCurrentItem(getNode().getSelectedTab());
+		_viewPager.setAdapter(_adapter);
+		_viewPager.setCurrentItem(getNode().getSelectedTab());
 
-        _onPageChangeListener = new ViewPager.SimpleOnPageChangeListener() {
-            @Override
-            public void onPageSelected(int position) {
-                super.onPageSelected(position);
-                getNode().setSelectedTab(position);
-                _bottomNavigationView.setSelectedItemId(position);
-            }
-        };
-        _viewPager.addOnPageChangeListener(_onPageChangeListener);
+		_onPageChangeListener = new ViewPager.SimpleOnPageChangeListener() {
+			@Override
+			public void onPageSelected(int position) {
+				super.onPageSelected(position);
+				getNode().setSelectedTab(position);
+				_bottomNavigationView.setSelectedItemId(position);
+			}
+		};
+		_viewPager.addOnPageChangeListener(_onPageChangeListener);
 
-        _bottomNavigationView.setOnNavigationItemSelectedListener(this);
-    }
+		_bottomNavigationView.setOnNavigationItemSelectedListener(this);
+	}
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
+	@Override
+	public void onDestroyView() {
+		super.onDestroyView();
 
-        _viewPager.removeOnPageChangeListener(_onPageChangeListener);
-        _onPageChangeListener = null;
+		_viewPager.removeOnPageChangeListener(_onPageChangeListener);
+		_onPageChangeListener = null;
 
-        _bottomNavigationView.setOnNavigationItemSelectedListener(null);
-    }
+		_bottomNavigationView.setOnNavigationItemSelectedListener(null);
+	}
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
 
-        _adapter = null;
-    }
+		_adapter = null;
+	}
 
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        _viewPager.setCurrentItem(item.getItemId(), true);
-        return true;
-    }
+	@Override
+	public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+		_viewPager.setCurrentItem(item.getItemId(), true);
+		return true;
+	}
 
-    @Override
-    public boolean onBackPressed() {
-        BaseFragment fragment = _adapter.getItem(_viewPager.getCurrentItem());
-        return fragment.onBackPressed();
-    }
+	@Override
+	public boolean onBackPressed() {
+		BaseFragment fragment = _adapter.getItem(_viewPager.getCurrentItem());
+		return fragment.onBackPressed();
+	}
 
-    @Override
-    public BaseFragment fragmentForPath(String path) {
-        if (path.equals(getNode().getScreenID())) {
-            return this;
-        }
-        if (path.indexOf(getNode().getScreenID()) == 0) {
-            BaseFragment checkFragment;
-            BaseFragment foundFragment = null;
+	@Override
+	public BaseFragment fragmentForPath(String path) {
+		if (path.equals(getNode().getScreenID())) {
+			return this;
+		}
+		if (path.indexOf(getNode().getScreenID()) == 0) {
+			BaseFragment checkFragment;
+			BaseFragment foundFragment = null;
 
-            int i = 0;
-            do {
-                if (i < _adapter.getCount()) {
-                    checkFragment = _adapter.getItem(i++);
+			int i = 0;
+			do {
+				if (i < _adapter.getCount()) {
+					checkFragment = _adapter.getItem(i++);
 
-                    if (path.indexOf(checkFragment.getNode().getScreenID()) == 0) {
-                        foundFragment = checkFragment;
-                    }
-                } else {
-                    checkFragment = null;
-                }
-            }
-            while (checkFragment != null);
+					if (path.indexOf(checkFragment.getNode().getScreenID()) == 0) {
+						foundFragment = checkFragment;
+					}
+				} else {
+					checkFragment = null;
+				}
+			}
+			while (checkFragment != null);
 
-            if (foundFragment != null) {
-                if (!foundFragment.getNode().getScreenID().equals(path)) {
-                    foundFragment = foundFragment.fragmentForPath(path);
-                }
+			if (foundFragment != null) {
+				if (!foundFragment.getNode().getScreenID().equals(path)) {
+					foundFragment = foundFragment.fragmentForPath(path);
+				}
 
-                return foundFragment;
-            }
-        }
-        return null;
-    }
+				return foundFragment;
+			}
+		}
+		return null;
+	}
 
-    @Override public void invalidate() {
-        int leni = _adapter.getFragments().size();
-        for (int i = 0; i < leni; ++i) {
-            BaseFragment fragment = _adapter.getFragments().get(i);
-            if (fragment != null) {
-                fragment.invalidate();
-            }
-        }
-    }
+	@Override public void invalidate() {
+		int leni = _adapter.getFragments().size();
+		for (int i = 0; i < leni; ++i) {
+			BaseFragment fragment = _adapter.getFragments().get(i);
+			if (fragment != null) {
+				fragment.invalidate();
+			}
+		}
+	}
 
-    @Override
-    public SingleFragment getCurrentFragment() {
-        BaseFragment currentFragment = _adapter.getItem(_viewPager.getCurrentItem());
-        if (currentFragment instanceof SingleFragment) {
-            return (SingleFragment) currentFragment;
-        }
-        return currentFragment.getCurrentFragment();
-    }
+	@Override
+	public SingleFragment getCurrentFragment() {
+		BaseFragment currentFragment = _adapter.getItem(_viewPager.getCurrentItem());
+		if (currentFragment instanceof SingleFragment) {
+			return (SingleFragment) currentFragment;
+		}
+		return currentFragment.getCurrentFragment();
+	}
 }

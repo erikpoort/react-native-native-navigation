@@ -41,211 +41,211 @@ import javax.annotation.Nullable;
  */
 
 public class RNNativeNavigationModule extends ReactContextBaseJavaModule implements LifecycleEventListener {
-    private static final String kRNNN = "RNNN";
+	private static final String kRNNN = "RNNN";
 
-    private Set<RNNNFragment> _fragments;
-    private final FragmentManager.FragmentLifecycleCallbacks _lifecycleCallbacks;
+	private Set<RNNNFragment> _fragments;
+	private final FragmentManager.FragmentLifecycleCallbacks _lifecycleCallbacks;
 
-    RNNativeNavigationModule(ReactApplicationContext reactContext, Map<String, Class<? extends Node>> externalNodes) {
-        super(reactContext);
+	RNNativeNavigationModule(ReactApplicationContext reactContext, Map<String, Class<? extends Node>> externalNodes) {
+		super(reactContext);
 
-        _fragments = new HashSet<>();
-        _lifecycleCallbacks = new FragmentManager.FragmentLifecycleCallbacks() {
-            @Override
-            public void onFragmentAttached(FragmentManager fm, Fragment f, Context context) {
-                super.onFragmentAttached(fm, f, context);
+		_fragments = new HashSet<>();
+		_lifecycleCallbacks = new FragmentManager.FragmentLifecycleCallbacks() {
+			@Override
+			public void onFragmentAttached(FragmentManager fm, Fragment f, Context context) {
+				super.onFragmentAttached(fm, f, context);
 
-                if (f instanceof RNNNFragment) {
-                    RNNNFragment baseFragment = (RNNNFragment) f;
-                    _fragments.add(baseFragment);
-                }
-            }
+				if (f instanceof RNNNFragment) {
+					RNNNFragment baseFragment = (RNNNFragment) f;
+					_fragments.add(baseFragment);
+				}
+			}
 
-            @Override
-            public void onFragmentDetached(FragmentManager fm, Fragment f) {
-                super.onFragmentDetached(fm, f);
-                if (f instanceof RNNNFragment) {
-                    RNNNFragment baseFragment = (RNNNFragment) f;
-                    _fragments.remove(baseFragment);
-                }
-            }
-        };
+			@Override
+			public void onFragmentDetached(FragmentManager fm, Fragment f) {
+				super.onFragmentDetached(fm, f);
+				if (f instanceof RNNNFragment) {
+					RNNNFragment baseFragment = (RNNNFragment) f;
+					_fragments.remove(baseFragment);
+				}
+			}
+		};
 
-        NodeHelper.getInstance().addExternalNodes(externalNodes);
+		NodeHelper.getInstance().addExternalNodes(externalNodes);
 
-        reactContext.addLifecycleEventListener(this);
-    }
+		reactContext.addLifecycleEventListener(this);
+	}
 
-    @Override
-    public void onCatalystInstanceDestroy() {
-        /*
+	@Override
+	public void onCatalystInstanceDestroy() {
+		/*
          * Save the state of the application before reload
 		 */
-        if (_fragments.size() > 0) {
-            RNNNFragment anyFragment = (RNNNFragment) _fragments.toArray()[0];
-            final RNNNFragment rootFragment = getRootFragment(anyFragment.getNode());
-            if (rootFragment != null) {
-                WritableMap currentState = rootFragment.getNode().getData();
-                RNNNState.INSTANCE.state = currentState.toHashMap();
+		if (_fragments.size() > 0) {
+			RNNNFragment anyFragment = (RNNNFragment) _fragments.toArray()[0];
+			final RNNNFragment rootFragment = getRootFragment(anyFragment.getNode());
+			if (rootFragment != null) {
+				WritableMap currentState = rootFragment.getNode().getData();
+				RNNNState.INSTANCE.state = currentState.toHashMap();
 
-                assert getCurrentActivity() != null;
-                getCurrentActivity().runOnUiThread(new Runnable() {
-                    @Override public void run() {
-                        rootFragment.invalidate();
-                    }
-                });
-            }
-        }
+				assert getCurrentActivity() != null;
+				getCurrentActivity().runOnUiThread(new Runnable() {
+					@Override public void run() {
+						rootFragment.invalidate();
+					}
+				});
+			}
+		}
 
-        super.onCatalystInstanceDestroy();
-    }
+		super.onCatalystInstanceDestroy();
+	}
 
-    @Override
-    public String getName() {
-        return "ReactNativeNativeNavigation";
-    }
+	@Override
+	public String getName() {
+		return "ReactNativeNativeNavigation";
+	}
 
-    @Nullable @Override public Map<String, Object> getConstants() {
-        return NodeHelper.getInstance().getConstants();
-    }
+	@Nullable @Override public Map<String, Object> getConstants() {
+		return NodeHelper.getInstance().getConstants();
+	}
 
-    @ReactMethod
-    public void onStart(Callback callback) {
-        HashMap<String, Object> state = RNNNState.INSTANCE.state;
-        if (state == null) {
-            Log.i(kRNNN, "First load");
-            callback.invoke();
-        } else {
-            Log.i(kRNNN, "Reload");
-            callback.invoke(Arguments.makeNativeMap(state));
-        }
-    }
+	@ReactMethod
+	public void onStart(Callback callback) {
+		HashMap<String, Object> state = RNNNState.INSTANCE.state;
+		if (state == null) {
+			Log.i(kRNNN, "First load");
+			callback.invoke();
+		} else {
+			Log.i(kRNNN, "Reload");
+			callback.invoke(Arguments.makeNativeMap(state));
+		}
+	}
 
-    @ReactMethod
-    public void setSiteMap(ReadableMap map, final Promise promise) {
-        RNNNState.INSTANCE.state = map.toHashMap();
+	@ReactMethod
+	public void setSiteMap(ReadableMap map, final Promise promise) {
+		RNNNState.INSTANCE.state = map.toHashMap();
 
-        try {
-            assert getCurrentActivity() != null;
-            ReactFragmentActivity mainActivity = (ReactFragmentActivity) getCurrentActivity();
-            final Node node = NodeHelper.getInstance().nodeFromMap(map, getReactInstanceManager());
-            final FragmentManager fragmentManager = mainActivity.getSupportFragmentManager();
+		try {
+			assert getCurrentActivity() != null;
+			ReactFragmentActivity mainActivity = (ReactFragmentActivity) getCurrentActivity();
+			final Node node = NodeHelper.getInstance().nodeFromMap(map, getReactInstanceManager());
+			final FragmentManager fragmentManager = mainActivity.getSupportFragmentManager();
 
-            mainActivity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    FragmentTransaction transaction = fragmentManager.beginTransaction();
-                    Fragment fragment = node.generateFragment();
-                    transaction.replace(android.R.id.content, fragment);
-                    transaction.commitNowAllowingStateLoss();
-                    promise.resolve(true);
-                }
-            });
-        } catch (Exception e) {
-            promise.reject(kRNNN, "Could not start app", e);
-        }
-    }
+			mainActivity.runOnUiThread(new Runnable() {
+				@Override
+				public void run() {
+					FragmentTransaction transaction = fragmentManager.beginTransaction();
+					Fragment fragment = node.generateFragment();
+					transaction.replace(android.R.id.content, fragment);
+					transaction.commitNowAllowingStateLoss();
+					promise.resolve(true);
+				}
+			});
+		} catch (Exception e) {
+			promise.reject(kRNNN, "Could not start app", e);
+		}
+	}
 
-    @ReactMethod
-    public void callMethodOnNode(String navigator, String methodName, ReadableMap arguments, Callback callback) {
-        RNNNFragment anyFragment = (RNNNFragment) _fragments.toArray()[0];
-        final BaseFragment rootFragment = (BaseFragment) getRootFragment(anyFragment.getNode());
+	@ReactMethod
+	public void callMethodOnNode(String navigator, String methodName, ReadableMap arguments, Callback callback) {
+		RNNNFragment anyFragment = (RNNNFragment) _fragments.toArray()[0];
+		final BaseFragment rootFragment = (BaseFragment) getRootFragment(anyFragment.getNode());
 
-        BaseFragment findFragment = rootFragment.fragmentForPath(navigator);
-        if (findFragment == null) {
-            return;
-        }
+		BaseFragment findFragment = rootFragment.fragmentForPath(navigator);
+		if (findFragment == null) {
+			return;
+		}
 
-        if (findFragment instanceof Navigatable) {
-            ((Navigatable) findFragment).callMethodWithName(methodName, arguments, rootFragment, callback);
-        }
-    }
+		if (findFragment instanceof Navigatable) {
+			((Navigatable) findFragment).callMethodWithName(methodName, arguments, rootFragment, callback);
+		}
+	}
 
-    @ReactMethod
-    public void handleBackButton(final Callback callback) {
-        assert getCurrentActivity() != null;
-        ReactFragmentActivity mainActivity = (ReactFragmentActivity) getCurrentActivity();
-        RNNNFragment anyFragment = (RNNNFragment) _fragments.toArray()[0];
-        final BaseFragment rootFragment = (BaseFragment) getRootFragment(anyFragment.getNode());
-        SingleFragment currentFragment = rootFragment.getCurrentFragment();
-        final StackFragment stackFragment = currentFragment.getStackFragment();
+	@ReactMethod
+	public void handleBackButton(final Callback callback) {
+		assert getCurrentActivity() != null;
+		ReactFragmentActivity mainActivity = (ReactFragmentActivity) getCurrentActivity();
+		RNNNFragment anyFragment = (RNNNFragment) _fragments.toArray()[0];
+		final BaseFragment rootFragment = (BaseFragment) getRootFragment(anyFragment.getNode());
+		SingleFragment currentFragment = rootFragment.getCurrentFragment();
+		final StackFragment stackFragment = currentFragment.getStackFragment();
 
-        if (stackFragment != null) {
-            mainActivity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    callback.invoke(stackFragment.onBackPressed());
-                }
-            });
-            return;
-        }
+		if (stackFragment != null) {
+			mainActivity.runOnUiThread(new Runnable() {
+				@Override
+				public void run() {
+					callback.invoke(stackFragment.onBackPressed());
+				}
+			});
+			return;
+		}
 
-        callback.invoke(false);
-    }
+		callback.invoke(false);
+	}
 
-    private ReactInstanceManager getReactInstanceManager() {
-        assert getCurrentActivity() != null;
-        ReactFragmentActivity mainActivity = (ReactFragmentActivity) getCurrentActivity();
-        ReactApplication mainApplication = (ReactApplication) mainActivity.getApplication();
-        ReactNativeHost reactNativeHost = mainApplication.getReactNativeHost();
-        return reactNativeHost.getReactInstanceManager();
-    }
+	private ReactInstanceManager getReactInstanceManager() {
+		assert getCurrentActivity() != null;
+		ReactFragmentActivity mainActivity = (ReactFragmentActivity) getCurrentActivity();
+		ReactApplication mainApplication = (ReactApplication) mainActivity.getApplication();
+		ReactNativeHost reactNativeHost = mainApplication.getReactNativeHost();
+		return reactNativeHost.getReactInstanceManager();
+	}
 
-    private RNNNFragment getRootFragment(Node node) {
-        RNNNFragment rootFragment = null;
-        String rootPath = node.getRootPath();
-        for (RNNNFragment findFragment : _fragments) {
-            if (findFragment != null) {
-                if (findFragment.getNode().getScreenID().equals(rootPath)) {
-                    rootFragment = findFragment;
-                    break;
-                }
-            }
-        }
-        return rootFragment;
-    }
+	private RNNNFragment getRootFragment(Node node) {
+		RNNNFragment rootFragment = null;
+		String rootPath = node.getRootPath();
+		for (RNNNFragment findFragment : _fragments) {
+			if (findFragment != null) {
+				if (findFragment.getNode().getScreenID().equals(rootPath)) {
+					rootFragment = findFragment;
+					break;
+				}
+			}
+		}
+		return rootFragment;
+	}
 
-    public void resetNavigation() {
-        if (_fragments.size() > 0) {
-            RNNNFragment anyFragment = (RNNNFragment) _fragments.toArray()[0];
-            final RNNNFragment rootFragment = getRootFragment(anyFragment.getNode());
+	public void resetNavigation() {
+		if (_fragments.size() > 0) {
+			RNNNFragment anyFragment = (RNNNFragment) _fragments.toArray()[0];
+			final RNNNFragment rootFragment = getRootFragment(anyFragment.getNode());
 
-            assert getCurrentActivity() != null;
-            getCurrentActivity().runOnUiThread(new Runnable() {
-                @Override public void run() {
-                    rootFragment.invalidate();
+			assert getCurrentActivity() != null;
+			getCurrentActivity().runOnUiThread(new Runnable() {
+				@Override public void run() {
+					rootFragment.invalidate();
 
 
-                    _fragments = new HashSet<>();
-                    RNNNState.INSTANCE.state = null;
-                    getReactInstanceManager().getDevSupportManager().handleReloadJS();
-                }
-            });
-        }
-    }
+					_fragments = new HashSet<>();
+					RNNNState.INSTANCE.state = null;
+					getReactInstanceManager().getDevSupportManager().handleReloadJS();
+				}
+			});
+		}
+	}
 
-    @Override
-    public void onHostResume() {
-        ReactFragmentActivity mainActivity = (ReactFragmentActivity) getCurrentActivity();
-        assert mainActivity != null;
-        mainActivity.getSupportFragmentManager().registerFragmentLifecycleCallbacks(_lifecycleCallbacks, true);
+	@Override
+	public void onHostResume() {
+		ReactFragmentActivity mainActivity = (ReactFragmentActivity) getCurrentActivity();
+		assert mainActivity != null;
+		mainActivity.getSupportFragmentManager().registerFragmentLifecycleCallbacks(_lifecycleCallbacks, true);
 
-        getReactInstanceManager().getDevSupportManager().addCustomDevOption("Reset navigation", new DevOptionHandler() {
-            @Override public void onOptionSelected() {
-                resetNavigation();
-            }
-        });
-    }
+		getReactInstanceManager().getDevSupportManager().addCustomDevOption("Reset navigation", new DevOptionHandler() {
+			@Override public void onOptionSelected() {
+				resetNavigation();
+			}
+		});
+	}
 
-    @Override
-    public void onHostPause() {
-        ReactFragmentActivity mainActivity = (ReactFragmentActivity) getCurrentActivity();
-        assert mainActivity != null;
-        mainActivity.getSupportFragmentManager().unregisterFragmentLifecycleCallbacks(_lifecycleCallbacks);
-    }
+	@Override
+	public void onHostPause() {
+		ReactFragmentActivity mainActivity = (ReactFragmentActivity) getCurrentActivity();
+		assert mainActivity != null;
+		mainActivity.getSupportFragmentManager().unregisterFragmentLifecycleCallbacks(_lifecycleCallbacks);
+	}
 
-    @Override
-    public void onHostDestroy() {
-        _fragments.clear();
-    }
+	@Override
+	public void onHostDestroy() {
+		_fragments.clear();
+	}
 }

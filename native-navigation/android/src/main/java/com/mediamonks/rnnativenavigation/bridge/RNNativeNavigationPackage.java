@@ -17,21 +17,21 @@ import java.util.Map;
  */
 
 public class RNNativeNavigationPackage implements ReactPackage {
-    private final Map<String, Class<? extends Node>> _externalNodes;
+	private final Map<String, Class<? extends Node>> _externalNodes;
 
-    public RNNativeNavigationPackage(Map<String, Class<? extends Node>> externalNodes) {
-        _externalNodes = externalNodes;
-    }
+	public RNNativeNavigationPackage(Map<String, Class<? extends Node>> externalNodes) {
+		_externalNodes = externalNodes;
+	}
 
-    @Override
-    public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {
-        List<NativeModule> modules = new ArrayList<>();
-        modules.add(new RNNativeNavigationModule(reactContext, _externalNodes));
-        return modules;
-    }
+	@Override
+	public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {
+		List<NativeModule> modules = new ArrayList<>();
+		modules.add(new RNNativeNavigationModule(reactContext, _externalNodes));
+		return modules;
+	}
 
-    @Override
-    public List<ViewManager> createViewManagers(ReactApplicationContext reactContext) {
-        return Collections.emptyList();
-    }
+	@Override
+	public List<ViewManager> createViewManagers(ReactApplicationContext reactContext) {
+		return Collections.emptyList();
+	}
 }

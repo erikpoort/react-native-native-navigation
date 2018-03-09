@@ -11,23 +11,23 @@ import android.widget.EditText;
  */
 
 class DoubleTapResetRecognizer {
-    private boolean _doReset = false;
-    private static final long DOUBLE_TAP_DELAY = 200;
+	private boolean _doReset = false;
+	private static final long DOUBLE_TAP_DELAY = 200;
 
-    boolean didDoubleTapE(int keyCode, View view) {
-        if (keyCode == KeyEvent.KEYCODE_E && !(view instanceof EditText)) {
-            if (_doReset) {
-                _doReset = false;
-                return true;
-            } else {
-                _doReset = true;
-                new Handler().postDelayed(new Runnable() {
-                    @Override public void run() {
-                        _doReset = false;
-                    }
-                }, DOUBLE_TAP_DELAY);
-            }
-        }
-        return false;
-    }
+	boolean didDoubleTapE(int keyCode, View view) {
+		if (keyCode == KeyEvent.KEYCODE_E && !(view instanceof EditText)) {
+			if (_doReset) {
+				_doReset = false;
+				return true;
+			} else {
+				_doReset = true;
+				new Handler().postDelayed(new Runnable() {
+					@Override public void run() {
+						_doReset = false;
+					}
+				}, DOUBLE_TAP_DELAY);
+			}
+		}
+		return false;
+	}
 }

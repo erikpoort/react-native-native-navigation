@@ -17,125 +17,126 @@ import java.util.Map;
  * example 2017
  */
 
-public class DrawerNode extends BaseNode  {
-    public static final String OPEN_VIEW = "openView";
+public class DrawerNode extends BaseNode {
+	public static final String OPEN_VIEW = "openView";
 
-    public static String JS_NAME = "DrawerView";
-    public static Map<String, Object> getConstants() {
-        Map<String, Object> map = new HashMap<>();
-        map.put(OPEN_VIEW, OPEN_VIEW);
-        return map;
-    }
+	public static String JS_NAME = "DrawerView";
 
-    public static final String LEFT = "left";
-    public static final String CENTER = "center";
-    public static final String RIGHT = "right";
-    private static final String SIDE = "side";
+	public static Map<String, Object> getConstants() {
+		Map<String, Object> map = new HashMap<>();
+		map.put(OPEN_VIEW, OPEN_VIEW);
+		return map;
+	}
 
-    private Node _leftNode;
-    private Node _centerNode;
-    private Node _rightNode;
-    private int _side;
+	public static final String LEFT = "left";
+	public static final String CENTER = "center";
+	public static final String RIGHT = "right";
+	private static final String SIDE = "side";
 
-    @Override
-    public BaseFragment generateFragment() {
-        DrawerFragment fragment = new DrawerFragment();
-        fragment.setNode(this);
-        return fragment;
-    }
+	private Node _leftNode;
+	private Node _centerNode;
+	private Node _rightNode;
+	private int _side;
 
-    @Override
-    public void setData(ReadableMap map) {
-        super.setData(map);
+	@Override
+	public BaseFragment generateFragment() {
+		DrawerFragment fragment = new DrawerFragment();
+		fragment.setNode(this);
+		return fragment;
+	}
 
-        try {
-            if (map.hasKey(LEFT)) {
-                _leftNode = NodeHelper.getInstance().nodeFromMap(map.getMap(LEFT), getInstanceManager());
-            }
-            if (map.hasKey(CENTER)) {
-                _centerNode = NodeHelper.getInstance().nodeFromMap(map.getMap(CENTER), getInstanceManager());
-            }
-            if (map.hasKey(RIGHT)) {
-                _rightNode = NodeHelper.getInstance().nodeFromMap(map.getMap(RIGHT), getInstanceManager());
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+	@Override
+	public void setData(ReadableMap map) {
+		super.setData(map);
 
-        String side = CENTER;
-        if (map.hasKey(SIDE)) {
-            side = map.getString(SIDE);
-        }
+		try {
+			if (map.hasKey(LEFT)) {
+				_leftNode = NodeHelper.getInstance().nodeFromMap(map.getMap(LEFT), getInstanceManager());
+			}
+			if (map.hasKey(CENTER)) {
+				_centerNode = NodeHelper.getInstance().nodeFromMap(map.getMap(CENTER), getInstanceManager());
+			}
+			if (map.hasKey(RIGHT)) {
+				_rightNode = NodeHelper.getInstance().nodeFromMap(map.getMap(RIGHT), getInstanceManager());
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
-        String[] sides = new String[]{LEFT, CENTER, RIGHT};
-        Integer[] gravities = new Integer[]{Gravity.START, Gravity.NO_GRAVITY, Gravity.END};
-        int index = Arrays.asList(sides).indexOf(side);
-        if (index >= 0) {
-            _side = gravities[index];
-        } else {
-            _side = Gravity.NO_GRAVITY;
-        }
-    }
+		String side = CENTER;
+		if (map.hasKey(SIDE)) {
+			side = map.getString(SIDE);
+		}
 
-    @Override
-    public WritableMap getData() {
-        WritableMap map = super.getData();
+		String[] sides = new String[]{LEFT, CENTER, RIGHT};
+		Integer[] gravities = new Integer[]{Gravity.START, Gravity.NO_GRAVITY, Gravity.END};
+		int index = Arrays.asList(sides).indexOf(side);
+		if (index >= 0) {
+			_side = gravities[index];
+		} else {
+			_side = Gravity.NO_GRAVITY;
+		}
+	}
 
-        if (_leftNode != null) {
-            map.putMap(LEFT, _leftNode.getData());
-        }
-        if (_centerNode != null) {
-            map.putMap(CENTER, _centerNode.getData());
-        }
-        if (_rightNode != null) {
-            map.putMap(RIGHT, _rightNode.getData());
-        }
+	@Override
+	public WritableMap getData() {
+		WritableMap map = super.getData();
 
-        String[] sides = new String[]{LEFT, CENTER, RIGHT};
-        Integer[] gravities = new Integer[]{Gravity.START, Gravity.NO_GRAVITY, Gravity.END};
-        int index = Arrays.asList(gravities).indexOf(_side);
-        if (index >= 0) {
-            map.putString(SIDE, sides[index]);
-        } else {
-            map.putString(SIDE, CENTER);
-        }
-        return map;
-    }
+		if (_leftNode != null) {
+			map.putMap(LEFT, _leftNode.getData());
+		}
+		if (_centerNode != null) {
+			map.putMap(CENTER, _centerNode.getData());
+		}
+		if (_rightNode != null) {
+			map.putMap(RIGHT, _rightNode.getData());
+		}
 
-    @Override
-    public String getTitle() {
-        return _centerNode.getTitle();
-    }
+		String[] sides = new String[]{LEFT, CENTER, RIGHT};
+		Integer[] gravities = new Integer[]{Gravity.START, Gravity.NO_GRAVITY, Gravity.END};
+		int index = Arrays.asList(gravities).indexOf(_side);
+		if (index >= 0) {
+			map.putString(SIDE, sides[index]);
+		} else {
+			map.putString(SIDE, CENTER);
+		}
+		return map;
+	}
 
-    public Node getLeftNode() {
-        return _leftNode;
-    }
+	@Override
+	public String getTitle() {
+		return _centerNode.getTitle();
+	}
 
-    public void setLeftNode(Node leftNode) {
-        _leftNode = leftNode;
-    }
+	public Node getLeftNode() {
+		return _leftNode;
+	}
 
-    public Node getCenterNode() {
-        return _centerNode;
-    }
+	public void setLeftNode(Node leftNode) {
+		_leftNode = leftNode;
+	}
 
-    public void setCenterNode(Node centerNode) {
-        _centerNode = centerNode;
-    }
+	public Node getCenterNode() {
+		return _centerNode;
+	}
 
-    public Node getRightNode() {
-        return _rightNode;
-    }
+	public void setCenterNode(Node centerNode) {
+		_centerNode = centerNode;
+	}
 
-    public void setRightNode(Node rightNode) {
-        _rightNode = rightNode;
-    }
+	public Node getRightNode() {
+		return _rightNode;
+	}
 
-    public int getSide() {
-        return _side;
-    }
+	public void setRightNode(Node rightNode) {
+		_rightNode = rightNode;
+	}
 
-    public void setSide(int side) {
-        _side = side;
-    }
+	public int getSide() {
+		return _side;
+	}
+
+	public void setSide(int side) {
+		_side = side;
+	}
 }

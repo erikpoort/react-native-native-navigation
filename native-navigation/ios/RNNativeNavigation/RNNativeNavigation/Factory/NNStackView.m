@@ -11,21 +11,24 @@
 NSString *const kPush = @"push";
 NSString *const kPop = @"pop";
 
+
 @interface NNStackView () <UINavigationControllerDelegate>
 
-@property(nonatomic, strong) NNStackNode *stackNode;
+@property (nonatomic, strong) NNStackNode *stackNode;
 
 @end
 
+
 @implementation NNStackView
 
-- (instancetype)initWithNode:(NNStackNode *)node {
+- (instancetype)initWithNode:(NNStackNode *)node
+{
     if (self = [super init]) {
         self.stackNode = node;
         self.navigationBar.translucent = NO;
         NSMutableArray *viewControllers = [@[] mutableCopy];
-        [node.stack enumerateObjectsUsingBlock:^(id <NNNode> view, NSUInteger idx, BOOL *stop) {
-            UIViewController <NNView> *viewController = [view generate];
+        [node.stack enumerateObjectsUsingBlock:^(id<NNNode> view, NSUInteger idx, BOOL *stop) {
+            UIViewController<NNView> *viewController = [view generate];
             [viewControllers addObject:viewController];
         }];
         self.viewControllers = [viewControllers copy];
@@ -36,22 +39,24 @@ NSString *const kPop = @"pop";
     return self;
 }
 
-- (NSString *)title {
+- (NSString *)title
+{
     return self.viewControllers.firstObject.title;
 }
 
-- (__kindof id <NNNode>)node {
+- (__kindof id<NNNode>)node
+{
     return self.stackNode;
 }
 
-- (UIViewController <NNView> *)viewForPath:(NSString *)path {
+- (UIViewController<NNView> *)viewForPath:(NSString *)path
+{
     if ([path isEqualToString:self.stackNode.screenID]) {
         return self;
     }
     if ([path rangeOfString:self.node.screenID].location == 0) {
-
-        UIViewController <NNView> *checkController;
-        UIViewController <NNView> *foundController;
+        UIViewController<NNView> *checkController;
+        UIViewController<NNView> *foundController;
 
         NSUInteger i = 0;
         do {
@@ -76,7 +81,8 @@ NSString *const kPop = @"pop";
     return nil;
 }
 
-- (void)callMethodWithName:(NSString *)methodName arguments:(NSDictionary *)arguments callback:(RCTResponseSenderBlock)callback {
+- (void)callMethodWithName:(NSString *)methodName arguments:(NSDictionary *)arguments callback:(RCTResponseSenderBlock)callback
+{
     NSMutableDictionary *methodDictionary = @{}.mutableCopy;
     methodDictionary[kPush] = [NSValue valueWithPointer:@selector(push:callback:)];
     methodDictionary[kPop] = [NSValue valueWithPointer:@selector(pop:callback:)];
@@ -85,8 +91,9 @@ NSString *const kPop = @"pop";
     [self performSelector:thisSelector withObject:arguments withObject:callback];
 }
 
-- (void)push:(NSDictionary *)arguments callback:(RCTResponseSenderBlock)callback {
-    UIViewController <NNView> *rootController = (UIViewController <NNView> *) [UIApplication sharedApplication].keyWindow.rootViewController;
+- (void)push:(NSDictionary *)arguments callback:(RCTResponseSenderBlock)callback
+{
+    UIViewController<NNView> *rootController = (UIViewController<NNView> *)[UIApplication sharedApplication].keyWindow.rootViewController;
     NNSingleNode *nodeObject = [NNNodeHelper.sharedInstance nodeFromMap:arguments[@"screen"] bridge:arguments[@"bridge"]];
     NNStackNode *stackNode = self.node;
     NSMutableArray *stack = stackNode.stack.mutableCopy;
@@ -95,7 +102,7 @@ NSString *const kPop = @"pop";
 
     NSDictionary *newState = rootController.node.data;
     [RNNNState sharedInstance].state = newState;
-    callback(@[newState]);
+    callback(@[ newState ]);
 
     dispatch_async(dispatch_get_main_queue(), ^{
         UIViewController *viewController = [nodeObject generate];
@@ -105,8 +112,9 @@ NSString *const kPop = @"pop";
     });
 }
 
-- (void)pop:(NSDictionary *)arguments callback:(RCTResponseSenderBlock)callback {
-    UIViewController <NNView> *rootController = (UIViewController <NNView> *) [UIApplication sharedApplication].keyWindow.rootViewController;
+- (void)pop:(NSDictionary *)arguments callback:(RCTResponseSenderBlock)callback
+{
+    UIViewController<NNView> *rootController = (UIViewController<NNView> *)[UIApplication sharedApplication].keyWindow.rootViewController;
     NNStackNode *stackNode = self.node;
     NSMutableArray *stack = stackNode.stack.mutableCopy;
     [stack removeLastObject];
@@ -114,7 +122,7 @@ NSString *const kPop = @"pop";
 
     NSDictionary *newState = rootController.node.data;
     [RNNNState sharedInstance].state = newState;
-    callback(@[newState]);
+    callback(@[ newState ]);
 
     dispatch_async(dispatch_get_main_queue(), ^{
         if (self) {
@@ -125,7 +133,8 @@ NSString *const kPop = @"pop";
 
 #pragma mark - UINavigationControllerDelegate
 
-- (void)navigationController:(UINavigationController *)navigationController didShowViewController:(UIViewController *)viewController animated:(BOOL)animated {
+- (void)navigationController:(UINavigationController *)navigationController didShowViewController:(UIViewController *)viewController animated:(BOOL)animated
+{
     self.stackNode.stack = [self.stackNode.stack subarrayWithRange:NSMakeRange(0, self.viewControllers.count)];
 }
 

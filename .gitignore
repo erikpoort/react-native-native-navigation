@@ -218,4 +218,4 @@ example/yarn.lock
 .tmp
 
 # Local
-native-navigation/examples.md
+native-navigation/examples.md.clang-format

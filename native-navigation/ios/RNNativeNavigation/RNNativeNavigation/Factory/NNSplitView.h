@@ -7,6 +7,7 @@
 
 @class NNSplitNode;
 
+
 @interface NNSplitView : UIViewController <NNView>
 
 - (instancetype)initWithNode:(NNSplitNode *)node;

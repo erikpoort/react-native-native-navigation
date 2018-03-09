@@ -6,6 +6,7 @@
 #import <Foundation/Foundation.h>
 #import "NNBaseNode.h"
 
+
 @interface ExampleNode : NNBaseNode <NNNode>
 
 @end

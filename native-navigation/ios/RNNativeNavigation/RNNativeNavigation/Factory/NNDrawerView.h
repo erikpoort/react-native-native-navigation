@@ -11,6 +11,7 @@
 
 FOUNDATION_EXPORT NSString *const kOpenView;
 
+
 @interface NNDrawerView : MMDrawerController <NNView>
 
 - (instancetype)initWithNode:(NNDrawerNode *)node;

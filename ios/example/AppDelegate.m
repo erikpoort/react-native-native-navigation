@@ -15,15 +15,17 @@
 #import "ReactNativeNativeNavigation.h"
 #import "ExampleNode.h"
 
+
 @implementation AppDelegate
 
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+{
     NSURL *jsCodeLocation;
 
     jsCodeLocation = [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index" fallbackResource:nil];
 
     [ReactNativeNativeNavigation addExternalNodes:@[
-            [ExampleNode class],
+        [ExampleNode class],
     ]];
 
     RCTRootView *rootView = [[RCTRootView alloc] initWithBundleURL:jsCodeLocation

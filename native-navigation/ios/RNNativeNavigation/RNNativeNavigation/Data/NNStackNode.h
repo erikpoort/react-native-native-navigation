@@ -5,8 +5,9 @@
 #import "NNNode.h"
 #import "NNBaseNode.h"
 
+
 @interface NNStackNode : NNBaseNode <NNNode>
 
-@property(nonatomic, copy) NSArray <id <NNNode>> *stack;
+@property (nonatomic, copy) NSArray<id<NNNode>> *stack;
 
 @end

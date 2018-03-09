@@ -8,29 +8,35 @@
 
 static NSString *const kName = @"name";
 
+
 @interface ExampleNode ()
 
-@property(nonatomic, strong) RCTBridge *bridge;
-@property(nonatomic, copy) NSString *title;
+@property (nonatomic, strong) RCTBridge *bridge;
+@property (nonatomic, copy) NSString *title;
 
 @end
 
+
 @implementation ExampleNode
 
-+ (NSString *)jsName {
++ (NSString *)jsName
+{
     return @"ExampleView";
 }
 
-- (UIViewController <NNView> *)generate {
+- (UIViewController<NNView> *)generate
+{
     return [[ExampleView alloc] initWithBridge:self.bridge node:self];
 }
 
-- (void)setData:(NSDictionary *)data {
+- (void)setData:(NSDictionary *)data
+{
     [super setData:data];
     self.title = data[kName];
 }
 
-- (NSDictionary *)data {
+- (NSDictionary *)data
+{
     NSMutableDictionary *data = [super data].mutableCopy;
     data[kName] = self.title;
     return data.copy;

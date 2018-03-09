@@ -6,15 +6,18 @@
 #import <React/RCTBridge.h>
 #import "RNNNState.h"
 
+
 @interface RNNNState ()
 
-@property(nonatomic, strong) UIWindow *window;
+@property (nonatomic, strong) UIWindow *window;
 
 @end
 
+
 @implementation RNNNState
 
-+ (instancetype)sharedInstance {
++ (instancetype)sharedInstance
+{
     static dispatch_once_t once;
     static id sharedInstance;
     dispatch_once(&once, ^{
@@ -23,7 +26,8 @@
     return sharedInstance;
 }
 
-- (instancetype)init {
+- (instancetype)init
+{
     if (self = [super init]) {
         [self newWindow];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onReload) name:RCTJavaScriptDidLoadNotification object:nil];
@@ -31,11 +35,13 @@
     return self;
 }
 
-- (void)onReload {
+- (void)onReload
+{
     [self newWindow];
 }
 
-- (void)newWindow {
+- (void)newWindow
+{
     if (self.window) {
         [self.window removeFromSuperview];
     }

@@ -21,7 +21,7 @@
 
 - (NSString *)screenID;
 
-- (UIViewController <NNView> *)generate;
+- (UIViewController<NNView> *)generate;
 
 + (NSDictionary<NSString *, id> *)constantsToExport;
 

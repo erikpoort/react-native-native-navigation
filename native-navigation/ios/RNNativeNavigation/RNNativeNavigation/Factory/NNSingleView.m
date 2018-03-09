@@ -10,16 +10,19 @@
 
 NSString *const kShowModal = @"showModal";
 
+
 @interface NNSingleView ()
 
-@property(nonatomic, strong) NNSingleNode *singleNode;
-@property(nonatomic, strong) RCTBridge *bridge;
+@property (nonatomic, strong) NNSingleNode *singleNode;
+@property (nonatomic, strong) RCTBridge *bridge;
 
 @end
 
+
 @implementation NNSingleView
 
-- (instancetype)initWithBridge:(RCTBridge *)bridge node:(NNSingleNode *)node {
+- (instancetype)initWithBridge:(RCTBridge *)bridge node:(NNSingleNode *)node
+{
     if (self = [super init]) {
         self.singleNode = node;
         self.bridge = bridge;
@@ -28,15 +31,18 @@ NSString *const kShowModal = @"showModal";
     return self;
 }
 
-- (__kindof id <NNNode>)node {
+- (__kindof id<NNNode>)node
+{
     return self.singleNode;
 }
 
-- (void)loadView {
+- (void)loadView
+{
     self.view = [[RCTRootView alloc] initWithBridge:self.bridge moduleName:self.node.screenID initialProperties:nil];
 }
 
-- (void)viewDidAppear:(BOOL)animated {
+- (void)viewDidAppear:(BOOL)animated
+{
     [super viewWillAppear:animated];
 
     if (self.singleNode.modal) {
@@ -44,8 +50,9 @@ NSString *const kShowModal = @"showModal";
     }
 }
 
-- (UIViewController <NNView> *)viewForPath:(NSString *)path {
-    UIViewController <NNView> *modalController = (UIViewController <NNView> *) self.presentedViewController;
+- (UIViewController<NNView> *)viewForPath:(NSString *)path
+{
+    UIViewController<NNView> *modalController = (UIViewController<NNView> *)self.presentedViewController;
     if ([path isEqualToString:self.singleNode.screenID]) {
         return self;
     }
@@ -59,7 +66,8 @@ NSString *const kShowModal = @"showModal";
     return nil;
 }
 
-- (void)callMethodWithName:(NSString *)methodName arguments:(NSDictionary *)arguments callback:(RCTResponseSenderBlock)callback {
+- (void)callMethodWithName:(NSString *)methodName arguments:(NSDictionary *)arguments callback:(RCTResponseSenderBlock)callback
+{
     NSMutableDictionary *methodDictionary = @{}.mutableCopy;
     methodDictionary[kShowModal] = [NSValue valueWithPointer:@selector(showModal:callback:)];
 
@@ -67,17 +75,18 @@ NSString *const kShowModal = @"showModal";
     [self performSelector:thisSelector withObject:arguments withObject:callback];
 }
 
-- (void)showModal:(NSDictionary *)arguments callback:(RCTResponseSenderBlock)callback {
+- (void)showModal:(NSDictionary *)arguments callback:(RCTResponseSenderBlock)callback
+{
     NNSingleNode *nodeObject = [NNNodeHelper.sharedInstance nodeFromMap:arguments[@"screen"] bridge:self.bridge];
 
-    UIViewController <NNView> *rootController = (UIViewController <NNView> *) [UIApplication sharedApplication].keyWindow.rootViewController;
+    UIViewController<NNView> *rootController = (UIViewController<NNView> *)[UIApplication sharedApplication].keyWindow.rootViewController;
 
     NNSingleNode *singleNode = self.node;
     singleNode.modal = nodeObject;
 
     NSDictionary *newState = rootController.node.data;
     [RNNNState sharedInstance].state = newState;
-    callback(@[newState]);
+    callback(@[ newState ]);
 
     dispatch_async(dispatch_get_main_queue(), ^{
         UIViewController *viewController = [nodeObject generate];

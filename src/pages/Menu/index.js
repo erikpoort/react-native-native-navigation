@@ -8,7 +8,7 @@ import {SingleView,StackView} from "../../../native-navigation/src/index";
 export default class Menu extends Component {
 	static pageMap = [Detail];
 	handleMenuItem = (view) => {
-		this.props.drawer.openView('center', view);
+		this.props.drawer.openView('center', view)
 	};
 	render(){
 		return (
@@ -18,7 +18,9 @@ export default class Menu extends Component {
 					<Button title="Detail" onPress={() => this.handleMenuItem(<SingleView id="Detail" screen={Detail}/>)} />
 					<Button title="Detail 2" onPress={() => this.handleMenuItem(
 						<StackView id="stackert">
-                            <SingleView id="Detail2" screen={Detail2} modal={<SingleView id="Detail2" screen={Detail2} />} />
+                            <SingleView id="Detail2" screen={Detail2}/>
+                            <SingleView id="Detail2" screen={Detail2}/>
+                            <SingleView id="Detail2" screen={Detail2}/>
 						</StackView>
 					)} />
 				</View>

@@ -157,12 +157,14 @@ public class StackFragment extends BaseFragment<StackNode> implements Navigatabl
     }
 
     private void removeNode(Node node, int transition) {
-        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
-        String topID = node.getScreenID();
-        transaction.remove(getChildFragmentManager().findFragmentByTag(topID));
-        transaction.setTransition(transition);
-        transaction.commitNowAllowingStateLoss();
-        node.setShown(false);
+        if (node.isShown()) {
+            FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+            String topID = node.getScreenID();
+            transaction.remove(getChildFragmentManager().findFragmentByTag(topID));
+            transaction.setTransition(transition);
+            transaction.commitNowAllowingStateLoss();
+            node.setShown(false);
+        }
     }
 
     public void popNode(Node node, int transition) {

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { SingleView, StackView, SplitView } from '../../../native-navigation/src/index';
 import Detail from '../Detail';
 

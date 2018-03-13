@@ -1,6 +1,6 @@
 {
   "name": "example",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
@@ -26,13 +26,13 @@
   "main": "index.android.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ErikMediaMonks/react-native-native-navigation.git"
+    "url": "git+https://github.com/erikpoort/react-native-native-navigation.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/ErikMediaMonks/react-native-native-navigation/issues"
+    "url": "https://github.com/erikpoort/react-native-native-navigation/issues"
   },
-  "homepage": "https://github.com/ErikMediaMonks/react-native-native-navigation#readme",
+  "homepage": "https://github.com/erikpoort/react-native-native-navigation#readme",
   "description": ""
 }

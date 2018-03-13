@@ -22,8 +22,11 @@ class Detail extends Component {
 					onPress={() => this.props.changeAxis(SplitView.AXIS.HORIZONTAL)}
 				/>
 				<Button
-					title="Push"
-					onPress={() => this.props.stack.push(<SingleView id="ja" screen={Detail2} />)}
+					title="Replace"
+					onPress={() => this.props.navigation.start(
+						<SingleView id="Detail2" screen={Detail2} />,
+						true
+					)}
 				/>
 			</View>
 		);

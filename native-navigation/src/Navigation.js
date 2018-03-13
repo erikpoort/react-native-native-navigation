@@ -48,7 +48,12 @@ class Navigation {
 		}
 	}
 
-	start(node) {
+	/**
+	 * Call this method to start the app. Or to replace the current navigation.
+	 * @param node  The node structure to show.
+	 * @param reset If set to true, native state is replaced by the sent node.
+	 */
+	start(node, reset = false) {
 		/**
 		 * This method is called every time the app is refreshed.
 		 * The native side will handle check for a cached state before rendering.
@@ -58,7 +63,7 @@ class Navigation {
 			 * If the request is set, this means the native side has a saved state which needs to be
 			 * rendered. Otherwise we need to generate a new one.
 			 */
-			if (!request) {
+			if (!request || reset) {
 				request = mapChild(this.viewMap, node, '');
 			}
 

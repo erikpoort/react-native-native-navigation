@@ -4,12 +4,12 @@
 
 #import "NNStackView.h"
 #import "NNStackNode.h"
-#import "NNSingleNode.h"
 #import "NNNodeHelper.h"
 #import "RNNNState.h"
 
 NSString *const kPush = @"push";
 NSString *const kPop = @"pop";
+NSString *const kPopTo = @"popTo";
 
 
 @interface NNStackView () <UINavigationControllerDelegate>
@@ -86,6 +86,7 @@ NSString *const kPop = @"pop";
     NSDictionary *methodDictionary = @{
         kPush : [NSValue valueWithPointer:@selector(push:callback:)],
         kPop : [NSValue valueWithPointer:@selector(pop:callback:)],
+        kPopTo : [NSValue valueWithPointer:@selector(popTo:callback:)],
     };
 
     SEL thisSelector = [methodDictionary[methodName] pointerValue];
@@ -136,6 +137,34 @@ NSString *const kPop = @"pop";
     dispatch_async(dispatch_get_main_queue(), ^{
         __strong typeof(weakSelf) self = weakSelf;
         [self popViewControllerAnimated:YES];
+    });
+}
+
+- (void)popTo:(NSDictionary *)arguments callback:(RCTResponseSenderBlock)callback
+{
+    UIViewController<NNView> *rootController = (UIViewController<NNView> *)[UIApplication sharedApplication].keyWindow.rootViewController;
+
+    UIViewController *foundController = [rootController viewForPath:arguments[@"path"]];
+    if (!foundController) {
+        return;
+    }
+
+    UINavigationController *navigationController = foundController.navigationController;
+    if (!navigationController) {
+        return;
+    }
+
+    NSUInteger index = [navigationController.viewControllers indexOfObject:foundController];
+    if (index == NSNotFound) {
+        return;
+    }
+
+    NSArray *viewControllers = [navigationController.viewControllers subarrayWithRange:NSMakeRange(0, index + 1)];
+
+    __weak typeof(self) weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        __strong typeof(weakSelf) self = weakSelf;
+        [self setViewControllers:viewControllers animated:YES];
     });
 }
 

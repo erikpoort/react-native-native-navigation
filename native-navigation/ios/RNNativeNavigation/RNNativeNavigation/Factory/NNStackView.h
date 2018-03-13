@@ -7,6 +7,7 @@
 
 FOUNDATION_EXPORT NSString *const kPush;
 FOUNDATION_EXPORT NSString *const kPop;
+FOUNDATION_EXPORT NSString *const kPopTo;
 
 @class NNStackNode;
 

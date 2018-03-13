@@ -118,7 +118,7 @@ NSString *const kOpenView = @"openView";
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
         __strong typeof(weakSelf) self = weakSelf;
-        UIViewController *viewController = [nodeObject generate];
+        UIViewController<NNView> *viewController = [nodeObject generate];
         if (viewController) {
             switch (side) {
                 case NNDrawerSideLeft:

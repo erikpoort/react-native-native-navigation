@@ -99,6 +99,10 @@ public class StackFragment extends BaseFragment<StackNode> implements Navigatabl
 				this.handlePopCall(rootFragment, callback);
 				break;
 			}
+			case StackNode.POP_TO: {
+				this.handlePopToCall(arguments, rootFragment, callback);
+				break;
+			}
 			case StackNode.POP_TO_ROOT: {
 				this.handlePopToRootCall(arguments, rootFragment, callback);
 				break;
@@ -151,6 +155,38 @@ public class StackFragment extends BaseFragment<StackNode> implements Navigatabl
 			});
 
 			callback.invoke(Arguments.makeNativeMap(rootFragment.getNode().getData().toHashMap()));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void handlePopToCall(ReadableMap arguments, RNNNFragment rootFragment, final Callback callback) {
+		try {
+			Node foundNode = null;
+			for (Node node : getNode().getStack()) {
+				if (node.getScreenID().equals(arguments.getString("path"))) {
+					foundNode = node;
+				}
+			}
+			if (foundNode == null) {
+				return;
+			}
+
+			final int index = getNode().getStack().indexOf(foundNode);
+			if (index < 0) {
+				return;
+			}
+
+			getActivity().runOnUiThread(new Runnable() {
+				@Override
+				public void run() {
+					while (getNode().getStack().size() - 1 > index + 1) {
+						popNode(getNode().getStack().peek(), FragmentTransaction.TRANSIT_NONE);
+					}
+
+					popNode(getNode().getStack().peek(), FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
+				}
+			});
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

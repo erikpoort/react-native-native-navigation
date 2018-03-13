@@ -21,6 +21,7 @@ import java.util.Stack;
 public class StackNode extends BaseNode {
 	public static final String PUSH = "push";
 	public static final String POP = "pop";
+	public static final String POP_TO = "popTo";
 	public static final String POP_TO_ROOT = "popToRoot";
 
 	public static String JS_NAME = "StackView";
@@ -29,6 +30,7 @@ public class StackNode extends BaseNode {
 		Map<String, Object> map = new HashMap<>();
 		map.put(PUSH, PUSH);
 		map.put(POP, POP);
+		map.put(POP_TO, POP_TO);
 		map.put(POP_TO_ROOT, POP_TO_ROOT);
 		return map;
 	}

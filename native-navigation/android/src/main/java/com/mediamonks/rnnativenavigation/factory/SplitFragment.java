@@ -4,12 +4,17 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
+import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.Callback;
+import com.facebook.react.bridge.ReadableMap;
+import com.mediamonks.rnnativenavigation.data.Node;
 import com.mediamonks.rnnativenavigation.data.SplitNode;
 
 /**
@@ -17,7 +22,7 @@ import com.mediamonks.rnnativenavigation.data.SplitNode;
  * example 2017
  */
 
-public class SplitFragment extends BaseFragment<SplitNode> {
+public class SplitFragment extends BaseFragment<SplitNode> implements Navigatable {
 
 	private BaseFragment _fragment1;
 	private BaseFragment _fragment2;
@@ -69,6 +74,54 @@ public class SplitFragment extends BaseFragment<SplitNode> {
 		FragmentTransaction transaction2 = fragmentManager.beginTransaction();
 		transaction2.remove(_fragment2);
 		transaction2.commitNowAllowingStateLoss();
+	}
+
+	@Override public void callMethodWithName(String name, ReadableMap arguments, RNNNFragment rootFragment, Callback callback) {
+		switch (name) {
+			case SplitNode.REPLACE: {
+				this.handleReplaceCall(arguments, rootFragment, callback);
+				break;
+			}
+		}
+	}
+
+	private void handleReplaceCall(ReadableMap arguments, RNNNFragment rootFragment, Callback callback) {
+		try {
+			final Node node = NodeHelper.getInstance().nodeFromMap(arguments.getMap("screen"), getNode().getInstanceManager());
+
+			String newPart = node.getScreenID().substring(getNode().getScreenID().length() + 1);
+			String[] parts = newPart.split("/");
+			final String whichNode = parts[0];
+			final boolean firstPart = whichNode.equals("node1");
+
+			if (firstPart) {
+				getNode().setNode1(node);
+			} else {
+				getNode().setNode2(node);
+			}
+
+			callback.invoke(Arguments.makeNativeMap(rootFragment.getNode().getData().toHashMap()));
+
+			FragmentManager fragmentManager = getChildFragmentManager();
+			final FragmentTransaction transaction = fragmentManager.beginTransaction();
+			final BaseFragment newFragment = node.generateFragment();
+
+			getActivity().runOnUiThread(new Runnable() {
+				@Override public void run() {
+					if (firstPart) {
+						transaction.replace(_fragment1.getId(), newFragment);
+						_fragment1 = newFragment;
+					} else {
+						transaction.replace(_fragment2.getId(), newFragment);
+						_fragment2 = newFragment;
+					}
+
+					transaction.commitNowAllowingStateLoss();
+				}
+			});
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override

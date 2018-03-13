@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import SplitNavigation from './SplitNavigation';
 import { mapChild } from '../../utils/NavigationUtils';
 
 export const AXIS = {
@@ -52,6 +53,8 @@ export const SplitNode = {
 			}
 		},
 		reduceScreens: (data, viewMap, pageMap) => {
+			const navigatorID = data.screenID;
+			const navigatorName = navigatorID.split("/").pop();
 			return [data.node1, data.node2].reduce((map, node) => {
 				const viewData = viewMap[node.type];
 				if (viewData) {
@@ -59,16 +62,26 @@ export const SplitNode = {
 						const { screenID, screen } = view;
 						const SplitScreen = () => {
 							return class extends Component {
+								split;
+
+								componentWillMount() {
+									this.split = new SplitNavigation(screenID, navigatorID, this.props.navigation);
+								}
+
 								render() {
 									const Screen = screen;
-									return <Screen {...this.props} />
+									return <Screen {...{
+										[navigatorName]: this.split,
+										split: this.split,
+									}} {...this.props} />
 								}
 							}
 						};
-						const Split = SplitScreen();
+
+						const split = SplitScreen();
 						return ({
 							screenID,
-							screen: Split,
+							screen: split,
 						})
 					});
 					return [

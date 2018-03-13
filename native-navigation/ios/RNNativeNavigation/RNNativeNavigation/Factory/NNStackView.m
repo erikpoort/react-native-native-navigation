@@ -83,9 +83,10 @@ NSString *const kPop = @"pop";
 
 - (void)callMethodWithName:(NSString *)methodName arguments:(NSDictionary *)arguments callback:(RCTResponseSenderBlock)callback
 {
-    NSMutableDictionary *methodDictionary = @{}.mutableCopy;
-    methodDictionary[kPush] = [NSValue valueWithPointer:@selector(push:callback:)];
-    methodDictionary[kPop] = [NSValue valueWithPointer:@selector(pop:callback:)];
+    NSDictionary *methodDictionary = @{
+        kPush : [NSValue valueWithPointer:@selector(push:callback:)],
+        kPop : [NSValue valueWithPointer:@selector(pop:callback:)],
+    };
 
     SEL thisSelector = [methodDictionary[methodName] pointerValue];
     [self performSelector:thisSelector withObject:arguments withObject:callback];
@@ -94,11 +95,10 @@ NSString *const kPop = @"pop";
 - (void)push:(NSDictionary *)arguments callback:(RCTResponseSenderBlock)callback
 {
     UIViewController<NNView> *rootController = (UIViewController<NNView> *)[UIApplication sharedApplication].keyWindow.rootViewController;
-    NNSingleNode *nodeObject = [NNNodeHelper.sharedInstance nodeFromMap:arguments[@"screen"] bridge:arguments[@"bridge"]];
-    NNStackNode *stackNode = self.node;
-    NSMutableArray *stack = stackNode.stack.mutableCopy;
+    id<NNNode> nodeObject = [NNNodeHelper.sharedInstance nodeFromMap:arguments[@"screen"] bridge:arguments[@"bridge"]];
+    NSMutableArray *stack = self.stackNode.stack.mutableCopy;
     [stack addObject:nodeObject];
-    stackNode.stack = stack;
+    self.stackNode.stack = stack;
 
     NSDictionary *newState = rootController.node.data;
     [RNNNState sharedInstance].state = newState;

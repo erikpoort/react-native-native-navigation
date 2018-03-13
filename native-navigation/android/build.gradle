@@ -1,12 +1,3 @@
-buildscript {
-    repositories {
-        jcenter()
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:2.3.3'
-    }
-}
-
 apply plugin: 'com.android.library'
 
 android {
@@ -19,8 +10,16 @@ android {
         versionCode 1
         versionName "0.0.1"
     }
+    buildTypes {
+        release {
+            minifyEnabled false
+        }
+        debug {
+            minifyEnabled false
+        }
+    }
     lintOptions {
-        abortOnError false
+        abortOnError true
     }
 }
 

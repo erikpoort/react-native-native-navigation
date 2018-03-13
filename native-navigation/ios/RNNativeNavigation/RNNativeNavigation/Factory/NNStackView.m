@@ -108,9 +108,15 @@ NSString *const kPop = @"pop";
     dispatch_async(dispatch_get_main_queue(), ^{
         __strong typeof(weakSelf) self = weakSelf;
         UIViewController *viewController = [nodeObject generate];
-        if (viewController) {
-            [self pushViewController:viewController animated:YES];
+
+        NSArray *viewControllers;
+        if ([arguments[@"arguments"][@"reset"] boolValue]) {
+            viewControllers = @[ viewController ];
+        } else {
+            viewControllers = [self.viewControllers arrayByAddingObject:viewController];
         }
+
+        [self setViewControllers:viewControllers animated:YES];
     });
 }
 

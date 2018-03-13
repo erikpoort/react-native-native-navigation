@@ -9,8 +9,8 @@ export default class StackNavigation extends BaseNavigation {
 		ReactNativeNativeNavigation.handleBackButton(callback);
 	};
 
-	push = (showScreen) => {
-		return super.addScreens(this.screenID, ReactNativeNativeNavigation.push, showScreen, null);
+	push = (showScreen, reset = false) => {
+		return super.addScreens(this.screenID, ReactNativeNativeNavigation.push, showScreen, { reset });
 	};
 
 	pop = () => {

@@ -10,6 +10,7 @@ import {
 import Home from './pages/Home';
 import Menu from './pages/Menu';
 import Detail from './pages/Detail'
+import Detail2 from './pages/Detail2'
 import Loading from './pages/Loading';
 
 import { Provider } from 'react-redux';
@@ -29,7 +30,11 @@ export default class example extends Component {
 
 		navigation.start(
 			<SplitView id='split' axis={SplitView.AXIS.VERTICAL}>
-				<SingleView id='menu' screen={Menu}/>
+				<StackView id="stack">
+					<SingleView id='detail' screen={Detail}/>
+					<SingleView id='detail' screen={Detail2}/>
+					<SingleView id='menu' screen={Menu}/>
+				</StackView>
 				<SingleView id='detail' screen={Detail}/>
 			</SplitView>
 		);

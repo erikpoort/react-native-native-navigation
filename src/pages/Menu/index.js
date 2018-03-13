@@ -8,7 +8,7 @@ import { SingleView, StackView } from "../../../native-navigation/src/index";
 export default class Menu extends Component {
 	static pageMap = [Detail];
 	handleMenuItem = (view) => {
-		this.props.split.replace('second', view)
+		this.props.stack.push(view)
 	};
 
 	render() {

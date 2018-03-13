@@ -28,17 +28,10 @@ export default class example extends Component {
 		);
 
 		navigation.start(
-			<DrawerView
-				id='drawer'
-				left={
-					<SplitView id='split' axis={SplitView.AXIS.VERTICAL}>
-						<SingleView id='menu' screen={Menu}/>
-						<StackView id='stack'>
-							<SingleView id='detail' screen={Detail}/>
-						</StackView>
-					</SplitView>
-				}
-				center={<ExampleView id='menu' screen={Menu}/>}/>
+			<SplitView id='split' axis={SplitView.AXIS.VERTICAL}>
+				<SingleView id='menu' screen={Menu}/>
+				<SingleView id='detail' screen={Detail}/>
+			</SplitView>
 		);
 	}
 

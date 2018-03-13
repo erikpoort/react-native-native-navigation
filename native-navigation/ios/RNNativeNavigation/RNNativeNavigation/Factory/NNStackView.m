@@ -124,10 +124,9 @@ NSString *const kPopTo = @"popTo";
 - (void)pop:(NSDictionary *)arguments callback:(RCTResponseSenderBlock)callback
 {
     UIViewController<NNView> *rootController = (UIViewController<NNView> *)[UIApplication sharedApplication].keyWindow.rootViewController;
-    NNStackNode *stackNode = self.node;
-    NSMutableArray *stack = stackNode.stack.mutableCopy;
+    NSMutableArray *stack = self.stackNode.stack.mutableCopy;
     [stack removeLastObject];
-    stackNode.stack = stack;
+    self.stackNode.stack = stack;
 
     NSDictionary *newState = rootController.node.data;
     [RNNNState sharedInstance].state = newState;
@@ -149,22 +148,21 @@ NSString *const kPopTo = @"popTo";
         return;
     }
 
-    UINavigationController *navigationController = foundController.navigationController;
-    if (!navigationController) {
-        return;
-    }
-
-    NSUInteger index = [navigationController.viewControllers indexOfObject:foundController];
+    NSUInteger index = [self.viewControllers indexOfObject:foundController];
     if (index == NSNotFound) {
         return;
     }
 
-    NSArray *viewControllers = [navigationController.viewControllers subarrayWithRange:NSMakeRange(0, index + 1)];
+    NSRange range = NSMakeRange(0, index + 1);
+    self.stackNode.stack = [self.stackNode.stack subarrayWithRange:range];
+
+    NSDictionary *newState = rootController.node.data;
+    [RNNNState sharedInstance].state = newState;
 
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
         __strong typeof(weakSelf) self = weakSelf;
-        [self setViewControllers:viewControllers animated:YES];
+        [self popToViewController:foundController animated:YES];
     });
 }
 

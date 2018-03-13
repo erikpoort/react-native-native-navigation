@@ -20,4 +20,8 @@ export default class StackNavigation extends BaseNavigation {
 	popTo = (path) => {
 		return ReactNativeNativeNavigation.callMethodOnNode(this.navigatorID, ReactNativeNativeNavigation.popTo, { path }, () => {})
 	};
+
+	popToRoot = () => {
+		return ReactNativeNativeNavigation.callMethodOnNode(this.navigatorID, ReactNativeNativeNavigation.popToRoot, null, () => {})
+	};
 }

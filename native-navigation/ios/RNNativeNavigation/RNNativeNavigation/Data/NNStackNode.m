@@ -61,7 +61,8 @@ static NSString *const kStackKey = @"stack";
     return @{
         kPush : kPush,
         kPop : kPop,
-        kPopTo : kPopTo
+        kPopTo : kPopTo,
+        kPopToRoot : kPopToRoot
     };
 }
 

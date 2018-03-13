@@ -8,6 +8,7 @@
 FOUNDATION_EXPORT NSString *const kPush;
 FOUNDATION_EXPORT NSString *const kPop;
 FOUNDATION_EXPORT NSString *const kPopTo;
+FOUNDATION_EXPORT NSString *const kPopToRoot;
 
 @class NNStackNode;
 

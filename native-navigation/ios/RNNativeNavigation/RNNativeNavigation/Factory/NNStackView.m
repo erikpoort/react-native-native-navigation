@@ -10,6 +10,7 @@
 NSString *const kPush = @"push";
 NSString *const kPop = @"pop";
 NSString *const kPopTo = @"popTo";
+NSString *const kPopToRoot = @"popToRoot";
 
 
 @interface NNStackView () <UINavigationControllerDelegate>
@@ -87,6 +88,7 @@ NSString *const kPopTo = @"popTo";
         kPush : [NSValue valueWithPointer:@selector(push:callback:)],
         kPop : [NSValue valueWithPointer:@selector(pop:callback:)],
         kPopTo : [NSValue valueWithPointer:@selector(popTo:callback:)],
+        kPopToRoot : [NSValue valueWithPointer:@selector(popToRoot:callback:)],
     };
 
     SEL thisSelector = [methodDictionary[methodName] pointerValue];
@@ -163,6 +165,21 @@ NSString *const kPopTo = @"popTo";
     dispatch_async(dispatch_get_main_queue(), ^{
         __strong typeof(weakSelf) self = weakSelf;
         [self popToViewController:foundController animated:YES];
+    });
+}
+
+- (void)popToRoot:(NSDictionary *)arguments callback:(RCTResponseSenderBlock)callback
+{
+    UIViewController<NNView> *rootController = (UIViewController<NNView> *)[UIApplication sharedApplication].keyWindow.rootViewController;
+
+    self.stackNode.stack = @[ self.stackNode.stack.firstObject ];
+    NSDictionary *newState = rootController.node.data;
+    [RNNNState sharedInstance].state = newState;
+
+    __weak typeof(self) weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        __strong typeof(weakSelf) self = weakSelf;
+        [self popToRootViewControllerAnimated:YES];
     });
 }
 

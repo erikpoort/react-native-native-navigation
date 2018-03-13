@@ -6,13 +6,24 @@ import com.mediamonks.rnnativenavigation.factory.BaseFragment;
 import com.mediamonks.rnnativenavigation.factory.NodeHelper;
 import com.mediamonks.rnnativenavigation.factory.SplitFragment;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Created by erik on 15/09/2017.
  * example 2017
  */
 
 public class SplitNode extends BaseNode {
+	public static final String REPLACE = "replace";
+
 	public static String JS_NAME = "SplitView";
+
+	public static Map<String, Object> getConstants() {
+		Map<String, Object> map = new HashMap<>();
+		map.put(REPLACE, REPLACE);
+		return map;
+	}
 
 	private static final String NODE1 = "node1";
 	private static final String NODE2 = "node2";
@@ -64,8 +75,16 @@ public class SplitNode extends BaseNode {
 		return _node1;
 	}
 
+	public void setNode1(Node node1) {
+		_node1 = node1;
+	}
+
 	public Node getNode2() {
 		return _node2;
+	}
+
+	public void setNode2(Node node2) {
+		_node2 = node2;
 	}
 
 	public int getAxis() {

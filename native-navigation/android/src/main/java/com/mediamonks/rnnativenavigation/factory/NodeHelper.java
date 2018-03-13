@@ -39,7 +39,7 @@ public class NodeHelper {
 //        _constants.add(TabNode.getConstants());
 
 		_nodes.put(SplitNode.JS_NAME, SplitNode.class);
-//        _constants.add(SplitNode.getConstants());
+        _constants.putAll(SplitNode.getConstants());
 
 		_nodes.put(DrawerNode.JS_NAME, DrawerNode.class);
 		_constants.putAll(DrawerNode.getConstants());

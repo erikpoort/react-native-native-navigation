@@ -88,7 +88,9 @@ NSString *const kShowModal = @"showModal";
     [RNNNState sharedInstance].state = newState;
     callback(@[ newState ]);
 
+    __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
+        __strong typeof(weakSelf) self = weakSelf;
         UIViewController *viewController = [nodeObject generate];
         if (viewController) {
             [self presentViewController:viewController animated:YES completion:nil];

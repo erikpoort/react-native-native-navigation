@@ -75,7 +75,9 @@ RCT_EXPORT_METHOD(
     : (RCTPromiseRejectBlock)reject)
 {
     // @formatter:on
+    __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
+        __strong typeof(weakSelf) self = weakSelf;
         [RNNNState sharedInstance].state = map;
 
         NNStackNode *nodeObject = [NNNodeHelper.sharedInstance nodeFromMap:map bridge:self.bridge];

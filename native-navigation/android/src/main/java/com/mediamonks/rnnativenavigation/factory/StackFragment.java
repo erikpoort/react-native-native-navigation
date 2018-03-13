@@ -102,24 +102,37 @@ public class StackFragment extends BaseFragment<StackNode> implements Navigatabl
 		}
 	}
 
-	private void handlePushCall(final ReadableMap arguments, RNNNFragment rootFragment, final Callback callback) {
+	private void handlePushCall(final ReadableMap arguments, final RNNNFragment rootFragment, final Callback callback) {
+		final Node node;
 		try {
-			final Node node = NodeHelper.getInstance().nodeFromMap(arguments.getMap("screen"), getNode().getInstanceManager());
-
-			Stack<Node> stack = getNode().getStack();
-			stack.add(node);
-
-			callback.invoke(Arguments.makeNativeMap(rootFragment.getNode().getData().toHashMap()));
-
-			getActivity().runOnUiThread(new Runnable() {
-				@Override
-				public void run() {
-					StackFragment.this.pushNode(node, FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-				}
-			});
+			node = NodeHelper.getInstance().nodeFromMap(arguments.getMap("screen"), getNode().getInstanceManager());
 		} catch (Exception e) {
 			e.printStackTrace();
+			return;
 		}
+
+		final boolean reset = arguments.getMap("arguments").getBoolean("reset");
+
+		Stack<Node> stack = getNode().getStack();
+		if (reset) {
+			stack.removeAllElements();
+		}
+		stack.add(node);
+
+		callback.invoke(Arguments.makeNativeMap(rootFragment.getNode().getData().toHashMap()));
+
+		getActivity().runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				if (reset) {
+					while (getNode().getStack().size() > 1) {
+						removeNode(getNode().getStack().pop(), FragmentTransaction.TRANSIT_NONE);
+					}
+				}
+
+				StackFragment.this.pushNode(node, FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+			}
+		});
 	}
 
 	private void handlePopCall(RNNNFragment rootFragment, final Callback callback) {

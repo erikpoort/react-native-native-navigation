@@ -73,6 +73,10 @@ public class NodeHelper {
 		_nodes.putAll(externalNodes);
 	}
 
+	public void addExternalConstants(Map<String, Object> externalConstants) {
+		_constants.putAll(externalConstants);
+	}
+
 	public Map<String, Object> getConstants() {
 		return _constants;
 	}

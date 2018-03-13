@@ -99,6 +99,10 @@ public class StackFragment extends BaseFragment<StackNode> implements Navigatabl
 				this.handlePopCall(rootFragment, callback);
 				break;
 			}
+			case StackNode.POP_TO_ROOT: {
+				this.handlePopToRootCall(arguments, rootFragment, callback);
+				break;
+			}
 		}
 	}
 
@@ -142,6 +146,24 @@ public class StackFragment extends BaseFragment<StackNode> implements Navigatabl
 				public void run() {
 					if (getNode().getStack().size() > 1) {
 						popNode(getNode().getStack().peek(), FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
+					}
+				}
+			});
+
+			callback.invoke(Arguments.makeNativeMap(rootFragment.getNode().getData().toHashMap()));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void handlePopToRootCall(ReadableMap arguments, RNNNFragment rootFragment, final Callback callback) {
+		try {
+			getActivity().runOnUiThread(new Runnable() {
+				@Override
+				public void run() {
+					popNode(getNode().getStack().peek(), FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
+					while (getNode().getStack().size() > 1) {
+						popNode(getNode().getStack().peek(), FragmentTransaction.TRANSIT_NONE);
 					}
 				}
 			});

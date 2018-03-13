@@ -15,8 +15,6 @@ static NSString *const kAxisKey = @"axis";
 @interface NNSplitNode ()
 
 @property (nonatomic, strong) RCTBridge *bridge;
-@property (nonatomic, strong) id<NNNode> node1;
-@property (nonatomic, strong) id<NNNode> node2;
 @property (nonatomic, assign) UILayoutConstraintAxis axis;
 
 @end
@@ -55,6 +53,13 @@ static NSString *const kAxisKey = @"axis";
 - (NSString *)title
 {
     return self.node1.title;
+}
+
++ (NSDictionary<NSString *, id> *)constantsToExport
+{
+    return @{
+        kReplace : kReplace,
+    };
 }
 
 @end

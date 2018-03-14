@@ -46,7 +46,7 @@ public class RNNativeNavigationModule extends ReactContextBaseJavaModule impleme
 	private Set<RNNNFragment> _fragments;
 	private final FragmentManager.FragmentLifecycleCallbacks _lifecycleCallbacks;
 
-	RNNativeNavigationModule(ReactApplicationContext reactContext, Map<String, Class<? extends Node>> externalNodes) {
+	public RNNativeNavigationModule(ReactApplicationContext reactContext, Map<String, Class<? extends Node>> externalNodes) {
 		super(reactContext);
 
 		_fragments = new HashSet<>();

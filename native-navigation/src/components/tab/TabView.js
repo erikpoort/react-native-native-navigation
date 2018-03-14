@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { mapChild } from '../../utils/NavigationUtils';
+import TabNavigation from './TabNavigation'
 
 class TabView {};
 
@@ -58,6 +59,8 @@ export const TabNode = {
 			};
 		},
 		reduceScreens: (data, viewMap, pageMap) => {
+			const navigatorID = data.screenID;
+			const navigatorName = navigatorID.split("/").pop();
 			return data.tabs.reduce((map, node) => {
 				const viewData = viewMap[node.type];
 				if (viewData) {
@@ -65,9 +68,18 @@ export const TabNode = {
 						const { screenID, screen } = view;
 						const TabScreen = () => {
 							return class extends Component {
+								tabs;
+
+								componentWillMount() {
+									this.tabs = new TabNavigation(screenID, navigatorID, this.props.navigation);
+								}
+
 								render() {
 									const Screen = screen;
-									return <Screen {...this.props} />
+									return <Screen {...{
+										[navigatorName]: this.tabs,
+										tabs: this.tabs
+									}} {...this.props} />
 								}
 							}
 						};

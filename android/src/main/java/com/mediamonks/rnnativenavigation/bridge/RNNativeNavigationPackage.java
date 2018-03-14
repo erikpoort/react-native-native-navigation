@@ -8,6 +8,7 @@ import com.mediamonks.rnnativenavigation.data.Node;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -18,6 +19,10 @@ import java.util.Map;
 
 public class RNNativeNavigationPackage implements ReactPackage {
 	private final Map<String, Class<? extends Node>> _externalNodes;
+
+	public RNNativeNavigationPackage() {
+		_externalNodes = new HashMap<>();
+	}
 
 	public RNNativeNavigationPackage(Map<String, Class<? extends Node>> externalNodes) {
 		_externalNodes = externalNodes;

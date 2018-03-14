@@ -6,8 +6,10 @@
 #import "NNNode.h"
 #import "NNTabNode.h"
 #import "RNNNState.h"
+#import "NNNodeHelper.h"
 
 NSString *const kOpenTab = @"openTab";
+NSString *const kInsertTab = @"insertTab";
 NSString *const kRemoveTab = @"removeTab";
 
 
@@ -131,6 +133,7 @@ NSString *const kRemoveTab = @"removeTab";
 {
     NSDictionary *methodDictionary = @{
         kOpenTab : [NSValue valueWithPointer:@selector(openTab:callback:)],
+        kInsertTab : [NSValue valueWithPointer:@selector(insertTab:callback:)],
         kRemoveTab : [NSValue valueWithPointer:@selector(removeTab:callback:)],
     };
 
@@ -152,6 +155,38 @@ NSString *const kRemoveTab = @"removeTab";
         __strong typeof(weakSelf) self = weakSelf;
         UITabBarItem *item = self.tabBar.items[index];
         [self showTabBarViewControllerForItem:item];
+    });
+}
+
+- (void)insertTab:(NSDictionary *)arguments callback:(RCTResponseSenderBlock)callback
+{
+    NSUInteger index = [arguments[@"arguments"][@"index"] unsignedIntegerValue];
+    BOOL animated = [arguments[@"arguments"][@"animated"] boolValue];
+
+    UIViewController<NNView> *rootController = (UIViewController<NNView> *)[UIApplication sharedApplication].keyWindow.rootViewController;
+    id<NNNode> nodeObject = [NNNodeHelper.sharedInstance nodeFromMap:arguments[@"screen"] bridge:arguments[@"bridge"]];
+    NSMutableArray *tabs = self.tabNode.tabs.mutableCopy;
+    [tabs insertObject:nodeObject atIndex:index];
+    self.tabNode.tabs = tabs;
+
+    NSDictionary *newState = rootController.node.data;
+    [RNNNState sharedInstance].state = newState;
+    callback(@[ newState ]);
+
+    __weak typeof(self) weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        __strong typeof(weakSelf) self = weakSelf;
+
+        UIViewController *viewController = [nodeObject generate];
+        UITabBarItem *tabBarItem = [[UITabBarItem alloc] initWithTitle:viewController.title image:nil tag:index];
+
+        NSMutableArray *viewControllers = self.viewControllers.mutableCopy;
+        [viewControllers insertObject:viewController atIndex:index];
+        self.viewControllers = viewControllers.copy;
+
+        NSMutableArray *items = self.tabBar.items.mutableCopy;
+        [items insertObject:tabBarItem atIndex:index];
+        [self.tabBar setItems:items.copy animated:animated];
     });
 }
 

@@ -13,7 +13,6 @@ static NSString *const kSelectedTabKey = @"selectedTab";
 @interface NNTabNode ()
 
 @property (nonatomic, strong) RCTBridge *bridge;
-@property (nonatomic, copy) NSArray<id<NNNode>> *tabs;
 
 @end
 
@@ -64,6 +63,7 @@ static NSString *const kSelectedTabKey = @"selectedTab";
 {
     return @{
         kOpenTab : kOpenTab,
+        kInsertTab : kInsertTab,
         kRemoveTab : kRemoveTab,
     };
 }

@@ -28,6 +28,10 @@ class Detail extends Component {
 						true
 					)}
 				/>
+				<Button
+					title="Tab 1"
+					onPress={() => this.props.tabs.openTab(0)}
+				/>
 			</View>
 		);
 	}

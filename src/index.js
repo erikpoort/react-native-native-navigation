@@ -29,14 +29,11 @@ export default class example extends Component {
 		);
 
 		navigation.start(
-			<SplitView id='split' axis={SplitView.AXIS.VERTICAL}>
-				<StackView id="stack">
-					<SingleView id='detail' screen={Detail}/>
-					<SingleView id='detail' screen={Detail2}/>
-					<SingleView id='menu' screen={Menu}/>
-				</StackView>
+			<TabView id='split'>
+				<SingleView id='menu' screen={Menu}/>
 				<SingleView id='detail' screen={Detail}/>
-			</SplitView>
+				<SingleView id='detail2' screen={Detail2}/>
+			</TabView>
 		);
 	}
 

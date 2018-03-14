@@ -5,6 +5,9 @@
 #import "NNTabView.h"
 #import "NNNode.h"
 #import "NNTabNode.h"
+#import "RNNNState.h"
+
+NSString *const kOpenTab = @"openTab";
 
 
 @interface NNTabView () <UITabBarDelegate>
@@ -121,6 +124,33 @@
     }
 
     return nil;
+}
+
+- (void)callMethodWithName:(NSString *)methodName arguments:(NSDictionary *)arguments callback:(RCTResponseSenderBlock)callback
+{
+    NSDictionary *methodDictionary = @{
+        kOpenTab : [NSValue valueWithPointer:@selector(openTab:callback:)],
+    };
+
+    SEL thisSelector = [methodDictionary[methodName] pointerValue];
+    [self performSelector:thisSelector withObject:arguments withObject:callback];
+}
+
+- (void)openTab:(NSDictionary *)arguments callback:(RCTResponseSenderBlock)callback
+{
+    UIViewController<NNView> *rootController = (UIViewController<NNView> *)[UIApplication sharedApplication].keyWindow.rootViewController;
+    NSUInteger index = [arguments[@"index"] unsignedIntegerValue];
+    self.tabNode.selectedTab = index;
+
+    NSDictionary *newState = rootController.node.data;
+    [RNNNState sharedInstance].state = newState;
+
+    __weak typeof(self) weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        __strong typeof(weakSelf) self = weakSelf;
+        UITabBarItem *item = self.tabBar.items[index];
+        [self showTabBarViewControllerForItem:item];
+    });
 }
 
 #pragma mark - UITabBarDelegate

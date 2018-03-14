@@ -8,6 +8,7 @@
 #import "RNNNState.h"
 
 NSString *const kOpenTab = @"openTab";
+NSString *const kRemoveTab = @"removeTab";
 
 
 @interface NNTabView () <UITabBarDelegate>
@@ -130,6 +131,7 @@ NSString *const kOpenTab = @"openTab";
 {
     NSDictionary *methodDictionary = @{
         kOpenTab : [NSValue valueWithPointer:@selector(openTab:callback:)],
+        kRemoveTab : [NSValue valueWithPointer:@selector(removeTab:callback:)],
     };
 
     SEL thisSelector = [methodDictionary[methodName] pointerValue];
@@ -150,6 +152,32 @@ NSString *const kOpenTab = @"openTab";
         __strong typeof(weakSelf) self = weakSelf;
         UITabBarItem *item = self.tabBar.items[index];
         [self showTabBarViewControllerForItem:item];
+    });
+}
+
+- (void)removeTab:(NSDictionary *)arguments callback:(RCTResponseSenderBlock)callback
+{
+    NSUInteger index = [arguments[@"index"] unsignedIntegerValue];
+    BOOL animated = [arguments[@"animated"] boolValue];
+
+    if (index >= self.tabBar.items.count) {
+        return;
+    }
+
+    NSMutableArray *items = self.tabBar.items.mutableCopy;
+    [items removeObjectAtIndex:index];
+
+    NSMutableArray *tabs = self.tabNode.tabs.mutableCopy;
+    [tabs removeObjectAtIndex:index];
+
+    UIViewController<NNView> *rootController = (UIViewController<NNView> *)[UIApplication sharedApplication].keyWindow.rootViewController;
+    NSDictionary *newState = rootController.node.data;
+    [RNNNState sharedInstance].state = newState;
+
+    __weak typeof(self) weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        __strong typeof(weakSelf) self = weakSelf;
+        [self.tabBar setItems:items.copy animated:animated];
     });
 }
 

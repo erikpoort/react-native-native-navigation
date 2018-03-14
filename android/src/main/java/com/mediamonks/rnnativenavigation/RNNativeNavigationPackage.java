@@ -1,4 +1,4 @@
-package com.mediamonks.rnnativenavigation.bridge;
+package com.mediamonks.rnnativenavigation;
 
 import com.facebook.react.ReactPackage;
 import com.facebook.react.bridge.NativeModule;

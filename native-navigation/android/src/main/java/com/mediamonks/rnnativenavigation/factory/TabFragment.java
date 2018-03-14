@@ -14,6 +14,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import com.facebook.react.bridge.Callback;
+import com.facebook.react.bridge.ReadableMap;
 import com.mediamonks.rnnativenavigation.data.Node;
 import com.mediamonks.rnnativenavigation.data.TabNode;
 
@@ -24,7 +26,7 @@ import java.util.List;
  * RNNativeNavigation 2017
  */
 
-public class TabFragment extends BaseFragment<TabNode> implements BottomNavigationView.OnNavigationItemSelectedListener {
+public class TabFragment extends BaseFragment<TabNode> implements BottomNavigationView.OnNavigationItemSelectedListener, Navigatable {
 	private ViewPager _viewPager;
 	private TabPagerAdapter _adapter;
 	private ViewPager.SimpleOnPageChangeListener _onPageChangeListener;
@@ -134,6 +136,23 @@ public class TabFragment extends BaseFragment<TabNode> implements BottomNavigati
 		super.onDestroy();
 
 		_adapter = null;
+	}
+
+	@Override public void callMethodWithName(String name, ReadableMap arguments, RNNNFragment rootFragment, Callback callback) {
+		switch (name) {
+			case TabNode.OPEN_TAB: {
+				this.handleOpenTabCall(arguments);
+				break;
+			}
+		}
+	}
+
+	private void handleOpenTabCall(final ReadableMap arguments) {
+		getActivity().runOnUiThread(new Runnable() {
+			@Override public void run() {
+				_viewPager.setCurrentItem(arguments.getInt("index"));
+			}
+		});
 	}
 
 	@Override

@@ -10,7 +10,9 @@ import com.mediamonks.rnnativenavigation.factory.NodeHelper;
 import com.mediamonks.rnnativenavigation.factory.TabFragment;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by erik on 10/08/2017.
@@ -18,7 +20,15 @@ import java.util.List;
  */
 
 public class TabNode extends BaseNode {
+	public static final String OPEN_TAB = "openTab";
+
 	public static String JS_NAME = "TabView";
+
+	public static Map<String, Object> getConstants() {
+		Map<String, Object> map = new HashMap<>();
+		map.put(OPEN_TAB, OPEN_TAB);
+		return map;
+	}
 
 	private static final String TABS = "tabs";
 	private static final String SELECTED_TAB = "selectedTab";

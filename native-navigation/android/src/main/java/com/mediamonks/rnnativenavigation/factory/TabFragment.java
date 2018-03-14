@@ -157,9 +157,12 @@ public class TabFragment extends BaseFragment<TabNode> implements BottomNavigati
 	}
 
 	private void handleOpenTabCall(final ReadableMap arguments) {
+		final int index = arguments.getInt("index");
+		getNode().setSelectedTab(index);
+
 		getActivity().runOnUiThread(new Runnable() {
 			@Override public void run() {
-				_viewPager.setCurrentItem(arguments.getInt("index"));
+				_viewPager.setCurrentItem(index);
 			}
 		});
 	}

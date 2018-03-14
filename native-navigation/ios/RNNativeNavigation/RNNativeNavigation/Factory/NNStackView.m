@@ -132,7 +132,6 @@ NSString *const kPopToRoot = @"popToRoot";
 
     NSDictionary *newState = rootController.node.data;
     [RNNNState sharedInstance].state = newState;
-    callback(@[ newState ]);
 
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{

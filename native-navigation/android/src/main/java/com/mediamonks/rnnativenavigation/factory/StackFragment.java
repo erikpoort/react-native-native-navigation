@@ -144,20 +144,14 @@ public class StackFragment extends BaseFragment<StackNode> implements Navigatabl
 	}
 
 	private void handlePopCall(RNNNFragment rootFragment, final Callback callback) {
-		try {
-			getActivity().runOnUiThread(new Runnable() {
-				@Override
-				public void run() {
-					if (getNode().getStack().size() > 1) {
-						popNode(getNode().getStack().peek(), FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
-					}
+		getActivity().runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				if (getNode().getStack().size() > 1) {
+					popNode(getNode().getStack().peek(), FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
 				}
-			});
-
-			callback.invoke(Arguments.makeNativeMap(rootFragment.getNode().getData().toHashMap()));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+			}
+		});
 	}
 
 	private void handlePopToCall(ReadableMap arguments, RNNNFragment rootFragment, final Callback callback) {
@@ -193,21 +187,15 @@ public class StackFragment extends BaseFragment<StackNode> implements Navigatabl
 	}
 
 	private void handlePopToRootCall(ReadableMap arguments, RNNNFragment rootFragment, final Callback callback) {
-		try {
-			getActivity().runOnUiThread(new Runnable() {
-				@Override
-				public void run() {
-					popNode(getNode().getStack().peek(), FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
-					while (getNode().getStack().size() > 1) {
-						popNode(getNode().getStack().peek(), FragmentTransaction.TRANSIT_NONE);
-					}
+		getActivity().runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				popNode(getNode().getStack().peek(), FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
+				while (getNode().getStack().size() > 1) {
+					popNode(getNode().getStack().peek(), FragmentTransaction.TRANSIT_NONE);
 				}
-			});
-
-			callback.invoke(Arguments.makeNativeMap(rootFragment.getNode().getData().toHashMap()));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+			}
+		});
 	}
 
 	private void showPeek(int transition) {

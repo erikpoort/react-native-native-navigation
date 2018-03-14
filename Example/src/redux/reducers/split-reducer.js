@@ -1,4 +1,4 @@
-import SplitView from '../../../native-navigation/src/components/split/SplitView';
+import SplitView from '../../../node_modules/react-native-native-navigation/src/components/split/SplitView';
 import { TOGGLE } from '../actions/split-actions';
 
 const initialState = {

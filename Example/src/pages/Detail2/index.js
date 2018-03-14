@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Button, Text, View } from 'react-native';
-import { SingleView } from '../../../native-navigation/src';
+import { SingleView } from '../../../node_modules/react-native-native-navigation/src';
 
 export default class Detail2 extends Component {
 	render(){

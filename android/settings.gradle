@@ -1,5 +1,0 @@
-rootProject.name = 'example'
-include ':react-native-native-navigation'
-project(':react-native-native-navigation').projectDir = new File(rootProject.projectDir, '../native-navigation/android')
-
-include ':app'

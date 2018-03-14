@@ -1,38 +1,37 @@
 {
-  "name": "example",
+  "name": "react-native-native-navigation",
   "version": "0.1.0",
-  "private": true,
+  "description": "ReactNative Native Navigation",
+  "files": [
+    "src",
+    "ios",
+    "android"
+  ],
+  "main": "src/index.js",
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
-    "ios": "react-native run-ios",
-    "android": "react-native run-android",
-    "test": "jest"
+    "ios": "npm run ios --prefix example",
+    "android": "npm run android --prefix example"
   },
-  "dependencies": {
-    "react": "^16.0.0-alpha.12",
-    "react-native": "0.48",
-    "react-redux": "^5.0.6",
-    "redux": "^3.7.2"
-  },
-  "devDependencies": {
-    "babel-jest": "20.0.3",
-    "babel-preset-react-native": "2.1.0",
-    "jest": "20.0.4",
-    "react-test-renderer": "16.0.0-alpha.12"
-  },
-  "jest": {
-    "preset": "react-native"
-  },
-  "main": "index.android.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/erikpoort/react-native-native-navigation.git"
   },
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "react",
+    "react-native",
+    "native",
+    "native-navigation"
+  ],
+  "author": "Erik Poort",
+  "license": "GNU General Public License v3.0",
   "bugs": {
-    "url": "https://github.com/erikpoort/react-native-native-navigation/issues"
+    "url": "https://github.com/ErikMediaMonks/react-native-native-navigation/issues"
   },
-  "homepage": "https://github.com/erikpoort/react-native-native-navigation#readme",
-  "description": ""
+  "homepage": "https://github.com/ErikMediaMonks/react-native-native-navigation#readme",
+  "dependencies": {},
+  "peerDependencies": {
+    "react": "^16.0.0-alpha.12",
+    "react-native": "0.47.1"
+  }
 }

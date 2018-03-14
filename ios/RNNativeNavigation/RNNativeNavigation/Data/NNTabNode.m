@@ -63,8 +63,6 @@ static NSString *const kSelectedTabKey = @"selectedTab";
 {
     return @{
         kOpenTab : kOpenTab,
-        kInsertTab : kInsertTab,
-        kRemoveTab : kRemoveTab,
     };
 }
 

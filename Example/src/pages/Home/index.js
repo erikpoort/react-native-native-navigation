@@ -1,5 +1,5 @@
 import React from 'react';
-import { SingleView, StackView, SplitView } from '../../../native-navigation/src/index';
+import { SingleView, StackView, SplitView } from '../../../node_modules/react-native-native-navigation/src/index';
 import Detail from '../Detail';
 
 class Home {

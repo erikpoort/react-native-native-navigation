@@ -26,8 +26,15 @@ export default class Menu extends Component {
 				<Button title="Detail 2" onPress={() => this.handleMenuItem(
 					<SingleView id="Detail2" screen={Detail2}/>
 				)}/>
+				<Button title="Add" onPress={() => {
+					this.props.tabs.insertTab(1, <SingleView id="new" screen={Detail} />, true)
+				}}/>
 				<Button title="Remove" onPress={() => {
 					this.props.tabs.removeTab(1, true)
+				}}/>
+				<Button title="Replace" onPress={() => {
+					this.props.tabs.removeTab(2, false)
+					this.props.tabs.insertTab(2, <SingleView id="new" screen={Detail} />, false)
 				}}/>
 			</View>
 		);

@@ -54,12 +54,17 @@ public class TabFragment extends BaseFragment<TabNode> implements BottomNavigati
 			return fragment;
 		}
 
+		void removeItem(int position) {
+			_fragments.removeAt(position);
+			_items.remove(position);
+		}
+
 		@Override
 		public int getCount() {
 			return _items.size();
 		}
 
-		public SparseArray<BaseFragment> getFragments() {
+		SparseArray<BaseFragment> getFragments() {
 			return _fragments;
 		}
 	}
@@ -144,6 +149,10 @@ public class TabFragment extends BaseFragment<TabNode> implements BottomNavigati
 				this.handleOpenTabCall(arguments);
 				break;
 			}
+			case TabNode.REMOVE_TAB: {
+				this.handleRemoveTabCall(arguments, rootFragment);
+				break;
+			}
 		}
 	}
 
@@ -151,6 +160,26 @@ public class TabFragment extends BaseFragment<TabNode> implements BottomNavigati
 		getActivity().runOnUiThread(new Runnable() {
 			@Override public void run() {
 				_viewPager.setCurrentItem(arguments.getInt("index"));
+			}
+		});
+	}
+
+
+	private void handleRemoveTabCall(final ReadableMap arguments, RNNNFragment rootFragment) {
+		final int index = arguments.getInt("index");
+
+		if (index >= getNode().getTabs().size()) {
+			return;
+		}
+
+		_adapter.removeItem(index);
+
+		getActivity().runOnUiThread(new Runnable() {
+			@Override public void run() {
+				_adapter.notifyDataSetChanged();
+
+				int itemId = _bottomNavigationView.getMenu().getItem(index).getItemId();
+				_bottomNavigationView.getMenu().removeItem(itemId);
 			}
 		});
 	}

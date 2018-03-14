@@ -169,6 +169,11 @@ NSString *const kRemoveTab = @"removeTab";
 
     NSMutableArray *tabs = self.tabNode.tabs.mutableCopy;
     [tabs removeObjectAtIndex:index];
+    self.tabNode.tabs = tabs.copy;
+
+    NSMutableArray *viewControllers = self.viewControllers.mutableCopy;
+    [viewControllers removeObjectAtIndex:index];
+    self.viewControllers = viewControllers.copy;
 
     UIViewController<NNView> *rootController = (UIViewController<NNView> *)[UIApplication sharedApplication].keyWindow.rootViewController;
     NSDictionary *newState = rootController.node.data;

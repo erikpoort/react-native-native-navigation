@@ -21,14 +21,12 @@ import java.util.Map;
 
 public class TabNode extends BaseNode {
 	public static final String OPEN_TAB = "openTab";
-	public static final String REMOVE_TAB = "removeTab";
 
 	public static String JS_NAME = "TabView";
 
 	public static Map<String, Object> getConstants() {
 		Map<String, Object> map = new HashMap<>();
 		map.put(OPEN_TAB, OPEN_TAB);
-		map.put(REMOVE_TAB, REMOVE_TAB);
 		return map;
 	}
 

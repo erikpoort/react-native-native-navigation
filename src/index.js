@@ -31,8 +31,8 @@ export default class example extends Component {
 		navigation.start(
 			<TabView id='split'>
 				<SingleView id='menu' screen={Menu}/>
-				<SingleView id='detail' screen={Detail}/>
-				<SingleView id='detail2' screen={Detail2}/>
+				<SingleView id={"new" + 1} screen={Detail} />
+				<SingleView id={"new" + 2} screen={Detail2} />
 			</TabView>
 		);
 	}

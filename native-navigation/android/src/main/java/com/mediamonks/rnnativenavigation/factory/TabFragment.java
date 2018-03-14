@@ -6,19 +6,21 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
-import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.ReadableMap;
 import com.mediamonks.rnnativenavigation.data.Node;
 import com.mediamonks.rnnativenavigation.data.TabNode;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -31,17 +33,22 @@ public class TabFragment extends BaseFragment<TabNode> implements BottomNavigati
 	private TabPagerAdapter _adapter;
 	private ViewPager.SimpleOnPageChangeListener _onPageChangeListener;
 	private BottomNavigationView _bottomNavigationView;
+	private List<Integer> _items;
 	private int _pagerId;
 
 	private static class TabPagerAdapter extends FragmentPagerAdapter {
 		private List<Node> _items;
-		private SparseArray<BaseFragment> _fragments;
+		private List<BaseFragment> _fragments;
 
 		TabPagerAdapter(FragmentManager fm, List<Node> items) {
 			super(fm);
 
 			this._items = items;
-			this._fragments = new SparseArray<>(items.size());
+			this._fragments = new ArrayList<>();
+			int leni = items.size();
+			for (int i = 0; i < leni; ++i) {
+				_fragments.add(null);
+			}
 		}
 
 		@Override
@@ -49,22 +56,18 @@ public class TabFragment extends BaseFragment<TabNode> implements BottomNavigati
 			BaseFragment fragment = _fragments.get(position);
 			if (fragment == null) {
 				fragment = _items.get(position).generateFragment();
-				_fragments.put(position, fragment);
+				_fragments.remove(position);
+				_fragments.add(position, fragment);
 			}
 			return fragment;
 		}
-
-		void removeItem(int position) {
-			_fragments.removeAt(position);
-			_items.remove(position);
-		}
-
+		
 		@Override
 		public int getCount() {
 			return _items.size();
 		}
 
-		SparseArray<BaseFragment> getFragments() {
+		List<BaseFragment> getFragments() {
 			return _fragments;
 		}
 	}
@@ -95,10 +98,13 @@ public class TabFragment extends BaseFragment<TabNode> implements BottomNavigati
 		_bottomNavigationView = new BottomNavigationView(getContext());
 		_bottomNavigationView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
+		_items = new ArrayList<>();
 		for (Node node : getNode().getTabs()) {
 			String title = node.getTitle();
-			int i = getNode().getTabs().indexOf(node);
-			_bottomNavigationView.getMenu().add(0, i, i, title);
+			int index = getNode().getTabs().indexOf(node);
+			int itemId = View.generateViewId();
+			_bottomNavigationView.getMenu().add(0, itemId, index, title);
+			_items.add(itemId);
 		}
 
 		linearLayout.addView(_bottomNavigationView);
@@ -118,7 +124,8 @@ public class TabFragment extends BaseFragment<TabNode> implements BottomNavigati
 			public void onPageSelected(int position) {
 				super.onPageSelected(position);
 				getNode().setSelectedTab(position);
-				_bottomNavigationView.setSelectedItemId(position);
+				int itemId = _bottomNavigationView.getMenu().getItem(position).getItemId();
+				_bottomNavigationView.setSelectedItemId(itemId);
 			}
 		};
 		_viewPager.addOnPageChangeListener(_onPageChangeListener);
@@ -149,10 +156,6 @@ public class TabFragment extends BaseFragment<TabNode> implements BottomNavigati
 				this.handleOpenTabCall(arguments);
 				break;
 			}
-			case TabNode.REMOVE_TAB: {
-				this.handleRemoveTabCall(arguments, rootFragment);
-				break;
-			}
 		}
 	}
 
@@ -167,29 +170,10 @@ public class TabFragment extends BaseFragment<TabNode> implements BottomNavigati
 		});
 	}
 
-
-	private void handleRemoveTabCall(final ReadableMap arguments, RNNNFragment rootFragment) {
-		final int index = arguments.getInt("index");
-
-		if (index >= getNode().getTabs().size()) {
-			return;
-		}
-
-		_adapter.removeItem(index);
-
-		getActivity().runOnUiThread(new Runnable() {
-			@Override public void run() {
-				_adapter.notifyDataSetChanged();
-
-				int itemId = _bottomNavigationView.getMenu().getItem(index).getItemId();
-				_bottomNavigationView.getMenu().removeItem(itemId);
-			}
-		});
-	}
-
 	@Override
 	public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-		_viewPager.setCurrentItem(item.getItemId(), true);
+		int index = _items.indexOf(item.getItemId());
+		_viewPager.setCurrentItem(index, true);
 		return true;
 	}
 

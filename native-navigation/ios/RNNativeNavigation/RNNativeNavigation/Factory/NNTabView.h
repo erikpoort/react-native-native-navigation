@@ -6,8 +6,6 @@
 #import "NNView.h"
 
 FOUNDATION_EXPORT NSString *const kOpenTab;
-FOUNDATION_EXPORT NSString *const kInsertTab;
-FOUNDATION_EXPORT NSString *const kRemoveTab;
 
 @class NNTabNode;
 

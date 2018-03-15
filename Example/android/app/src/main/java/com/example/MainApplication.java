@@ -7,7 +7,7 @@ import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
-import com.mediamonks.rnnativenavigation.bridge.RNNativeNavigationPackage;
+import com.mediamonks.rnnativenavigation.RNNativeNavigationPackage;
 import com.mediamonks.rnnativenavigation.data.Node;
 
 import java.util.Arrays;
@@ -28,8 +28,8 @@ public class MainApplication extends Application implements ReactApplication {
             hashMap.put(ExampleNode.JS_NAME, ExampleNode.class);
 
             return Arrays.asList(
-                    new RNNativeNavigationPackage(hashMap),
-                    new MainReactPackage()
+                    new MainReactPackage(),
+                    new RNNativeNavigationPackage(hashMap)
             );
         }
 

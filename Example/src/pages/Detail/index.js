@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Button, Text, View } from 'react-native';
 import { changeAxis } from '../../redux/actions/split-actions';
-import { SplitView, SingleView } from '../../../node_modules/react-native-native-navigation/src/index';
+import { SplitView, SingleView } from 'react-native-native-navigation';
 import Detail2 from '../Detail2/index';
 
 class Detail extends Component {

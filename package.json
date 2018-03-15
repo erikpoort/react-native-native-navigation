@@ -26,7 +26,7 @@
   "homepage": "https://github.com/ErikMediaMonks/react-native-native-navigation#readme",
   "dependencies": {},
   "peerDependencies": {
-    "react": "^16.0.0-alpha.12",
-    "react-native": "0.47.1"
+    "react": "^16.3.0-alpha.1",
+    "react-native": "0.54.2"
   }
 }

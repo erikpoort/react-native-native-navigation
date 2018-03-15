@@ -8,11 +8,6 @@
     "android"
   ],
   "main": "src/index.js",
-  "scripts": {
-    "start": "node node_modules/react-native/local-cli/cli.js start",
-    "ios": "npm run ios --prefix example",
-    "android": "npm run android --prefix example"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/erikpoort/react-native-native-navigation.git"

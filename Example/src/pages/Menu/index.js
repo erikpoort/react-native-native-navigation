@@ -3,7 +3,7 @@ import { Button, View, Text } from 'react-native';
 import Detail from '../Detail';
 import Home from "../Home";
 import Detail2 from "../Detail2";
-import { SingleView, StackView } from "../../../node_modules/react-native-native-navigation/src/index";
+import { SingleView, StackView } from "react-native-native-navigation";
 
 export default class Menu extends Component {
 	static pageMap = [Detail];

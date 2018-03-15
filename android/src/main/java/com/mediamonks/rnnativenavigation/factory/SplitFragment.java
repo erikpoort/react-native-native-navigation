@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -100,7 +99,7 @@ public class SplitFragment extends BaseFragment<SplitNode> implements Navigatabl
 				getNode().setNode2(node);
 			}
 
-			callback.invoke(Arguments.makeNativeMap(rootFragment.getNode().getData().toHashMap()));
+			callback.invoke(Arguments.makeNativeMap(rootFragment.getNode().getData()));
 
 			FragmentManager fragmentManager = getChildFragmentManager();
 			final FragmentTransaction transaction = fragmentManager.beginTransaction();

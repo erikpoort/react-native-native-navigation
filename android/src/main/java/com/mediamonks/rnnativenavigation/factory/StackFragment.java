@@ -127,7 +127,7 @@ public class StackFragment extends BaseFragment<StackNode> implements Navigatabl
 		}
 		stack.add(node);
 
-		callback.invoke(Arguments.makeNativeMap(rootFragment.getNode().getData().toHashMap()));
+		callback.invoke(Arguments.makeNativeMap(rootFragment.getNode().getData()));
 
 		getActivity().runOnUiThread(new Runnable() {
 			@Override

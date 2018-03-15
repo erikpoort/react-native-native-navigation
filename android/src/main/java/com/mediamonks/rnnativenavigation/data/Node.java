@@ -2,8 +2,9 @@ package com.mediamonks.rnnativenavigation.data;
 
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.bridge.ReadableMap;
-import com.facebook.react.bridge.WritableMap;
 import com.mediamonks.rnnativenavigation.factory.BaseFragment;
+
+import java.util.HashMap;
 
 /**
  * Created by erik on 09/08/2017.
@@ -15,7 +16,7 @@ public interface Node {
 
 	void setData(ReadableMap map);
 
-	WritableMap getData();
+	HashMap<String, Object> getData();
 
 	void setShown(boolean shown);
 

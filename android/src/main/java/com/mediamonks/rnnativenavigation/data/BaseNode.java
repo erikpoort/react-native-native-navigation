@@ -2,8 +2,8 @@ package com.mediamonks.rnnativenavigation.data;
 
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.bridge.ReadableMap;
-import com.facebook.react.bridge.WritableMap;
-import com.facebook.react.bridge.WritableNativeMap;
+
+import java.util.HashMap;
 
 /**
  * Created by erik on 05/09/2017.
@@ -34,10 +34,10 @@ public abstract class BaseNode implements Node {
 		_type = map.getString(TYPE);
 	}
 
-	public WritableMap getData() {
-		WritableNativeMap data = new WritableNativeMap();
-		data.putString(SCREEN_ID, _screenID);
-		data.putString(TYPE, _type);
+	public HashMap<String, Object> getData() {
+		HashMap<String, Object> data = new HashMap<>();
+		data.put(SCREEN_ID, _screenID);
+		data.put(TYPE, _type);
 		return data;
 	}
 

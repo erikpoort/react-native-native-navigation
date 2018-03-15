@@ -155,7 +155,7 @@ public class DrawerFragment extends BaseFragment<DrawerNode> implements Navigata
 					}
 				}
 
-				callback.invoke(Arguments.makeNativeMap(rootFragment.getNode().getData().toHashMap()));
+				callback.invoke(Arguments.makeNativeMap(rootFragment.getNode().getData()));
 
 				FragmentManager fragmentManager = getChildFragmentManager();
 				final FragmentTransaction transaction = fragmentManager.beginTransaction();

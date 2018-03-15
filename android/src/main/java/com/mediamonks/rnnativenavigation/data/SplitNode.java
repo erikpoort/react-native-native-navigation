@@ -1,7 +1,6 @@
 package com.mediamonks.rnnativenavigation.data;
 
 import com.facebook.react.bridge.ReadableMap;
-import com.facebook.react.bridge.WritableMap;
 import com.mediamonks.rnnativenavigation.factory.BaseFragment;
 import com.mediamonks.rnnativenavigation.factory.NodeHelper;
 import com.mediamonks.rnnativenavigation.factory.SplitFragment;
@@ -58,11 +57,11 @@ public class SplitNode extends BaseNode {
 	}
 
 	@Override
-	public WritableMap getData() {
-		WritableMap map = super.getData();
-		map.putMap(NODE1, _node1.getData());
-		map.putMap(NODE2, _node2.getData());
-		map.putString(AXIS, _axis == 1 ? VERTICAL : HORIZONTAL);
+	public HashMap<String, Object> getData() {
+		HashMap<String, Object> map = super.getData();
+		map.put(NODE1, _node1.getData());
+		map.put(NODE2, _node2.getData());
+		map.put(AXIS, _axis == 1 ? VERTICAL : HORIZONTAL);
 		return map;
 	}
 

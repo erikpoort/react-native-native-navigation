@@ -2,13 +2,11 @@ package com.mediamonks.rnnativenavigation.data;
 
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
-import com.facebook.react.bridge.WritableArray;
-import com.facebook.react.bridge.WritableMap;
-import com.facebook.react.bridge.WritableNativeArray;
 import com.mediamonks.rnnativenavigation.factory.BaseFragment;
 import com.mediamonks.rnnativenavigation.factory.NodeHelper;
 import com.mediamonks.rnnativenavigation.factory.StackFragment;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
@@ -67,13 +65,13 @@ public class StackNode extends BaseNode {
 	}
 
 	@Override
-	public WritableMap getData() {
-		WritableMap map = super.getData();
-		WritableArray stack = new WritableNativeArray();
+	public HashMap<String, Object> getData() {
+		HashMap<String, Object> map = super.getData();
+		ArrayList<HashMap<String, Object>> stack = new ArrayList<>();
 		for (Node node : _stack) {
-			stack.pushMap(node.getData());
+			stack.add(node.getData());
 		}
-		map.putArray(STACK, stack);
+		map.put(STACK, stack);
 		return map;
 	}
 

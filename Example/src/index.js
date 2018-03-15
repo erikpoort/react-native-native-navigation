@@ -6,7 +6,7 @@ import {
 	SplitView,
 	StackView,
 	TabView
-} from '../node_modules/react-native-native-navigation';
+} from 'react-native-native-navigation';
 import Home from './pages/Home';
 import Menu from './pages/Menu';
 import Detail from './pages/Detail'

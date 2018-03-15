@@ -1,5 +1,5 @@
 import React from 'react';
-import { SingleNode } from '../../node_modules/react-native-native-navigation/src/components/single/SingleView';
+import { SingleNode } from 'react-native-native-navigation';
 
 class ExampleView {}
 

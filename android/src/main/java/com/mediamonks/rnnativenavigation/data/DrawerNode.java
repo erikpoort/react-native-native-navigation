@@ -3,7 +3,6 @@ package com.mediamonks.rnnativenavigation.data;
 import android.view.Gravity;
 
 import com.facebook.react.bridge.ReadableMap;
-import com.facebook.react.bridge.WritableMap;
 import com.mediamonks.rnnativenavigation.factory.BaseFragment;
 import com.mediamonks.rnnativenavigation.factory.DrawerFragment;
 import com.mediamonks.rnnativenavigation.factory.NodeHelper;
@@ -79,26 +78,26 @@ public class DrawerNode extends BaseNode {
 	}
 
 	@Override
-	public WritableMap getData() {
-		WritableMap map = super.getData();
+	public HashMap<String, Object> getData() {
+		HashMap<String, Object> map = super.getData();
 
 		if (_leftNode != null) {
-			map.putMap(LEFT, _leftNode.getData());
+			map.put(LEFT, _leftNode.getData());
 		}
 		if (_centerNode != null) {
-			map.putMap(CENTER, _centerNode.getData());
+			map.put(CENTER, _centerNode.getData());
 		}
 		if (_rightNode != null) {
-			map.putMap(RIGHT, _rightNode.getData());
+			map.put(RIGHT, _rightNode.getData());
 		}
 
 		String[] sides = new String[]{LEFT, CENTER, RIGHT};
 		Integer[] gravities = new Integer[]{Gravity.START, Gravity.NO_GRAVITY, Gravity.END};
 		int index = Arrays.asList(gravities).indexOf(_side);
 		if (index >= 0) {
-			map.putString(SIDE, sides[index]);
+			map.put(SIDE, sides[index]);
 		} else {
-			map.putString(SIDE, CENTER);
+			map.put(SIDE, CENTER);
 		}
 		return map;
 	}

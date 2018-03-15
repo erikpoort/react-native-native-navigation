@@ -1,7 +1,6 @@
 package com.mediamonks.rnnativenavigation.data;
 
 import com.facebook.react.bridge.ReadableMap;
-import com.facebook.react.bridge.WritableMap;
 import com.mediamonks.rnnativenavigation.factory.BaseFragment;
 import com.mediamonks.rnnativenavigation.factory.NodeHelper;
 import com.mediamonks.rnnativenavigation.factory.SingleFragment;
@@ -53,11 +52,11 @@ public class SingleNode extends BaseNode {
 	}
 
 	@Override
-	public WritableMap getData() {
-		WritableMap data = super.getData();
-		data.putString(NAME, _title);
+	public HashMap<String, Object> getData() {
+		HashMap<String, Object> data = super.getData();
+		data.put(NAME, _title);
 		if (_modal != null) {
-			data.putMap(MODAL, _modal.getData());
+			data.put(MODAL, _modal.getData());
 		}
 		return data;
 	}

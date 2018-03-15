@@ -113,7 +113,7 @@ public class SingleFragment extends BaseFragment<SingleNode> implements Navigata
 
 			this.getNode().setModal(node);
 
-			callback.invoke(Arguments.makeNativeMap(rootFragment.getNode().getData().toHashMap()));
+			callback.invoke(Arguments.makeNativeMap(rootFragment.getNode().getData()));
 
 			getActivity().runOnUiThread(new Runnable() {
 				@Override

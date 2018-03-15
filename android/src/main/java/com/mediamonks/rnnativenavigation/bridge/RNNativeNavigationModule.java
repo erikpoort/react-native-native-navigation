@@ -18,7 +18,6 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableMap;
-import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.devsupport.interfaces.DevOptionHandler;
 import com.mediamonks.rnnativenavigation.data.Node;
 import com.mediamonks.rnnativenavigation.factory.BaseFragment;
@@ -85,8 +84,7 @@ public class RNNativeNavigationModule extends ReactContextBaseJavaModule impleme
 			RNNNFragment anyFragment = (RNNNFragment) _fragments.toArray()[0];
 			final RNNNFragment rootFragment = getRootFragment(anyFragment.getNode());
 			if (rootFragment != null) {
-				WritableMap currentState = rootFragment.getNode().getData();
-				RNNNState.INSTANCE.state = currentState.toHashMap();
+				RNNNState.INSTANCE.state = rootFragment.getNode().getData();
 
 				assert getCurrentActivity() != null;
 				getCurrentActivity().runOnUiThread(new Runnable() {

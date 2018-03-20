@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { processColor } from 'react-native';
 import {
 	Navigation,
 	DrawerView,
@@ -29,11 +30,11 @@ export default class example extends Component {
 		);
 
 		navigation.start(
-			<TabView id='split'>
-				<SingleView id='menu' screen={Menu}/>
-				<SingleView id={"new" + 1} screen={Detail} />
-				<SingleView id={"new" + 2} screen={Detail2} />
-			</TabView>
+			<StackView id='split'>
+				<SingleView id='menu' screen={Menu} style={{
+					barBackground: processColor('#f00'),
+				}} />
+			</StackView>
 		);
 	}
 

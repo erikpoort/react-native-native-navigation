@@ -3,6 +3,7 @@
 //
 
 #import <React/RCTRootView.h>
+#import <React/RCTConvert.h>
 #import "NNSingleView.h"
 #import "NNSingleNode.h"
 #import "NNNodeHelper.h"
@@ -39,14 +40,58 @@ NSString *const kShowModal = @"showModal";
 - (void)loadView
 {
     self.view = [[RCTRootView alloc] initWithBridge:self.bridge moduleName:self.node.screenID initialProperties:nil];
+    self.edgesForExtendedLayout = UIRectEdgeNone;
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+
+    [self setColors:self.singleNode.style];
+}
+
+- (void)willMoveToParentViewController:(nullable UIViewController *)parent
+{
+    [super willMoveToParentViewController:parent];
+
+    if (parent == nil) {
+        NSArray *controllers = self.navigationController.viewControllers.copy;
+        NSUInteger index = [controllers indexOfObject:self];
+        UIViewController *controller;
+        if (index != NSNotFound) {
+            controller = controllers[index - 1];
+        } else {
+            controller = controllers.lastObject;
+        }
+
+        if ([controller isKindOfClass:[NNSingleView class]]) {
+            NNSingleView *singleView = (NNSingleView *)controller;
+            [self setColors:singleView.singleNode.style];
+        }
+    }
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
-    [super viewWillAppear:animated];
+    [super viewDidAppear:animated];
+
+    [self setColors:self.singleNode.style];
 
     if (self.singleNode.modal) {
         [self presentViewController:[self.singleNode.modal generate] animated:NO completion:nil];
+    }
+}
+
+- (void)setColors:(NSDictionary *)style
+{
+    NSString *barTintColorString = style[@"barTint"];
+    if (barTintColorString) {
+        self.navigationController.navigationBar.tintColor = [RCTConvert UIColor:barTintColorString];
+    }
+
+    NSString *barBackgroundColorString = style[@"barBackground"];
+    if (barBackgroundColorString) {
+        self.navigationController.navigationBar.barTintColor = [RCTConvert UIColor:barBackgroundColorString];
     }
 }
 

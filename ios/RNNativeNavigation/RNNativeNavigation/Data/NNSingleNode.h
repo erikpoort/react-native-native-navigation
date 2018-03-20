@@ -8,5 +8,6 @@
 @interface NNSingleNode : NNBaseNode <NNNode>
 
 @property (nonatomic, strong) id<NNNode> modal;
+@property (nonatomic, strong) NSDictionary<NSString *, id> *style;
 
 @end

@@ -26,7 +26,6 @@ NSString *const kPopToRoot = @"popToRoot";
 {
     if (self = [super init]) {
         self.stackNode = node;
-        self.navigationBar.translucent = NO;
         NSMutableArray *viewControllers = [@[] mutableCopy];
         [node.stack enumerateObjectsUsingBlock:^(id<NNNode> view, NSUInteger idx, BOOL *stop) {
             UIViewController<NNView> *viewController = [view generate];
@@ -107,19 +106,19 @@ NSString *const kPopToRoot = @"popToRoot";
     [RNNNState sharedInstance].state = newState;
     callback(@[ newState ]);
 
+    NSDictionary *extraArguments = arguments[@"arguments"];
+
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
         __strong typeof(weakSelf) self = weakSelf;
         UIViewController *viewController = [nodeObject generate];
 
-        NSArray *viewControllers;
-        if ([arguments[@"arguments"][@"reset"] boolValue]) {
-            viewControllers = @[ viewController ];
+        if ([extraArguments[@"reset"] boolValue]) {
+            NSArray *viewControllers = @[ viewController ];
+            [self setViewControllers:viewControllers animated:YES];
         } else {
-            viewControllers = [self.viewControllers arrayByAddingObject:viewController];
+            [self pushViewController:viewController animated:YES];
         }
-
-        [self setViewControllers:viewControllers animated:YES];
     });
 }
 

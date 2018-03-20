@@ -9,6 +9,7 @@
 
 static NSString *const kName = @"name";
 static NSString *const kModal = @"modal";
+static NSString *const kStyle = @"style";
 
 
 @interface NNSingleNode ()
@@ -36,12 +37,14 @@ static NSString *const kModal = @"modal";
     [super setData:data];
     self.title = data[kName];
     self.modal = [NNNodeHelper.sharedInstance nodeFromMap:data[kModal] bridge:self.bridge];
+    self.style = data[kStyle];
 }
 
 - (NSDictionary *)data
 {
     NSMutableDictionary *data = [super data].mutableCopy;
     data[kName] = self.title;
+    data[kStyle] = self.style;
     if (self.modal) {
         data[kModal] = self.modal.data;
     }

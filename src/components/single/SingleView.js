@@ -12,7 +12,7 @@ export const SingleNode = {
 				return null;
 			}
 
-			const { id, screen, modal } = dom.props;
+			const { id, screen, modal, style } = dom.props;
 
 			if (id == null) {
 				console.error("RNNN", "An id prop is mandatory");
@@ -37,6 +37,7 @@ export const SingleNode = {
 				name,
 				type,
 				screenID,
+				style,
 				modal: modalData,
 			};
 		},

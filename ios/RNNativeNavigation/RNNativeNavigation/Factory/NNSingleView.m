@@ -40,7 +40,6 @@ NSString *const kShowModal = @"showModal";
 - (void)loadView
 {
     self.view = [[RCTRootView alloc] initWithBridge:self.bridge moduleName:self.node.screenID initialProperties:nil];
-    self.edgesForExtendedLayout = UIRectEdgeNone;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -89,9 +88,19 @@ NSString *const kShowModal = @"showModal";
         self.navigationController.navigationBar.tintColor = [RCTConvert UIColor:barTintColorString];
     }
 
-    NSString *barBackgroundColorString = style[@"barBackground"];
-    if (barBackgroundColorString) {
-        self.navigationController.navigationBar.barTintColor = [RCTConvert UIColor:barBackgroundColorString];
+    BOOL barTransparent = [style[@"barTransparent"] boolValue];
+
+    if (barTransparent) {
+        self.navigationController.navigationBar.translucent = barTransparent;
+        self.navigationController.navigationBar.shadowImage = [[UIImage alloc] init];
+        [self.navigationController.navigationBar setBackgroundImage:[[UIImage alloc] init] forBarMetrics:UIBarMetricsDefault];
+        self.edgesForExtendedLayout = UIRectEdgeAll;
+    } else {
+        NSString *barBackgroundColorString = style[@"barBackground"];
+        if (barBackgroundColorString) {
+            self.navigationController.navigationBar.barTintColor = [RCTConvert UIColor:barBackgroundColorString];
+        }
+        self.edgesForExtendedLayout = UIRectEdgeNone;
     }
 }
 

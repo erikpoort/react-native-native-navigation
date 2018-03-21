@@ -28,9 +28,6 @@ NSString *const kReplace = @"replace";
     if (self = [super init]) {
         self.splitNode = node;
 
-        self.title = node.title;
-
-
         NSMutableArray *axes = @[ @"H", @"V" ].mutableCopy;
         NSString *baseAxis = axes[self.splitNode.axis];
         [axes removeObjectAtIndex:self.splitNode.axis];

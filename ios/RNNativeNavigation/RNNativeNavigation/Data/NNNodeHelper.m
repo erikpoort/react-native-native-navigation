@@ -45,7 +45,7 @@ static NSString *const kJSViewName = @"type";
     return self;
 }
 
-- (void)addExternalNodes:(NSArray<NNBaseNode *> *)nodes
+- (void)addExternalNodes:(NSArray<Class<NNNode>> *)nodes
 {
     _externalNodes = [_externalNodes arrayByAddingObjectsFromArray:nodes];
 }

@@ -30,7 +30,6 @@ NSString *const kOpenView = @"openView";
                           leftDrawerViewController:leftController
                          rightDrawerViewController:rightController]) {
         self.drawerNode = drawerNode;
-        self.title = node.title;
         self.openDrawerGestureModeMask = MMOpenDrawerGestureModeAll;
         self.closeDrawerGestureModeMask = MMCloseDrawerGestureModeAll;
 
@@ -145,7 +144,7 @@ NSString *const kOpenView = @"openView";
         if ([side isEqualToString:CENTER]) return NNDrawerSideCenter;
         if ([side isEqualToString:RIGHT]) return NNDrawerSideRight;
     }
-    return nil;
+    return NNDrawerSideCenter;
 }
 
 

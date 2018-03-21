@@ -50,11 +50,6 @@ static NSString *const kAxisKey = @"axis";
     return data.copy;
 }
 
-- (NSString *)title
-{
-    return self.node1.title;
-}
-
 + (NSDictionary<NSString *, id> *)constantsToExport
 {
     return @{

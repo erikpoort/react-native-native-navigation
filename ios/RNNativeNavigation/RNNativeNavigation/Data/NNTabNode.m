@@ -54,11 +54,6 @@ static NSString *const kSelectedTabKey = @"selectedTab";
     return data.copy;
 }
 
-- (NSString *)title
-{
-    return self.tabs.firstObject.title;
-}
-
 + (NSDictionary<NSString *, id> *)constantsToExport
 {
     return @{

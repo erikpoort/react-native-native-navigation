@@ -27,7 +27,6 @@ NSString *const kOpenTab = @"openTab";
     if (self = [super init]) {
         self.tabNode = node;
 
-        self.title = node.title;
         self.view.backgroundColor = [UIColor whiteColor];
 
         NSMutableArray *viewControllers = [@[] mutableCopy];
@@ -35,7 +34,7 @@ NSString *const kOpenTab = @"openTab";
         [node.tabs enumerateObjectsUsingBlock:^(id<NNNode> view, NSUInteger idx, BOOL *stop) {
             UIViewController *viewController = [view generate];
             [viewControllers addObject:viewController];
-            UITabBarItem *tabBarItem = [[UITabBarItem alloc] initWithTitle:viewController.title image:nil tag:idx];
+            UITabBarItem *tabBarItem = [[UITabBarItem alloc] initWithTitle:@"todo" image:nil tag:idx];
             [items addObject:tabBarItem];
         }];
         self.viewControllers = [viewControllers copy];

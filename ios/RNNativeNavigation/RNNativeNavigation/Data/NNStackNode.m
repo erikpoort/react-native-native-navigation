@@ -51,11 +51,6 @@ static NSString *const kStackKey = @"stack";
     return data.copy;
 }
 
-- (NSString *)title
-{
-    return self.stack.lastObject.title;
-}
-
 + (NSDictionary<NSString *, id> *)constantsToExport
 {
     return @{

@@ -24,7 +24,6 @@
     if (self = [super init]) {
         self.exampleNode = node;
         self.bridge = bridge;
-        self.title = node.title;
     }
 
     return self;

@@ -17,8 +17,6 @@
 
 - (NSDictionary *)data;
 
-- (NSString *)title;
-
 - (NSString *)screenID;
 
 - (UIViewController<NNView> *)generate;

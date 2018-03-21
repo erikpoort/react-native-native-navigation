@@ -56,11 +56,6 @@
     return data.copy;
 }
 
-- (NSString *)title
-{
-    return self.centerNode.title;
-}
-
 + (NSDictionary<NSString *, id> *)constantsToExport
 {
     return @{

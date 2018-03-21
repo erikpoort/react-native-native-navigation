@@ -48,12 +48,6 @@ NSString *const kType = @"type";
     NSAssert(NO, @"%@ should be overridden", NSStringFromSelector(_cmd));
 }
 
-- (NSString *)title
-{
-    NSAssert(NO, @"%@ should be overridden", NSStringFromSelector(_cmd));
-    return nil;
-}
-
 - (UIViewController<NNView> *)generate
 {
     NSAssert(NO, @"%@ should be overridden", NSStringFromSelector(_cmd));

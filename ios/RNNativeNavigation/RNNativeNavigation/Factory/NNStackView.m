@@ -40,11 +40,6 @@ NSString *const kPopToRoot = @"popToRoot";
     return self;
 }
 
-- (NSString *)title
-{
-    return self.viewControllers.firstObject.title;
-}
-
 - (__kindof id<NNNode>)node
 {
     return self.stackNode;

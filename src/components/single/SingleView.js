@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import SingleNavigation from './SingleNavigation';
-import { mapChild } from '../../utils/NavigationUtils';
+import { mapChild, pageName } from '../../utils/NavigationUtils';
 
 class SingleView {}
 
@@ -27,14 +27,14 @@ export const SingleNode = {
 			}
 
 			const type = dom.type.name;
-			const name = screen.name;
+			const page = pageName(screen);
 
 			let modalData = null;
 			if (modal) {
 				modalData = mapChild(viewMap, modal, `${screenID}/modal`);
 			}
 			return {
-				name,
+				page,
 				type,
 				screenID,
 				modal: modalData,
@@ -60,7 +60,7 @@ export const SingleNode = {
 					}
 				}
 			};
-			const screen = SingleScreen(pageMap[data.name]);
+			const screen = SingleScreen(pageMap[data.page]);
 
 			let modal = [];
 			if (data.modal) {

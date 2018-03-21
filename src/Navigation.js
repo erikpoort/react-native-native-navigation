@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactNativeNativeNavigation from './ReactNativeNativeNavigation';
-import { generatePageList, mapChild, registerScreens } from './utils/NavigationUtils';
+import { generatePageList, mapChild, registerScreens, pageName } from './utils/NavigationUtils';
 import { SingleNode } from './components/single/SingleView';
 import { StackNode } from './components/stack/StackView';
 import { TabNode } from './components/tab/TabView';
@@ -33,7 +33,7 @@ class Navigation {
 		).reduce((map, page) => {
 			return {
 				...map,
-				[page.name]: page,
+				[pageName(page)]: page,
 			}
 		}, {});
 

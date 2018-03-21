@@ -23,7 +23,7 @@ export default class example extends Component {
 
 		this.home = new Home();
 		const navigation = new Navigation(
-			[Home, Menu, Detail],
+			[Menu, Detail],
 			[ExampleNode],
 			Provider, store
 		);

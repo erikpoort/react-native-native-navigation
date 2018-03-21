@@ -57,3 +57,19 @@ export const mapChild = (viewMap, dom, path) => {
 	const node = getNode(viewMap, dom);
 	return node.mapToDictionary(viewMap, dom, path);
 };
+
+export const pageName = (page) => {
+	const displayName = page.displayName;
+	if (displayName) {
+		const fromIndex = displayName.lastIndexOf("(") + 1;
+		const toIndex = displayName.indexOf(")");
+		if (toIndex > fromIndex) {
+			return displayName.substring(fromIndex, toIndex);
+		} else {
+			return displayName;
+		}
+	} else {
+		console.error('RNNN', 'Page should be a Component or HOC should implement displayName');
+		return null;
+	}
+};

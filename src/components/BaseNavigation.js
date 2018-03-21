@@ -13,7 +13,7 @@ export default class BaseNavigation {
 		this.screenID = screenID;
 	}
 
-	addScreens(newPath, presentMethod, showScreen, extraArguments){
+	addScreens(newPath, presentMethod, showScreen, extraArguments) {
 		const viewMap = this.navigation.viewMap;
 		const args = {
 			screen: mapChild(viewMap, showScreen, newPath),

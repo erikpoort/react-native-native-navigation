@@ -9,12 +9,15 @@
 
 static NSString *const kPage = @"page";
 static NSString *const kModal = @"modal";
+static NSString *const kStyle = @"style";
 
 
 @interface NNSingleNode ()
 
 @property (nonatomic, strong) RCTBridge *bridge;
 @property (nonatomic, copy) NSString *page;
+@property (nonatomic, copy) NSDictionary<NSString *, id> *style;
+
 
 @end
 
@@ -36,12 +39,14 @@ static NSString *const kModal = @"modal";
     [super setData:data];
     self.page = data[kPage];
     self.modal = [NNNodeHelper.sharedInstance nodeFromMap:data[kModal] bridge:self.bridge];
+    self.style = data[kStyle];
 }
 
 - (NSDictionary *)data
 {
     NSMutableDictionary *data = [super data].mutableCopy;
     data[kPage] = self.page;
+    data[kStyle] = self.style;
     if (self.modal) {
         data[kModal] = self.modal.data;
     }

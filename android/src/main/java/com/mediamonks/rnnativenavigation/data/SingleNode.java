@@ -26,9 +26,11 @@ public class SingleNode extends BaseNode {
 
 	private static final String PAGE = "page";
 	private static final String MODAL = "modal";
+	private static final String STYLE = "style";
 
-	private String _title;
+	private String _page;
 	private Node _modal;
+	private HashMap <String, Object> _style;
 
 	@Override
 	public BaseFragment<SingleNode> generateFragment() {
@@ -40,7 +42,8 @@ public class SingleNode extends BaseNode {
 	@Override
 	public void setData(ReadableMap map) {
 		super.setData(map);
-		_title = map.getString(PAGE);
+		_page = map.getString(PAGE);
+		_style = map.getMap(STYLE).toHashMap();
 
 		if (map.hasKey(MODAL)) {
 			try {
@@ -54,7 +57,8 @@ public class SingleNode extends BaseNode {
 	@Override
 	public HashMap<String, Object> getData() {
 		HashMap<String, Object> data = super.getData();
-		data.put(PAGE, _title);
+		data.put(PAGE, _page);
+		data.put(STYLE, _style);
 		if (_modal != null) {
 			data.put(MODAL, _modal.getData());
 		}
@@ -67,5 +71,9 @@ public class SingleNode extends BaseNode {
 
 	public Node getModal() {
 		return _modal;
+	}
+
+	public HashMap<String, Object> getStyle() {
+		return _style;
 	}
 }

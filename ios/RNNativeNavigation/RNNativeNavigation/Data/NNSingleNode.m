@@ -7,12 +7,14 @@
 #import "NNSingleView.h"
 #import "NNNodeHelper.h"
 
+static NSString *const kPage = @"page";
 static NSString *const kModal = @"modal";
 
 
 @interface NNSingleNode ()
 
 @property (nonatomic, strong) RCTBridge *bridge;
+@property (nonatomic, copy) NSString *page;
 
 @end
 
@@ -32,12 +34,14 @@ static NSString *const kModal = @"modal";
 - (void)setData:(NSDictionary *)data
 {
     [super setData:data];
+    self.page = data[kPage];
     self.modal = [NNNodeHelper.sharedInstance nodeFromMap:data[kModal] bridge:self.bridge];
 }
 
 - (NSDictionary *)data
 {
     NSMutableDictionary *data = [super data].mutableCopy;
+    data[kPage] = self.page;
     if (self.modal) {
         data[kModal] = self.modal.data;
     }

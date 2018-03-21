@@ -102,11 +102,6 @@ public class DrawerNode extends BaseNode {
 		return map;
 	}
 
-	@Override
-	public String getTitle() {
-		return _centerNode.getTitle();
-	}
-
 	public Node getLeftNode() {
 		return _leftNode;
 	}

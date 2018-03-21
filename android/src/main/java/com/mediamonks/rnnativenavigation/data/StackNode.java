@@ -75,11 +75,6 @@ public class StackNode extends BaseNode {
 		return map;
 	}
 
-	@Override
-	public String getTitle() {
-		return _stack.firstElement().getTitle();
-	}
-
 	public Stack<Node> getStack() {
 		return _stack;
 	}

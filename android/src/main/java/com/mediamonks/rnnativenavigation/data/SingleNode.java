@@ -24,10 +24,8 @@ public class SingleNode extends BaseNode {
 		return map;
 	}
 
-	private static final String NAME = "name";
 	private static final String MODAL = "modal";
 
-	private String _title;
 	private Node _modal;
 
 	@Override
@@ -40,7 +38,6 @@ public class SingleNode extends BaseNode {
 	@Override
 	public void setData(ReadableMap map) {
 		super.setData(map);
-		_title = map.getString(NAME);
 
 		if (map.hasKey(MODAL)) {
 			try {
@@ -54,16 +51,10 @@ public class SingleNode extends BaseNode {
 	@Override
 	public HashMap<String, Object> getData() {
 		HashMap<String, Object> data = super.getData();
-		data.put(NAME, _title);
 		if (_modal != null) {
 			data.put(MODAL, _modal.getData());
 		}
 		return data;
-	}
-
-	@Override
-	public String getTitle() {
-		return _title;
 	}
 
 	public void setModal(Node modal) {

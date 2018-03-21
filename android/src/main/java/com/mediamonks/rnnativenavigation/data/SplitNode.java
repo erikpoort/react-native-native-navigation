@@ -65,11 +65,6 @@ public class SplitNode extends BaseNode {
 		return map;
 	}
 
-	@Override
-	public String getTitle() {
-		return _node1.getTitle();
-	}
-
 	public Node getNode1() {
 		return _node1;
 	}

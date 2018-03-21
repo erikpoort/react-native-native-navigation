@@ -22,8 +22,6 @@ public interface Node {
 
 	boolean isShown();
 
-	String getTitle();
-
 	String getScreenID();
 
 	BaseFragment generateFragment();

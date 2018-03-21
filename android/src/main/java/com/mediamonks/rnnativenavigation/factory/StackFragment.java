@@ -240,7 +240,7 @@ public class StackFragment extends BaseFragment<StackNode> implements Navigatabl
 	private void handleCurrentStack() {
 		int size = getNode().getStack().size();
 		_toolbar.setNavigationIcon(size > 1 ? _upIcon : null);
-		_toolbar.setTitle(getNode().getStack().peek().getTitle());
+		_toolbar.setTitle("todo");
 	}
 
 	@Override

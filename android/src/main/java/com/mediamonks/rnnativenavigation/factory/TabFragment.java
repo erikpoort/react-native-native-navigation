@@ -100,10 +100,9 @@ public class TabFragment extends BaseFragment<TabNode> implements BottomNavigati
 
 		_items = new ArrayList<>();
 		for (Node node : getNode().getTabs()) {
-			String title = node.getTitle();
 			int index = getNode().getTabs().indexOf(node);
 			int itemId = View.generateViewId();
-			_bottomNavigationView.getMenu().add(0, itemId, index, title);
+			_bottomNavigationView.getMenu().add(0, itemId, index, "todo");
 			_items.add(itemId);
 		}
 

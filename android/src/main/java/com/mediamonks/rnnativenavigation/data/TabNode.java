@@ -75,11 +75,6 @@ public class TabNode extends BaseNode {
 		return map;
 	}
 
-	@Override
-	public String getTitle() {
-		return "";
-	}
-
 	public List<Node> getTabs() {
 		return _tabs;
 	}

@@ -82,7 +82,7 @@ class Navigation {
 				/**
 				 * Register all screens to be able to render them through RN.
 				 */
-				registerScreens(this, screens, this.provider, this.store);
+				registerScreens(this, screens);
 
 				/**
 				 * Everything is prepared to render natively.

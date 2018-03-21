@@ -32,6 +32,7 @@ export default class example extends Component {
 		navigation.start(
 			<StackView id='split'>
 				<SingleView id='menu' screen={Menu} style={{
+					title: 'Menu',
 					barBackground: processColor('#f00'),
 				}} />
 			</StackView>

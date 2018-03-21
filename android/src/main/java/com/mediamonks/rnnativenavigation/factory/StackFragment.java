@@ -1,10 +1,7 @@
 package com.mediamonks.rnnativenavigation.factory;
 
-import android.animation.ArgbEvaluator;
-import android.animation.ObjectAnimator;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -15,14 +12,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
-import android.view.animation.AccelerateDecelerateInterpolator;
-import android.view.animation.AccelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.ReadableNativeMap;
 import com.mediamonks.rnnativenavigation.R;
 import com.mediamonks.rnnativenavigation.data.Node;
 import com.mediamonks.rnnativenavigation.data.SingleNode;
@@ -248,17 +244,22 @@ public class StackFragment extends BaseFragment<StackNode> implements Navigatabl
 		int size = getNode().getStack().size();
 		_toolbar.setNavigationIcon(size > 1 ? _upIcon : null);
 
-		Node showNode = getNode().getStack().peek();
-		_toolbar.setTitle("todo");
 
+		Node showNode = getNode().getStack().peek();
 		if (showNode instanceof SingleNode) {
 			SingleNode singleNode = (SingleNode) showNode;
 
-			Integer barBackgroundColor = ((Double) singleNode.getStyle().get("barBackground")).intValue();
-			_toolbar.setBackgroundColor(barBackgroundColor);
+			if (singleNode.getStyle().hasKey("title")) {
+				_toolbar.setTitle(singleNode.getStyle().getString("title"));
+			}
 
-			if (singleNode.getStyle().containsKey("barTint")) {
-				Integer tintColor = ((Double) singleNode.getStyle().get("barTint")).intValue();
+			if (singleNode.getStyle().hasKey("barBackground")) {
+				Integer barBackgroundColor = (int) singleNode.getStyle().getDouble("barBackground");
+				_toolbar.setBackgroundColor(barBackgroundColor);
+			}
+
+			if (singleNode.getStyle().hasKey("barTint")) {
+				Integer tintColor = (int) singleNode.getStyle().getDouble("barTint");
 				_upIcon.setColorFilter(tintColor, PorterDuff.Mode.SRC_ATOP);
 			}
 		}

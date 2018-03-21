@@ -27,7 +27,7 @@ NSString *const kShowModal = @"showModal";
     if (self = [super init]) {
         self.singleNode = node;
         self.bridge = bridge;
-        self.title = @"todo";
+        self.title = self.singleNode.style[@"title"] ?: @"";
     }
     return self;
 }

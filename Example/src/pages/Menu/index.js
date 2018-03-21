@@ -17,12 +17,14 @@ export default class Menu extends Component {
 				<Text>Menu</Text>
 				<Button title="Detail" onPress={() => this.handleMenuItem(
 					<SingleView id="Detail" screen={Detail} style={{
+						title: 'Detail',
 						barBackground: processColor('#ff0'),
 						barTint: processColor('#00f'),
 					}}/>
 				)}/>
 				<Button title="Detail 2" onPress={() => this.handleMenuItem(
 					<SingleView id="Detail2" screen={Detail2} style={{
+						title: 'Detail2',
 						barBackground: processColor('#f0f'),
 						barTint: processColor('#0f0'),
 					}}/>

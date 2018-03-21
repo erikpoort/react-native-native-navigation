@@ -1,6 +1,7 @@
 package com.mediamonks.rnnativenavigation.data;
 
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.ReadableNativeMap;
 import com.mediamonks.rnnativenavigation.factory.BaseFragment;
 import com.mediamonks.rnnativenavigation.factory.NodeHelper;
 import com.mediamonks.rnnativenavigation.factory.SingleFragment;
@@ -30,7 +31,7 @@ public class SingleNode extends BaseNode {
 
 	private String _page;
 	private Node _modal;
-	private HashMap <String, Object> _style;
+	private ReadableNativeMap _style;
 
 	@Override
 	public BaseFragment<SingleNode> generateFragment() {
@@ -43,7 +44,7 @@ public class SingleNode extends BaseNode {
 	public void setData(ReadableMap map) {
 		super.setData(map);
 		_page = map.getString(PAGE);
-		_style = map.getMap(STYLE).toHashMap();
+		_style = (ReadableNativeMap) map.getMap(STYLE);
 
 		if (map.hasKey(MODAL)) {
 			try {
@@ -58,7 +59,7 @@ public class SingleNode extends BaseNode {
 	public HashMap<String, Object> getData() {
 		HashMap<String, Object> data = super.getData();
 		data.put(PAGE, _page);
-		data.put(STYLE, _style);
+		data.put(STYLE, _style.toHashMap());
 		if (_modal != null) {
 			data.put(MODAL, _modal.getData());
 		}
@@ -73,7 +74,7 @@ public class SingleNode extends BaseNode {
 		return _modal;
 	}
 
-	public HashMap<String, Object> getStyle() {
+	public ReadableNativeMap getStyle() {
 		return _style;
 	}
 }

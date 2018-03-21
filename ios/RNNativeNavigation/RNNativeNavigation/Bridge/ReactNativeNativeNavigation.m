@@ -137,7 +137,7 @@ RCT_EXPORT_METHOD(
     }]];
 
     [[RCTKeyCommands sharedInstance]
-        registerKeyCommandWithInput:@"e"
+        registerKeyCommandWithInput:@"n"
                       modifierFlags:UIKeyModifierCommand
                              action:^(UIKeyCommand *command) {
                                  [weakSelf resetApplication];

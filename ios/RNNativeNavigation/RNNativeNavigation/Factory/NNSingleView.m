@@ -10,6 +10,7 @@
 #import "RNNNState.h"
 
 NSString *const kShowModal = @"showModal";
+NSString *const kChangeTitle = @"changeTitle";
 
 
 @interface NNSingleView ()
@@ -92,7 +93,7 @@ NSString *const kShowModal = @"showModal";
         UIColor *color = [RCTConvert UIColor:barTintColorString];
         self.navigationController.navigationBar.tintColor = color;
         self.navigationController.navigationBar.titleTextAttributes = @{
-            NSForegroundColorAttributeName : color,
+            NSForegroundColorAttributeName: color,
         };
     }
 
@@ -136,6 +137,7 @@ NSString *const kShowModal = @"showModal";
 {
     NSMutableDictionary *methodDictionary = @{}.mutableCopy;
     methodDictionary[kShowModal] = [NSValue valueWithPointer:@selector(showModal:callback:)];
+    methodDictionary[kChangeTitle] = [NSValue valueWithPointer:@selector(changeTitle:callback:)];
 
     SEL thisSelector = [methodDictionary[methodName] pointerValue];
     [self performSelector:thisSelector withObject:arguments withObject:callback];
@@ -147,12 +149,11 @@ NSString *const kShowModal = @"showModal";
 
     UIViewController<NNView> *rootController = (UIViewController<NNView> *) [UIApplication sharedApplication].keyWindow.rootViewController;
 
-    NNSingleNode *singleNode = self.node;
-    singleNode.modal = nodeObject;
+    self.singleNode.modal = nodeObject;
 
     NSDictionary *newState = rootController.node.data;
     [RNNNState sharedInstance].state = newState;
-    callback(@[ newState ]);
+    callback(@[newState]);
 
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -161,6 +162,21 @@ NSString *const kShowModal = @"showModal";
         if (viewController) {
             [self presentViewController:viewController animated:YES completion:nil];
         }
+    });
+}
+
+- (void)changeTitle:(NSDictionary *)arguments callback:(RCTResponseSenderBlock)callback
+{
+    NSMutableDictionary *style = self.singleNode.style.mutableCopy;
+    NSString *title = arguments[@"title"];
+    style[@"title"] = title;
+    self.singleNode.style = style.copy;
+
+    __weak typeof(self) weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        __strong typeof(weakSelf) self = weakSelf;
+        self.navigationController.navigationBar.topItem.title = title;
+        self.title = title;
     });
 }
 

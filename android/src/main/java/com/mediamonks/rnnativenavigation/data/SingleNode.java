@@ -2,6 +2,7 @@ package com.mediamonks.rnnativenavigation.data;
 
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.ReadableNativeMap;
+import com.facebook.react.bridge.WritableNativeMap;
 import com.mediamonks.rnnativenavigation.factory.BaseFragment;
 import com.mediamonks.rnnativenavigation.factory.NodeHelper;
 import com.mediamonks.rnnativenavigation.factory.SingleFragment;
@@ -16,12 +17,14 @@ import java.util.Map;
 
 public class SingleNode extends BaseNode {
 	public static final String SHOW_MODAL = "showModal";
+	public static final String CHANGE_TITLE = "changeTitle";
 
 	public static String JS_NAME = "SingleView";
 
 	public static Map<String, Object> getConstants() {
 		Map<String, Object> map = new HashMap<>();
 		map.put(SHOW_MODAL, SHOW_MODAL);
+		map.put(CHANGE_TITLE, CHANGE_TITLE);
 		return map;
 	}
 
@@ -76,5 +79,9 @@ public class SingleNode extends BaseNode {
 
 	public ReadableNativeMap getStyle() {
 		return _style;
+	}
+
+	public void setStyle(WritableNativeMap style) {
+		_style = style;
 	}
 }

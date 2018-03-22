@@ -16,8 +16,6 @@ static NSString *const kStyle = @"style";
 
 @property (nonatomic, strong) RCTBridge *bridge;
 @property (nonatomic, copy) NSString *page;
-@property (nonatomic, copy) NSDictionary<NSString *, id> *style;
-
 
 @end
 
@@ -56,7 +54,8 @@ static NSString *const kStyle = @"style";
 + (NSDictionary<NSString *, id> *)constantsToExport
 {
     return @{
-        kShowModal : kShowModal
+        kShowModal: kShowModal,
+        kChangeTitle: kChangeTitle
     };
 }
 

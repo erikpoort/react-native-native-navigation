@@ -32,6 +32,10 @@ class Detail extends Component {
 					title="Tab 1"
 					onPress={() => this.props.tabs.openTab(0)}
 				/>
+				<Button
+					title="Change title"
+					onPress={() => this.props.single.changeTitle("Changed")}
+				/>
 			</View>
 		);
 	}

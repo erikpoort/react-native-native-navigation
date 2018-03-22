@@ -118,6 +118,10 @@ public class StackFragment extends BaseFragment<StackNode> implements Navigatabl
 				this.handlePopToRootCall();
 				break;
 			}
+			case SingleNode.CHANGE_TITLE: {
+				this.handleChangeTitleCall(arguments);
+				break;
+			}
 		}
 	}
 
@@ -205,6 +209,15 @@ public class StackFragment extends BaseFragment<StackNode> implements Navigatabl
 				while (getNode().getStack().size() > 1) {
 					popNode(getNode().getStack().peek(), FragmentTransaction.TRANSIT_NONE);
 				}
+			}
+		});
+	}
+
+	private void handleChangeTitleCall(final ReadableMap arguments) {
+		getActivity().runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				_toolbar.setTitle(arguments.getString("title"));
 			}
 		});
 	}

@@ -17,6 +17,8 @@ import com.mediamonks.rnnativenavigation.data.Node;
 import com.mediamonks.rnnativenavigation.data.SingleNode;
 import com.mediamonks.rnnativenavigation.react.RNRootView;
 
+import java.util.HashMap;
+
 /**
  * Created by erik on 09/08/2017.
  * RNNativeNavigation 2017
@@ -104,6 +106,10 @@ public class SingleFragment extends BaseFragment<SingleNode> implements Navigata
 				this.handleShowModalCall(arguments, rootFragment, callback);
 				break;
 			}
+			case SingleNode.CHANGE_TITLE: {
+				this.handleChangeTitleCall(arguments);
+				break;
+			}
 		}
 	}
 
@@ -124,6 +130,15 @@ public class SingleFragment extends BaseFragment<SingleNode> implements Navigata
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	private void handleChangeTitleCall(ReadableMap arguments) {
+		HashMap <String, Object> style = getNode().getStyle().toHashMap();
+		String title = arguments.getString("title");
+		style.put("title", title);
+		getNode().setStyle(Arguments.makeNativeMap(style));
+
+		getStackFragment().callMethodWithName(SingleNode.CHANGE_TITLE, arguments, null, null);
 	}
 
 	public void showModal(Node node, boolean animated) {

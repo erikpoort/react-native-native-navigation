@@ -18,7 +18,7 @@ import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Callback;
@@ -47,26 +47,28 @@ public class StackFragment extends BaseFragment<StackNode> implements Navigatabl
 		// I'm calling generateViewId() twice, calling it once doesn't work on first load. My assumption is the initial id is later hijacked by ReactNative, making it impossible to add fragments
 		View.generateViewId();
 
-		LinearLayout linearLayout = new LinearLayout(getActivity());
-		linearLayout.setBackgroundColor(Color.WHITE);
-		linearLayout.setOrientation(LinearLayout.VERTICAL);
-		linearLayout.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+		RelativeLayout relativeLayout = new RelativeLayout(getActivity());
+		relativeLayout.setBackgroundColor(Color.WHITE);
+		relativeLayout.setLayoutParams(new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 
-		_toolbar = (Toolbar) inflater.inflate(R.layout.toolbar, linearLayout, false);
+		_holder = new FrameLayout(getActivity());
+		_holder.setId(View.generateViewId());
+
+		_toolbar = (Toolbar) inflater.inflate(R.layout.toolbar, relativeLayout, false);
+		_toolbar.setId(View.generateViewId());
 		_upIcon = _toolbar.getNavigationIcon();
 		TypedValue typedValue = new TypedValue();
 		if (getActivity().getTheme().resolveAttribute(android.R.attr.actionBarSize, typedValue, true)) {
 			_toolbarHeight = TypedValue.complexToDimensionPixelSize(typedValue.data, getResources().getDisplayMetrics());
-			_toolbar.setLayoutParams(new Toolbar.LayoutParams(LayoutParams.MATCH_PARENT, _toolbarHeight));
+			_toolbar.setLayoutParams(new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, _toolbarHeight));
 		}
-		linearLayout.addView(_toolbar);
 
-		_holder = new FrameLayout(getActivity());
+		RelativeLayout.LayoutParams holderParams = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 
-		_holder.setId(View.generateViewId());
-		linearLayout.addView(_holder, new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, 1));
+		relativeLayout.addView(_holder, holderParams);
+		relativeLayout.addView(_toolbar);
 
-		return linearLayout;
+		return relativeLayout;
 	}
 
 	@Override
@@ -284,7 +286,12 @@ public class StackFragment extends BaseFragment<StackNode> implements Navigatabl
 					_toolbar.setTitle(singleNode.getStyle().getString("title"));
 				}
 
-				if (singleNode.getStyle().hasKey("barBackground")) {
+				boolean barTransparent = false;
+				if (singleNode.getStyle().hasKey("barTransparent")) {
+					barTransparent = singleNode.getStyle().getBoolean("barTransparent");
+				}
+
+				if (singleNode.getStyle().hasKey("barBackground") && !barTransparent) {
 					Integer barBackgroundColor = (int) singleNode.getStyle().getDouble("barBackground");
 
 					ColorDrawable background = (ColorDrawable) _toolbar.getBackground();
@@ -300,6 +307,14 @@ public class StackFragment extends BaseFragment<StackNode> implements Navigatabl
 					Integer tintColor = (int) singleNode.getStyle().getDouble("barTint");
 					_upIcon.setColorFilter(tintColor, PorterDuff.Mode.SRC_ATOP);
 				}
+				RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) _holder.getLayoutParams();
+				if (barTransparent) {
+					_toolbar.setBackgroundColor(Color.TRANSPARENT);
+					params.removeRule(RelativeLayout.BELOW);
+				} else {
+					params.addRule(RelativeLayout.BELOW, _toolbar.getId());
+				}
+				_holder.setLayoutParams(params);
 			}
 		} else {
 			_toolbar.setNavigationIcon(size > 1 ? _upIcon : null);

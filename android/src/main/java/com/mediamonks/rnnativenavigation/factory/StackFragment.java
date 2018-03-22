@@ -99,15 +99,15 @@ public class StackFragment extends BaseFragment<StackNode> implements Navigatabl
 				break;
 			}
 			case StackNode.POP: {
-				this.handlePopCall(rootFragment, callback);
+				this.handlePopCall();
 				break;
 			}
 			case StackNode.POP_TO: {
-				this.handlePopToCall(arguments, rootFragment, callback);
+				this.handlePopToCall(arguments);
 				break;
 			}
 			case StackNode.POP_TO_ROOT: {
-				this.handlePopToRootCall(arguments, rootFragment, callback);
+				this.handlePopToRootCall();
 				break;
 			}
 		}
@@ -146,7 +146,7 @@ public class StackFragment extends BaseFragment<StackNode> implements Navigatabl
 		});
 	}
 
-	private void handlePopCall(RNNNFragment rootFragment, final Callback callback) {
+	private void handlePopCall() {
 		getActivity().runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
@@ -157,7 +157,7 @@ public class StackFragment extends BaseFragment<StackNode> implements Navigatabl
 		});
 	}
 
-	private void handlePopToCall(ReadableMap arguments, RNNNFragment rootFragment, final Callback callback) {
+	private void handlePopToCall(ReadableMap arguments) {
 		try {
 			Node foundNode = null;
 			for (Node node : getNode().getStack()) {
@@ -189,7 +189,7 @@ public class StackFragment extends BaseFragment<StackNode> implements Navigatabl
 		}
 	}
 
-	private void handlePopToRootCall(ReadableMap arguments, RNNNFragment rootFragment, final Callback callback) {
+	private void handlePopToRootCall() {
 		getActivity().runOnUiThread(new Runnable() {
 			@Override
 			public void run() {

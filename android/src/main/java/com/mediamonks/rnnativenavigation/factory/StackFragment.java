@@ -1,7 +1,11 @@
 package com.mediamonks.rnnativenavigation.factory;
 
+import android.animation.ArgbEvaluator;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -12,13 +16,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.ReadableMap;
-import com.facebook.react.bridge.ReadableNativeMap;
 import com.mediamonks.rnnativenavigation.R;
 import com.mediamonks.rnnativenavigation.data.Node;
 import com.mediamonks.rnnativenavigation.data.SingleNode;
@@ -34,6 +38,7 @@ import java.util.Stack;
 public class StackFragment extends BaseFragment<StackNode> implements Navigatable {
 	private FrameLayout _holder;
 	private Toolbar _toolbar;
+	private int _toolbarHeight;
 	private Drawable _upIcon;
 
 	@Nullable
@@ -51,7 +56,8 @@ public class StackFragment extends BaseFragment<StackNode> implements Navigatabl
 		_upIcon = _toolbar.getNavigationIcon();
 		TypedValue typedValue = new TypedValue();
 		if (getActivity().getTheme().resolveAttribute(android.R.attr.actionBarSize, typedValue, true)) {
-			_toolbar.setLayoutParams(new Toolbar.LayoutParams(LayoutParams.MATCH_PARENT, TypedValue.complexToDimensionPixelSize(typedValue.data, getResources().getDisplayMetrics())));
+			_toolbarHeight = TypedValue.complexToDimensionPixelSize(typedValue.data, getResources().getDisplayMetrics());
+			_toolbar.setLayoutParams(new Toolbar.LayoutParams(LayoutParams.MATCH_PARENT, _toolbarHeight));
 		}
 		linearLayout.addView(_toolbar);
 
@@ -215,7 +221,7 @@ public class StackFragment extends BaseFragment<StackNode> implements Navigatabl
 		transaction.commitNowAllowingStateLoss();
 		node.setShown(true);
 
-		handleCurrentStack();
+		handleCurrentStack(transition);
 	}
 
 	private void removeNode(Node node, int transition) {
@@ -237,31 +243,66 @@ public class StackFragment extends BaseFragment<StackNode> implements Navigatabl
 			showPeek(FragmentTransaction.TRANSIT_NONE);
 		}
 
-		handleCurrentStack();
+		handleCurrentStack(transition);
 	}
 
-	private void handleCurrentStack() {
+	private void handleCurrentStack(int transition) {
 		int size = getNode().getStack().size();
-		_toolbar.setNavigationIcon(size > 1 ? _upIcon : null);
-
 
 		Node showNode = getNode().getStack().peek();
 		if (showNode instanceof SingleNode) {
 			SingleNode singleNode = (SingleNode) showNode;
+			int duration = transition == FragmentTransaction.TRANSIT_NONE
+					? 0
+					: getResources().getInteger(android.R.integer.config_shortAnimTime);
 
-			if (singleNode.getStyle().hasKey("title")) {
-				_toolbar.setTitle(singleNode.getStyle().getString("title"));
+			boolean barHidden = false;
+			if (singleNode.getStyle().hasKey("barHidden")) {
+				barHidden = singleNode.getStyle().getBoolean("barHidden");
 			}
 
-			if (singleNode.getStyle().hasKey("barBackground")) {
-				Integer barBackgroundColor = (int) singleNode.getStyle().getDouble("barBackground");
-				_toolbar.setBackgroundColor(barBackgroundColor);
-			}
+			int fromHeight = _toolbar.getMeasuredHeight();
+			int toHeight = barHidden ? 0 : _toolbarHeight;
 
-			if (singleNode.getStyle().hasKey("barTint")) {
-				Integer tintColor = (int) singleNode.getStyle().getDouble("barTint");
-				_upIcon.setColorFilter(tintColor, PorterDuff.Mode.SRC_ATOP);
+			ValueAnimator anim = ValueAnimator.ofInt(fromHeight, toHeight);
+			anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+				@Override
+				public void onAnimationUpdate(ValueAnimator valueAnimator) {
+					int val = (Integer) valueAnimator.getAnimatedValue();
+					ViewGroup.LayoutParams layoutParams = _toolbar.getLayoutParams();
+					layoutParams.height = val;
+					_toolbar.setLayoutParams(layoutParams);
+				}
+			});
+			anim.setDuration(duration);
+			anim.start();
+
+			if (!barHidden) {
+				_toolbar.setNavigationIcon(size > 1 ? _upIcon : null);
+
+				if (singleNode.getStyle().hasKey("title")) {
+					_toolbar.setTitle(singleNode.getStyle().getString("title"));
+				}
+
+				if (singleNode.getStyle().hasKey("barBackground")) {
+					Integer barBackgroundColor = (int) singleNode.getStyle().getDouble("barBackground");
+
+					ColorDrawable background = (ColorDrawable) _toolbar.getBackground();
+					int fromColor = background.getColor();
+
+					ObjectAnimator animator = ObjectAnimator.ofObject(_toolbar, "backgroundColor", new ArgbEvaluator(), fromColor, barBackgroundColor);
+					animator.setDuration(duration);
+					animator.setInterpolator(new DecelerateInterpolator());
+					animator.start();
+				}
+
+				if (singleNode.getStyle().hasKey("barTint")) {
+					Integer tintColor = (int) singleNode.getStyle().getDouble("barTint");
+					_upIcon.setColorFilter(tintColor, PorterDuff.Mode.SRC_ATOP);
+				}
 			}
+		} else {
+			_toolbar.setNavigationIcon(size > 1 ? _upIcon : null);
 		}
 	}
 

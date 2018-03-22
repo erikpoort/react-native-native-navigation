@@ -255,26 +255,43 @@ public class StackFragment extends BaseFragment<StackNode> implements Navigatabl
 		if (showNode instanceof SingleNode) {
 			SingleNode singleNode = (SingleNode) showNode;
 
+			// Current values
 			ColorDrawable background = (ColorDrawable) _toolbar.getBackground();
 			int fromColor = background.getColor();
+			int fromHeight = _toolbar.getMeasuredHeight();
 
+			// Requested values
 			boolean barTransparent = false;
 			if (singleNode.getStyle().hasKey("barTransparent")) {
 				barTransparent = singleNode.getStyle().getBoolean("barTransparent");
 			}
 
-			int duration = transition == FragmentTransaction.TRANSIT_NONE
-					? 0
-					: getResources().getInteger(android.R.integer.config_shortAnimTime);
-
 			boolean barHidden = false;
 			if (singleNode.getStyle().hasKey("barHidden")) {
 				barHidden = singleNode.getStyle().getBoolean("barHidden");
 			}
-
-			int fromHeight = _toolbar.getMeasuredHeight();
 			int toHeight = barHidden ? 0 : _toolbarHeight;
 
+			if (singleNode.getStyle().hasKey("title")) {
+				_toolbar.setTitle(singleNode.getStyle().getString("title"));
+			}
+
+			if (singleNode.getStyle().hasKey("barTint")) {
+				Integer tintColor = (int) singleNode.getStyle().getDouble("barTint");
+				_upIcon.setColorFilter(tintColor, PorterDuff.Mode.SRC_ATOP);
+			}
+
+			Integer barBackgroundColor = Color.TRANSPARENT;
+			if (singleNode.getStyle().hasKey("barBackground") && !barTransparent) {
+				barBackgroundColor = (int) singleNode.getStyle().getDouble("barBackground");
+			}
+
+			// Config
+			int duration = transition == FragmentTransaction.TRANSIT_NONE
+					? 0
+					: getResources().getInteger(android.R.integer.config_shortAnimTime);
+
+			// Execution
 			ValueAnimator anim = ValueAnimator.ofInt(fromHeight, toHeight);
 			anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
 				@Override
@@ -291,28 +308,10 @@ public class StackFragment extends BaseFragment<StackNode> implements Navigatabl
 			if (!barHidden) {
 				_toolbar.setNavigationIcon(size > 1 ? _upIcon : null);
 
-				if (singleNode.getStyle().hasKey("title")) {
-					_toolbar.setTitle(singleNode.getStyle().getString("title"));
-				}
-
-				if (singleNode.getStyle().hasKey("barBackground") || barTransparent) {
-					Integer barBackgroundColor;
-					if (barTransparent) {
-						barBackgroundColor = Color.TRANSPARENT;
-					} else {
-						barBackgroundColor = (int) singleNode.getStyle().getDouble("barBackground");
-					}
-
-					ObjectAnimator animator = ObjectAnimator.ofObject(_toolbar, "backgroundColor", new ArgbEvaluator(), fromColor, barBackgroundColor);
-					animator.setDuration(duration);
-					animator.setInterpolator(new DecelerateInterpolator());
-					animator.start();
-				}
-
-				if (singleNode.getStyle().hasKey("barTint")) {
-					Integer tintColor = (int) singleNode.getStyle().getDouble("barTint");
-					_upIcon.setColorFilter(tintColor, PorterDuff.Mode.SRC_ATOP);
-				}
+				ObjectAnimator animator = ObjectAnimator.ofObject(_toolbar, "backgroundColor", new ArgbEvaluator(), fromColor, barBackgroundColor);
+				animator.setDuration(duration);
+				animator.setInterpolator(new DecelerateInterpolator());
+				animator.start();
 
 				RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) _holder.getLayoutParams();
 				if (barTransparent) {

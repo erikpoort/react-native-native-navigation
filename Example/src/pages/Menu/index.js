@@ -26,6 +26,7 @@ export default class Menu extends Component {
 					<SingleView id="Detail2" screen={Detail2} style={{
 						title: 'Detail2',
 						barBackground: processColor('#f0f'),
+						barTransparent: true,
 						barTint: processColor('#0f0'),
 					}}/>
 				)}/>

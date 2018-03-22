@@ -33,8 +33,9 @@ export default class example extends Component {
 			<StackView id='split'>
 				<SingleView id='menu' screen={Menu} style={{
 					title: 'Menu',
-					barTransparent: true,
-					barBackground: processColor('#ff0000ff'),
+					barHidden: true,
+					barTransparent: false,
+					barBackground: processColor('#0000ff'),
 				}} />
 			</StackView>
 		);

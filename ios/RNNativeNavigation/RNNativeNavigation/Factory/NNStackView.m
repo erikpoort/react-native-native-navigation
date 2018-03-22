@@ -6,6 +6,8 @@
 #import "NNStackNode.h"
 #import "NNNodeHelper.h"
 #import "RNNNState.h"
+#import "NNSingleView.h"
+#import "NNSingleNode.h"
 
 NSString *const kPush = @"push";
 NSString *const kPop = @"pop";
@@ -91,7 +93,7 @@ NSString *const kPopToRoot = @"popToRoot";
 
 - (void)push:(NSDictionary *)arguments callback:(RCTResponseSenderBlock)callback
 {
-    UIViewController<NNView> *rootController = (UIViewController<NNView> *)[UIApplication sharedApplication].keyWindow.rootViewController;
+    UIViewController<NNView> *rootController = (UIViewController<NNView> *) [UIApplication sharedApplication].keyWindow.rootViewController;
     id<NNNode> nodeObject = [NNNodeHelper.sharedInstance nodeFromMap:arguments[@"screen"] bridge:arguments[@"bridge"]];
     NSMutableArray *stack = self.stackNode.stack.mutableCopy;
     [stack addObject:nodeObject];
@@ -119,7 +121,7 @@ NSString *const kPopToRoot = @"popToRoot";
 
 - (void)pop:(NSDictionary *)arguments callback:(RCTResponseSenderBlock)callback
 {
-    UIViewController<NNView> *rootController = (UIViewController<NNView> *)[UIApplication sharedApplication].keyWindow.rootViewController;
+    UIViewController<NNView> *rootController = (UIViewController<NNView> *) [UIApplication sharedApplication].keyWindow.rootViewController;
     NSMutableArray *stack = self.stackNode.stack.mutableCopy;
     [stack removeLastObject];
     self.stackNode.stack = stack;
@@ -136,7 +138,7 @@ NSString *const kPopToRoot = @"popToRoot";
 
 - (void)popTo:(NSDictionary *)arguments callback:(RCTResponseSenderBlock)callback
 {
-    UIViewController<NNView> *rootController = (UIViewController<NNView> *)[UIApplication sharedApplication].keyWindow.rootViewController;
+    UIViewController<NNView> *rootController = (UIViewController<NNView> *) [UIApplication sharedApplication].keyWindow.rootViewController;
 
     UIViewController *foundController = [rootController viewForPath:arguments[@"path"]];
     if (!foundController) {
@@ -163,7 +165,7 @@ NSString *const kPopToRoot = @"popToRoot";
 
 - (void)popToRoot:(NSDictionary *)arguments callback:(RCTResponseSenderBlock)callback
 {
-    UIViewController<NNView> *rootController = (UIViewController<NNView> *)[UIApplication sharedApplication].keyWindow.rootViewController;
+    UIViewController<NNView> *rootController = (UIViewController<NNView> *) [UIApplication sharedApplication].keyWindow.rootViewController;
 
     self.stackNode.stack = @[ self.stackNode.stack.firstObject ];
     NSDictionary *newState = rootController.node.data;
@@ -181,6 +183,14 @@ NSString *const kPopToRoot = @"popToRoot";
 - (void)navigationController:(UINavigationController *)navigationController didShowViewController:(UIViewController *)viewController animated:(BOOL)animated
 {
     self.stackNode.stack = [self.stackNode.stack subarrayWithRange:NSMakeRange(0, self.viewControllers.count)];
+}
+
+- (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated
+{
+    if ([viewController isKindOfClass:[NNSingleView class]]) {
+        NNSingleView *singleView = (NNSingleView *) viewController;
+        [navigationController setNavigationBarHidden:[singleView.singleNode.style[@"barHidden"] boolValue] animated:animated];
+    }
 }
 
 @end

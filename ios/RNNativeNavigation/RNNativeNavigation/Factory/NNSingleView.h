@@ -12,6 +12,8 @@ FOUNDATION_EXPORT NSString *const kShowModal;
 
 @interface NNSingleView : UIViewController <NNView>
 
+@property (nonatomic, strong, readonly) NNSingleNode *singleNode;
+
 - (instancetype)initWithBridge:(RCTBridge *)bridge node:(NNSingleNode *)node;
 
 @end

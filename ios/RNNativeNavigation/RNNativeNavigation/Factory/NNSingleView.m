@@ -64,7 +64,7 @@ NSString *const kShowModal = @"showModal";
         }
 
         if ([controller isKindOfClass:[NNSingleView class]]) {
-            NNSingleView *singleView = (NNSingleView *)controller;
+            NNSingleView *singleView = (NNSingleView *) controller;
             [self setColors:singleView.singleNode.style];
         }
     }
@@ -83,6 +83,10 @@ NSString *const kShowModal = @"showModal";
 
 - (void)setColors:(NSDictionary *)style
 {
+    if ([style[@"barHidden"] boolValue]) {
+        return;
+    }
+
     NSString *barTintColorString = style[@"barTint"];
     if (barTintColorString) {
         self.navigationController.navigationBar.tintColor = [RCTConvert UIColor:barTintColorString];
@@ -90,12 +94,16 @@ NSString *const kShowModal = @"showModal";
 
     BOOL barTransparent = [style[@"barTransparent"] boolValue];
 
+    self.navigationController.navigationBar.translucent = barTransparent;
+
     if (barTransparent) {
-        self.navigationController.navigationBar.translucent = barTransparent;
         self.navigationController.navigationBar.shadowImage = [[UIImage alloc] init];
         [self.navigationController.navigationBar setBackgroundImage:[[UIImage alloc] init] forBarMetrics:UIBarMetricsDefault];
         self.edgesForExtendedLayout = UIRectEdgeAll;
     } else {
+        self.navigationController.navigationBar.shadowImage = nil;
+        [self.navigationController.navigationBar setBackgroundImage:nil forBarMetrics:UIBarMetricsDefault];
+
         NSString *barBackgroundColorString = style[@"barBackground"];
         if (barBackgroundColorString) {
             self.navigationController.navigationBar.barTintColor = [RCTConvert UIColor:barBackgroundColorString];
@@ -106,7 +114,7 @@ NSString *const kShowModal = @"showModal";
 
 - (UIViewController<NNView> *)viewForPath:(NSString *)path
 {
-    UIViewController<NNView> *modalController = (UIViewController<NNView> *)self.presentedViewController;
+    UIViewController<NNView> *modalController = (UIViewController<NNView> *) self.presentedViewController;
     if ([path isEqualToString:self.singleNode.screenID]) {
         return self;
     }
@@ -133,7 +141,7 @@ NSString *const kShowModal = @"showModal";
 {
     NNSingleNode *nodeObject = [NNNodeHelper.sharedInstance nodeFromMap:arguments[@"screen"] bridge:self.bridge];
 
-    UIViewController<NNView> *rootController = (UIViewController<NNView> *)[UIApplication sharedApplication].keyWindow.rootViewController;
+    UIViewController<NNView> *rootController = (UIViewController<NNView> *) [UIApplication sharedApplication].keyWindow.rootViewController;
 
     NNSingleNode *singleNode = self.node;
     singleNode.modal = nodeObject;

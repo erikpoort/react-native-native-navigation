@@ -279,6 +279,7 @@ public class StackFragment extends BaseFragment<StackNode> implements Navigatabl
 			if (singleNode.getStyle().hasKey("barTint")) {
 				Integer tintColor = (int) singleNode.getStyle().getDouble("barTint");
 				_upIcon.setColorFilter(tintColor, PorterDuff.Mode.SRC_ATOP);
+				_toolbar.setTitleTextColor(tintColor);
 			}
 
 			Integer barBackgroundColor = Color.TRANSPARENT;

@@ -19,7 +19,7 @@ export default class Menu extends Component {
 					<SingleView id="Detail" screen={Detail} style={{
 						title: 'Detail',
 						barBackground: processColor('#ff0'),
-						barTint: processColor('#00f'),
+						barTint: processColor('#f00'),
 					}}/>
 				)}/>
 				<Button title="Detail 2" onPress={() => this.handleMenuItem(

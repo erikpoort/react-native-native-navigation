@@ -89,7 +89,11 @@ NSString *const kShowModal = @"showModal";
 
     NSString *barTintColorString = style[@"barTint"];
     if (barTintColorString) {
-        self.navigationController.navigationBar.tintColor = [RCTConvert UIColor:barTintColorString];
+        UIColor *color = [RCTConvert UIColor:barTintColorString];
+        self.navigationController.navigationBar.tintColor = color;
+        self.navigationController.navigationBar.titleTextAttributes = @{
+            NSForegroundColorAttributeName : color,
+        };
     }
 
     BOOL barTransparent = [style[@"barTransparent"] boolValue];

@@ -36,6 +36,7 @@ export default class example extends Component {
 					barHidden: false,
 					barTransparent: false,
 					barBackground: processColor('#0000ff'),
+					barTint: processColor('#ff0000'),
 				}} />
 			</StackView>
 		);

@@ -80,7 +80,7 @@ NSString *const kPopToRoot = @"popToRoot";
 
 - (void)callMethodWithName:(NSString *)methodName arguments:(NSDictionary *)arguments callback:(RCTResponseSenderBlock)callback
 {
-    typedef void (^Block)();
+    typedef void (^Block)(void);
     NSDictionary<NSString *, Block> *methodMap = @{
         kPush: ^{
             [self push:arguments callback:callback];

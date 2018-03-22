@@ -83,7 +83,7 @@ NSString *const kOpenView = @"openView";
 
 - (void)callMethodWithName:(NSString *)methodName arguments:(NSDictionary *)arguments callback:(RCTResponseSenderBlock)callback
 {
-    typedef void (^Block)();
+    typedef void (^Block)(void);
     NSDictionary<NSString *, Block> *methodMap = @{
         kOpenView: ^{
             [self openView:arguments callback:callback];

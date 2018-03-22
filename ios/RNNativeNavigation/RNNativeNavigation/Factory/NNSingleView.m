@@ -135,7 +135,7 @@ NSString *const kChangeTitle = @"changeTitle";
 
 - (void)callMethodWithName:(NSString *)methodName arguments:(NSDictionary *)arguments callback:(RCTResponseSenderBlock)callback
 {
-    typedef void (^Block)();
+    typedef void (^Block)(void);
     NSDictionary<NSString *, Block> *methodMap = @{
         kShowModal: ^{
             [self showModal:arguments callback:callback];

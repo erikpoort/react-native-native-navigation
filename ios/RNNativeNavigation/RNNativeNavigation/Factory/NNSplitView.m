@@ -122,7 +122,7 @@ NSString *const kReplace = @"replace";
 
 - (void)callMethodWithName:(NSString *)methodName arguments:(NSDictionary *)arguments callback:(RCTResponseSenderBlock)callback
 {
-    typedef void (^Block)();
+    typedef void (^Block)(void);
     NSDictionary<NSString *, Block> *methodMap = @{
         kReplace: ^{
             [self replace:arguments callback:callback];

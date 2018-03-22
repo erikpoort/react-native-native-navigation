@@ -80,15 +80,26 @@ NSString *const kPopToRoot = @"popToRoot";
 
 - (void)callMethodWithName:(NSString *)methodName arguments:(NSDictionary *)arguments callback:(RCTResponseSenderBlock)callback
 {
-    NSDictionary *methodDictionary = @{
-        kPush : [NSValue valueWithPointer:@selector(push:callback:)],
-        kPop : [NSValue valueWithPointer:@selector(pop:callback:)],
-        kPopTo : [NSValue valueWithPointer:@selector(popTo:callback:)],
-        kPopToRoot : [NSValue valueWithPointer:@selector(popToRoot:callback:)],
+    typedef void (^Block)();
+    NSDictionary<NSString *, Block> *methodMap = @{
+        kPush: ^{
+            [self push:arguments callback:callback];
+        },
+        kPop: ^{
+            [self pop];
+        },
+        kPopTo: ^{
+            [self popTo:arguments];
+        },
+        kPopToRoot: ^{
+            [self popToRootCallback];
+        },
     };
 
-    SEL thisSelector = [methodDictionary[methodName] pointerValue];
-    [self performSelector:thisSelector withObject:arguments withObject:callback];
+    Block block = methodMap[methodName];
+    if (block) {
+        block();
+    }
 }
 
 - (void)push:(NSDictionary *)arguments callback:(RCTResponseSenderBlock)callback
@@ -101,7 +112,7 @@ NSString *const kPopToRoot = @"popToRoot";
 
     NSDictionary *newState = rootController.node.data;
     [RNNNState sharedInstance].state = newState;
-    callback(@[ newState ]);
+    callback(@[newState]);
 
     NSDictionary *extraArguments = arguments[@"arguments"];
 
@@ -111,7 +122,7 @@ NSString *const kPopToRoot = @"popToRoot";
         UIViewController *viewController = [nodeObject generate];
 
         if ([extraArguments[@"reset"] boolValue]) {
-            NSArray *viewControllers = @[ viewController ];
+            NSArray *viewControllers = @[viewController];
             [self setViewControllers:viewControllers animated:YES];
         } else {
             [self pushViewController:viewController animated:YES];
@@ -119,7 +130,7 @@ NSString *const kPopToRoot = @"popToRoot";
     });
 }
 
-- (void)pop:(NSDictionary *)arguments callback:(RCTResponseSenderBlock)callback
+- (void)pop
 {
     UIViewController<NNView> *rootController = (UIViewController<NNView> *) [UIApplication sharedApplication].keyWindow.rootViewController;
     NSMutableArray *stack = self.stackNode.stack.mutableCopy;
@@ -136,7 +147,7 @@ NSString *const kPopToRoot = @"popToRoot";
     });
 }
 
-- (void)popTo:(NSDictionary *)arguments callback:(RCTResponseSenderBlock)callback
+- (void)popTo:(NSDictionary *)arguments
 {
     UIViewController<NNView> *rootController = (UIViewController<NNView> *) [UIApplication sharedApplication].keyWindow.rootViewController;
 
@@ -163,11 +174,11 @@ NSString *const kPopToRoot = @"popToRoot";
     });
 }
 
-- (void)popToRoot:(NSDictionary *)arguments callback:(RCTResponseSenderBlock)callback
+- (void)popToRootCallback
 {
     UIViewController<NNView> *rootController = (UIViewController<NNView> *) [UIApplication sharedApplication].keyWindow.rootViewController;
 
-    self.stackNode.stack = @[ self.stackNode.stack.firstObject ];
+    self.stackNode.stack = @[self.stackNode.stack.firstObject];
     NSDictionary *newState = rootController.node.data;
     [RNNNState sharedInstance].state = newState;
 

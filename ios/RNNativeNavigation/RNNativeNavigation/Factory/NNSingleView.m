@@ -135,12 +135,20 @@ NSString *const kChangeTitle = @"changeTitle";
 
 - (void)callMethodWithName:(NSString *)methodName arguments:(NSDictionary *)arguments callback:(RCTResponseSenderBlock)callback
 {
-    NSMutableDictionary *methodDictionary = @{}.mutableCopy;
-    methodDictionary[kShowModal] = [NSValue valueWithPointer:@selector(showModal:callback:)];
-    methodDictionary[kChangeTitle] = [NSValue valueWithPointer:@selector(changeTitle:callback:)];
+    typedef void (^Block)();
+    NSDictionary<NSString *, Block> *methodMap = @{
+        kShowModal: ^{
+            [self showModal:arguments callback:callback];
+        },
+        kChangeTitle: ^{
+            [self changeTitle:arguments];
+        }
+    };
 
-    SEL thisSelector = [methodDictionary[methodName] pointerValue];
-    [self performSelector:thisSelector withObject:arguments withObject:callback];
+    Block block = methodMap[methodName];
+    if (block) {
+        block();
+    }
 }
 
 - (void)showModal:(NSDictionary *)arguments callback:(RCTResponseSenderBlock)callback
@@ -165,7 +173,7 @@ NSString *const kChangeTitle = @"changeTitle";
     });
 }
 
-- (void)changeTitle:(NSDictionary *)arguments callback:(RCTResponseSenderBlock)callback
+- (void)changeTitle:(NSDictionary *)arguments
 {
     NSMutableDictionary *style = self.singleNode.style.mutableCopy;
     NSString *title = arguments[@"title"];

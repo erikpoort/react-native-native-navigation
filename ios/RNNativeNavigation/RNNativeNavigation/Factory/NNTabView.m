@@ -127,17 +127,22 @@ NSString *const kOpenTab = @"openTab";
 
 - (void)callMethodWithName:(NSString *)methodName arguments:(NSDictionary *)arguments callback:(RCTResponseSenderBlock)callback
 {
-    NSDictionary *methodDictionary = @{
-        kOpenTab : [NSValue valueWithPointer:@selector(openTab:callback:)],
+    typedef void (^Block)();
+    NSDictionary<NSString *, Block> *methodMap = @{
+        kOpenTab: ^{
+            [self openTab:arguments];
+        },
     };
 
-    SEL thisSelector = [methodDictionary[methodName] pointerValue];
-    [self performSelector:thisSelector withObject:arguments withObject:callback];
+    Block block = methodMap[methodName];
+    if (block) {
+        block();
+    }
 }
 
-- (void)openTab:(NSDictionary *)arguments callback:(RCTResponseSenderBlock)callback
+- (void)openTab:(NSDictionary *)arguments
 {
-    UIViewController<NNView> *rootController = (UIViewController<NNView> *)[UIApplication sharedApplication].keyWindow.rootViewController;
+    UIViewController<NNView> *rootController = (UIViewController<NNView> *) [UIApplication sharedApplication].keyWindow.rootViewController;
     NSUInteger index = [arguments[@"index"] unsignedIntegerValue];
     self.tabNode.selectedTab = index;
 
@@ -158,7 +163,7 @@ NSString *const kOpenTab = @"openTab";
 {
     if ([self.tabBar.items indexOfObject:item] == self.tabNode.selectedTab) {
         if ([self.viewControllers[self.tabNode.selectedTab] isKindOfClass:[UINavigationController class]]) {
-            UINavigationController *navigationController = (UINavigationController *)self.viewControllers[self.tabNode.selectedTab];
+            UINavigationController *navigationController = (UINavigationController *) self.viewControllers[self.tabNode.selectedTab];
             [navigationController popToRootViewControllerAnimated:YES];
         }
     } else {

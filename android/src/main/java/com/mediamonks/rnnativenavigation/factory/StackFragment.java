@@ -254,6 +254,15 @@ public class StackFragment extends BaseFragment<StackNode> implements Navigatabl
 		Node showNode = getNode().getStack().peek();
 		if (showNode instanceof SingleNode) {
 			SingleNode singleNode = (SingleNode) showNode;
+
+			ColorDrawable background = (ColorDrawable) _toolbar.getBackground();
+			int fromColor = background.getColor();
+
+			boolean barTransparent = false;
+			if (singleNode.getStyle().hasKey("barTransparent")) {
+				barTransparent = singleNode.getStyle().getBoolean("barTransparent");
+			}
+
 			int duration = transition == FragmentTransaction.TRANSIT_NONE
 					? 0
 					: getResources().getInteger(android.R.integer.config_shortAnimTime);
@@ -286,16 +295,13 @@ public class StackFragment extends BaseFragment<StackNode> implements Navigatabl
 					_toolbar.setTitle(singleNode.getStyle().getString("title"));
 				}
 
-				boolean barTransparent = false;
-				if (singleNode.getStyle().hasKey("barTransparent")) {
-					barTransparent = singleNode.getStyle().getBoolean("barTransparent");
-				}
-
-				if (singleNode.getStyle().hasKey("barBackground") && !barTransparent) {
-					Integer barBackgroundColor = (int) singleNode.getStyle().getDouble("barBackground");
-
-					ColorDrawable background = (ColorDrawable) _toolbar.getBackground();
-					int fromColor = background.getColor();
+				if (singleNode.getStyle().hasKey("barBackground") || barTransparent) {
+					Integer barBackgroundColor;
+					if (barTransparent) {
+						barBackgroundColor = Color.TRANSPARENT;
+					} else {
+						barBackgroundColor = (int) singleNode.getStyle().getDouble("barBackground");
+					}
 
 					ObjectAnimator animator = ObjectAnimator.ofObject(_toolbar, "backgroundColor", new ArgbEvaluator(), fromColor, barBackgroundColor);
 					animator.setDuration(duration);
@@ -307,9 +313,9 @@ public class StackFragment extends BaseFragment<StackNode> implements Navigatabl
 					Integer tintColor = (int) singleNode.getStyle().getDouble("barTint");
 					_upIcon.setColorFilter(tintColor, PorterDuff.Mode.SRC_ATOP);
 				}
+
 				RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) _holder.getLayoutParams();
 				if (barTransparent) {
-					_toolbar.setBackgroundColor(Color.TRANSPARENT);
 					params.removeRule(RelativeLayout.BELOW);
 				} else {
 					params.addRule(RelativeLayout.BELOW, _toolbar.getId());

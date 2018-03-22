@@ -15,7 +15,7 @@ class DoubleTapResetRecognizer {
 	private static final long DOUBLE_TAP_DELAY = 200;
 
 	boolean didDoubleTapE(int keyCode, View view) {
-		if (keyCode == KeyEvent.KEYCODE_E && !(view instanceof EditText)) {
+		if (keyCode == KeyEvent.KEYCODE_N && !(view instanceof EditText)) {
 			if (_doReset) {
 				_doReset = false;
 				return true;

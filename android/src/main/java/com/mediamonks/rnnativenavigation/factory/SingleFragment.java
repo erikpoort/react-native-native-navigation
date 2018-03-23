@@ -143,6 +143,10 @@ public class SingleFragment extends BaseFragment<SingleNode> implements Navigata
 			int barTint = arguments.getInt("barTint");
 			style.put("barTint", barTint);
 		}
+		if (arguments.hasKey("barBackground")) {
+			int barBackgroundColor = arguments.getInt("barBackground");
+			style.put("barBackground", barBackgroundColor);
+		}
 		getNode().setStyle(Arguments.makeNativeMap(style));
 
 		getStackFragment().callMethodWithName(SingleNode.UPDATE_STYLE, arguments, null, null);

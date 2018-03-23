@@ -186,6 +186,12 @@ NSString *const kUpdateStyle = @"updateStyle";
         style[@"barTint"] = barTintString;
         barTintColor = [RCTConvert UIColor:barTintString];
     }
+    NSString *barBackgroundString = arguments[@"barBackground"];
+    UIColor *barBackgroundColor;
+    if (barBackgroundString) {
+        style[@"barBackground"] = barBackgroundString;
+        barBackgroundColor = [RCTConvert UIColor:barBackgroundString];
+    }
     self.singleNode.style = style.copy;
 
     __weak typeof(self) weakSelf = self;
@@ -199,6 +205,9 @@ NSString *const kUpdateStyle = @"updateStyle";
                 NSForegroundColorAttributeName: barTintColor,
             };
             self.navigationController.navigationBar.tintColor = barTintColor;
+        }
+        if (barBackgroundColor) {
+            self.navigationController.navigationBar.barTintColor = barBackgroundColor;
         }
     });
 }

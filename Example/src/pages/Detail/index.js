@@ -34,7 +34,11 @@ class Detail extends Component {
 				/>
 				<Button
 					title="Change title"
-					onPress={() => this.props.single.updateStyle({ title: "Changed", barTint: processColor("#00f") })}
+					onPress={() => this.props.single.updateStyle({
+						title: "Changed",
+						barTint: processColor("#00f"),
+						barBackground: processColor('#f0f'),
+					})}
 				/>
 			</View>
 		);

@@ -225,6 +225,10 @@ public class StackFragment extends BaseFragment<StackNode> implements Navigatabl
 					_toolbar.setTitleTextColor(color);
 					_upIcon.setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
 				}
+				if (arguments.hasKey("barBackground")) {
+					int color = arguments.getInt("barBackground");
+					_toolbar.setBackgroundColor(color);
+				}
 			}
 		});
 	}

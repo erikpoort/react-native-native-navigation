@@ -21,9 +21,9 @@
   "author": "Erik Poort",
   "license": "GNU General Public License v3.0",
   "bugs": {
-    "url": "https://github.com/ErikMediaMonks/react-native-native-navigation/issues"
+    "url": "https://github.com/erikpoort/react-native-native-navigation/issues"
   },
-  "homepage": "https://github.com/ErikMediaMonks/react-native-native-navigation#readme",
+  "homepage": "https://github.com/erikpoort/react-native-native-navigation#readme",
   "dependencies": {},
   "peerDependencies": {
     "react": "^16.3.0-alpha.1",

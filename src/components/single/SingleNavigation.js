@@ -10,7 +10,7 @@ export default class SingleNavigation extends BaseNavigation {
 		return super.addScreens(newPath, ReactNativeNativeNavigation.showModal, showScreen, null);
 	};
 
-	changeTitle = (title) => {
-		ReactNativeNativeNavigation.callMethodOnNode(this.navigatorID, ReactNativeNativeNavigation.changeTitle, { title }, () => {});
+	updateStyle = (style) => {
+		ReactNativeNativeNavigation.callMethodOnNode(this.navigatorID, ReactNativeNativeNavigation.updateStyle, style, () => {});
 	}
 }

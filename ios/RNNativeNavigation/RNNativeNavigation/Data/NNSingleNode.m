@@ -55,7 +55,7 @@ static NSString *const kStyle = @"style";
 {
     return @{
         kShowModal: kShowModal,
-        kChangeTitle: kChangeTitle
+        kUpdateStyle: kUpdateStyle
     };
 }
 

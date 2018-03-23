@@ -118,7 +118,7 @@ public class StackFragment extends BaseFragment<StackNode> implements Navigatabl
 				this.handlePopToRootCall();
 				break;
 			}
-			case SingleNode.CHANGE_TITLE: {
+			case SingleNode.UPDATE_STYLE: {
 				this.handleChangeTitleCall(arguments);
 				break;
 			}

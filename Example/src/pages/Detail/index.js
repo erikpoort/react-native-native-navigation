@@ -8,7 +8,7 @@ import Detail2 from '../Detail2/index';
 
 class Detail extends Component {
 	static pageMap = [Detail2];
-	
+
 	render() {
 		return (
 			<View>
@@ -34,7 +34,7 @@ class Detail extends Component {
 				/>
 				<Button
 					title="Change title"
-					onPress={() => this.props.single.changeTitle("Changed")}
+					onPress={() => this.props.single.updateStyle({ title: "Changed" })}
 				/>
 			</View>
 		);

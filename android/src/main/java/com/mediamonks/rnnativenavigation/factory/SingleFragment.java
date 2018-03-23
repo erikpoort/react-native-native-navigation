@@ -106,8 +106,8 @@ public class SingleFragment extends BaseFragment<SingleNode> implements Navigata
 				this.handleShowModalCall(arguments, rootFragment, callback);
 				break;
 			}
-			case SingleNode.CHANGE_TITLE: {
-				this.handleChangeTitleCall(arguments);
+			case SingleNode.UPDATE_STYLE: {
+				this.handleUpdateStyleCall(arguments);
 				break;
 			}
 		}
@@ -132,13 +132,13 @@ public class SingleFragment extends BaseFragment<SingleNode> implements Navigata
 		}
 	}
 
-	private void handleChangeTitleCall(ReadableMap arguments) {
+	private void handleUpdateStyleCall(ReadableMap arguments) {
 		HashMap <String, Object> style = getNode().getStyle().toHashMap();
 		String title = arguments.getString("title");
 		style.put("title", title);
 		getNode().setStyle(Arguments.makeNativeMap(style));
 
-		getStackFragment().callMethodWithName(SingleNode.CHANGE_TITLE, arguments, null, null);
+		getStackFragment().callMethodWithName(SingleNode.UPDATE_STYLE, arguments, null, null);
 	}
 
 	public void showModal(Node node, boolean animated) {

@@ -10,7 +10,7 @@
 #import "RNNNState.h"
 
 NSString *const kShowModal = @"showModal";
-NSString *const kChangeTitle = @"changeTitle";
+NSString *const kUpdateStyle = @"updateStyle";
 
 
 @interface NNSingleView ()
@@ -140,8 +140,8 @@ NSString *const kChangeTitle = @"changeTitle";
         kShowModal: ^{
             [self showModal:arguments callback:callback];
         },
-        kChangeTitle: ^{
-            [self changeTitle:arguments];
+        kUpdateStyle: ^{
+            [self updateStyle:arguments];
         }
     };
 
@@ -173,7 +173,7 @@ NSString *const kChangeTitle = @"changeTitle";
     });
 }
 
-- (void)changeTitle:(NSDictionary *)arguments
+- (void)updateStyle:(NSDictionary *)arguments
 {
     NSMutableDictionary *style = self.singleNode.style.mutableCopy;
     NSString *title = arguments[@"title"];

@@ -6,7 +6,7 @@
 #import "NNView.h"
 
 FOUNDATION_EXPORT NSString *const kShowModal;
-FOUNDATION_EXPORT NSString *const kChangeTitle;
+FOUNDATION_EXPORT NSString *const kUpdateStyle;
 
 @class NNSingleNode;
 

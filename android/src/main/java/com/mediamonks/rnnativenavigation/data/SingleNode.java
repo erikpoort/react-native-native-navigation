@@ -17,14 +17,14 @@ import java.util.Map;
 
 public class SingleNode extends BaseNode {
 	public static final String SHOW_MODAL = "showModal";
-	public static final String CHANGE_TITLE = "changeTitle";
+	public static final String UPDATE_STYLE = "updateStyle";
 
 	public static String JS_NAME = "SingleView";
 
 	public static Map<String, Object> getConstants() {
 		Map<String, Object> map = new HashMap<>();
 		map.put(SHOW_MODAL, SHOW_MODAL);
-		map.put(CHANGE_TITLE, CHANGE_TITLE);
+		map.put(UPDATE_STYLE, UPDATE_STYLE);
 		return map;
 	}
 

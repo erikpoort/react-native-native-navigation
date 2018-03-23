@@ -119,7 +119,7 @@ public class StackFragment extends BaseFragment<StackNode> implements Navigatabl
 				break;
 			}
 			case SingleNode.UPDATE_STYLE: {
-				this.handleChangeTitleCall(arguments);
+				this.handleUpdateStyleCall(arguments);
 				break;
 			}
 		}
@@ -213,11 +213,18 @@ public class StackFragment extends BaseFragment<StackNode> implements Navigatabl
 		});
 	}
 
-	private void handleChangeTitleCall(final ReadableMap arguments) {
+	private void handleUpdateStyleCall(final ReadableMap arguments) {
 		getActivity().runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
-				_toolbar.setTitle(arguments.getString("title"));
+				if (arguments.hasKey("title")) {
+					_toolbar.setTitle(arguments.getString("title"));
+				}
+				if (arguments.hasKey("barTint")) {
+					int color = arguments.getInt("barTint");
+					_toolbar.setTitleTextColor(color);
+					_upIcon.setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
+				}
 			}
 		});
 	}

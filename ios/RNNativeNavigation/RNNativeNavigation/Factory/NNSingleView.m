@@ -177,14 +177,29 @@ NSString *const kUpdateStyle = @"updateStyle";
 {
     NSMutableDictionary *style = self.singleNode.style.mutableCopy;
     NSString *title = arguments[@"title"];
-    style[@"title"] = title;
+    if (title) {
+        style[@"title"] = title;
+    }
+    NSString *barTintString = arguments[@"barTint"];
+    UIColor *barTintColor;
+    if (barTintString) {
+        style[@"barTint"] = barTintString;
+        barTintColor = [RCTConvert UIColor:barTintString];
+    }
     self.singleNode.style = style.copy;
 
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
         __strong typeof(weakSelf) self = weakSelf;
-        self.navigationController.navigationBar.topItem.title = title;
-        self.title = title;
+        if (title) {
+            self.title = title;
+        }
+        if (barTintColor) {
+            self.navigationController.navigationBar.titleTextAttributes = @{
+                NSForegroundColorAttributeName: barTintColor,
+            };
+            self.navigationController.navigationBar.tintColor = barTintColor;
+        }
     });
 }
 

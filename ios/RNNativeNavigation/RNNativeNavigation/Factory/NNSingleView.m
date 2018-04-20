@@ -48,6 +48,7 @@ NSString *const kUpdateStyle = @"updateStyle";
     [super viewWillAppear:animated];
 
     [self setColors:self.singleNode.style];
+    [self adaptStyle];
 }
 
 - (void)willMoveToParentViewController:(nullable UIViewController *)parent
@@ -173,39 +174,53 @@ NSString *const kUpdateStyle = @"updateStyle";
     });
 }
 
-- (void)updateStyle:(NSDictionary *)arguments
-{
+- (void)updateStyle:(NSDictionary *)arguments {
     NSMutableDictionary *style = self.singleNode.style.mutableCopy;
     NSString *title = arguments[@"title"];
     if (title) {
         style[@"title"] = title;
     }
     NSString *barTintString = arguments[@"barTint"];
-    UIColor *barTintColor;
     if (barTintString) {
-        style[@"barTint"] = barTintString;
-        barTintColor = [RCTConvert UIColor:barTintString];
+        style[@"barTint"] = [RCTConvert UIColor:barTintString];
     }
     NSString *barBackgroundString = arguments[@"barBackground"];
-    UIColor *barBackgroundColor;
     if (barBackgroundString) {
-        style[@"barBackground"] = barBackgroundString;
-        barBackgroundColor = [RCTConvert UIColor:barBackgroundString];
+        style[@"barBackground"] = [RCTConvert UIColor:barBackgroundString];
     }
     self.singleNode.style = style.copy;
 
+    [self adaptStyle];
+}
+
+- (void)adaptStyle {
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
         __strong typeof(weakSelf) self = weakSelf;
+        NSString *title = self.singleNode.style[@"title"];
         if (title) {
             self.title = title;
         }
+
+        NSMutableDictionary *textAttributes = @{}.mutableCopy;
+
+        UIColor *barTintColor = self.singleNode.style[@"barTint"];
         if (barTintColor) {
-            self.navigationController.navigationBar.titleTextAttributes = @{
-                NSForegroundColorAttributeName: barTintColor,
-            };
+            textAttributes[NSForegroundColorAttributeName] = barTintColor;
             self.navigationController.navigationBar.tintColor = barTintColor;
         }
+        UIColor *barBackgroundColor = self.singleNode.style[@"barBackground"];
+        NSString *barFontName = self.singleNode.style[@"barFont"];
+        NSNumber *barFontSize = self.singleNode.style[@"barFontSize"];
+        if (barFontName && barFontSize) {
+            UIFont *barFont = [UIFont fontWithName:barFontName size:barFontSize.floatValue];
+            textAttributes[NSFontAttributeName] = barFont;
+        }
+
+        if (textAttributes.count > 0) {
+            self.navigationController.navigationBar.titleTextAttributes = textAttributes.copy;
+        }
+
         if (barBackgroundColor) {
             self.navigationController.navigationBar.barTintColor = barBackgroundColor;
         }

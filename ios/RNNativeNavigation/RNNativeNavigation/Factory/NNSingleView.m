@@ -2,12 +2,15 @@
 // Copyright (c) 2017 MediaMonks. All rights reserved.
 //
 
+#import <Foundation/Foundation.h>
 #import <React/RCTRootView.h>
 #import <React/RCTConvert.h>
+#import <React/RCTEventEmitter.h>
 #import "NNSingleView.h"
 #import "NNSingleNode.h"
 #import "NNNodeHelper.h"
 #import "RNNNState.h"
+#import "ReactNativeNativeEventEmitter.h"
 
 NSString *const kShowModal = @"showModal";
 NSString *const kUpdateStyle = @"updateStyle";
@@ -154,7 +157,7 @@ NSString *const kUpdateStyle = @"updateStyle";
 
 - (void)showModal:(NSDictionary *)arguments callback:(RCTResponseSenderBlock)callback
 {
-    NNSingleNode *nodeObject = [NNNodeHelper.sharedInstance nodeFromMap:arguments[@"screen"] bridge:self.bridge];
+    NNSingleNode *nodeObject = [NNNodeHelper.sharedInstance nodeFromMap:arguments[@"screen"] bridge:self.bridge eventEmitter:self.singleNode.eventEmitter];
 
     UIViewController<NNView> *rootController = (UIViewController<NNView> *) [UIApplication sharedApplication].keyWindow.rootViewController;
 
@@ -180,13 +183,13 @@ NSString *const kUpdateStyle = @"updateStyle";
     if (title) {
         style[@"title"] = title;
     }
-    NSString *barTintString = arguments[@"barTint"];
-    if (barTintString) {
-        style[@"barTint"] = [RCTConvert UIColor:barTintString];
+    NSString *barTint = arguments[@"barTint"];
+    if (barTint) {
+        style[@"barTint"] = barTint;
     }
-    NSString *barBackgroundString = arguments[@"barBackground"];
-    if (barBackgroundString) {
-        style[@"barBackground"] = [RCTConvert UIColor:barBackgroundString];
+    NSString *barBackground = arguments[@"barBackground"];
+    if (barBackground) {
+        style[@"barBackground"] = barBackground;
     }
     self.singleNode.style = style.copy;
 
@@ -204,12 +207,13 @@ NSString *const kUpdateStyle = @"updateStyle";
 
         NSMutableDictionary *textAttributes = @{}.mutableCopy;
 
-        UIColor *barTintColor = self.singleNode.style[@"barTint"];
+        id barTintColor = self.singleNode.style[@"barTint"];
         if (barTintColor) {
-            textAttributes[NSForegroundColorAttributeName] = barTintColor;
-            self.navigationController.navigationBar.tintColor = barTintColor;
+            UIColor *color = [RCTConvert UIColor:barTintColor];
+            textAttributes[NSForegroundColorAttributeName] = color;
+            self.navigationController.navigationBar.tintColor = color;
         }
-        UIColor *barBackgroundColor = self.singleNode.style[@"barBackground"];
+
         NSString *barFontName = self.singleNode.style[@"barFont"];
         NSNumber *barFontSize = self.singleNode.style[@"barFontSize"];
         if (barFontName && barFontSize) {
@@ -221,10 +225,43 @@ NSString *const kUpdateStyle = @"updateStyle";
             self.navigationController.navigationBar.titleTextAttributes = textAttributes.copy;
         }
 
+        UIColor *barBackgroundColor = self.singleNode.style[@"barBackground"];
         if (barBackgroundColor) {
-            self.navigationController.navigationBar.barTintColor = barBackgroundColor;
+            self.navigationController.navigationBar.barTintColor = [RCTConvert UIColor:barBackgroundColor];
         }
+
+        NSMutableArray *buttons;
+
+        NSArray *leftBarButtons = self.singleNode.style[@"leftBarButtons"];
+        buttons = @[].mutableCopy;
+        [leftBarButtons enumerateObjectsUsingBlock:^(NSDictionary *obj, NSUInteger idx, BOOL *stop) {
+            UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc] initWithTitle:obj[@"title"] style:UIBarButtonItemStylePlain target:self action:@selector(onLeftBarButton:)];
+            barButtonItem.tag = idx;
+            [buttons addObject:barButtonItem];
+        }];
+        self.navigationItem.leftBarButtonItems = buttons.copy;
+
+        NSArray *rightBarButtons = self.singleNode.style[@"rightBarButtons"];
+        buttons = @[].mutableCopy;
+        [rightBarButtons enumerateObjectsUsingBlock:^(NSDictionary *obj, NSUInteger idx, BOOL *stop) {
+            UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc] initWithTitle:obj[@"title"] style:UIBarButtonItemStylePlain target:self action:@selector(onRightBarButton:)];
+            barButtonItem.tag = idx;
+            [buttons addObject:barButtonItem];
+        }];
+        self.navigationItem.rightBarButtonItems = buttons.copy;
     });
+}
+
+- (void)onBarButton:(NSDictionary *)data {
+    [self.singleNode.eventEmitter sendEventWithName:self.node.screenID body:data[@"id"]];
+}
+
+- (void)onLeftBarButton:(UIBarButtonItem *)button {
+    [self onBarButton:self.singleNode.style[@"leftBarButtons"][(NSUInteger) button.tag]];
+}
+
+- (void)onRightBarButton:(UIBarButtonItem *)button {
+    [self onBarButton:self.singleNode.style[@"rightBarButtons"][(NSUInteger) button.tag]];
 }
 
 @end

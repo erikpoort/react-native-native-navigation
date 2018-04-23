@@ -105,7 +105,7 @@ NSString *const kPopToRoot = @"popToRoot";
 - (void)push:(NSDictionary *)arguments callback:(RCTResponseSenderBlock)callback
 {
     UIViewController<NNView> *rootController = (UIViewController<NNView> *) [UIApplication sharedApplication].keyWindow.rootViewController;
-    id<NNNode> nodeObject = [NNNodeHelper.sharedInstance nodeFromMap:arguments[@"screen"] bridge:arguments[@"bridge"]];
+    id<NNNode> nodeObject = [NNNodeHelper.sharedInstance nodeFromMap:arguments[@"screen"] bridge:arguments[@"bridge"] eventEmitter:self.stackNode.eventEmitter];
     NSMutableArray *stack = self.stackNode.stack.mutableCopy;
     [stack addObject:nodeObject];
     self.stackNode.stack = stack;

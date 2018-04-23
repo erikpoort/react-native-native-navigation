@@ -36,8 +36,8 @@ static NSString *const kAxisKey = @"axis";
 {
     [super setData:data];
 
-    self.node1 = [NNNodeHelper.sharedInstance nodeFromMap:data[kNode1Key] bridge:self.bridge];
-    self.node2 = [NNNodeHelper.sharedInstance nodeFromMap:data[kNode2Key] bridge:self.bridge];
+    self.node1 = [NNNodeHelper.sharedInstance nodeFromMap:data[kNode1Key] bridge:self.bridge eventEmitter:self.eventEmitter];
+    self.node2 = [NNNodeHelper.sharedInstance nodeFromMap:data[kNode2Key] bridge:self.bridge eventEmitter:self.eventEmitter];
     self.axis = [data[kAxisKey] isEqualToString:@"vertical"] ? UILayoutConstraintAxisVertical : UILayoutConstraintAxisHorizontal;
 }
 
@@ -48,6 +48,13 @@ static NSString *const kAxisKey = @"axis";
     data[kNode2Key] = self.node2.data;
     data[kAxisKey] = self.axis == UILayoutConstraintAxisHorizontal ? @"horizontal" : @"vertical";
     return data.copy;
+}
+
+- (NSArray<NSString *> *)supportedEvents {
+    NSMutableArray *events = @[].mutableCopy;
+    [events addObjectsFromArray:self.node1.supportedEvents];
+    [events addObjectsFromArray:self.node2.supportedEvents];
+    return events.copy;
 }
 
 + (NSDictionary<NSString *, id> *)constantsToExport

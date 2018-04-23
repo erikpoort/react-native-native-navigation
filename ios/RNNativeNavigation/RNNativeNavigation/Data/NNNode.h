@@ -6,12 +6,15 @@
 #import <React/RCTBridge.h>
 
 @protocol NNView;
+@class ReactNativeNativeEventEmitter;
 
 @protocol NNNode <NSObject>
 
 + (NSString *)jsName;
 
 - (void)setBridge:(RCTBridge *)bridge;
+
+- (void)setEventEmitter:(ReactNativeNativeEventEmitter *)emitter;
 
 - (void)setData:(NSDictionary *)data;
 
@@ -20,6 +23,8 @@
 - (NSString *)screenID;
 
 - (UIViewController<NNView> *)generate;
+
+- (NSArray<NSString *> *)supportedEvents;
 
 + (NSDictionary<NSString *, id> *)constantsToExport;
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactNativeNativeNavigation from './ReactNativeNativeNavigation';
+import NativeBridge from './NativeBridge';
 import { generatePageList, mapChild, registerScreens, pageName } from './utils/NavigationUtils';
 import { SingleNode } from './components/single/SingleView';
 import { StackNode } from './components/stack/StackView';
@@ -58,7 +58,7 @@ class Navigation {
 		 * This method is called every time the app is refreshed.
 		 * The native side will handle check for a cached state before rendering.
 		 */
-		ReactNativeNativeNavigation.onStart((request) => {
+		NativeBridge.onStart((request) => {
 			/**
 			 * If the request is set, this means the native side has a saved state which needs to be
 			 * rendered. Otherwise we need to generate a new one.
@@ -87,7 +87,7 @@ class Navigation {
 				/**
 				 * Everything is prepared to render natively.
 				 */
-				ReactNativeNativeNavigation.setSiteMap(request);
+				NativeBridge.setSiteMap(request);
 			}
 		});
 	}

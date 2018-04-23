@@ -30,9 +30,9 @@
 {
     [super setData:data];
 
-    self.leftNode = [NNNodeHelper.sharedInstance nodeFromMap:data[LEFT] bridge:self.bridge];
-    self.centerNode = [NNNodeHelper.sharedInstance nodeFromMap:data[CENTER] bridge:self.bridge];
-    self.rightNode = [NNNodeHelper.sharedInstance nodeFromMap:data[RIGHT] bridge:self.bridge];
+    self.leftNode = [NNNodeHelper.sharedInstance nodeFromMap:data[LEFT] bridge:self.bridge eventEmitter:self.eventEmitter];
+    self.centerNode = [NNNodeHelper.sharedInstance nodeFromMap:data[CENTER] bridge:self.bridge eventEmitter:self.eventEmitter];
+    self.rightNode = [NNNodeHelper.sharedInstance nodeFromMap:data[RIGHT] bridge:self.bridge eventEmitter:self.eventEmitter];
 
     NSArray *sides = @[ @"center", @"left", @"right" ];
     NSString *side = data[SIDE];
@@ -54,6 +54,14 @@
     NSArray *sides = @[ CENTER, LEFT, RIGHT ];
     data[SIDE] = sides[self.side];
     return data.copy;
+}
+
+- (NSArray<NSString *> *)supportedEvents {
+    NSMutableArray *events = @[].mutableCopy;
+    [events addObjectsFromArray:self.leftNode.supportedEvents];
+    [events addObjectsFromArray:self.centerNode.supportedEvents];
+    [events addObjectsFromArray:self.rightNode.supportedEvents];
+    return events.copy;
 }
 
 + (NSDictionary<NSString *, id> *)constantsToExport

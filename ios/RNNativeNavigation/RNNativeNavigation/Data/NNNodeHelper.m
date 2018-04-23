@@ -9,6 +9,7 @@
 #import "NNTabNode.h"
 #import "NNSplitNode.h"
 #import "NNDrawerNode.h"
+#import "RNNNState.h"
 
 static NSString *const kJSViewName = @"type";
 
@@ -50,7 +51,7 @@ static NSString *const kJSViewName = @"type";
     _externalNodes = [_externalNodes arrayByAddingObjectsFromArray:nodes];
 }
 
-- (id<NNNode>)nodeFromMap:(NSDictionary *)map bridge:(RCTBridge *)bridge
+- (id<NNNode>)nodeFromMap:(NSDictionary *)map bridge:(RCTBridge *)bridge eventEmitter:(ReactNativeNativeEventEmitter *)eventEmitter
 {
     if (map == nil || [map isEqual:[NSNull null]]) {
         return nil;
@@ -73,6 +74,7 @@ static NSString *const kJSViewName = @"type";
         id<NNNode> nodeObject = (id<NNNode>)[[nodeClass alloc] init];
         [nodeObject setBridge:bridge];
         [nodeObject setData:map];
+        [nodeObject setEventEmitter:eventEmitter];
         return nodeObject;
     }
     return nil;

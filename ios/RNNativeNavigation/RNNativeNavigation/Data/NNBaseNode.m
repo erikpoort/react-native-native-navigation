@@ -37,6 +37,12 @@ NSString *const kType = @"type";
     return @{};
 }
 
+- (NSArray<NSString *> *)supportedEvents
+{
+    NSAssert(NO, @"%@ should be overridden", NSStringFromSelector(_cmd));
+    return nil;
+}
+
 + (NSString *)jsName
 {
     NSAssert(NO, @"%@ should be overridden", NSStringFromSelector(_cmd));

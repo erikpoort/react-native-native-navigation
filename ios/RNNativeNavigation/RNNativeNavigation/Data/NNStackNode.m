@@ -35,7 +35,7 @@ static NSString *const kStackKey = @"stack";
     NSArray<NSDictionary *> *objects = data[kStackKey];
     NSMutableArray<NNNode> *tempStack = (NSMutableArray<NNNode> *)@[].mutableCopy;
     [objects enumerateObjectsUsingBlock:^(NSDictionary *obj, NSUInteger idx, BOOL *stop) {
-        [tempStack addObject:[[NNNodeHelper sharedInstance] nodeFromMap:obj bridge:self.bridge]];
+        [tempStack addObject:[[NNNodeHelper sharedInstance] nodeFromMap:obj bridge:self.bridge eventEmitter:self.eventEmitter]];
     }];
     self.stack = tempStack;
 }
@@ -49,6 +49,14 @@ static NSString *const kStackKey = @"stack";
     }];
     data[kStackKey] = stack.copy;
     return data.copy;
+}
+
+- (NSArray<NSString *> *)supportedEvents {
+    NSMutableArray *events = @[].mutableCopy;
+    [self.stack enumerateObjectsUsingBlock:^(id <NNNode> obj, NSUInteger idx, BOOL *stop) {
+        [events addObjectsFromArray:obj.supportedEvents];
+    }];
+    return events.copy;
 }
 
 + (NSDictionary<NSString *, id> *)constantsToExport

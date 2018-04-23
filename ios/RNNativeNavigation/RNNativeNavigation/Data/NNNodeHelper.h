@@ -8,6 +8,7 @@
 
 @class RCTBridge;
 @class NNBaseNode;
+@class ReactNativeNativeEventEmitter;
 
 
 @interface NNNodeHelper : NSObject
@@ -16,7 +17,7 @@
 
 - (void)addExternalNodes:(NSArray<NNBaseNode *> *)nodes;
 
-- (id<NNNode>)nodeFromMap:(NSDictionary *)map bridge:(RCTBridge *)bridge;
+- (id<NNNode>)nodeFromMap:(NSDictionary *)map bridge:(RCTBridge *)bridge eventEmitter:(ReactNativeNativeEventEmitter *)eventEmitter;
 
 - (NSDictionary<NSString *, id> *)constantsToExport;
 

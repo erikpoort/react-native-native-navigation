@@ -36,7 +36,7 @@ static NSString *const kSelectedTabKey = @"selectedTab";
     NSArray<NSDictionary *> *objects = data[kTabsKey];
     NSMutableArray<NNNode> *tempTabs = (NSMutableArray<NNNode> *)@[].mutableCopy;
     [objects enumerateObjectsUsingBlock:^(NSDictionary *obj, NSUInteger idx, BOOL *stop) {
-        [tempTabs addObject:[NNNodeHelper.sharedInstance nodeFromMap:obj bridge:self.bridge]];
+        [tempTabs addObject:[NNNodeHelper.sharedInstance nodeFromMap:obj bridge:self.bridge eventEmitter:self.eventEmitter]];
     }];
     self.tabs = tempTabs.copy;
     self.selectedTab = [data[kSelectedTabKey] unsignedIntegerValue];
@@ -52,6 +52,14 @@ static NSString *const kSelectedTabKey = @"selectedTab";
     data[kTabsKey] = tabs;
     data[kSelectedTabKey] = @(self.selectedTab);
     return data.copy;
+}
+
+- (NSArray<NSString *> *)supportedEvents {
+    NSMutableArray *events = @[].mutableCopy;
+    [self.tabs enumerateObjectsUsingBlock:^(id <NNNode> obj, NSUInteger idx, BOOL *stop) {
+        [events addObjectsFromArray:obj.supportedEvents];
+    }];
+    return events.copy;
 }
 
 + (NSDictionary<NSString *, id> *)constantsToExport

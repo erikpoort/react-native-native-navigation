@@ -36,7 +36,7 @@ static NSString *const kStyle = @"style";
 {
     [super setData:data];
     self.page = data[kPage];
-    self.modal = [NNNodeHelper.sharedInstance nodeFromMap:data[kModal] bridge:self.bridge];
+    self.modal = [NNNodeHelper.sharedInstance nodeFromMap:data[kModal] bridge:self.bridge eventEmitter:self.eventEmitter];
     self.style = data[kStyle];
 }
 
@@ -49,6 +49,10 @@ static NSString *const kStyle = @"style";
         data[kModal] = self.modal.data;
     }
     return data.copy;
+}
+
+- (NSArray<NSString *> *)supportedEvents {
+    return [[NSArray arrayWithArray:self.modal.supportedEvents] arrayByAddingObject:self.screenID];
 }
 
 + (NSDictionary<NSString *, id> *)constantsToExport

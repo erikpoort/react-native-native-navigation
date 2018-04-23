@@ -3,8 +3,11 @@ package com.mediamonks.rnnativenavigation.factory;
 import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -13,16 +16,20 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Callback;
+import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.ReadableType;
 import com.mediamonks.rnnativenavigation.R;
 import com.mediamonks.rnnativenavigation.data.Node;
 import com.mediamonks.rnnativenavigation.data.SingleNode;
@@ -40,6 +47,16 @@ public class StackFragment extends BaseFragment<StackNode> implements Navigatabl
 	private Toolbar _toolbar;
 	private int _toolbarHeight;
 	private Drawable _upIcon;
+	private DeviceEventManagerModule.RCTDeviceEventEmitter _eventEmitter;
+
+	@Override public void setNode(StackNode node) {
+		super.setNode(node);
+
+		ReactContext context = node.getInstanceManager().getCurrentReactContext();
+		if (context != null) {
+			_eventEmitter = context.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class);
+		}
+	}
 
 	@Nullable
 	@Override
@@ -79,6 +96,27 @@ public class StackFragment extends BaseFragment<StackNode> implements Navigatabl
 			@Override
 			public void onClick(View v) {
 				onBackPressed();
+			}
+		});
+
+		_toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+			@Override public boolean onMenuItemClick(MenuItem item) {
+				int id = item.getItemId();
+
+				SingleNode singleNode = getCurrentFragment().getNode();
+				if (singleNode.getStyle().hasKey("rightBarButtons") && singleNode.getStyle().getType("rightBarButtons") == ReadableType.Array) {
+					ReadableArray buttons = singleNode.getStyle().getArray("rightBarButtons");
+					assert buttons != null;
+
+					if (id >= 0 && id < buttons.size()) {
+						ReadableMap data = buttons.getMap(id);
+						_eventEmitter.emit(singleNode.getScreenID(), data.getString("id"));
+
+						return true;
+					}
+				}
+
+				return false;
 			}
 		});
 	}
@@ -298,12 +336,15 @@ public class StackFragment extends BaseFragment<StackNode> implements Navigatabl
 
 			if (singleNode.getStyle().hasKey("title")) {
 				_toolbar.setTitle(singleNode.getStyle().getString("title"));
+			} else {
+				_toolbar.setTitle("");
 			}
 
 			if (singleNode.getStyle().hasKey("barTint")) {
 				Integer tintColor = (int) singleNode.getStyle().getDouble("barTint");
 				_upIcon.setColorFilter(tintColor, PorterDuff.Mode.SRC_ATOP);
 				_toolbar.setTitleTextColor(tintColor);
+				_toolbar.setSubtitleTextColor(tintColor);
 			}
 
 			Integer barBackgroundColor = Color.TRANSPARENT;
@@ -311,6 +352,30 @@ public class StackFragment extends BaseFragment<StackNode> implements Navigatabl
 				barBackgroundColor = (int) singleNode.getStyle().getDouble("barBackground");
 			}
 
+			_toolbar.getMenu().clear();
+
+			if (singleNode.getStyle().hasKey("rightBarButtons") && singleNode.getStyle().getType("rightBarButtons") == ReadableType.Array) {
+				ReadableArray buttons = singleNode.getStyle().getArray("rightBarButtons");
+				assert buttons != null;
+
+				int leni = buttons.size();
+				for (int i = 0; i < leni; ++i) {
+					ReadableMap map = buttons.getMap(i);
+					_toolbar.getMenu().add(0, i, i, map.getString("title"));
+					MenuItem item = _toolbar.getMenu().getItem(i);
+					item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+
+					if (singleNode.getStyle().hasKey("barTint")) {
+						Integer tintColor = (int) singleNode.getStyle().getDouble("barTint");
+						View view = _toolbar.findViewById(i);
+						if (view != null && view instanceof TextView) {
+							TextView textView = (TextView) view;
+							textView.setTextColor(tintColor);
+						}
+					}
+				}
+			}
+			
 			// Config
 			int duration = transition == FragmentTransaction.TRANSIT_NONE
 					? 0

@@ -149,7 +149,9 @@ public class SingleFragment extends BaseFragment<SingleNode> implements Navigata
 		}
 		getNode().setStyle(Arguments.makeNativeMap(style));
 
-		getStackFragment().callMethodWithName(SingleNode.UPDATE_STYLE, arguments, null, null);
+		if (getStackFragment() != null) {
+			getStackFragment().callMethodWithName(SingleNode.UPDATE_STYLE, arguments, null, null);
+		}
 	}
 
 	public void showModal(Node node, boolean animated) {

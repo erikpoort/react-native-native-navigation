@@ -17,7 +17,11 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
+import android.text.SpannableString;
+import android.text.Spanned;
 import android.text.TextPaint;
+import android.text.style.AbsoluteSizeSpan;
+import android.text.style.TypefaceSpan;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -346,6 +350,15 @@ public class StackFragment extends BaseFragment<StackNode> implements Navigatabl
 				_toolbar.setTitle("");
 			}
 
+			if (singleNode.getStyle().hasKey("barFont") && singleNode.getStyle().hasKey("barFontSize")) {
+				String font = singleNode.getStyle().getString("barFont");
+				int fontSize = singleNode.getStyle().getInt("barFontSize");
+				SpannableString span = new SpannableString(_toolbar.getTitle());
+				span.setSpan(new TypefaceSpan(font), 0, _toolbar.getTitle().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+				span.setSpan(new AbsoluteSizeSpan(fontSize, true), 0, _toolbar.getTitle().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+				_toolbar.setTitle(span);
+			}
+
 			if (singleNode.getStyle().hasKey("barTint")) {
 				Integer tintColor = (int) singleNode.getStyle().getDouble("barTint");
 				_upIcon.setColorFilter(tintColor, PorterDuff.Mode.SRC_ATOP);
@@ -407,7 +420,7 @@ public class StackFragment extends BaseFragment<StackNode> implements Navigatabl
 					}
 				}
 			}
-			
+
 			// Config
 			int duration = transition == FragmentTransaction.TRANSIT_NONE
 					? 0

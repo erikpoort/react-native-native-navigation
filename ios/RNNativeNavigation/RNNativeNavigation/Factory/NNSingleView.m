@@ -10,7 +10,6 @@
 #import "NNSingleNode.h"
 #import "NNNodeHelper.h"
 #import "RNNNState.h"
-#import "ReactNativeNativeEventEmitter.h"
 
 NSString *const kShowModal = @"showModal";
 NSString *const kUpdateStyle = @"updateStyle";
@@ -44,6 +43,7 @@ NSString *const kUpdateStyle = @"updateStyle";
 - (void)loadView
 {
     self.view = [[RCTRootView alloc] initWithBridge:self.bridge moduleName:self.node.screenID initialProperties:nil];
+    [self adaptStyle];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -71,6 +71,7 @@ NSString *const kUpdateStyle = @"updateStyle";
         if ([controller isKindOfClass:[NNSingleView class]]) {
             NNSingleView *singleView = (NNSingleView *) controller;
             [self setColors:singleView.singleNode.style];
+            [singleView adaptStyle];
         }
     }
 }
@@ -90,15 +91,6 @@ NSString *const kUpdateStyle = @"updateStyle";
 {
     if ([style[@"barHidden"] boolValue]) {
         return;
-    }
-
-    NSString *barTintColorString = style[@"barTint"];
-    if (barTintColorString) {
-        UIColor *color = [RCTConvert UIColor:barTintColorString];
-        self.navigationController.navigationBar.tintColor = color;
-        self.navigationController.navigationBar.titleTextAttributes = @{
-            NSForegroundColorAttributeName: color,
-        };
     }
 
     BOOL barTransparent = [style[@"barTransparent"] boolValue];
@@ -193,63 +185,59 @@ NSString *const kUpdateStyle = @"updateStyle";
     }
     self.singleNode.style = style.copy;
 
-    [self adaptStyle];
-}
-
-- (void)adaptStyle {
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
         __strong typeof(weakSelf) self = weakSelf;
-        NSString *title = self.singleNode.style[@"title"];
-        if (title) {
-            self.title = title;
-        }
-
-        NSMutableDictionary *textAttributes = @{}.mutableCopy;
-
-        id barTintColor = self.singleNode.style[@"barTint"];
-        if (barTintColor) {
-            UIColor *color = [RCTConvert UIColor:barTintColor];
-            textAttributes[NSForegroundColorAttributeName] = color;
-            self.navigationController.navigationBar.tintColor = color;
-        }
-
-        NSString *barFontName = self.singleNode.style[@"barFont"];
-        NSNumber *barFontSize = self.singleNode.style[@"barFontSize"];
-        if (barFontName && barFontSize) {
-            UIFont *barFont = [UIFont fontWithName:barFontName size:barFontSize.floatValue];
-            textAttributes[NSFontAttributeName] = barFont;
-        }
-
-        if (textAttributes.count > 0) {
-            self.navigationController.navigationBar.titleTextAttributes = textAttributes.copy;
-        }
-
-        UIColor *barBackgroundColor = self.singleNode.style[@"barBackground"];
-        if (barBackgroundColor) {
-            self.navigationController.navigationBar.barTintColor = [RCTConvert UIColor:barBackgroundColor];
-        }
-
-        NSMutableArray *buttons;
-
-        NSArray *leftBarButtons = self.singleNode.style[@"leftBarButtons"];
-        buttons = @[].mutableCopy;
-        [leftBarButtons enumerateObjectsUsingBlock:^(NSDictionary *obj, NSUInteger idx, BOOL *stop) {
-            UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc] initWithTitle:obj[@"title"] style:UIBarButtonItemStylePlain target:self action:@selector(onLeftBarButton:)];
-            barButtonItem.tag = idx;
-            [buttons addObject:barButtonItem];
-        }];
-        self.navigationItem.leftBarButtonItems = buttons.copy;
-
-        NSArray *rightBarButtons = self.singleNode.style[@"rightBarButtons"];
-        buttons = @[].mutableCopy;
-        [rightBarButtons enumerateObjectsUsingBlock:^(NSDictionary *obj, NSUInteger idx, BOOL *stop) {
-            UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc] initWithTitle:obj[@"title"] style:UIBarButtonItemStylePlain target:self action:@selector(onRightBarButton:)];
-            barButtonItem.tag = idx;
-            [buttons addObject:barButtonItem];
-        }];
-        self.navigationItem.rightBarButtonItems = buttons.copy;
+        [self adaptStyle];
     });
+}
+
+- (void)adaptStyle {
+    NSString *title = self.singleNode.style[@"title"];
+    if (title) {
+        self.title = title;
+    }
+
+    NSMutableDictionary *textAttributes = @{}.mutableCopy;
+
+    id barTintColor = self.singleNode.style[@"barTint"];
+    if (barTintColor) {
+        UIColor *color = [RCTConvert UIColor:barTintColor];
+        textAttributes[NSForegroundColorAttributeName] = color;
+        self.navigationController.navigationBar.tintColor = color;
+    }
+
+    NSString *barFontName = self.singleNode.style[@"barFont"];
+    NSNumber *barFontSize = self.singleNode.style[@"barFontSize"];
+    if (barFontName && barFontSize) {
+        UIFont *barFont = [UIFont fontWithName:barFontName size:barFontSize.floatValue];
+        textAttributes[NSFontAttributeName] = barFont;
+    }
+
+    if (textAttributes.count > 0) {
+        self.navigationController.navigationBar.titleTextAttributes = textAttributes.copy;
+    }
+
+    UIColor *barBackgroundColor = self.singleNode.style[@"barBackground"];
+    if (barBackgroundColor) {
+        self.navigationController.navigationBar.barTintColor = [RCTConvert UIColor:barBackgroundColor];
+    }
+
+
+    NSDictionary *leftBarButton = self.singleNode.style[@"leftBarButton"];
+    if (leftBarButton) {
+        UIBarButtonItem *leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:leftBarButton[@"title"] style:UIBarButtonItemStylePlain target:self action:@selector(onLeftBarButton:)];
+        self.navigationItem.leftBarButtonItems = @[leftBarButtonItem];
+    }
+
+    NSArray *rightBarButtons = self.singleNode.style[@"rightBarButtons"];
+    NSMutableArray *buttons = @[].mutableCopy;
+    [rightBarButtons enumerateObjectsUsingBlock:^(NSDictionary *obj, NSUInteger idx, BOOL *stop) {
+        UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc] initWithTitle:obj[@"title"] style:UIBarButtonItemStylePlain target:self action:@selector(onRightBarButton:)];
+        barButtonItem.tag = idx;
+        [buttons addObject:barButtonItem];
+    }];
+    self.navigationItem.rightBarButtonItems = buttons.copy;
 }
 
 - (void)onBarButton:(NSDictionary *)data {
@@ -257,7 +245,7 @@ NSString *const kUpdateStyle = @"updateStyle";
 }
 
 - (void)onLeftBarButton:(UIBarButtonItem *)button {
-    [self onBarButton:self.singleNode.style[@"leftBarButtons"][(NSUInteger) button.tag]];
+    [self onBarButton:self.singleNode.style[@"leftBarButton"]];
 }
 
 - (void)onRightBarButton:(UIBarButtonItem *)button {

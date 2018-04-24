@@ -6,7 +6,10 @@ import android.animation.ValueAnimator;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.PorterDuff;
+import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -14,6 +17,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
+import android.text.TextPaint;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -27,9 +31,11 @@ import android.widget.TextView;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Callback;
+import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.ReadableType;
+import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.mediamonks.rnnativenavigation.R;
 import com.mediamonks.rnnativenavigation.data.Node;
 import com.mediamonks.rnnativenavigation.data.SingleNode;
@@ -354,6 +360,32 @@ public class StackFragment extends BaseFragment<StackNode> implements Navigatabl
 
 			_toolbar.getMenu().clear();
 
+			BitmapDrawable customLeftIcon = null;
+
+			if (singleNode.getStyle().hasKey("leftBarButton") && singleNode.getStyle().getType("leftBarButton") == ReadableType.Map) {
+				ReadableMap button = singleNode.getStyle().getMap("leftBarButton");
+				assert button != null;
+
+				String title = button.getString("title");
+
+				Typeface typeface = Typeface.create("Roboto-Regular", Typeface.NORMAL);
+
+				TextPaint paint = new TextPaint();
+				paint.setTypeface(typeface);
+				paint.setColor(Color.RED);
+				paint.setTextSize(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 20, getResources().getDisplayMetrics()));
+				paint.setStyle(Paint.Style.FILL);
+				paint.setAntiAlias(true);
+
+				Rect bounds = new Rect();
+				paint.getTextBounds(title, 0, title.length(), bounds);
+
+				Bitmap bitmap = Bitmap.createBitmap(bounds.width(), bounds.height(), Bitmap.Config.ARGB_8888);
+				Canvas canvas = new Canvas(bitmap);
+				canvas.drawText(title, -bounds.left, bitmap.getHeight(), paint);
+				customLeftIcon = new BitmapDrawable(getResources(), bitmap);
+			}
+
 			if (singleNode.getStyle().hasKey("rightBarButtons") && singleNode.getStyle().getType("rightBarButtons") == ReadableType.Array) {
 				ReadableArray buttons = singleNode.getStyle().getArray("rightBarButtons");
 				assert buttons != null;
@@ -396,7 +428,7 @@ public class StackFragment extends BaseFragment<StackNode> implements Navigatabl
 			anim.start();
 
 			if (!barHidden) {
-				_toolbar.setNavigationIcon(size > 1 ? _upIcon : null);
+				_toolbar.setNavigationIcon(size > 1 ? _upIcon : customLeftIcon);
 
 				ObjectAnimator animator = ObjectAnimator.ofObject(_toolbar, "backgroundColor", new ArgbEvaluator(), fromColor, barBackgroundColor);
 				animator.setDuration(duration);

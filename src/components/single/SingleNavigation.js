@@ -32,4 +32,8 @@ export default class SingleNavigation extends BaseNavigation {
 	addListener = (id, listener) => {
 		this.listeners[id] = listener
 	}
+
+	removeListener = (id, listener) => {
+		this.listeners[id] = null
+	}
 }

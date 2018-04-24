@@ -18,10 +18,13 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
 import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.style.AbsoluteSizeSpan;
+import android.text.style.ForegroundColorSpan;
 import android.text.style.TypefaceSpan;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -381,22 +384,35 @@ public class StackFragment extends BaseFragment<StackNode> implements Navigatabl
 
 				String title = button.getString("title");
 
-				Typeface typeface = Typeface.create("Roboto-Regular", Typeface.NORMAL);
+				if (title != null) {
+					TextPaint paint = new TextPaint();
 
-				TextPaint paint = new TextPaint();
-				paint.setTypeface(typeface);
-				paint.setColor(Color.RED);
-				paint.setTextSize(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 20, getResources().getDisplayMetrics()));
-				paint.setStyle(Paint.Style.FILL);
-				paint.setAntiAlias(true);
+					if (button.hasKey("font")) {
+						Typeface typeface = Typeface.create(button.getString("font"), Typeface.NORMAL);
+						paint.setTypeface(typeface);
+					}
 
-				Rect bounds = new Rect();
-				paint.getTextBounds(title, 0, title.length(), bounds);
+					if (button.hasKey("color")) {
+						paint.setColor(button.getInt("color"));
+					} else if (singleNode.getStyle().hasKey("barTint")) {
+						paint.setColor(singleNode.getStyle().getInt("barTint"));
+					}
 
-				Bitmap bitmap = Bitmap.createBitmap(bounds.width(), bounds.height(), Bitmap.Config.ARGB_8888);
-				Canvas canvas = new Canvas(bitmap);
-				canvas.drawText(title, -bounds.left, bitmap.getHeight(), paint);
-				customLeftIcon = new BitmapDrawable(getResources(), bitmap);
+					if (button.hasKey("fontSize")) {
+						paint.setTextSize(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, button.getInt("fontSize"), getResources().getDisplayMetrics()));
+					}
+
+					paint.setStyle(Paint.Style.FILL);
+					paint.setAntiAlias(true);
+
+					Rect bounds = new Rect();
+					paint.getTextBounds(title, 0, title.length(), bounds);
+
+					Bitmap bitmap = Bitmap.createBitmap(bounds.width(), bounds.height(), Bitmap.Config.ARGB_8888);
+					Canvas canvas = new Canvas(bitmap);
+					canvas.drawText(title, -bounds.left, bitmap.getHeight(), paint);
+					customLeftIcon = new BitmapDrawable(getResources(), bitmap);
+				}
 			}
 
 			if (singleNode.getStyle().hasKey("rightBarButtons") && singleNode.getStyle().getType("rightBarButtons") == ReadableType.Array) {
@@ -406,17 +422,40 @@ public class StackFragment extends BaseFragment<StackNode> implements Navigatabl
 				int leni = buttons.size();
 				for (int i = 0; i < leni; ++i) {
 					ReadableMap map = buttons.getMap(i);
-					_toolbar.getMenu().add(0, i, i, map.getString("title"));
-					MenuItem item = _toolbar.getMenu().getItem(i);
-					item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 
-					if (singleNode.getStyle().hasKey("barTint")) {
-						Integer tintColor = (int) singleNode.getStyle().getDouble("barTint");
-						View view = _toolbar.findViewById(i);
-						if (view != null && view instanceof TextView) {
-							TextView textView = (TextView) view;
-							textView.setTextColor(tintColor);
+					if (map.hasKey("title")) {
+						String title = map.getString("title");
+						TextPaint paint = new TextPaint();
+
+						if (map.hasKey("font")) {
+							Typeface typeface = Typeface.create(map.getString("font"), Typeface.NORMAL);
+							paint.setTypeface(typeface);
 						}
+
+						if (map.hasKey("color")) {
+							paint.setColor(map.getInt("color"));
+						} else if (singleNode.getStyle().hasKey("barTint")) {
+							paint.setColor(singleNode.getStyle().getInt("barTint"));
+						}
+
+						if (map.hasKey("fontSize")) {
+							paint.setTextSize(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, map.getInt("fontSize"), getResources().getDisplayMetrics()));
+						}
+
+						paint.setStyle(Paint.Style.FILL);
+						paint.setAntiAlias(true);
+
+						Rect bounds = new Rect();
+						paint.getTextBounds(title, 0, title.length(), bounds);
+
+						Bitmap bitmap = Bitmap.createBitmap(bounds.width(), bounds.height(), Bitmap.Config.ARGB_8888);
+						Canvas canvas = new Canvas(bitmap);
+						canvas.drawText(title, -bounds.left, bitmap.getHeight(), paint);
+						BitmapDrawable drawable = new BitmapDrawable(getResources(), bitmap);
+
+						_toolbar.getMenu().add("");
+						_toolbar.getMenu().getItem(i).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+						_toolbar.getMenu().getItem(i).setIcon(drawable);
 					}
 				}
 			}

@@ -98,9 +98,9 @@ NSString *const kOpenView = @"openView";
 
 - (void)openView:(NSDictionary *)arguments callback:(RCTResponseSenderBlock)callback
 {
-    NNSingleNode *nodeObject = [NNNodeHelper.sharedInstance nodeFromMap:arguments[@"screen"] bridge:arguments[@"bridge"] eventEmitter:self.drawerNode.eventEmitter];
+    NNSingleNode *nodeObject = [NNNodeHelper.sharedInstance nodeFromMap:arguments[@"screen"] bridge:arguments[@"bridge"]];
 
-    UIViewController<NNView> *rootController = (UIViewController<NNView> *) [UIApplication sharedApplication].keyWindow.rootViewController;
+    UIViewController <NNView> *rootController = (UIViewController <NNView> *) [UIApplication sharedApplication].keyWindow.rootViewController;
 
     NNDrawerSide side = [self sideForPath:nodeObject.screenID];
 

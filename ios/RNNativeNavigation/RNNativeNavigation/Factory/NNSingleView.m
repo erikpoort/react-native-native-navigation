@@ -149,9 +149,9 @@ NSString *const kUpdateStyle = @"updateStyle";
 
 - (void)showModal:(NSDictionary *)arguments callback:(RCTResponseSenderBlock)callback
 {
-    NNSingleNode *nodeObject = [NNNodeHelper.sharedInstance nodeFromMap:arguments[@"screen"] bridge:self.bridge eventEmitter:self.singleNode.eventEmitter];
+    NNSingleNode *nodeObject = [NNNodeHelper.sharedInstance nodeFromMap:arguments[@"screen"] bridge:self.bridge];
 
-    UIViewController<NNView> *rootController = (UIViewController<NNView> *) [UIApplication sharedApplication].keyWindow.rootViewController;
+    UIViewController <NNView> *rootController = (UIViewController <NNView> *) [UIApplication sharedApplication].keyWindow.rootViewController;
 
     self.singleNode.modal = nodeObject;
 

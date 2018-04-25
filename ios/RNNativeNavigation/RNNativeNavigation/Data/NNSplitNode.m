@@ -36,8 +36,8 @@ static NSString *const kAxisKey = @"axis";
 {
     [super setData:data];
 
-    self.node1 = [NNNodeHelper.sharedInstance nodeFromMap:data[kNode1Key] bridge:self.bridge eventEmitter:self.eventEmitter];
-    self.node2 = [NNNodeHelper.sharedInstance nodeFromMap:data[kNode2Key] bridge:self.bridge eventEmitter:self.eventEmitter];
+    self.node1 = [NNNodeHelper.sharedInstance nodeFromMap:data[kNode1Key] bridge:self.bridge];
+    self.node2 = [NNNodeHelper.sharedInstance nodeFromMap:data[kNode2Key] bridge:self.bridge];
     self.axis = [data[kAxisKey] isEqualToString:@"vertical"] ? UILayoutConstraintAxisVertical : UILayoutConstraintAxisHorizontal;
 }
 
@@ -62,6 +62,10 @@ static NSString *const kAxisKey = @"axis";
     return @{
         kReplace : kReplace,
     };
+}
+
+- (ReactNativeNativeEventEmitter *)eventEmitter {
+    return [self.bridge moduleForClass:[ReactNativeNativeEventEmitter class]];
 }
 
 @end

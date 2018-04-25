@@ -9,12 +9,12 @@
 
 @interface NNBaseNode : NSObject <NNNode>
 
-@property (nonatomic, weak) ReactNativeNativeEventEmitter *eventEmitter;
-
 @property (nonatomic, copy, readonly) NSString *screenID;
 
 - (void)setData:(NSDictionary *)data;
 
 - (NSDictionary *)data;
+
+- (ReactNativeNativeEventEmitter *)eventEmitter;
 
 @end

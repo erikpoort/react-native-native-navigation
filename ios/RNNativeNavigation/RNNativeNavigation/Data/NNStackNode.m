@@ -35,7 +35,7 @@ static NSString *const kStackKey = @"stack";
     NSArray<NSDictionary *> *objects = data[kStackKey];
     NSMutableArray<NNNode> *tempStack = (NSMutableArray<NNNode> *)@[].mutableCopy;
     [objects enumerateObjectsUsingBlock:^(NSDictionary *obj, NSUInteger idx, BOOL *stop) {
-        [tempStack addObject:[[NNNodeHelper sharedInstance] nodeFromMap:obj bridge:self.bridge eventEmitter:self.eventEmitter]];
+        [tempStack addObject:[[NNNodeHelper sharedInstance] nodeFromMap:obj bridge:self.bridge]];
     }];
     self.stack = tempStack;
 }
@@ -67,6 +67,10 @@ static NSString *const kStackKey = @"stack";
         kPopTo : kPopTo,
         kPopToRoot : kPopToRoot
     };
+}
+
+- (ReactNativeNativeEventEmitter *)eventEmitter {
+    return [self.bridge moduleForClass:[ReactNativeNativeEventEmitter class]];
 }
 
 @end

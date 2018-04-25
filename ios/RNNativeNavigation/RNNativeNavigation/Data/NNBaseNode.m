@@ -37,6 +37,11 @@ NSString *const kType = @"type";
     return @{};
 }
 
+- (ReactNativeNativeEventEmitter *)eventEmitter {
+    NSAssert(NO, @"%@ should be overridden", NSStringFromSelector(_cmd));
+    return nil;
+}
+
 - (NSArray<NSString *> *)supportedEvents
 {
     NSAssert(NO, @"%@ should be overridden", NSStringFromSelector(_cmd));

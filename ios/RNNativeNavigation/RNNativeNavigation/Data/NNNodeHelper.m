@@ -51,8 +51,7 @@ static NSString *const kJSViewName = @"type";
     _externalNodes = [_externalNodes arrayByAddingObjectsFromArray:nodes];
 }
 
-- (id<NNNode>)nodeFromMap:(NSDictionary *)map bridge:(RCTBridge *)bridge eventEmitter:(ReactNativeNativeEventEmitter *)eventEmitter
-{
+- (id <NNNode>)nodeFromMap:(NSDictionary *)map bridge:(RCTBridge *)bridge {
     if (map == nil || [map isEqual:[NSNull null]]) {
         return nil;
     }
@@ -74,7 +73,6 @@ static NSString *const kJSViewName = @"type";
         id<NNNode> nodeObject = (id<NNNode>)[[nodeClass alloc] init];
         [nodeObject setBridge:bridge];
         [nodeObject setData:map];
-        [nodeObject setEventEmitter:eventEmitter];
         return nodeObject;
     }
     return nil;

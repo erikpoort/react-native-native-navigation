@@ -138,7 +138,7 @@ NSString *const kReplace = @"replace";
 - (void)replace:(NSDictionary *)arguments callback:(RCTResponseSenderBlock)callback
 {
     UIViewController<NNView> *rootController = (UIViewController<NNView> *) [UIApplication sharedApplication].keyWindow.rootViewController;
-    id<NNNode> nodeObject = [NNNodeHelper.sharedInstance nodeFromMap:arguments[@"screen"] bridge:arguments[@"bridge"] eventEmitter:self.splitNode.eventEmitter];
+    id<NNNode> nodeObject = [NNNodeHelper.sharedInstance nodeFromMap:arguments[@"screen"] bridge:arguments[@"bridge"]];
 
     NSString *newPart = [nodeObject.screenID substringFromIndex:self.splitNode.screenID.length + 1];
     NSArray *splitArray = [newPart componentsSeparatedByString:@"/"];

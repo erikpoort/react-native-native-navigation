@@ -14,8 +14,6 @@
 
 - (void)setBridge:(RCTBridge *)bridge;
 
-- (void)setEventEmitter:(ReactNativeNativeEventEmitter *)emitter;
-
 - (void)setData:(NSDictionary *)data;
 
 - (NSDictionary *)data;

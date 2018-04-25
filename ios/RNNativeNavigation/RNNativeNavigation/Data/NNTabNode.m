@@ -36,7 +36,7 @@ static NSString *const kSelectedTabKey = @"selectedTab";
     NSArray<NSDictionary *> *objects = data[kTabsKey];
     NSMutableArray<NNNode> *tempTabs = (NSMutableArray<NNNode> *)@[].mutableCopy;
     [objects enumerateObjectsUsingBlock:^(NSDictionary *obj, NSUInteger idx, BOOL *stop) {
-        [tempTabs addObject:[NNNodeHelper.sharedInstance nodeFromMap:obj bridge:self.bridge eventEmitter:self.eventEmitter]];
+        [tempTabs addObject:[NNNodeHelper.sharedInstance nodeFromMap:obj bridge:self.bridge]];
     }];
     self.tabs = tempTabs.copy;
     self.selectedTab = [data[kSelectedTabKey] unsignedIntegerValue];
@@ -67,6 +67,10 @@ static NSString *const kSelectedTabKey = @"selectedTab";
     return @{
         kOpenTab : kOpenTab,
     };
+}
+
+- (ReactNativeNativeEventEmitter *)eventEmitter {
+    return [self.bridge moduleForClass:[ReactNativeNativeEventEmitter class]];
 }
 
 @end

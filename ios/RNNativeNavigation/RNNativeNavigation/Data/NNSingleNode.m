@@ -36,12 +36,11 @@ static NSString *const kStyle = @"style";
 {
     [super setData:data];
     self.page = data[kPage];
-    self.modal = [NNNodeHelper.sharedInstance nodeFromMap:data[kModal] bridge:self.bridge eventEmitter:self.eventEmitter];
+    self.modal = [NNNodeHelper.sharedInstance nodeFromMap:data[kModal] bridge:self.bridge];
     self.style = data[kStyle];
 }
 
-- (NSDictionary *)data
-{
+- (NSDictionary *)data {
     NSMutableDictionary *data = [super data].mutableCopy;
     data[kPage] = self.page;
     data[kStyle] = self.style;
@@ -61,6 +60,10 @@ static NSString *const kStyle = @"style";
         kShowModal: kShowModal,
         kUpdateStyle: kUpdateStyle
     };
+}
+
+- (ReactNativeNativeEventEmitter *)eventEmitter {
+    return [self.bridge moduleForClass:[ReactNativeNativeEventEmitter class]];
 }
 
 @end

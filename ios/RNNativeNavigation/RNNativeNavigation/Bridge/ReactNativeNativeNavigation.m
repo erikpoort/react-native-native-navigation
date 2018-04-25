@@ -19,9 +19,7 @@
 static NSString *const kRNNN = @"RNNN";
 
 
-@implementation ReactNativeNativeNavigation {
-    ReactNativeNativeEventEmitter *_eventEmitter;
-}
+@implementation ReactNativeNativeNavigation
 RCT_EXPORT_MODULE();
 
 @synthesize bridge = _bridge;
@@ -78,9 +76,7 @@ RCT_EXPORT_METHOD(
     dispatch_async(dispatch_get_main_queue(), ^{
         [RNNNState sharedInstance].state = map;
 
-        _eventEmitter = [self.bridge moduleForClass:[ReactNativeNativeEventEmitter class]];
-
-        NNStackNode *nodeObject = [NNNodeHelper.sharedInstance nodeFromMap:map bridge:self.bridge eventEmitter:_eventEmitter];
+        NNStackNode *nodeObject = [NNNodeHelper.sharedInstance nodeFromMap:map bridge:self.bridge];
         UIViewController *viewController = [nodeObject generate];
 
         UIWindow *window = [RNNNState sharedInstance].window;

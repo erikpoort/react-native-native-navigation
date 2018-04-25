@@ -328,11 +328,6 @@ public class StackFragment extends BaseFragment<StackNode> implements Navigatabl
 		if (showNode instanceof SingleNode) {
 			SingleNode singleNode = (SingleNode) showNode;
 
-			// Current values
-			ColorDrawable background = (ColorDrawable) _toolbar.getBackground();
-			int fromColor = background.getColor();
-			int fromHeight = _toolbar.getMeasuredHeight();
-
 			// Requested values
 			boolean barTransparent = false;
 			if (singleNode.getStyle().hasKey("barTransparent")) {
@@ -373,6 +368,12 @@ public class StackFragment extends BaseFragment<StackNode> implements Navigatabl
 			}
 
 			_toolbar.getMenu().clear();
+
+			BitmapDrawable customBackIcon = null;
+
+			if (singleNode.getStyle().hasKey("backButtonImage")) {
+				customBackIcon = Convert.drawable(singleNode.getStyle().getMap("backButtonImage"), getResources());
+			}
 
 			BitmapDrawable customLeftIcon = null;
 
@@ -452,32 +453,13 @@ public class StackFragment extends BaseFragment<StackNode> implements Navigatabl
 				}
 			}
 
-			// Config
-			int duration = transition == FragmentTransaction.TRANSIT_NONE
-					? 0
-					: getResources().getInteger(android.R.integer.config_shortAnimTime);
-
-			// Execution
-			ValueAnimator anim = ValueAnimator.ofInt(fromHeight, toHeight);
-			anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-				@Override
-				public void onAnimationUpdate(ValueAnimator valueAnimator) {
-					int val = (Integer) valueAnimator.getAnimatedValue();
-					ViewGroup.LayoutParams layoutParams = _toolbar.getLayoutParams();
-					layoutParams.height = val;
-					_toolbar.setLayoutParams(layoutParams);
-				}
-			});
-			anim.setDuration(duration);
-			anim.start();
+			ViewGroup.LayoutParams layoutParams = _toolbar.getLayoutParams();
+			layoutParams.height = toHeight;
+			_toolbar.setLayoutParams(layoutParams);
 
 			if (!barHidden) {
-				_toolbar.setNavigationIcon(size > 1 ? _upIcon : customLeftIcon);
-
-				ObjectAnimator animator = ObjectAnimator.ofObject(_toolbar, "backgroundColor", new ArgbEvaluator(), fromColor, barBackgroundColor);
-				animator.setDuration(duration);
-				animator.setInterpolator(new DecelerateInterpolator());
-				animator.start();
+				_toolbar.setNavigationIcon(size > 1 ? (customBackIcon != null ? customBackIcon : _upIcon) : customLeftIcon);
+				_toolbar.setBackgroundColor(barBackgroundColor);
 
 				RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) _holder.getLayoutParams();
 				if (barTransparent) {

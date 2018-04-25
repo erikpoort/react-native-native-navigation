@@ -228,6 +228,9 @@ NSString *const kUpdateStyle = @"updateStyle";
         UIImage *image = [RCTConvert UIImage:self.singleNode.style[@"backButtonImage"]];
         self.navigationController.navigationBar.backIndicatorImage = image;
         self.navigationController.navigationBar.backIndicatorTransitionMaskImage = image;
+    } else {
+        self.navigationController.navigationBar.backIndicatorImage = nil;
+        self.navigationController.navigationBar.backIndicatorTransitionMaskImage = nil;
     }
 
     NSDictionary *leftBarButton = self.singleNode.style[@"leftBarButton"];

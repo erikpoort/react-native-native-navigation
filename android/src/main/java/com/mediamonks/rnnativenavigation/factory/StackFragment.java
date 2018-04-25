@@ -4,16 +4,21 @@ import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.ColorFilter;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
@@ -35,16 +40,19 @@ import android.widget.TextView;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Callback;
+import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.ReadableType;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
+import com.facebook.react.modules.image.ImageLoaderModule;
 import com.mediamonks.rnnativenavigation.R;
 import com.mediamonks.rnnativenavigation.data.Node;
 import com.mediamonks.rnnativenavigation.data.SingleNode;
 import com.mediamonks.rnnativenavigation.data.StackNode;
 
+import java.net.URL;
 import java.util.Stack;
 
 /**
@@ -379,9 +387,8 @@ public class StackFragment extends BaseFragment<StackNode> implements Navigatabl
 				ReadableMap button = singleNode.getStyle().getMap("leftBarButton");
 				assert button != null;
 
-				String title = button.getString("title");
-
-				if (title != null) {
+				if (button.hasKey("title")) {
+					String title = button.getString("title");
 					TextPaint paint = new TextPaint();
 
 					if (button.hasKey("font")) {
@@ -403,11 +410,27 @@ public class StackFragment extends BaseFragment<StackNode> implements Navigatabl
 					Rect bounds = new Rect();
 					paint.getTextBounds(title, 0, title.length(), bounds);
 
-					int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 14, getResources().getDisplayMetrics());
-					Bitmap bitmap = Bitmap.createBitmap(bounds.width() + padding * 2, bounds.height(), Bitmap.Config.ARGB_8888);
+					Bitmap bitmap = Bitmap.createBitmap(bounds.width(), bounds.height(), Bitmap.Config.ARGB_8888);
 					Canvas canvas = new Canvas(bitmap);
-					canvas.drawText(title, -bounds.left + padding, bitmap.getHeight(), paint);
+					canvas.drawText(title, -bounds.left, bitmap.getHeight(), paint);
 					customLeftIcon = new BitmapDrawable(getResources(), bitmap);
+				} else if (button.hasKey("icon")) {
+					ReadableMap iconData = button.getMap("icon");
+					Uri uri = Uri.parse(iconData.getString("uri"));
+					try {
+						StrictMode.ThreadPolicy threadPolicy = StrictMode.getThreadPolicy();
+						StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().permitNetwork().build());
+
+						String path = uri.toString();
+						URL url = new URL(path);
+						Bitmap bitmap = BitmapFactory.decodeStream(url.openStream());
+						customLeftIcon = new BitmapDrawable(getResources(), bitmap);
+						if (singleNode.getStyle().hasKey("barTint")) {
+							customLeftIcon.setColorFilter(singleNode.getStyle().getInt("barTint"), PorterDuff.Mode.SRC_ATOP);
+						}
+						StrictMode.setThreadPolicy(threadPolicy);
+					} catch (Exception e) {
+					}
 				}
 			}
 

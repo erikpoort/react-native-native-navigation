@@ -226,16 +226,21 @@ NSString *const kUpdateStyle = @"updateStyle";
 
     NSDictionary *leftBarButton = self.singleNode.style[@"leftBarButton"];
     if (leftBarButton) {
-        UIBarButtonItem *leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:leftBarButton[@"title"] style:UIBarButtonItemStylePlain target:self action:@selector(onLeftBarButton:)];
-        NSMutableDictionary *attributes = @{}.mutableCopy;
-        if (leftBarButton[@"color"]) {
-            attributes[NSForegroundColorAttributeName] = [RCTConvert UIColor:leftBarButton[@"color"]];
+        if (leftBarButton[@"title"]) {
+            UIBarButtonItem *leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:leftBarButton[@"title"] style:UIBarButtonItemStylePlain target:self action:@selector(onLeftBarButton:)];
+            NSMutableDictionary *attributes = @{}.mutableCopy;
+            if (leftBarButton[@"color"]) {
+                attributes[NSForegroundColorAttributeName] = [RCTConvert UIColor:leftBarButton[@"color"]];
+            }
+            if (leftBarButton[@"font"] && leftBarButton[@"fontSize"]) {
+                attributes[NSFontAttributeName] = [UIFont fontWithName:leftBarButton[@"font"] size:((NSNumber *)leftBarButton[@"fontSize"]).floatValue];
+            }
+            [leftBarButtonItem setTitleTextAttributes:attributes forState:UIControlStateNormal];
+            self.navigationItem.leftBarButtonItem = leftBarButtonItem;
+        } else if (leftBarButton[@"icon"]) {
+            UIBarButtonItem *leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[RCTConvert UIImage:leftBarButton[@"icon"]] style:UIBarButtonItemStylePlain target:self action:@selector(onLeftBarButton:)];
+            self.navigationItem.leftBarButtonItem = leftBarButtonItem;
         }
-        if (leftBarButton[@"font"] && leftBarButton[@"fontSize"]) {
-            attributes[NSFontAttributeName] = [UIFont fontWithName:leftBarButton[@"font"] size:((NSNumber *)leftBarButton[@"fontSize"]).floatValue];
-        }
-        [leftBarButtonItem setTitleTextAttributes:attributes forState:UIControlStateNormal];
-        self.navigationItem.leftBarButtonItems = @[leftBarButtonItem];
     }
 
     NSArray *rightBarButtons = self.singleNode.style[@"rightBarButtons"];

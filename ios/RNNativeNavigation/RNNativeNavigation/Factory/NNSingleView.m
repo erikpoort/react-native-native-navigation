@@ -227,6 +227,14 @@ NSString *const kUpdateStyle = @"updateStyle";
     NSDictionary *leftBarButton = self.singleNode.style[@"leftBarButton"];
     if (leftBarButton) {
         UIBarButtonItem *leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:leftBarButton[@"title"] style:UIBarButtonItemStylePlain target:self action:@selector(onLeftBarButton:)];
+        NSMutableDictionary *attributes = @{}.mutableCopy;
+        if (leftBarButton[@"color"]) {
+            attributes[NSForegroundColorAttributeName] = [RCTConvert UIColor:leftBarButton[@"color"]];
+        }
+        if (leftBarButton[@"font"] && leftBarButton[@"fontSize"]) {
+            attributes[NSFontAttributeName] = [UIFont fontWithName:leftBarButton[@"font"] size:((NSNumber *)leftBarButton[@"fontSize"]).floatValue];
+        }
+        [leftBarButtonItem setTitleTextAttributes:attributes forState:UIControlStateNormal];
         self.navigationItem.leftBarButtonItems = @[leftBarButtonItem];
     }
 
@@ -234,6 +242,14 @@ NSString *const kUpdateStyle = @"updateStyle";
     NSMutableArray *buttons = @[].mutableCopy;
     [rightBarButtons enumerateObjectsUsingBlock:^(NSDictionary *obj, NSUInteger idx, BOOL *stop) {
         UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc] initWithTitle:obj[@"title"] style:UIBarButtonItemStylePlain target:self action:@selector(onRightBarButton:)];
+        NSMutableDictionary *attributes = @{}.mutableCopy;
+        if (obj[@"color"]) {
+            attributes[NSForegroundColorAttributeName] = [RCTConvert UIColor:obj[@"color"]];
+        }
+        if (obj[@"font"] && obj[@"fontSize"]) {
+            attributes[NSFontAttributeName] = [UIFont fontWithName:obj[@"font"] size:((NSNumber *)obj[@"fontSize"]).floatValue];
+        }
+        [barButtonItem setTitleTextAttributes:attributes forState:UIControlStateNormal];
         barButtonItem.tag = idx;
         [buttons addObject:barButtonItem];
     }];

@@ -223,6 +223,12 @@ NSString *const kUpdateStyle = @"updateStyle";
         self.navigationController.navigationBar.barTintColor = [RCTConvert UIColor:barBackgroundColor];
     }
 
+    NSDictionary *backButtonImage = self.singleNode.style[@"backButtonImage"];
+    if (backButtonImage) {
+        UIImage *image = [RCTConvert UIImage:self.singleNode.style[@"backButtonImage"]];
+        self.navigationController.navigationBar.backIndicatorImage = image;
+        self.navigationController.navigationBar.backIndicatorTransitionMaskImage = image;
+    }
 
     NSDictionary *leftBarButton = self.singleNode.style[@"leftBarButton"];
     if (leftBarButton) {

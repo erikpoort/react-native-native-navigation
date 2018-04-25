@@ -388,13 +388,11 @@ public class StackFragment extends BaseFragment<StackNode> implements Navigatabl
 						Typeface typeface = Typeface.create(button.getString("font"), Typeface.NORMAL);
 						paint.setTypeface(typeface);
 					}
-
 					if (button.hasKey("color")) {
 						paint.setColor(button.getInt("color"));
 					} else if (singleNode.getStyle().hasKey("barTint")) {
 						paint.setColor(singleNode.getStyle().getInt("barTint"));
 					}
-
 					if (button.hasKey("fontSize")) {
 						paint.setTextSize(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, button.getInt("fontSize"), getResources().getDisplayMetrics()));
 					}
@@ -405,9 +403,10 @@ public class StackFragment extends BaseFragment<StackNode> implements Navigatabl
 					Rect bounds = new Rect();
 					paint.getTextBounds(title, 0, title.length(), bounds);
 
-					Bitmap bitmap = Bitmap.createBitmap(bounds.width(), bounds.height(), Bitmap.Config.ARGB_8888);
+					int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 14, getResources().getDisplayMetrics());
+					Bitmap bitmap = Bitmap.createBitmap(bounds.width() + padding * 2, bounds.height(), Bitmap.Config.ARGB_8888);
 					Canvas canvas = new Canvas(bitmap);
-					canvas.drawText(title, -bounds.left, bitmap.getHeight(), paint);
+					canvas.drawText(title, -bounds.left + padding, bitmap.getHeight(), paint);
 					customLeftIcon = new BitmapDrawable(getResources(), bitmap);
 				}
 			}

@@ -119,12 +119,24 @@ NSString *const kPopToRoot = @"popToRoot";
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
         __strong typeof(weakSelf) self = weakSelf;
-        UIViewController *viewController = [nodeObject generate];
+        UIViewController<NNView> *viewController = [nodeObject generate];
 
         if ([extraArguments[@"reset"] boolValue]) {
             NSArray *viewControllers = @[viewController];
             [self setViewControllers:viewControllers animated:YES];
         } else {
+            if ([viewController.node isKindOfClass:[NNSingleNode class]]) {
+                NNSingleNode *singleNode = viewController.node;
+                NSString *backButtonTitle = singleNode.style[@"backButtonTitle"];
+                if (backButtonTitle) {
+                    if ([backButtonTitle isEqualToString:@""]) {
+                        backButtonTitle = @" ";
+                    }
+                    self.viewControllers.lastObject.navigationItem.title = backButtonTitle;
+                } else {
+                    self.viewControllers.lastObject.navigationItem.title = nil;
+                }
+            }
             [self pushViewController:viewController animated:YES];
         }
     });

@@ -81,6 +81,7 @@ NSString *const kUpdateStyle = @"updateStyle";
     [super viewDidAppear:animated];
 
     [self setColors:self.singleNode.style];
+    [self adaptStyle];
 
     if (self.singleNode.modal) {
         [self presentViewController:[self.singleNode.modal generate] animated:NO completion:nil];
@@ -221,6 +222,14 @@ NSString *const kUpdateStyle = @"updateStyle";
     UIColor *barBackgroundColor = self.singleNode.style[@"barBackground"];
     if (barBackgroundColor) {
         self.navigationController.navigationBar.barTintColor = [RCTConvert UIColor:barBackgroundColor];
+    }
+
+    NSString *backButtonTitle = self.singleNode.style[@"backButtonTitle"];
+    if (backButtonTitle) {
+        if ([backButtonTitle isEqualToString:@""]) {
+            backButtonTitle = @" ";
+        }
+        self.navigationItem.backBarButtonItem.title = backButtonTitle;
     }
 
     NSDictionary *backButtonImage = self.singleNode.style[@"backButtonImage"];

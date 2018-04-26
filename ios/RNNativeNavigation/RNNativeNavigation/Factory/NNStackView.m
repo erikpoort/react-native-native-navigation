@@ -133,8 +133,6 @@ NSString *const kPopToRoot = @"popToRoot";
                         backButtonTitle = @" ";
                     }
                     self.viewControllers.lastObject.navigationItem.title = backButtonTitle;
-                } else {
-                    self.viewControllers.lastObject.navigationItem.title = nil;
                 }
             }
             [self pushViewController:viewController animated:YES];

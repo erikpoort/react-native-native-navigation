@@ -1,4 +1,4 @@
-# react-native-native-navigation
+# react-native-native-navigation (r3n)
 Very ambitious private project to create a better native navigation framework.
 
 ## Current state

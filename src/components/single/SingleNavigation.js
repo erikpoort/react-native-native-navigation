@@ -33,7 +33,7 @@ export default class SingleNavigation extends BaseNavigation {
 		this.listeners[id] = listener
 	}
 
-	removeListener = (id, listener) => {
+	removeListener = (id) => {
 		this.listeners[id] = null
 	}
 }

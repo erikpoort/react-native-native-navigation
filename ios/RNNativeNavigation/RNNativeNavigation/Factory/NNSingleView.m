@@ -12,6 +12,7 @@
 #import "RNNNState.h"
 
 NSString *const kShowModal = @"showModal";
+NSString *const kDismiss = @"dismiss";
 NSString *const kUpdateStyle = @"updateStyle";
 
 
@@ -137,6 +138,9 @@ NSString *const kUpdateStyle = @"updateStyle";
         kShowModal: ^{
             [self showModal:arguments callback:callback];
         },
+        kDismiss: ^{
+            [self dismiss];
+        },
         kUpdateStyle: ^{
             [self updateStyle:arguments];
         }
@@ -165,9 +169,17 @@ NSString *const kUpdateStyle = @"updateStyle";
         __strong typeof(weakSelf) self = weakSelf;
         UIViewController *viewController = [nodeObject generate];
         if (viewController) {
+            viewController.modalPresenter = self;
             [self presentViewController:viewController animated:YES completion:nil];
         }
     });
+}
+
+- (void)dismiss {
+    if (self.modalPresenter) {
+        self.modalPresenter.singleNode.modal = nil;
+        [self dismissViewControllerAnimated:YES completion:nil];
+    }
 }
 
 - (void)updateStyle:(NSDictionary *)arguments {
@@ -278,6 +290,24 @@ NSString *const kUpdateStyle = @"updateStyle";
 
 - (void)onRightBarButton:(UIBarButtonItem *)button {
     [self onBarButton:self.singleNode.style[@"rightBarButtons"][(NSUInteger) button.tag]];
+}
+
+@end
+
+#import <objc/runtime.h>
+
+@implementation UIViewController (Modal)
+
+static char MODAL_PRESENTER_KEY;
+
+@dynamic modalPresenter;
+
+- (NNSingleView *)modalPresenter {
+    return (NNSingleView *) objc_getAssociatedObject(self, &MODAL_PRESENTER_KEY);
+}
+
+- (void)setModalPresenter:(NNSingleView *)modalPresenter {
+    objc_setAssociatedObject(self, &MODAL_PRESENTER_KEY, modalPresenter, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 @end

@@ -10,10 +10,9 @@
 #import "NNView.h"
 #import "ReactNativeNativeNavigation.h"
 
+#if RCT_DEBUG
 #import <React/RCTDevMenu.h>
 #import <React/RCTKeyCommands.h>
-
-#if __has_include("RCTDevMenu.h")
 #endif
 
 static NSString *const kRNNN = @"RNNN";
@@ -125,8 +124,7 @@ RCT_EXPORT_METHOD(
 
 - (void)addDeveloperOptions
 {
-#if __has_include("RCTDevMenu.h")
-#endif
+#if RCT_DEBUG
     __weak ReactNativeNativeNavigation *weakSelf = self;
     [_bridge.devMenu addItem:[RCTDevMenuItem buttonItemWithTitle:@"Reset navigation" handler:^{
         [weakSelf resetApplication];
@@ -138,6 +136,7 @@ RCT_EXPORT_METHOD(
                              action:^(UIKeyCommand *command) {
                                  [weakSelf resetApplication];
                              }];
+#endif
 }
 
 - (void)dealloc

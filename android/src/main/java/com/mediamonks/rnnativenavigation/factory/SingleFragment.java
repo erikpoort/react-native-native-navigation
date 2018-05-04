@@ -133,20 +133,8 @@ public class SingleFragment extends BaseFragment<SingleNode> implements Navigata
 	}
 
 	private void handleUpdateStyleCall(ReadableMap arguments) {
-		// Title
 		HashMap <String, Object> style = getNode().getStyle().toHashMap();
-		if (arguments.hasKey("title")) {
-			String title = arguments.getString("title");
-			style.put("title", title);
-		}
-		if (arguments.hasKey("barTint")) {
-			int barTint = arguments.getInt("barTint");
-			style.put("barTint", barTint);
-		}
-		if (arguments.hasKey("barBackground")) {
-			int barBackgroundColor = arguments.getInt("barBackground");
-			style.put("barBackground", barBackgroundColor);
-		}
+		style.putAll(arguments.toHashMap());
 		getNode().setStyle(Arguments.makeNativeMap(style));
 
 		if (getStackFragment() != null) {

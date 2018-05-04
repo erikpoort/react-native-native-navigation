@@ -8,6 +8,8 @@
 
 @interface NNStackNode : NNBaseNode <NNNode>
 
+@property (nonatomic, strong, readonly) RCTBridge *bridge;
+
 @property (nonatomic, copy) NSArray<id<NNNode>> *stack;
 
 @end

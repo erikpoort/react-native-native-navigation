@@ -100,12 +100,8 @@ RCT_EXPORT_METHOD(
     __kindof UIViewController<NNView> *findController = [rootController viewForPath:navigator];
     if (!findController) return;
 
-    NSMutableDictionary *newArguments = @{}.mutableCopy;
-    newArguments[@"bridge"] = self.bridge;
-    [newArguments addEntriesFromDictionary:arguments];
-
     if ([findController respondsToSelector:@selector(callMethodWithName:arguments:callback:)]) {
-        [findController callMethodWithName:methodName arguments:newArguments callback:callback];
+        [findController callMethodWithName:methodName arguments:arguments callback:callback];
     }
 }
 

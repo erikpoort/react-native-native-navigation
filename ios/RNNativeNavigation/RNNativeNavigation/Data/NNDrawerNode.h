@@ -21,6 +21,8 @@ typedef NS_ENUM(NSInteger, NNDrawerSide) {
 
 @interface NNDrawerNode : NNBaseNode <NNNode>
 
+@property (nonatomic, strong, readonly) RCTBridge *bridge;
+
 @property (nonatomic, strong) id<NNNode> leftNode;
 @property (nonatomic, strong) id<NNNode> centerNode;
 @property (nonatomic, strong) id<NNNode> rightNode;

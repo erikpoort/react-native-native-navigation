@@ -172,18 +172,7 @@ NSString *const kUpdateStyle = @"updateStyle";
 
 - (void)updateStyle:(NSDictionary *)arguments {
     NSMutableDictionary *style = self.singleNode.style.mutableCopy;
-    NSString *title = arguments[@"title"];
-    if (title) {
-        style[@"title"] = title;
-    }
-    NSString *barTint = arguments[@"barTint"];
-    if (barTint) {
-        style[@"barTint"] = barTint;
-    }
-    NSString *barBackground = arguments[@"barBackground"];
-    if (barBackground) {
-        style[@"barBackground"] = barBackground;
-    }
+    [style addEntriesFromDictionary:arguments];
     self.singleNode.style = style.copy;
 
     __weak typeof(self) weakSelf = self;

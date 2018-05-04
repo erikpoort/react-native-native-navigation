@@ -266,18 +266,7 @@ public class StackFragment extends BaseFragment<StackNode> implements Navigatabl
 		getActivity().runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
-				if (arguments.hasKey("title")) {
-					_toolbar.setTitle(arguments.getString("title"));
-				}
-				if (arguments.hasKey("barTint")) {
-					int color = arguments.getInt("barTint");
-					_toolbar.setTitleTextColor(color);
-					_upIcon.setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
-				}
-				if (arguments.hasKey("barBackground")) {
-					int color = arguments.getInt("barBackground");
-					_toolbar.setBackgroundColor(color);
-				}
+				handleCurrentStack(-1);
 			}
 		});
 	}

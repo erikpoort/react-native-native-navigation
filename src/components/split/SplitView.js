@@ -64,11 +64,11 @@ export const SplitNode = {
 							return class extends Component {
 								split;
 
-								componentWillMount() {
-									this.split = new SplitNavigation(screenID, navigatorID, this.props.navigation);
-								}
-
 								render() {
+									if (this.split == null) {
+										this.split = new SplitNavigation(screenID, navigatorID, this.props.navigation);
+									}
+
 									const Screen = screen;
 									return <Screen {...{
 										[navigatorName]: this.split,

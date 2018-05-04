@@ -66,12 +66,12 @@ export const DrawerNode = {
 							return class extends Component {
 								drawer;
 
-								componentWillMount() {
-									this.drawer = new DrawerNavigation(screenID, navigatorID, this.props.navigation);
-									this.drawer.drawerView = screen
-								}
-
 								render() {
+									if (this.drawer == null) {
+										this.drawer = new DrawerNavigation(screenID, navigatorID, this.props.navigation);
+										this.drawer.drawerView = screen
+									}
+
 									const Screen = screen;
 									return <Screen {...{
 										[navigatorName]: this.drawer,

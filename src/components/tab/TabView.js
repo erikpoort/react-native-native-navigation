@@ -70,11 +70,11 @@ export const TabNode = {
 							return class extends Component {
 								tabs;
 
-								componentWillMount() {
-									this.tabs = new TabNavigation(screenID, navigatorID, this.props.navigation);
-								}
-
 								render() {
+									if (this.tabs == null) {
+										this.tabs = new TabNavigation(screenID, navigatorID, this.props.navigation);
+									}
+
 									const Screen = screen;
 									return <Screen {...{
 										[navigatorName]: this.tabs,

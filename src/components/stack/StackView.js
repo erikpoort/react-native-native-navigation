@@ -72,9 +72,7 @@ export const StackNode = {
 								removeBackButtonListener;
 								stack;
 
-								componentWillMount() {
-									this.stack = new StackNavigation(screenID, navigatorID, this.props.navigation);
-
+								componentDidMount() {
 									const { remove } = BackHandler.addEventListener('hardwareBackPress', () => {
 										this.stack.handleBackButton((handled) => {
 											if (!handled) {
@@ -93,6 +91,10 @@ export const StackNode = {
 								}
 
 								render() {
+									if (this.stack == null) {
+										this.stack = new StackNavigation(screenID, navigatorID, this.props.navigation);
+									}
+
 									const Screen = screen;
 									return <Screen {...{
 										[navigatorName]: this.stack,

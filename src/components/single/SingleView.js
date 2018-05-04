@@ -49,11 +49,11 @@ export const SingleNode = {
 				return class extends Component {
 					single;
 
-					componentWillMount() {
-						this.single = new SingleNavigation(screenID, screenID, this.props.navigation);
-					}
-
 					render() {
+						if (this.single == null) {
+							this.single = new SingleNavigation(screenID, screenID, this.props.navigation);
+						}
+
 						return <Screen {...{
 							[screenName]: this.single,
 							single: this.single

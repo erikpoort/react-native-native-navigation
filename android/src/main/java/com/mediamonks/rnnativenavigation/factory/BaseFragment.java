@@ -11,6 +11,7 @@ import com.mediamonks.rnnativenavigation.data.Node;
 
 public abstract class BaseFragment<T extends Node> extends Fragment implements RNNNFragment {
 	private StackFragment _stackFragment;
+	private ModalFragment _modalFragment;
 
 	private T _node;
 
@@ -34,6 +35,14 @@ public abstract class BaseFragment<T extends Node> extends Fragment implements R
 
 	public StackFragment getStackFragment() {
 		return _stackFragment;
+	}
+
+	public void setModalFragment(ModalFragment modalFragment) {
+		_modalFragment = modalFragment;
+	}
+
+	public ModalFragment getModalFragment() {
+		return _modalFragment;
 	}
 
 	public abstract SingleFragment getCurrentFragment();

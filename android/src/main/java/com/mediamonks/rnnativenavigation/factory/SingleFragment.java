@@ -106,6 +106,10 @@ public class SingleFragment extends BaseFragment<SingleNode> implements Navigata
 				this.handleShowModalCall(arguments, rootFragment, callback);
 				break;
 			}
+			case SingleNode.DISMISS: {
+				this.handleDismiss();
+				break;
+			}
 			case SingleNode.UPDATE_STYLE: {
 				this.handleUpdateStyleCall(arguments);
 				break;
@@ -129,6 +133,12 @@ public class SingleFragment extends BaseFragment<SingleNode> implements Navigata
 			});
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+	}
+
+	private void handleDismiss() {
+		if (this.getModalFragment() != null) {
+			this.getModalFragment().dismiss();
 		}
 	}
 

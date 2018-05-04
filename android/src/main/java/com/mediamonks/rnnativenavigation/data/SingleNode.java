@@ -17,6 +17,7 @@ import java.util.Map;
 
 public class SingleNode extends BaseNode {
 	public static final String SHOW_MODAL = "showModal";
+	public static final String DISMISS = "dismiss";
 	public static final String UPDATE_STYLE = "updateStyle";
 
 	public static String JS_NAME = "SingleView";
@@ -24,6 +25,7 @@ public class SingleNode extends BaseNode {
 	public static Map<String, Object> getConstants() {
 		Map<String, Object> map = new HashMap<>();
 		map.put(SHOW_MODAL, SHOW_MODAL);
+		map.put(DISMISS, DISMISS);
 		map.put(UPDATE_STYLE, UPDATE_STYLE);
 		return map;
 	}

@@ -62,7 +62,7 @@ NSString *const kUpdateStyle = @"updateStyle";
         NSArray *controllers = self.navigationController.viewControllers.copy;
         NSUInteger index = [controllers indexOfObject:self];
         UIViewController *controller;
-        if (index != NSNotFound) {
+        if (index != NSNotFound && index > 0) {
             controller = controllers[index - 1];
         } else {
             controller = controllers.lastObject;

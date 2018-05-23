@@ -12,7 +12,7 @@ export const SingleNode = {
 				return null;
 			}
 
-			const { id, screen, modal, style } = dom.props;
+			const { id, screen, modal, style, passProps } = dom.props;
 
 			if (id == null) {
 				console.error("RNNN", "An id prop is mandatory");
@@ -29,6 +29,23 @@ export const SingleNode = {
 			const type = dom.type.name;
 			const page = pageName(screen);
 
+			if (passProps != null) {
+				const acceptedTypes = ["boolean", "number", "string"]
+				for (var key in passProps) {
+					if (passProps.hasOwnProperty(key)) {
+						var keyType = typeof key
+						var valueType = typeof passProps[key]
+						if (!acceptedTypes.includes(valueType) || !acceptedTypes.includes(keyType)) {
+							console.error("RNNN", "You can only pass strings, numbers and booleans. this is to " +
+								"avoid bridge abuse. If you need to pass small objects, split them up into key " +
+								"value. If you need to pass large objects concider saving them in something like " +
+								"a redux store and pass the id of the object.", screenID);
+							return null;
+						}
+					}
+				}
+			}
+
 			let modalData = null;
 			if (modal) {
 				modalData = mapChild(viewMap, modal, `${screenID}/modal`);
@@ -39,6 +56,7 @@ export const SingleNode = {
 				screenID,
 				style,
 				modal: modalData,
+				passProps,
 			};
 		},
 		reduceScreens: (data, viewMap, pageMap) => {

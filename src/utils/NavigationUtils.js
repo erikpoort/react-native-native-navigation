@@ -29,11 +29,11 @@ export const registerScreens = (navigation, screens) => {
 
 		AppRegistry.registerComponent(screenID, () => {
 			return class extends Component {
-				renderScreen = () => <Screen navigation={navigation}/>;
+				renderScreen = (initialProps) => <Screen navigation={navigation} {...initialProps} />;
 
 				render() {
 					return ReduxProvider && ReduxStore
-						? <ReduxProvider store={ReduxStore}>{this.renderScreen()}</ReduxProvider>
+						? <ReduxProvider store={ReduxStore}>{this.renderScreen(this.props)}</ReduxProvider>
 						: this.renderScreen();
 				}
 			}

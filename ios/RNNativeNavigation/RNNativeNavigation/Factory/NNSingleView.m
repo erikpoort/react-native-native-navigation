@@ -43,7 +43,11 @@ NSString *const kUpdateStyle = @"updateStyle";
 
 - (void)loadView
 {
-    self.view = [[RCTRootView alloc] initWithBridge:self.bridge moduleName:self.node.screenID initialProperties:nil];
+    self.view = [[RCTRootView alloc]
+        initWithBridge:self.bridge
+        moduleName:self.node.screenID
+        initialProperties:self.singleNode.props
+    ];
     [self adaptStyle];
 }
 

@@ -33,10 +33,12 @@ public class SingleNode extends BaseNode {
 	private static final String PAGE = "page";
 	private static final String MODAL = "modal";
 	private static final String STYLE = "style";
+	private static final String PROPS = "passProps";
 
 	private String _page;
 	private Node _modal;
 	private ReadableNativeMap _style;
+	private ReadableNativeMap _props;
 
 	@Override
 	public BaseFragment<SingleNode> generateFragment() {
@@ -58,6 +60,10 @@ public class SingleNode extends BaseNode {
 				e.printStackTrace();
 			}
 		}
+
+		if (map.hasKey(PROPS)) {
+			_props = (ReadableNativeMap) map.getMap(PROPS);
+		}
 	}
 
 	@Override
@@ -67,6 +73,9 @@ public class SingleNode extends BaseNode {
 		data.put(STYLE, _style.toHashMap());
 		if (_modal != null) {
 			data.put(MODAL, _modal.getData());
+		}
+		if (_props != null) {
+			data.put(PROPS, _props.toHashMap());
 		}
 		return data;
 	}
@@ -85,5 +94,9 @@ public class SingleNode extends BaseNode {
 
 	public void setStyle(WritableNativeMap style) {
 		_style = style;
+	}
+
+	public ReadableNativeMap getProps() {
+		return _props;
 	}
 }

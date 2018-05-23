@@ -13,6 +13,7 @@ import android.view.ViewGroup.LayoutParams;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.ReadableMapKeySetIterator;
 import com.mediamonks.rnnativenavigation.data.Node;
 import com.mediamonks.rnnativenavigation.data.SingleNode;
 import com.mediamonks.rnnativenavigation.react.RNRootView;
@@ -40,7 +41,33 @@ public class SingleFragment extends BaseFragment<SingleNode> implements Navigata
 		super.onViewCreated(view, savedInstanceState);
 		Log.i("MMM onViewCreated", getNode().getScreenID());
 		RNRootView rootView = (RNRootView) view;
-		rootView.startReactApplication(getNode().getInstanceManager(), getNode().getScreenID());
+
+		Bundle bundle = new Bundle();
+		if (getNode().getProps() != null) {
+			ReadableMapKeySetIterator iterator = getNode().getProps().keySetIterator();
+			while (iterator.hasNextKey()) {
+				String key = iterator.nextKey();
+				switch (getNode().getProps().getType(key)) {
+					case Boolean:
+						bundle.putBoolean(key, getNode().getProps().getBoolean(key));
+						break;
+					case Number:
+						bundle.putDouble(key, getNode().getProps().getDouble(key));
+						break;
+					case String:
+						bundle.putString(key, getNode().getProps().getString(key));
+						break;
+					default:
+						break;
+				}
+			}
+		}
+
+		rootView.startReactApplication(
+			getNode().getInstanceManager(),
+			getNode().getScreenID(),
+			bundle
+		);
 	}
 
 	@Override public void onResume() {

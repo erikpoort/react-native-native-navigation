@@ -42,7 +42,7 @@ export const registerScreens = (navigation, screens) => {
 };
 
 export const getNode = (viewMap, dom) => {
-	const domType = dom.type.name;
+	const domType = dom.type.viewName;
 	const node = viewMap[domType];
 
 	if (node && typeof(node.mapToDictionary) === 'function') {

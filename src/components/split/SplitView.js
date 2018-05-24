@@ -8,11 +8,12 @@ export const AXIS = {
 };
 
 class SplitView {
+	static viewName = "SplitView"
 	static AXIS = AXIS;
 }
 
 export const SplitNode = {
-	[SplitView.name]: {
+	[SplitView.viewName]: {
 		mapToDictionary: (viewMap, dom, path) => {
 			if (dom == null || dom.props == null || path == null) {
 				console.error("RNNN", "dom and path are mandatory parameters.");
@@ -26,7 +27,7 @@ export const SplitNode = {
 			}
 
 			const screenID = `${path}/${id}`;
-			const type = dom.type.name;
+			const type = dom.type.viewName;
 
 			if (dom.props.children.length !== 2) {
 				console.error("RNNN", "A SplitView expects two children", screenID);

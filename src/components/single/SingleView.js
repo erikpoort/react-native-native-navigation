@@ -2,10 +2,12 @@ import React, { Component } from 'react';
 import SingleNavigation from './SingleNavigation';
 import { mapChild, pageName } from '../../utils/NavigationUtils';
 
-class SingleView {}
+class SingleView {
+	static viewName = "SingleView"
+}
 
 export const SingleNode = {
-	[SingleView.name]: {
+	[SingleView.viewName]: {
 		mapToDictionary: (viewMap, dom, path) => {
 			if (dom == null || dom.props == null || path == null) {
 				console.error("RNNN", "dom and path are mandatory parameters.");
@@ -26,7 +28,7 @@ export const SingleNode = {
 				return null;
 			}
 
-			const type = dom.type.name;
+			const type = dom.type.viewName;
 			const page = pageName(screen);
 
 			if (passProps != null) {

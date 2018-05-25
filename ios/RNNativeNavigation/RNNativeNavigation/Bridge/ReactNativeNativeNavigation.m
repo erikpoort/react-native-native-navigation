@@ -76,8 +76,8 @@ RCT_EXPORT_METHOD(
         [RNNNState sharedInstance].state = map;
 
         NNStackNode *nodeObject = [NNNodeHelper.sharedInstance nodeFromMap:map bridge:self.bridge];
-        UIViewController *viewController = [nodeObject generate];
-
+        UIViewController <NNView> *viewController = [nodeObject generate];
+        RNNNState.sharedInstance.viewController = viewController;
         UIWindow *window = [RNNNState sharedInstance].window;
         window.rootViewController = viewController;
         [window makeKeyAndVisible];
@@ -95,7 +95,7 @@ RCT_EXPORT_METHOD(
 )
 {
     // clang-format on
-    UIViewController<NNView> *rootController = (UIViewController<NNView> *)[UIApplication sharedApplication].keyWindow.rootViewController;
+    UIViewController<NNView> *rootController = RNNNState.sharedInstance.viewController;
     __kindof UIViewController<NNView> *findController = [rootController viewForPath:navigator];
     if (!findController) return;
 

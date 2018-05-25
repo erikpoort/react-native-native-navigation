@@ -160,7 +160,7 @@ NSString *const kUpdateStyle = @"updateStyle";
 {
     NNSingleNode *nodeObject = [NNNodeHelper.sharedInstance nodeFromMap:arguments[@"screen"] bridge:self.bridge];
 
-    UIViewController <NNView> *rootController = (UIViewController <NNView> *) [UIApplication sharedApplication].keyWindow.rootViewController;
+    UIViewController <NNView> *rootController = RNNNState.sharedInstance.viewController;
 
     self.singleNode.modal = nodeObject;
 

@@ -104,7 +104,7 @@ NSString *const kPopToRoot = @"popToRoot";
 
 - (void)push:(NSDictionary *)arguments callback:(RCTResponseSenderBlock)callback
 {
-    UIViewController<NNView> *rootController = (UIViewController<NNView> *) [UIApplication sharedApplication].keyWindow.rootViewController;
+    UIViewController<NNView> *rootController = RNNNState.sharedInstance.viewController;
     id<NNNode> nodeObject = [NNNodeHelper.sharedInstance nodeFromMap:arguments[@"screen"] bridge:self.stackNode.bridge];
     NSMutableArray *stack = self.stackNode.stack.mutableCopy;
     [stack addObject:nodeObject];
@@ -142,7 +142,7 @@ NSString *const kPopToRoot = @"popToRoot";
 
 - (void)pop
 {
-    UIViewController<NNView> *rootController = (UIViewController<NNView> *) [UIApplication sharedApplication].keyWindow.rootViewController;
+    UIViewController<NNView> *rootController = RNNNState.sharedInstance.viewController;
     NSMutableArray *stack = self.stackNode.stack.mutableCopy;
     [stack removeLastObject];
     self.stackNode.stack = stack;
@@ -159,7 +159,7 @@ NSString *const kPopToRoot = @"popToRoot";
 
 - (void)popTo:(NSDictionary *)arguments
 {
-    UIViewController<NNView> *rootController = (UIViewController<NNView> *) [UIApplication sharedApplication].keyWindow.rootViewController;
+    UIViewController<NNView> *rootController = RNNNState.sharedInstance.viewController;
 
     UIViewController *foundController = [rootController viewForPath:arguments[@"path"]];
     if (!foundController) {
@@ -186,7 +186,7 @@ NSString *const kPopToRoot = @"popToRoot";
 
 - (void)popToRootCallback
 {
-    UIViewController<NNView> *rootController = (UIViewController<NNView> *) [UIApplication sharedApplication].keyWindow.rootViewController;
+    UIViewController<NNView> *rootController = RNNNState.sharedInstance.viewController;
 
     self.stackNode.stack = @[self.stackNode.stack.firstObject];
     NSDictionary *newState = rootController.node.data;

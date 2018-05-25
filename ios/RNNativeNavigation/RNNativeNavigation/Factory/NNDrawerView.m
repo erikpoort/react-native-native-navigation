@@ -100,7 +100,7 @@ NSString *const kOpenView = @"openView";
 {
     NNSingleNode *nodeObject = [NNNodeHelper.sharedInstance nodeFromMap:arguments[@"screen"] bridge:self.drawerNode.bridge];
 
-    UIViewController <NNView> *rootController = (UIViewController <NNView> *) [UIApplication sharedApplication].keyWindow.rootViewController;
+    UIViewController <NNView> *rootController = RNNNState.sharedInstance.viewController;
 
     NNDrawerSide side = [self sideForPath:nodeObject.screenID];
 

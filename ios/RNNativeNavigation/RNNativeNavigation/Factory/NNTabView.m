@@ -142,7 +142,7 @@ NSString *const kOpenTab = @"openTab";
 
 - (void)openTab:(NSDictionary *)arguments
 {
-    UIViewController<NNView> *rootController = (UIViewController<NNView> *) [UIApplication sharedApplication].keyWindow.rootViewController;
+    UIViewController<NNView> *rootController = RNNNState.sharedInstance.viewController;
     NSUInteger index = [arguments[@"index"] unsignedIntegerValue];
     self.tabNode.selectedTab = index;
 

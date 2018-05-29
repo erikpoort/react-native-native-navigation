@@ -30,7 +30,6 @@ NSString *const kOpenView = @"openView";
                           leftDrawerViewController:leftController
                          rightDrawerViewController:rightController]) {
         self.drawerNode = drawerNode;
-        self.title = node.title;
         self.openDrawerGestureModeMask = MMOpenDrawerGestureModeAll;
         self.closeDrawerGestureModeMask = MMCloseDrawerGestureModeAll;
 
@@ -54,9 +53,9 @@ NSString *const kOpenView = @"openView";
 - (UIViewController<NNView> *)viewForPath:(NSString *)path
 {
     UIViewController<NNView> *foundController;
-    UIViewController<NNView> *leftController = (UIViewController<NNView> *)self.leftDrawerViewController;
-    UIViewController<NNView> *centerController = (UIViewController<NNView> *)self.centerViewController;
-    UIViewController<NNView> *rightController = (UIViewController<NNView> *)self.rightDrawerViewController;
+    UIViewController<NNView> *leftController = (UIViewController<NNView> *) self.leftDrawerViewController;
+    UIViewController<NNView> *centerController = (UIViewController<NNView> *) self.centerViewController;
+    UIViewController<NNView> *rightController = (UIViewController<NNView> *) self.rightDrawerViewController;
 
     if ([path isEqualToString:self.drawerNode.screenID]) {
         return self;
@@ -84,18 +83,24 @@ NSString *const kOpenView = @"openView";
 
 - (void)callMethodWithName:(NSString *)methodName arguments:(NSDictionary *)arguments callback:(RCTResponseSenderBlock)callback
 {
-    NSMutableDictionary *methodDictionary = @{}.mutableCopy;
-    methodDictionary[kOpenView] = [NSValue valueWithPointer:@selector(openView:callback:)];
+    typedef void (^Block)(void);
+    NSDictionary<NSString *, Block> *methodMap = @{
+        kOpenView: ^{
+            [self openView:arguments callback:callback];
+        }
+    };
 
-    SEL thisSelector = [methodDictionary[methodName] pointerValue];
-    [self performSelector:thisSelector withObject:arguments withObject:callback];
+    Block block = methodMap[methodName];
+    if (block) {
+        block();
+    }
 }
 
 - (void)openView:(NSDictionary *)arguments callback:(RCTResponseSenderBlock)callback
 {
-    NNSingleNode *nodeObject = [NNNodeHelper.sharedInstance nodeFromMap:arguments[@"screen"] bridge:arguments[@"bridge"]];
+    NNSingleNode *nodeObject = [NNNodeHelper.sharedInstance nodeFromMap:arguments[@"screen"] bridge:self.drawerNode.bridge];
 
-    UIViewController<NNView> *rootController = (UIViewController<NNView> *)[UIApplication sharedApplication].keyWindow.rootViewController;
+    UIViewController <NNView> *rootController = RNNNState.sharedInstance.viewController;
 
     NNDrawerSide side = [self sideForPath:nodeObject.screenID];
 
@@ -113,7 +118,7 @@ NSString *const kOpenView = @"openView";
 
     NSDictionary *newState = rootController.node.data;
     [RNNNState sharedInstance].state = newState;
-    callback(@[ newState ]);
+    callback(@[newState]);
 
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -145,7 +150,7 @@ NSString *const kOpenView = @"openView";
         if ([side isEqualToString:CENTER]) return NNDrawerSideCenter;
         if ([side isEqualToString:RIGHT]) return NNDrawerSideRight;
     }
-    return nil;
+    return NNDrawerSideCenter;
 }
 
 

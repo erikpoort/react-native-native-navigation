@@ -4,16 +4,15 @@
 
 #import <React/RCTUtils.h>
 #import "NNBaseNode.h"
-#import "ReactNativeNativeNavigation.h"
 #import "RNNNState.h"
 #import "NNNodeHelper.h"
 #import "NNStackNode.h"
 #import "NNView.h"
+#import "ReactNativeNativeNavigation.h"
 
+#if RCT_DEBUG
 #import <React/RCTDevMenu.h>
 #import <React/RCTKeyCommands.h>
-
-#if __has_include("RCTDevMenu.h")
 #endif
 
 static NSString *const kRNNN = @"RNNN";
@@ -77,8 +76,8 @@ RCT_EXPORT_METHOD(
         [RNNNState sharedInstance].state = map;
 
         NNStackNode *nodeObject = [NNNodeHelper.sharedInstance nodeFromMap:map bridge:self.bridge];
-        UIViewController *viewController = [nodeObject generate];
-
+        UIViewController <NNView> *viewController = [nodeObject generate];
+        RNNNState.sharedInstance.viewController = viewController;
         UIWindow *window = [RNNNState sharedInstance].window;
         window.rootViewController = viewController;
         [window makeKeyAndVisible];
@@ -96,16 +95,12 @@ RCT_EXPORT_METHOD(
 )
 {
     // clang-format on
-    UIViewController<NNView> *rootController = (UIViewController<NNView> *)[UIApplication sharedApplication].keyWindow.rootViewController;
+    UIViewController<NNView> *rootController = RNNNState.sharedInstance.viewController;
     __kindof UIViewController<NNView> *findController = [rootController viewForPath:navigator];
     if (!findController) return;
 
-    NSMutableDictionary *newArguments = @{}.mutableCopy;
-    newArguments[@"bridge"] = self.bridge;
-    [newArguments addEntriesFromDictionary:arguments];
-
     if ([findController respondsToSelector:@selector(callMethodWithName:arguments:callback:)]) {
-        [findController callMethodWithName:methodName arguments:newArguments callback:callback];
+        [findController callMethodWithName:methodName arguments:arguments callback:callback];
     }
 }
 
@@ -129,19 +124,19 @@ RCT_EXPORT_METHOD(
 
 - (void)addDeveloperOptions
 {
-#if __has_include("RCTDevMenu.h")
-#endif
+#if RCT_DEBUG
     __weak ReactNativeNativeNavigation *weakSelf = self;
     [_bridge.devMenu addItem:[RCTDevMenuItem buttonItemWithTitle:@"Reset navigation" handler:^{
         [weakSelf resetApplication];
     }]];
 
     [[RCTKeyCommands sharedInstance]
-        registerKeyCommandWithInput:@"e"
+        registerKeyCommandWithInput:@"n"
                       modifierFlags:UIKeyModifierCommand
                              action:^(UIKeyCommand *command) {
                                  [weakSelf resetApplication];
                              }];
+#endif
 }
 
 - (void)dealloc

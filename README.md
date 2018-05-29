@@ -1,8 +1,12 @@
-# react-native-native-navigation
+# react-native-native-navigation (r3n)
 Very ambitious private project to create a better native navigation framework.
 
 ## Current state
-Navigation works, but doesn't have styling yet.
+Navigation works, the stack navigator has basic styling.
 
 ## Roadmap
-This is still a side-project, so I work on it whenever I can.
+This is now being used in an actual project, functionality is mostly added based on the requirements of that project.
+I'll keep adding other functionality whenever possible!
+
+# Documentation
+https://github.com/erikpoort/react-native-native-navigation/wiki

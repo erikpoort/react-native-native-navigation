@@ -13,9 +13,12 @@ import android.view.ViewGroup.LayoutParams;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.ReadableMapKeySetIterator;
 import com.mediamonks.rnnativenavigation.data.Node;
 import com.mediamonks.rnnativenavigation.data.SingleNode;
 import com.mediamonks.rnnativenavigation.react.RNRootView;
+
+import java.util.HashMap;
 
 /**
  * Created by erik on 09/08/2017.
@@ -38,7 +41,33 @@ public class SingleFragment extends BaseFragment<SingleNode> implements Navigata
 		super.onViewCreated(view, savedInstanceState);
 		Log.i("MMM onViewCreated", getNode().getScreenID());
 		RNRootView rootView = (RNRootView) view;
-		rootView.startReactApplication(getNode().getInstanceManager(), getNode().getScreenID());
+
+		Bundle bundle = new Bundle();
+		if (getNode().getProps() != null) {
+			ReadableMapKeySetIterator iterator = getNode().getProps().keySetIterator();
+			while (iterator.hasNextKey()) {
+				String key = iterator.nextKey();
+				switch (getNode().getProps().getType(key)) {
+					case Boolean:
+						bundle.putBoolean(key, getNode().getProps().getBoolean(key));
+						break;
+					case Number:
+						bundle.putDouble(key, getNode().getProps().getDouble(key));
+						break;
+					case String:
+						bundle.putString(key, getNode().getProps().getString(key));
+						break;
+					default:
+						break;
+				}
+			}
+		}
+
+		rootView.startReactApplication(
+			getNode().getInstanceManager(),
+			getNode().getScreenID(),
+			bundle
+		);
 	}
 
 	@Override public void onResume() {
@@ -104,6 +133,14 @@ public class SingleFragment extends BaseFragment<SingleNode> implements Navigata
 				this.handleShowModalCall(arguments, rootFragment, callback);
 				break;
 			}
+			case SingleNode.DISMISS: {
+				this.handleDismiss();
+				break;
+			}
+			case SingleNode.UPDATE_STYLE: {
+				this.handleUpdateStyleCall(arguments);
+				break;
+			}
 		}
 	}
 
@@ -123,6 +160,22 @@ public class SingleFragment extends BaseFragment<SingleNode> implements Navigata
 			});
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+	}
+
+	private void handleDismiss() {
+		if (this.getModalFragment() != null) {
+			this.getModalFragment().dismiss();
+		}
+	}
+
+	private void handleUpdateStyleCall(ReadableMap arguments) {
+		HashMap <String, Object> style = getNode().getStyle().toHashMap();
+		style.putAll(arguments.toHashMap());
+		getNode().setStyle(Arguments.makeNativeMap(style));
+
+		if (getStackFragment() != null) {
+			getStackFragment().callMethodWithName(SingleNode.UPDATE_STYLE, arguments, null, null);
 		}
 	}
 

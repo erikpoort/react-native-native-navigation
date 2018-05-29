@@ -34,7 +34,7 @@
     self.centerNode = [NNNodeHelper.sharedInstance nodeFromMap:data[CENTER] bridge:self.bridge];
     self.rightNode = [NNNodeHelper.sharedInstance nodeFromMap:data[RIGHT] bridge:self.bridge];
 
-    NSArray *sides = @[ @"center", @"left", @"right" ];
+    NSArray *sides = @[@"center", @"left", @"right"];
     NSString *side = data[SIDE];
     self.side = (MMDrawerSide)(side ? [sides indexOfObject:side] : 0);
 }
@@ -56,9 +56,12 @@
     return data.copy;
 }
 
-- (NSString *)title
-{
-    return self.centerNode.title;
+- (NSArray<NSString *> *)supportedEvents {
+    NSMutableArray *events = @[].mutableCopy;
+    [events addObjectsFromArray:self.leftNode.supportedEvents];
+    [events addObjectsFromArray:self.centerNode.supportedEvents];
+    [events addObjectsFromArray:self.rightNode.supportedEvents];
+    return events.copy;
 }
 
 + (NSDictionary<NSString *, id> *)constantsToExport
@@ -66,6 +69,10 @@
     return @{
         kOpenView : kOpenView,
     };
+}
+
+- (ReactNativeNativeEventEmitter *)eventEmitter {
+    return [self.bridge moduleForClass:[ReactNativeNativeEventEmitter class]];
 }
 
 @end

@@ -1,25 +1,50 @@
 package com.mediamonks.rnnativenavigation.factory;
 
+import android.animation.ArgbEvaluator;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.Rect;
+import android.graphics.Typeface;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.TextPaint;
+import android.text.style.AbsoluteSizeSpan;
+import android.text.style.TypefaceSpan;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Callback;
+import com.facebook.react.bridge.ReactContext;
+import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.ReadableType;
+import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.mediamonks.rnnativenavigation.R;
 import com.mediamonks.rnnativenavigation.data.Node;
+import com.mediamonks.rnnativenavigation.data.SingleNode;
 import com.mediamonks.rnnativenavigation.data.StackNode;
+import com.mediamonks.rnnativenavigation.devsupport.Convert;
 
 import java.util.Stack;
 
@@ -31,7 +56,18 @@ import java.util.Stack;
 public class StackFragment extends BaseFragment<StackNode> implements Navigatable {
 	private FrameLayout _holder;
 	private Toolbar _toolbar;
+	private int _toolbarHeight;
 	private Drawable _upIcon;
+	private DeviceEventManagerModule.RCTDeviceEventEmitter _eventEmitter;
+
+	@Override public void setNode(StackNode node) {
+		super.setNode(node);
+
+		ReactContext context = node.getInstanceManager().getCurrentReactContext();
+		if (context != null) {
+			_eventEmitter = context.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class);
+		}
+	}
 
 	@Nullable
 	@Override
@@ -39,25 +75,28 @@ public class StackFragment extends BaseFragment<StackNode> implements Navigatabl
 		// I'm calling generateViewId() twice, calling it once doesn't work on first load. My assumption is the initial id is later hijacked by ReactNative, making it impossible to add fragments
 		View.generateViewId();
 
-		LinearLayout linearLayout = new LinearLayout(getActivity());
-		linearLayout.setBackgroundColor(Color.WHITE);
-		linearLayout.setOrientation(LinearLayout.VERTICAL);
-		linearLayout.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+		RelativeLayout relativeLayout = new RelativeLayout(getActivity());
+		relativeLayout.setBackgroundColor(Color.WHITE);
+		relativeLayout.setLayoutParams(new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 
-		_toolbar = (Toolbar) inflater.inflate(R.layout.toolbar, linearLayout, false);
+		_holder = new FrameLayout(getActivity());
+		_holder.setId(View.generateViewId());
+
+		_toolbar = (Toolbar) inflater.inflate(R.layout.toolbar, relativeLayout, false);
+		_toolbar.setId(View.generateViewId());
 		_upIcon = _toolbar.getNavigationIcon();
 		TypedValue typedValue = new TypedValue();
 		if (getActivity().getTheme().resolveAttribute(android.R.attr.actionBarSize, typedValue, true)) {
-			_toolbar.setLayoutParams(new Toolbar.LayoutParams(LayoutParams.MATCH_PARENT, TypedValue.complexToDimensionPixelSize(typedValue.data, getResources().getDisplayMetrics())));
+			_toolbarHeight = TypedValue.complexToDimensionPixelSize(typedValue.data, getResources().getDisplayMetrics());
+			_toolbar.setLayoutParams(new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, _toolbarHeight));
 		}
-		linearLayout.addView(_toolbar);
 
-		_holder = new FrameLayout(getActivity());
+		RelativeLayout.LayoutParams holderParams = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 
-		_holder.setId(View.generateViewId());
-		linearLayout.addView(_holder, new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, 1));
+		relativeLayout.addView(_holder, holderParams);
+		relativeLayout.addView(_toolbar);
 
-		return linearLayout;
+		return relativeLayout;
 	}
 
 	@Override
@@ -68,6 +107,27 @@ public class StackFragment extends BaseFragment<StackNode> implements Navigatabl
 			@Override
 			public void onClick(View v) {
 				onBackPressed();
+			}
+		});
+
+		_toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+			@Override public boolean onMenuItemClick(MenuItem item) {
+				int id = item.getItemId();
+
+				SingleNode singleNode = getCurrentFragment().getNode();
+				if (singleNode.getStyle().hasKey("rightBarButtons") && singleNode.getStyle().getType("rightBarButtons") == ReadableType.Array) {
+					ReadableArray buttons = singleNode.getStyle().getArray("rightBarButtons");
+					assert buttons != null;
+
+					if (id >= 0 && id < buttons.size()) {
+						ReadableMap data = buttons.getMap(id);
+						_eventEmitter.emit(singleNode.getScreenID(), data.getString("id"));
+
+						return true;
+					}
+				}
+
+				return false;
 			}
 		});
 	}
@@ -96,15 +156,19 @@ public class StackFragment extends BaseFragment<StackNode> implements Navigatabl
 				break;
 			}
 			case StackNode.POP: {
-				this.handlePopCall(rootFragment, callback);
+				this.handlePopCall();
 				break;
 			}
 			case StackNode.POP_TO: {
-				this.handlePopToCall(arguments, rootFragment, callback);
+				this.handlePopToCall(arguments);
 				break;
 			}
 			case StackNode.POP_TO_ROOT: {
-				this.handlePopToRootCall(arguments, rootFragment, callback);
+				this.handlePopToRootCall();
+				break;
+			}
+			case SingleNode.UPDATE_STYLE: {
+				this.handleUpdateStyleCall(arguments);
 				break;
 			}
 		}
@@ -143,7 +207,7 @@ public class StackFragment extends BaseFragment<StackNode> implements Navigatabl
 		});
 	}
 
-	private void handlePopCall(RNNNFragment rootFragment, final Callback callback) {
+	private void handlePopCall() {
 		getActivity().runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
@@ -154,7 +218,7 @@ public class StackFragment extends BaseFragment<StackNode> implements Navigatabl
 		});
 	}
 
-	private void handlePopToCall(ReadableMap arguments, RNNNFragment rootFragment, final Callback callback) {
+	private void handlePopToCall(ReadableMap arguments) {
 		try {
 			Node foundNode = null;
 			for (Node node : getNode().getStack()) {
@@ -186,7 +250,7 @@ public class StackFragment extends BaseFragment<StackNode> implements Navigatabl
 		}
 	}
 
-	private void handlePopToRootCall(ReadableMap arguments, RNNNFragment rootFragment, final Callback callback) {
+	private void handlePopToRootCall() {
 		getActivity().runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
@@ -194,6 +258,15 @@ public class StackFragment extends BaseFragment<StackNode> implements Navigatabl
 				while (getNode().getStack().size() > 1) {
 					popNode(getNode().getStack().peek(), FragmentTransaction.TRANSIT_NONE);
 				}
+			}
+		});
+	}
+
+	private void handleUpdateStyleCall(final ReadableMap arguments) {
+		getActivity().runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				handleCurrentStack(-1);
 			}
 		});
 	}
@@ -212,7 +285,7 @@ public class StackFragment extends BaseFragment<StackNode> implements Navigatabl
 		transaction.commitNowAllowingStateLoss();
 		node.setShown(true);
 
-		handleCurrentStack();
+		handleCurrentStack(transition);
 	}
 
 	private void removeNode(Node node, int transition) {
@@ -234,13 +307,160 @@ public class StackFragment extends BaseFragment<StackNode> implements Navigatabl
 			showPeek(FragmentTransaction.TRANSIT_NONE);
 		}
 
-		handleCurrentStack();
+		handleCurrentStack(transition);
 	}
 
-	private void handleCurrentStack() {
+	private void handleCurrentStack(int transition) {
 		int size = getNode().getStack().size();
-		_toolbar.setNavigationIcon(size > 1 ? _upIcon : null);
-		_toolbar.setTitle(getNode().getStack().peek().getTitle());
+
+		Node showNode = getNode().getStack().peek();
+		if (showNode instanceof SingleNode) {
+			SingleNode singleNode = (SingleNode) showNode;
+
+			// Requested values
+			boolean barTransparent = false;
+			if (singleNode.getStyle().hasKey("barTransparent")) {
+				barTransparent = singleNode.getStyle().getBoolean("barTransparent");
+			}
+
+			boolean barHidden = false;
+			if (singleNode.getStyle().hasKey("barHidden")) {
+				barHidden = singleNode.getStyle().getBoolean("barHidden");
+			}
+			int toHeight = barHidden ? 0 : _toolbarHeight;
+
+			if (singleNode.getStyle().hasKey("title")) {
+				_toolbar.setTitle(singleNode.getStyle().getString("title"));
+			} else {
+				_toolbar.setTitle("");
+			}
+
+			if (singleNode.getStyle().hasKey("barFont") && singleNode.getStyle().hasKey("barFontSize")) {
+				String font = singleNode.getStyle().getString("barFont");
+				int fontSize = singleNode.getStyle().getInt("barFontSize");
+				SpannableString span = new SpannableString(_toolbar.getTitle());
+				span.setSpan(new TypefaceSpan(font), 0, _toolbar.getTitle().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+				span.setSpan(new AbsoluteSizeSpan(fontSize, true), 0, _toolbar.getTitle().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+				_toolbar.setTitle(span);
+			}
+
+			if (singleNode.getStyle().hasKey("barTint")) {
+				Integer tintColor = (int) singleNode.getStyle().getDouble("barTint");
+				_upIcon.setColorFilter(tintColor, PorterDuff.Mode.SRC_ATOP);
+				_toolbar.setTitleTextColor(tintColor);
+				_toolbar.setSubtitleTextColor(tintColor);
+			}
+
+			Integer barBackgroundColor = Color.TRANSPARENT;
+			if (singleNode.getStyle().hasKey("barBackground") && !barTransparent) {
+				barBackgroundColor = (int) singleNode.getStyle().getDouble("barBackground");
+			}
+
+			_toolbar.getMenu().clear();
+
+			BitmapDrawable customBackIcon = null;
+
+			if (singleNode.getStyle().hasKey("backButtonImage")) {
+				customBackIcon = Convert.drawable(singleNode.getStyle().getMap("backButtonImage"), getResources());
+			}
+
+			BitmapDrawable customLeftIcon = null;
+
+			if (singleNode.getStyle().hasKey("leftBarButton") && singleNode.getStyle().getType("leftBarButton") == ReadableType.Map) {
+				ReadableMap button = singleNode.getStyle().getMap("leftBarButton");
+				assert button != null;
+
+				if (button.hasKey("title")) {
+					String title = button.getString("title");
+					TextPaint paint = new TextPaint();
+
+					if (button.hasKey("font")) {
+						Typeface typeface = Typeface.create(button.getString("font"), Typeface.NORMAL);
+						paint.setTypeface(typeface);
+					}
+					if (button.hasKey("color")) {
+						paint.setColor(button.getInt("color"));
+					} else if (singleNode.getStyle().hasKey("barTint")) {
+						paint.setColor(singleNode.getStyle().getInt("barTint"));
+					}
+					if (button.hasKey("fontSize")) {
+						paint.setTextSize(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, button.getInt("fontSize"), getResources().getDisplayMetrics()));
+					}
+
+					paint.setStyle(Paint.Style.FILL);
+					paint.setAntiAlias(true);
+
+					Rect bounds = new Rect();
+					paint.getTextBounds(title, 0, title.length(), bounds);
+
+					Bitmap bitmap = Bitmap.createBitmap(bounds.width(), bounds.height(), Bitmap.Config.ARGB_8888);
+					Canvas canvas = new Canvas(bitmap);
+					canvas.drawText(title, -bounds.left, bitmap.getHeight(), paint);
+					customLeftIcon = new BitmapDrawable(getResources(), bitmap);
+				} else if (button.hasKey("icon")) {
+					ReadableMap iconData = button.getMap("icon");
+					customLeftIcon = Convert.drawable(iconData, getResources());
+					if (customLeftIcon != null && singleNode.getStyle().hasKey("barTint")) {
+						customLeftIcon.setColorFilter(singleNode.getStyle().getInt("barTint"), PorterDuff.Mode.SRC_ATOP);
+					}
+				}
+			}
+
+			if (singleNode.getStyle().hasKey("rightBarButtons") && singleNode.getStyle().getType("rightBarButtons") == ReadableType.Array) {
+				ReadableArray buttons = singleNode.getStyle().getArray("rightBarButtons");
+				assert buttons != null;
+
+				int leni = buttons.size();
+				for (int i = 0; i < leni; ++i) {
+					ReadableMap map = buttons.getMap(i);
+
+					if (map.hasKey("title")) {
+						String title = map.getString("title");
+
+						_toolbar.getMenu().add(title);
+						_toolbar.getMenu().getItem(i).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+
+						View view = _toolbar.findViewById(i);
+						if (view instanceof TextView) {
+							TextView textView = (TextView) view;
+
+							textView.setAllCaps(false);
+							if (map.hasKey("fontSize")) {
+								textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, map.getInt("fontSize"));
+							}
+							if (map.hasKey("color")) {
+								textView.setTextColor(map.getInt("color"));
+							} else if (singleNode.getStyle().hasKey("barTint")) {
+								textView.setTextColor(singleNode.getStyle().getInt("barTint"));
+							}
+							if (map.hasKey("font")) {
+								Typeface typeface = Typeface.create(map.getString("font"), Typeface.NORMAL);
+								textView.setTypeface(typeface);
+							}
+						}
+					}
+				}
+			}
+
+			ViewGroup.LayoutParams layoutParams = _toolbar.getLayoutParams();
+			layoutParams.height = toHeight;
+			_toolbar.setLayoutParams(layoutParams);
+
+			if (!barHidden) {
+				_toolbar.setNavigationIcon(size > 1 ? (customBackIcon != null ? customBackIcon : _upIcon) : customLeftIcon);
+				_toolbar.setBackgroundColor(barBackgroundColor);
+
+				RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) _holder.getLayoutParams();
+				if (barTransparent) {
+					params.removeRule(RelativeLayout.BELOW);
+				} else {
+					params.addRule(RelativeLayout.BELOW, _toolbar.getId());
+				}
+				_holder.setLayoutParams(params);
+			}
+		} else {
+			_toolbar.setNavigationIcon(size > 1 ? _upIcon : null);
+		}
 	}
 
 	@Override

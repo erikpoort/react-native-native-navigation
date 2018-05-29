@@ -109,6 +109,7 @@ public class ModalFragment extends DialogFragment implements RNNNFragment {
 		FragmentManager fragmentManager = getChildFragmentManager();
 		FragmentTransaction transaction = fragmentManager.beginTransaction();
 		_fragment = getNode().generateFragment();
+		_fragment.setModalFragment(this);
 		transaction.add(view.getId(), _fragment);
 		transaction.commitNowAllowingStateLoss();
 	}
@@ -118,6 +119,7 @@ public class ModalFragment extends DialogFragment implements RNNNFragment {
 
 		FragmentManager fragmentManager = getChildFragmentManager();
 		FragmentTransaction transaction = fragmentManager.beginTransaction();
+		_fragment.setModalFragment(null);
 		transaction.remove(_fragment);
 		transaction.setTransition(FragmentTransaction.TRANSIT_NONE);
 		transaction.commitAllowingStateLoss();

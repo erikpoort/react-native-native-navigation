@@ -9,6 +9,8 @@
 
 @interface NNSplitNode : NNBaseNode <NNNode>
 
+@property (nonatomic, strong, readonly) RCTBridge *bridge;
+
 @property (nonatomic, strong) id<NNNode> node1;
 @property (nonatomic, strong) id<NNNode> node2;
 @property (nonatomic, assign, readonly) UILayoutConstraintAxis axis;

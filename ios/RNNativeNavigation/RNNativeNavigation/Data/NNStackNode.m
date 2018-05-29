@@ -51,9 +51,12 @@ static NSString *const kStackKey = @"stack";
     return data.copy;
 }
 
-- (NSString *)title
-{
-    return self.stack.lastObject.title;
+- (NSArray<NSString *> *)supportedEvents {
+    NSMutableArray *events = @[].mutableCopy;
+    [self.stack enumerateObjectsUsingBlock:^(id <NNNode> obj, NSUInteger idx, BOOL *stop) {
+        [events addObjectsFromArray:obj.supportedEvents];
+    }];
+    return events.copy;
 }
 
 + (NSDictionary<NSString *, id> *)constantsToExport
@@ -64,6 +67,10 @@ static NSString *const kStackKey = @"stack";
         kPopTo : kPopTo,
         kPopToRoot : kPopToRoot
     };
+}
+
+- (ReactNativeNativeEventEmitter *)eventEmitter {
+    return [self.bridge moduleForClass:[ReactNativeNativeEventEmitter class]];
 }
 
 @end

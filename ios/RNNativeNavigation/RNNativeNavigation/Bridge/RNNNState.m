@@ -5,6 +5,7 @@
 
 #import <React/RCTBridge.h>
 #import "RNNNState.h"
+#import "NNView.h"
 
 
 @interface RNNNState ()

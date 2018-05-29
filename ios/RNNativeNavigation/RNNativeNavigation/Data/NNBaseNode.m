@@ -37,6 +37,17 @@ NSString *const kType = @"type";
     return @{};
 }
 
+- (ReactNativeNativeEventEmitter *)eventEmitter {
+    NSAssert(NO, @"%@ should be overridden", NSStringFromSelector(_cmd));
+    return nil;
+}
+
+- (NSArray<NSString *> *)supportedEvents
+{
+    NSAssert(NO, @"%@ should be overridden", NSStringFromSelector(_cmd));
+    return nil;
+}
+
 + (NSString *)jsName
 {
     NSAssert(NO, @"%@ should be overridden", NSStringFromSelector(_cmd));
@@ -46,12 +57,6 @@ NSString *const kType = @"type";
 - (void)setBridge:(RCTBridge *)bridge
 {
     NSAssert(NO, @"%@ should be overridden", NSStringFromSelector(_cmd));
-}
-
-- (NSString *)title
-{
-    NSAssert(NO, @"%@ should be overridden", NSStringFromSelector(_cmd));
-    return nil;
 }
 
 - (UIViewController<NNView> *)generate

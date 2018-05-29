@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import { mapChild } from '../../utils/NavigationUtils';
 import TabNavigation from './TabNavigation'
 
-class TabView {};
+class TabView {
+	static viewName = "TabView"
+};
 
 const mapChildren = (viewMap, children, path) => {
 	if (!Array.isArray(children)) {
@@ -23,7 +25,7 @@ const mapChildren = (viewMap, children, path) => {
 };
 
 export const TabNode = {
-	[TabView.name]: {
+	[TabView.viewName]: {
 		mapToDictionary: (viewMap, dom, path) => {
 			if (dom == null || dom.props == null || path == null) {
 				console.error("RNNN", "dom and path are mandatory parameters.");
@@ -37,7 +39,7 @@ export const TabNode = {
 			}
 
 			const screenID = `${path}/${id}`;
-			const type = dom.type.name;
+			const type = dom.type.viewName;
 
 			if (dom.props.children.length < 2) {
 				console.error("RNNN", "A TabView expects at least two children", screenID);
@@ -70,11 +72,11 @@ export const TabNode = {
 							return class extends Component {
 								tabs;
 
-								componentWillMount() {
-									this.tabs = new TabNavigation(screenID, navigatorID, this.props.navigation);
-								}
-
 								render() {
+									if (this.tabs == null) {
+										this.tabs = new TabNavigation(screenID, navigatorID, this.props.navigation);
+									}
+
 									const Screen = screen;
 									return <Screen {...{
 										[navigatorName]: this.tabs,

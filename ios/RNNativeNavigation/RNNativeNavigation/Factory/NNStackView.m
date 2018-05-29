@@ -6,6 +6,8 @@
 #import "NNStackNode.h"
 #import "NNNodeHelper.h"
 #import "RNNNState.h"
+#import "NNSingleView.h"
+#import "NNSingleNode.h"
 
 NSString *const kPush = @"push";
 NSString *const kPop = @"pop";
@@ -26,7 +28,6 @@ NSString *const kPopToRoot = @"popToRoot";
 {
     if (self = [super init]) {
         self.stackNode = node;
-        self.navigationBar.translucent = NO;
         NSMutableArray *viewControllers = [@[] mutableCopy];
         [node.stack enumerateObjectsUsingBlock:^(id<NNNode> view, NSUInteger idx, BOOL *stop) {
             UIViewController<NNView> *viewController = [view generate];
@@ -38,11 +39,6 @@ NSString *const kPopToRoot = @"popToRoot";
     }
 
     return self;
-}
-
-- (NSString *)title
-{
-    return self.viewControllers.firstObject.title;
 }
 
 - (__kindof id<NNNode>)node
@@ -84,48 +80,69 @@ NSString *const kPopToRoot = @"popToRoot";
 
 - (void)callMethodWithName:(NSString *)methodName arguments:(NSDictionary *)arguments callback:(RCTResponseSenderBlock)callback
 {
-    NSDictionary *methodDictionary = @{
-        kPush : [NSValue valueWithPointer:@selector(push:callback:)],
-        kPop : [NSValue valueWithPointer:@selector(pop:callback:)],
-        kPopTo : [NSValue valueWithPointer:@selector(popTo:callback:)],
-        kPopToRoot : [NSValue valueWithPointer:@selector(popToRoot:callback:)],
+    typedef void (^Block)(void);
+    NSDictionary<NSString *, Block> *methodMap = @{
+        kPush: ^{
+            [self push:arguments callback:callback];
+        },
+        kPop: ^{
+            [self pop];
+        },
+        kPopTo: ^{
+            [self popTo:arguments];
+        },
+        kPopToRoot: ^{
+            [self popToRootCallback];
+        },
     };
 
-    SEL thisSelector = [methodDictionary[methodName] pointerValue];
-    [self performSelector:thisSelector withObject:arguments withObject:callback];
+    Block block = methodMap[methodName];
+    if (block) {
+        block();
+    }
 }
 
 - (void)push:(NSDictionary *)arguments callback:(RCTResponseSenderBlock)callback
 {
-    UIViewController<NNView> *rootController = (UIViewController<NNView> *)[UIApplication sharedApplication].keyWindow.rootViewController;
-    id<NNNode> nodeObject = [NNNodeHelper.sharedInstance nodeFromMap:arguments[@"screen"] bridge:arguments[@"bridge"]];
+    UIViewController<NNView> *rootController = RNNNState.sharedInstance.viewController;
+    id<NNNode> nodeObject = [NNNodeHelper.sharedInstance nodeFromMap:arguments[@"screen"] bridge:self.stackNode.bridge];
     NSMutableArray *stack = self.stackNode.stack.mutableCopy;
     [stack addObject:nodeObject];
     self.stackNode.stack = stack;
 
     NSDictionary *newState = rootController.node.data;
     [RNNNState sharedInstance].state = newState;
-    callback(@[ newState ]);
+    callback(@[newState]);
+
+    NSDictionary *extraArguments = arguments[@"arguments"];
 
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
         __strong typeof(weakSelf) self = weakSelf;
-        UIViewController *viewController = [nodeObject generate];
+        UIViewController<NNView> *viewController = [nodeObject generate];
 
-        NSArray *viewControllers;
-        if ([arguments[@"arguments"][@"reset"] boolValue]) {
-            viewControllers = @[ viewController ];
+        if ([extraArguments[@"reset"] boolValue]) {
+            NSArray *viewControllers = @[viewController];
+            [self setViewControllers:viewControllers animated:YES];
         } else {
-            viewControllers = [self.viewControllers arrayByAddingObject:viewController];
+            if ([viewController.node isKindOfClass:[NNSingleNode class]]) {
+                NNSingleNode *singleNode = viewController.node;
+                NSString *backButtonTitle = singleNode.style[@"backButtonTitle"];
+                if (backButtonTitle) {
+                    if ([backButtonTitle isEqualToString:@""]) {
+                        backButtonTitle = @" ";
+                    }
+                    self.viewControllers.lastObject.navigationItem.title = backButtonTitle;
+                }
+            }
+            [self pushViewController:viewController animated:YES];
         }
-
-        [self setViewControllers:viewControllers animated:YES];
     });
 }
 
-- (void)pop:(NSDictionary *)arguments callback:(RCTResponseSenderBlock)callback
+- (void)pop
 {
-    UIViewController<NNView> *rootController = (UIViewController<NNView> *)[UIApplication sharedApplication].keyWindow.rootViewController;
+    UIViewController<NNView> *rootController = RNNNState.sharedInstance.viewController;
     NSMutableArray *stack = self.stackNode.stack.mutableCopy;
     [stack removeLastObject];
     self.stackNode.stack = stack;
@@ -140,9 +157,9 @@ NSString *const kPopToRoot = @"popToRoot";
     });
 }
 
-- (void)popTo:(NSDictionary *)arguments callback:(RCTResponseSenderBlock)callback
+- (void)popTo:(NSDictionary *)arguments
 {
-    UIViewController<NNView> *rootController = (UIViewController<NNView> *)[UIApplication sharedApplication].keyWindow.rootViewController;
+    UIViewController<NNView> *rootController = RNNNState.sharedInstance.viewController;
 
     UIViewController *foundController = [rootController viewForPath:arguments[@"path"]];
     if (!foundController) {
@@ -167,11 +184,11 @@ NSString *const kPopToRoot = @"popToRoot";
     });
 }
 
-- (void)popToRoot:(NSDictionary *)arguments callback:(RCTResponseSenderBlock)callback
+- (void)popToRootCallback
 {
-    UIViewController<NNView> *rootController = (UIViewController<NNView> *)[UIApplication sharedApplication].keyWindow.rootViewController;
+    UIViewController<NNView> *rootController = RNNNState.sharedInstance.viewController;
 
-    self.stackNode.stack = @[ self.stackNode.stack.firstObject ];
+    self.stackNode.stack = @[self.stackNode.stack.firstObject];
     NSDictionary *newState = rootController.node.data;
     [RNNNState sharedInstance].state = newState;
 
@@ -187,6 +204,14 @@ NSString *const kPopToRoot = @"popToRoot";
 - (void)navigationController:(UINavigationController *)navigationController didShowViewController:(UIViewController *)viewController animated:(BOOL)animated
 {
     self.stackNode.stack = [self.stackNode.stack subarrayWithRange:NSMakeRange(0, self.viewControllers.count)];
+}
+
+- (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated
+{
+    if ([viewController isKindOfClass:[NNSingleView class]]) {
+        NNSingleView *singleView = (NNSingleView *) viewController;
+        [navigationController setNavigationBarHidden:[singleView.singleNode.style[@"barHidden"] boolValue] animated:animated];
+    }
 }
 
 @end

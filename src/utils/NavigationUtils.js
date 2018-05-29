@@ -29,11 +29,11 @@ export const registerScreens = (navigation, screens) => {
 
 		AppRegistry.registerComponent(screenID, () => {
 			return class extends Component {
-				renderScreen = () => <Screen navigation={navigation}/>;
+				renderScreen = (initialProps) => <Screen navigation={navigation} {...initialProps} />;
 
 				render() {
 					return ReduxProvider && ReduxStore
-						? <ReduxProvider store={ReduxStore}>{this.renderScreen()}</ReduxProvider>
+						? <ReduxProvider store={ReduxStore}>{this.renderScreen(this.props)}</ReduxProvider>
 						: this.renderScreen();
 				}
 			}
@@ -42,7 +42,7 @@ export const registerScreens = (navigation, screens) => {
 };
 
 export const getNode = (viewMap, dom) => {
-	const domType = dom.type.name;
+	const domType = dom.type.viewName;
 	const node = viewMap[domType];
 
 	if (node && typeof(node.mapToDictionary) === 'function') {
@@ -56,4 +56,20 @@ export const getNode = (viewMap, dom) => {
 export const mapChild = (viewMap, dom, path) => {
 	const node = getNode(viewMap, dom);
 	return node.mapToDictionary(viewMap, dom, path);
+};
+
+export const pageName = (page) => {
+	const displayName = page.displayName;
+	if (displayName) {
+		const fromIndex = displayName.lastIndexOf("(") + 1;
+		const toIndex = displayName.indexOf(")");
+		if (toIndex > fromIndex) {
+			return displayName.substring(fromIndex, toIndex);
+		} else {
+			return displayName;
+		}
+	} else {
+		console.error('RNNN', 'Page should be a Component or HOC should implement displayName');
+		return null;
+	}
 };

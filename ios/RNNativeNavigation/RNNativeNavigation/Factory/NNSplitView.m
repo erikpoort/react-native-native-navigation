@@ -28,10 +28,7 @@ NSString *const kReplace = @"replace";
     if (self = [super init]) {
         self.splitNode = node;
 
-        self.title = node.title;
-
-
-        NSMutableArray *axes = @[ @"H", @"V" ].mutableCopy;
+        NSMutableArray *axes = @[@"H", @"V"].mutableCopy;
         NSString *baseAxis = axes[self.splitNode.axis];
         [axes removeObjectAtIndex:self.splitNode.axis];
         NSString *oppositeAxis = axes.firstObject;
@@ -125,18 +122,23 @@ NSString *const kReplace = @"replace";
 
 - (void)callMethodWithName:(NSString *)methodName arguments:(NSDictionary *)arguments callback:(RCTResponseSenderBlock)callback
 {
-    NSDictionary *methodDictionary = @{
-        kReplace : [NSValue valueWithPointer:@selector(replace:callback:)],
+    typedef void (^Block)(void);
+    NSDictionary<NSString *, Block> *methodMap = @{
+        kReplace: ^{
+            [self replace:arguments callback:callback];
+        }
     };
 
-    SEL thisSelector = [methodDictionary[methodName] pointerValue];
-    [self performSelector:thisSelector withObject:arguments withObject:callback];
+    Block block = methodMap[methodName];
+    if (block) {
+        block();
+    }
 }
 
 - (void)replace:(NSDictionary *)arguments callback:(RCTResponseSenderBlock)callback
 {
-    UIViewController<NNView> *rootController = (UIViewController<NNView> *)[UIApplication sharedApplication].keyWindow.rootViewController;
-    id<NNNode> nodeObject = [NNNodeHelper.sharedInstance nodeFromMap:arguments[@"screen"] bridge:arguments[@"bridge"]];
+    UIViewController<NNView> *rootController = RNNNState.sharedInstance.viewController;
+    id<NNNode> nodeObject = [NNNodeHelper.sharedInstance nodeFromMap:arguments[@"screen"] bridge:self.splitNode.bridge];
 
     NSString *newPart = [nodeObject.screenID substringFromIndex:self.splitNode.screenID.length + 1];
     NSArray *splitArray = [newPart componentsSeparatedByString:@"/"];
@@ -151,7 +153,7 @@ NSString *const kReplace = @"replace";
 
     NSDictionary *newState = rootController.node.data;
     [RNNNState sharedInstance].state = newState;
-    callback(@[ newState ]);
+    callback(@[newState]);
 
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{

@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import DrawerNavigation from "./DrawerNavigation";
 import { mapChild } from '../../utils/NavigationUtils';
 
-class DrawerView {}
+class DrawerView {
+	static viewName = "DrawerView"
+}
 
 const nodeToDictionary = (viewMap, name, dom, path) => {
 	let data = dom.props[name];
@@ -13,7 +15,7 @@ const nodeToDictionary = (viewMap, name, dom, path) => {
 };
 
 export const DrawerNode = {
-	[DrawerView.name]: {
+	[DrawerView.viewName]: {
 		mapToDictionary: (viewMap, dom, path) => {
 			if (dom == null || dom.props == null || path == null) {
 				console.error("RNNN", "dom and path are mandatory parameters.");
@@ -27,7 +29,7 @@ export const DrawerNode = {
 			}
 
 			const screenID = `${path}/${id}`;
-			const type = dom.type.name;
+			const type = dom.type.viewName;
 
 			const center = nodeToDictionary(viewMap, 'center', dom, screenID);
 			if (center == null) {
@@ -66,12 +68,12 @@ export const DrawerNode = {
 							return class extends Component {
 								drawer;
 
-								componentWillMount() {
-									this.drawer = new DrawerNavigation(screenID, navigatorID, this.props.navigation);
-									this.drawer.drawerView = screen
-								}
-
 								render() {
+									if (this.drawer == null) {
+										this.drawer = new DrawerNavigation(screenID, navigatorID, this.props.navigation);
+										this.drawer.drawerView = screen
+									}
+
 									const Screen = screen;
 									return <Screen {...{
 										[navigatorName]: this.drawer,

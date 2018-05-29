@@ -3,7 +3,9 @@ import { BackHandler } from 'react-native';
 import StackNavigation from './StackNavigation';
 import { mapChild } from '../../utils/NavigationUtils';
 
-class StackView {};
+class StackView {
+	static viewName = "StackView"
+};
 
 const mapChildren = (viewMap, children, path) => {
 	if (!Array.isArray(children)) {
@@ -26,7 +28,7 @@ const mapChildren = (viewMap, children, path) => {
 };
 
 export const StackNode = {
-	[StackView.name]: {
+	[StackView.viewName]: {
 		mapToDictionary: (viewMap, dom, path) => {
 			if (dom == null || dom.props == null || path == null) {
 				console.error("RNNN", "dom and path are mandatory parameters.");
@@ -40,7 +42,7 @@ export const StackNode = {
 			}
 
 			const screenID = `${path}/${id}`;
-			const type = dom.type.name;
+			const type = dom.type.viewName;
 
 			if (dom.props.children.length === 0) {
 				console.error("RNNN", "A StackView expects at least one child", screenID);
@@ -72,9 +74,7 @@ export const StackNode = {
 								removeBackButtonListener;
 								stack;
 
-								componentWillMount() {
-									this.stack = new StackNavigation(screenID, navigatorID, this.props.navigation);
-
+								componentDidMount() {
 									const { remove } = BackHandler.addEventListener('hardwareBackPress', () => {
 										this.stack.handleBackButton((handled) => {
 											if (!handled) {
@@ -93,6 +93,10 @@ export const StackNode = {
 								}
 
 								render() {
+									if (this.stack == null) {
+										this.stack = new StackNavigation(screenID, navigatorID, this.props.navigation);
+									}
+
 									const Screen = screen;
 									return <Screen {...{
 										[navigatorName]: this.stack,

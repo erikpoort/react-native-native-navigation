@@ -7,14 +7,16 @@
 #import "NNSingleView.h"
 #import "NNNodeHelper.h"
 
-static NSString *const kName = @"name";
+static NSString *const kPage = @"page";
 static NSString *const kModal = @"modal";
+static NSString *const kStyle = @"style";
+static NSString *const kPassProps = @"passProps";
 
 
 @interface NNSingleNode ()
 
 @property (nonatomic, strong) RCTBridge *bridge;
-@property (nonatomic, copy) NSString *title;
+@property (nonatomic, copy) NSString *page;
 
 @end
 
@@ -34,25 +36,40 @@ static NSString *const kModal = @"modal";
 - (void)setData:(NSDictionary *)data
 {
     [super setData:data];
-    self.title = data[kName];
+    self.page = data[kPage];
     self.modal = [NNNodeHelper.sharedInstance nodeFromMap:data[kModal] bridge:self.bridge];
+    self.style = data[kStyle];
+    self.props = data[kPassProps];
 }
 
-- (NSDictionary *)data
-{
+- (NSDictionary *)data {
     NSMutableDictionary *data = [super data].mutableCopy;
-    data[kName] = self.title;
+    data[kPage] = self.page;
+    data[kStyle] = self.style;
     if (self.modal) {
         data[kModal] = self.modal.data;
     }
+    if (self.props) {
+        data[kPassProps] = self.props;
+    }
     return data.copy;
+}
+
+- (NSArray<NSString *> *)supportedEvents {
+    return [[NSArray arrayWithArray:self.modal.supportedEvents] arrayByAddingObject:self.screenID];
 }
 
 + (NSDictionary<NSString *, id> *)constantsToExport
 {
     return @{
-        kShowModal : kShowModal
+        kShowModal: kShowModal,
+        kDismiss: kDismiss,
+        kUpdateStyle: kUpdateStyle
     };
+}
+
+- (ReactNativeNativeEventEmitter *)eventEmitter {
+    return [self.bridge moduleForClass:[ReactNativeNativeEventEmitter class]];
 }
 
 @end

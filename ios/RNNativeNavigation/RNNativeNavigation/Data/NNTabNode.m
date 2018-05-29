@@ -54,9 +54,12 @@ static NSString *const kSelectedTabKey = @"selectedTab";
     return data.copy;
 }
 
-- (NSString *)title
-{
-    return self.tabs.firstObject.title;
+- (NSArray<NSString *> *)supportedEvents {
+    NSMutableArray *events = @[].mutableCopy;
+    [self.tabs enumerateObjectsUsingBlock:^(id <NNNode> obj, NSUInteger idx, BOOL *stop) {
+        [events addObjectsFromArray:obj.supportedEvents];
+    }];
+    return events.copy;
 }
 
 + (NSDictionary<NSString *, id> *)constantsToExport
@@ -64,6 +67,10 @@ static NSString *const kSelectedTabKey = @"selectedTab";
     return @{
         kOpenTab : kOpenTab,
     };
+}
+
+- (ReactNativeNativeEventEmitter *)eventEmitter {
+    return [self.bridge moduleForClass:[ReactNativeNativeEventEmitter class]];
 }
 
 @end

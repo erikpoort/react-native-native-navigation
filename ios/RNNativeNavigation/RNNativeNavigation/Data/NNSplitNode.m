@@ -50,9 +50,11 @@ static NSString *const kAxisKey = @"axis";
     return data.copy;
 }
 
-- (NSString *)title
-{
-    return self.node1.title;
+- (NSArray<NSString *> *)supportedEvents {
+    NSMutableArray *events = @[].mutableCopy;
+    [events addObjectsFromArray:self.node1.supportedEvents];
+    [events addObjectsFromArray:self.node2.supportedEvents];
+    return events.copy;
 }
 
 + (NSDictionary<NSString *, id> *)constantsToExport
@@ -60,6 +62,10 @@ static NSString *const kAxisKey = @"axis";
     return @{
         kReplace : kReplace,
     };
+}
+
+- (ReactNativeNativeEventEmitter *)eventEmitter {
+    return [self.bridge moduleForClass:[ReactNativeNativeEventEmitter class]];
 }
 
 @end

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { processColor } from 'react-native';
 import {
 	Navigation,
 	DrawerView,
@@ -23,17 +24,21 @@ export default class example extends Component {
 
 		this.home = new Home();
 		const navigation = new Navigation(
-			[Home, Menu, Detail],
+			[Menu, Detail],
 			[ExampleNode],
 			Provider, store
 		);
 
 		navigation.start(
-			<TabView id='split'>
-				<SingleView id='menu' screen={Menu}/>
-				<SingleView id={"new" + 1} screen={Detail} />
-				<SingleView id={"new" + 2} screen={Detail2} />
-			</TabView>
+			<StackView id='split'>
+				<SingleView id='menu' screen={Menu} style={{
+					title: 'Menu',
+					barHidden: false,
+					barTransparent: false,
+					barBackground: processColor('#0000ff'),
+					barTint: processColor('#ff0000'),
+				}} />
+			</StackView>
 		);
 	}
 

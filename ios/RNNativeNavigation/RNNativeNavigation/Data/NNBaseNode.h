@@ -1,10 +1,10 @@
 //
-
 // Copyright (c) 2017 MediaMonks. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 #import "NNNode.h"
+#import "ReactNativeNativeEventEmitter.h"
 
 
 @interface NNBaseNode : NSObject <NNNode>
@@ -14,5 +14,7 @@
 - (void)setData:(NSDictionary *)data;
 
 - (NSDictionary *)data;
+
+- (ReactNativeNativeEventEmitter *)eventEmitter;
 
 @end

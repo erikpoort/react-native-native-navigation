@@ -1,6 +1,6 @@
 {
   "name": "react-native-native-navigation",
-  "version": "0.1.4",
+  "version": "0.1.6",
   "description": "ReactNative Native Navigation",
   "files": [
     "src",
@@ -16,7 +16,8 @@
     "react",
     "react-native",
     "native",
-    "native-navigation"
+    "native-navigation",
+    "r3n"
   ],
   "author": "Erik Poort",
   "license": "GNU General Public License v3.0",
